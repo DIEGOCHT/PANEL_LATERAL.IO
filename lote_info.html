@@ -24,7 +24,7 @@ html,body{
 
     position:fixed;
 
-    top:10px;
+    top:124px;
     left:10px;
 
     width:420px;
@@ -187,6 +187,8 @@ html,body{
 
 }
 
+
+
 @media(max-width:600px){
 
     #panel{
@@ -252,10 +254,52 @@ html,body{
 
         </div>
 
+<button id="consultarPrecio">
+
+    ✉ Consultar precio
+
+</button>
     </div>
 
 </div>
+<div id="modalConsulta">
 
+    <div id="ventanaConsulta">
+
+        <button id="cerrarModal">×</button>
+
+        <h2>Consultar precio</h2>
+
+        <p id="datosLote"></p>
+
+        <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email">
+
+        <input
+            type="tel"
+            id="telefono"
+            placeholder="Teléfono">
+
+        <textarea
+            id="mensaje"
+            placeholder="Mensaje"></textarea>
+
+        <button id="enviarConsulta">
+
+            Enviar
+
+        </button>
+
+    </div>
+
+</div>
 <script>
 
 const panel = document.getElementById("panel");
@@ -387,6 +431,77 @@ function procesarDatos(datos){
     },100);
 
 }
+
+document
+.getElementById("consultarPrecio")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="flex";
+
+    document
+    .getElementById("datosLote")
+    .textContent =
+    loteEl.textContent +
+    " - " +
+    ubicacionEl.textContent;
+
+});
+
+document
+.getElementById("cerrarModal")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="none";
+
+});
+
+document
+.getElementById("enviarConsulta")
+.addEventListener("click",()=>{
+
+    const nombre =
+    document.getElementById("nombre").value;
+
+    const email =
+    document.getElementById("email").value;
+
+    const telefono =
+    document.getElementById("telefono").value;
+
+    const mensaje =
+    document.getElementById("mensaje").value;
+
+    const texto =
+
+`Hola, deseo consultar el precio del siguiente lote:
+
+Lote: ${loteEl.textContent}
+Ubicación: ${ubicacionEl.textContent}
+Estado: ${estadoEl.textContent}
+Área: ${areaEl.textContent}
+Medidas: ${medidasEl.textContent}
+
+Nombre: ${nombre}
+Email: ${email}
+Teléfono: ${telefono}
+
+Mensaje:
+${mensaje}`;
+
+    const whatsapp =
+    "https://wa.me/51989567212?text=" +
+    encodeURIComponent(texto);
+
+    window.open(
+        whatsapp,
+        "_blank"
+    );
+
+});
 
 cargarLote();
 
