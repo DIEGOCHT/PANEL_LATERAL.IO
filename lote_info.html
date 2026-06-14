@@ -24,8 +24,8 @@ html,body{
 
     position:fixed;
 
-    top:10px;
-    left:10px;
+    top:124px;
+    left:0px;
 
     width:420px;
     max-width:calc(100vw - 20px);
@@ -187,6 +187,147 @@ html,body{
 
 }
 
+#consultarPrecio{
+
+    width:100%;
+
+    border:none;
+
+    background:#3f4d5d;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    padding:18px;
+
+    border-radius:35px;
+
+    cursor:pointer;
+
+    margin-top:20px;
+
+}
+
+#modalConsulta{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+#ventanaConsulta{
+
+    width:650px;
+
+    max-width:95vw;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    position:relative;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+}
+
+#cerrarModal{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f2f2f2;
+
+    cursor:pointer;
+
+    font-size:34px;
+
+}
+
+#datosLote{
+
+    color:#777;
+
+    margin-bottom:20px;
+
+}
+
+#ventanaConsulta input,
+#ventanaConsulta textarea{
+
+    width:100%;
+
+    padding:18px;
+
+    margin-top:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:30px;
+
+    font-size:16px;
+
+}
+
+#ventanaConsulta textarea{
+
+    height:120px;
+
+    resize:none;
+
+}
+
+#enviarConsulta{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:35px;
+
+    background:#3f4d5d;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
 @media(max-width:600px){
 
     #panel{
@@ -252,10 +393,52 @@ html,body{
 
         </div>
 
+<button id="consultarPrecio">
+
+    ✉ Consultar precio
+
+</button>
     </div>
 
 </div>
+<div id="modalConsulta">
 
+    <div id="ventanaConsulta">
+
+        <button id="cerrarModal">×</button>
+
+        <h2>Consultar precio</h2>
+
+        <p id="datosLote"></p>
+
+        <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email">
+
+        <input
+            type="tel"
+            id="telefono"
+            placeholder="Teléfono">
+
+        <textarea
+            id="mensaje"
+            placeholder="Mensaje"></textarea>
+
+        <button id="enviarConsulta">
+
+            Enviar
+
+        </button>
+
+    </div>
+
+</div>
 <script>
 
 const panel = document.getElementById("panel");
@@ -387,6 +570,77 @@ function procesarDatos(datos){
     },100);
 
 }
+
+document
+.getElementById("consultarPrecio")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="flex";
+
+    document
+    .getElementById("datosLote")
+    .textContent =
+    loteEl.textContent +
+    " - " +
+    ubicacionEl.textContent;
+
+});
+
+document
+.getElementById("cerrarModal")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="none";
+
+});
+
+document
+.getElementById("enviarConsulta")
+.addEventListener("click",()=>{
+
+    const nombre =
+    document.getElementById("nombre").value;
+
+    const email =
+    document.getElementById("email").value;
+
+    const telefono =
+    document.getElementById("telefono").value;
+
+    const mensaje =
+    document.getElementById("mensaje").value;
+
+    const texto =
+
+`Hola, deseo consultar el precio del siguiente lote:
+
+Lote: ${loteEl.textContent}
+Ubicación: ${ubicacionEl.textContent}
+Estado: ${estadoEl.textContent}
+Área: ${areaEl.textContent}
+Medidas: ${medidasEl.textContent}
+
+Nombre: ${nombre}
+Email: ${email}
+Teléfono: ${telefono}
+
+Mensaje:
+${mensaje}`;
+
+    const whatsapp =
+    "https://wa.me/51989567212?text=" +
+    encodeURIComponent(texto);
+
+    window.open(
+        whatsapp,
+        "_blank"
+    );
+
+});
 
 cargarLote();
 
