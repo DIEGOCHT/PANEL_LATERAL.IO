@@ -30,7 +30,7 @@ html,body{
     width:420px;
     max-width:calc(100vw - 20px);
 
-    background:#ffffff;
+    background:#fff;
 
     border-radius:22px;
 
@@ -39,17 +39,25 @@ html,body{
     box-shadow:0 12px 40px rgba(0,0,0,.25);
 
     transform:translateX(-120%);
+
     transition:.4s ease;
+
 }
 
 #panel.visible{
+
     transform:translateX(0);
+
 }
 
 #imagenContainer{
+
     position:relative;
+
     height:240px;
-    background:#f0f0f0;
+
+    background:#f3f3f3;
+
 }
 
 #imagen{
@@ -58,7 +66,9 @@ html,body{
     height:100%;
 
     object-fit:cover;
+
     display:block;
+
 }
 
 #cerrar{
@@ -72,38 +82,45 @@ html,body{
     height:52px;
 
     border:none;
+
     border-radius:50%;
 
-    background:#ffffff;
+    background:white;
 
     cursor:pointer;
 
     font-size:30px;
-    line-height:1;
 
     box-shadow:0 2px 10px rgba(0,0,0,.25);
+
 }
 
 #contenido{
+
     padding:24px;
+
 }
 
 #cabecera{
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     gap:10px;
+
 }
 
 #lote{
 
     margin:0;
 
-    font-size:20px;
-    font-weight:700;
+    font-size:22px;
 
     color:#222;
+
 }
 
 #estado{
@@ -114,59 +131,74 @@ html,body{
 
     color:white;
 
-    font-size:14px;
     font-weight:bold;
 
-    white-space:nowrap;
+    font-size:14px;
+
 }
 
 .estado-libre{
-    background:#17a34a;
+
+    background:#16a34a;
+
 }
 
 .estado-reservado{
+
     background:#eab308;
+
 }
 
 .estado-vendido{
+
     background:#dc2626;
+
 }
 
 .fila{
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     padding:14px 0;
 
     border-bottom:1px solid #e5e5e5;
+
 }
 
 .label{
+
     color:#666;
+
     font-size:15px;
+
 }
 
 .valor{
+
     color:#222;
-    font-size:16px;
+
     font-weight:600;
+
     text-align:right;
+
 }
 
 @media(max-width:600px){
 
     #panel{
+
         width:calc(100vw - 20px);
+
     }
 
     #imagenContainer{
-        height:190px;
-    }
 
-    #lote{
-        font-size:18px;
+        height:180px;
+
     }
 
 }
@@ -180,7 +212,7 @@ html,body{
 
     <div id="imagenContainer">
 
-        <img id="imagen" src="" alt="Lote">
+        <img id="imagen" src="" alt="Imagen del lote">
 
         <button id="cerrar">×</button>
 
@@ -197,18 +229,27 @@ html,body{
         </div>
 
         <div class="fila">
+
             <span class="label">Medidas</span>
+
             <span class="valor" id="medidas"></span>
+
         </div>
 
         <div class="fila">
+
             <span class="label">Área</span>
+
             <span class="valor" id="area"></span>
+
         </div>
 
         <div class="fila">
+
             <span class="label">Ubicación</span>
+
             <span class="valor" id="ubicacion"></span>
+
         </div>
 
     </div>
@@ -216,9 +257,6 @@ html,body{
 </div>
 
 <script>
-
-const API =
-"https://script.google.com/macros/s/AKfycbxBOEvdiRzdowvAkexEdUZrEgKxqi9lJCSy6bnqLMVgdvYQv_PMGYKv2-U71sWzauR8/exec";
 
 const panel = document.getElementById("panel");
 
@@ -229,8 +267,7 @@ const areaEl = document.getElementById("area");
 const ubicacionEl = document.getElementById("ubicacion");
 const imagenEl = document.getElementById("imagen");
 
-document
-.getElementById("cerrar")
+document.getElementById("cerrar")
 .addEventListener("click",()=>{
 
     panel.classList.remove("visible");
@@ -239,115 +276,115 @@ document
 
 function obtenerParametro(nombre){
 
-    const url =
-    new URL(window.location.href);
+    const url = new URL(window.location.href);
 
     return url.searchParams.get(nombre);
 
 }
 
-async function cargarLote(){
+function cargarLote(){
+
+    const script = document.createElement("script");
+
+    script.src =
+    "https://script.google.com/macros/s/AKfycbxBOEvdiRzdowvAkexEdUZrEgKxqi9lJCSy6bnqLMVgdvYQv_PMGYKv2-U71sWzauR8/exec?callback=procesarDatos";
+
+    document.body.appendChild(script);
+
+}
+
+function procesarDatos(datos){
 
     const loteBuscado =
     obtenerParametro("lote");
 
     if(!loteBuscado){
+
+        loteEl.textContent =
+        "No se indicó lote";
+
         return;
+
     }
 
-    try{
+    const lote =
+    datos.find(item =>
+        item.Lote === loteBuscado
+    );
 
-        const respuesta =
-        await fetch(API);
-
-        const datos =
-        await respuesta.json();
-
-        const lote =
-        datos.find(item =>
-            item.Lote === loteBuscado
-        );
-
-        if(!lote){
-            loteEl.textContent =
-            "Lote no encontrado";
-            return;
-        }
+    if(!lote){
 
         loteEl.textContent =
-        lote.Lote;
+        "Lote no encontrado";
 
-        medidasEl.textContent =
-        lote.Medidas || "-";
-
-        areaEl.textContent =
-        lote.Area || "-";
-
-        ubicacionEl.textContent =
-        lote.Ubicacion || "-";
-
-        estadoEl.textContent =
-        lote.Estado || "";
-
-        estadoEl.className = "";
-
-        const estado =
-        (lote.Estado || "")
-        .toUpperCase();
-
-        if(estado === "LIBRE"){
-
-            estadoEl.classList
-            .add("estado-libre");
-
-        }
-        else if(
-            estado === "RESERVADO"
-        ){
-
-            estadoEl.classList
-            .add("estado-reservado");
-
-        }
-        else{
-
-            estadoEl.classList
-            .add("estado-vendido");
-
-        }
-
-        if(
-            lote.Imagen &&
-            lote.Imagen.trim() !== ""
-        ){
-
-            imagenEl.src =
-            lote.Imagen;
-
-        }
-        else{
-
-            imagenEl.src =
-            "thumbnail.png";
-
-        }
-
-        setTimeout(()=>{
-
-            panel.classList
-            .add("visible");
-
-        },100);
+        return;
 
     }
-    catch(error){
 
-        console.error(error);
+    loteEl.textContent =
+    lote.Lote;
 
-        loteEl.textContent =
-        "Error al cargar";
+    medidasEl.textContent =
+    lote.Medidas || "-";
+
+    areaEl.textContent =
+    lote.Area || "-";
+
+    ubicacionEl.textContent =
+    lote.Ubicacion || "-";
+
+    estadoEl.textContent =
+    lote.Estado || "";
+
+    estadoEl.className = "";
+
+    const estado =
+    (lote.Estado || "")
+    .toUpperCase();
+
+    if(estado === "LIBRE"){
+
+        estadoEl.classList
+        .add("estado-libre");
 
     }
+    else if(
+        estado === "RESERVADO"
+    ){
+
+        estadoEl.classList
+        .add("estado-reservado");
+
+    }
+    else{
+
+        estadoEl.classList
+        .add("estado-vendido");
+
+    }
+
+    if(
+        lote.Imagen &&
+        lote.Imagen.trim() !== ""
+    ){
+
+        imagenEl.src =
+        lote.Imagen;
+
+    }
+    else{
+
+        imagenEl.src =
+        "thumbnail.png";
+
+    }
+
+    setTimeout(()=>{
+
+        panel.classList
+        .add("visible");
+
+    },100);
 
 }
 
