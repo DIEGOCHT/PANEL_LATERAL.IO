@@ -600,21 +600,74 @@ document
 
 document
 .getElementById("enviarConsulta")
-.addEventListener("click",()=>{
+.addEventListener("click", async ()=>{
 
-    const nombre =
-    document.getElementById("nombre").value;
+```
+const nombre =
+document.getElementById("nombre").value.trim();
 
-    const email =
-    document.getElementById("email").value;
+const email =
+document.getElementById("email").value.trim();
 
-    const telefono =
-    document.getElementById("telefono").value;
+const telefono =
+document.getElementById("telefono").value.trim();
 
-    const mensaje =
-    document.getElementById("mensaje").value;
+const mensaje =
+document.getElementById("mensaje").value.trim();
 
-    const texto =
+if(nombre === ""){
+
+    alert("Ingrese su nombre");
+
+    return;
+
+}
+
+if(telefono === ""){
+
+    alert("Ingrese su teléfono");
+
+    return;
+
+}
+
+const datos = {
+
+    lote: loteEl.textContent,
+
+    estado: estadoEl.textContent,
+
+    area: areaEl.textContent,
+
+    medidas: medidasEl.textContent,
+
+    nombre: nombre,
+
+    email: email,
+
+    telefono: telefono,
+
+    mensaje: mensaje
+
+};
+
+try{
+
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbxBOEvdiRzdowvAkexEdUZrEgKxqi9lJCSy6bnqLMVgdvYQv_PMGYKv2-U71sWzauR8/exec",
+    {
+        method:"POST",
+        body:JSON.stringify(datos)
+    });
+
+}catch(error){
+
+    console.log(error);
+
+}
+
+const texto =
+```
 
 `Hola, deseo consultar el precio del siguiente lote:
 
@@ -631,14 +684,18 @@ Teléfono: ${telefono}
 Mensaje:
 ${mensaje}`;
 
-    const whatsapp =
-    "https://wa.me/51989567212?text=" +
-    encodeURIComponent(texto);
+```
+const whatsapp =
 
-    window.open(
-        whatsapp,
-        "_blank"
-    );
+"https://wa.me/51989567212?text=" +
+
+encodeURIComponent(texto);
+
+window.open(
+    whatsapp,
+    "_blank"
+);
+```
 
 });
 
