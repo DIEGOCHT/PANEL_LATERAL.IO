@@ -602,72 +602,70 @@ document
 .getElementById("enviarConsulta")
 .addEventListener("click", async ()=>{
 
-```
-const nombre =
-document.getElementById("nombre").value.trim();
+    const nombre =
+    document.getElementById("nombre").value.trim();
 
-const email =
-document.getElementById("email").value.trim();
+    const email =
+    document.getElementById("email").value.trim();
 
-const telefono =
-document.getElementById("telefono").value.trim();
+    const telefono =
+    document.getElementById("telefono").value.trim();
 
-const mensaje =
-document.getElementById("mensaje").value.trim();
+    const mensaje =
+    document.getElementById("mensaje").value.trim();
 
-if(nombre === ""){
+    if(nombre === ""){
 
-    alert("Ingrese su nombre");
+        alert("Ingrese su nombre");
 
-    return;
+        return;
 
-}
+    }
 
-if(telefono === ""){
+    if(telefono === ""){
 
-    alert("Ingrese su teléfono");
+        alert("Ingrese su teléfono");
 
-    return;
+        return;
 
-}
+    }
 
-const datos = {
+    const datos = {
 
-    lote: loteEl.textContent,
+        lote: loteEl.textContent,
 
-    estado: estadoEl.textContent,
+        estado: estadoEl.textContent,
 
-    area: areaEl.textContent,
+        area: areaEl.textContent,
 
-    medidas: medidasEl.textContent,
+        medidas: medidasEl.textContent,
 
-    nombre: nombre,
+        nombre: nombre,
 
-    email: email,
+        email: email,
 
-    telefono: telefono,
+        telefono: telefono,
 
-    mensaje: mensaje
+        mensaje: mensaje
 
-};
+    };
 
-try{
+    try{
 
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbxBOEvdiRzdowvAkexEdUZrEgKxqi9lJCSy6bnqLMVgdvYQv_PMGYKv2-U71sWzauR8/exec",
-    {
-        method:"POST",
-        body:JSON.stringify(datos)
-    });
+        await fetch(
+        "https://script.google.com/macros/s/AKfycbxBOEvdiRzdowvAkexEdUZrEgKxqi9lJCSy6bnqLMVgdvYQv_PMGYKv2-U71sWzauR8/exec",
+        {
+            method:"POST",
+            body:JSON.stringify(datos)
+        });
 
-}catch(error){
+    }catch(error){
 
-    console.log(error);
+        console.log(error);
 
-}
+    }
 
-const texto =
-```
+    const texto =
 
 `Hola, deseo consultar el precio del siguiente lote:
 
@@ -684,18 +682,14 @@ Teléfono: ${telefono}
 Mensaje:
 ${mensaje}`;
 
-```
-const whatsapp =
+    const whatsapp =
+    "https://wa.me/51989567212?text=" +
+    encodeURIComponent(texto);
 
-"https://wa.me/51989567212?text=" +
-
-encodeURIComponent(texto);
-
-window.open(
-    whatsapp,
-    "_blank"
-);
-```
+    window.open(
+        whatsapp,
+        "_blank"
+    );
 
 });
 
