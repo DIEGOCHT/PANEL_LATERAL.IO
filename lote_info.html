@@ -599,6 +599,36 @@ document
 });
 
 document
+.getElementById("modalConsulta")
+.addEventListener("click",(e)=>{
+
+    if(
+        e.target.id === "modalConsulta"
+    ){
+
+        document
+        .getElementById("modalConsulta")
+        .style.display="none";
+
+    }
+
+});
+
+document.addEventListener("keydown",(e)=>{
+
+    if(
+        e.key === "Escape"
+    ){
+
+        document
+        .getElementById("modalConsulta")
+        .style.display="none";
+
+    }
+
+});
+
+document
 .getElementById("enviarConsulta")
 .addEventListener("click", async ()=>{
 
