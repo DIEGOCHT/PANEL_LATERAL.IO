@@ -52,6 +52,34 @@ html,body{
 
 #imagenContainer{
 
+#imagenContainer::after{
+
+```
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background:rgba(0,0,0,.35);
+
+opacity:0;
+
+transition:.3s;
+
+pointer-events:none;
+```
+
+}
+
+#imagenContainer.no-disponible::after{
+
+```
+opacity:1;
+```
+
+}
+
     position:relative;
 
     height:192px;
@@ -188,6 +216,16 @@ html,body{
 }
 
 #consultarPrecio{
+
+#consultarPrecio.disabled{
+
+    background:#bdbdbd;
+
+    cursor:not-allowed;
+
+    opacity:.7;
+
+}
 
     width:100%;
 
@@ -572,6 +610,76 @@ function procesarDatos(datos){
 
     }
 
+const imagenContainer =
+document.getElementById("imagenContainer");
+
+if(
+estado === "RESERVADO" ||
+estado === "VENDIDO"
+){
+
+```
+imagenContainer.classList
+.add("no-disponible");
+```
+
+}
+else{
+
+```
+imagenContainer.classList
+.remove("no-disponible");
+```
+
+}
+
+
+const botonConsulta =
+document.getElementById("consultarPrecio");
+
+if(estado === "RESERVADO"){
+
+    botonConsulta.disabled = true;
+
+    botonConsulta.style.background =
+    "#eab308";
+
+    botonConsulta.style.color =
+    "#ffffff";
+
+    botonConsulta.innerHTML =
+    "⏳ Lote reservado";
+
+}
+else if(estado === "VENDIDO"){
+
+    botonConsulta.disabled = true;
+
+    botonConsulta.style.background =
+    "#dc2626";
+
+    botonConsulta.style.color =
+    "#ffffff";
+
+    botonConsulta.innerHTML =
+    "✖ Lote vendido";
+
+}
+else{
+
+    botonConsulta.disabled = false;
+
+    botonConsulta.style.background =
+    "#3f4d5d";
+
+    botonConsulta.style.color =
+    "#ffffff";
+
+    botonConsulta.innerHTML =
+    "✉ Consultar precio";
+
+}
+
     if(
         lote.Imagen &&
         lote.Imagen.trim() !== ""
@@ -601,6 +709,25 @@ document
 .getElementById("consultarPrecio")
 .addEventListener("click",()=>{
 
+    if(
+        document
+        .getElementById("consultarPrecio")
+        .disabled
+    ){
+
+        return;
+
+    }
+
+    if(
+        document
+        .getElementById("consultarPrecio")
+        .disabled
+    ){
+
+        return;
+
+    }
     document
     .getElementById("modalConsulta")
     .style.display="flex";
