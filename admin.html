@@ -322,15 +322,19 @@ button{
 
     <div id="menuAdmin">
 
-        <button id="btnLotes">
-            LOTES
-        </button>
+    <button id="btnLotes">
+        LOTES
+    </button>
 
-        <button id="btnAuditoria">
-            AUDITORÍA
-        </button>
+    <button id="btnAuditoria">
+        AUDITORÍA
+    </button>
 
-    </div>
+    <button id="btnAsesores">
+        ASESORES
+    </button>
+
+</div>
 
     <div id="herramientas">
 
@@ -375,6 +379,9 @@ button{
     <div id="contenedorAuditoria"
          style="display:none">
     </div>
+<div id="contenedorAsesores"
+     style="display:none">
+</div>
 
 </div>
 <div id="modalEstado">
@@ -492,11 +499,15 @@ async function login(){
 
     if(resultado.rol !== "ADMIN"){
 
-        document
-        .getElementById("btnAuditoria")
-        .style.display = "none";
+    document
+    .getElementById("btnAuditoria")
+    .style.display = "none";
 
-    }
+    document
+    .getElementById("btnAsesores")
+    .style.display = "none";
+
+}
 
             document
             .getElementById("usuarioLogeado")
@@ -539,71 +550,7 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
-function renderizarLotes(datos){
 
-let html = `
-<table class="tabla">
-<tr>
-<th>Lote</th>
-<th>Estado</th>
-<th>Área</th>
-<th>Ubicación</th>
-<th>Acción</th>
-</tr>
-`;
-
-datos.forEach(lote=>{
-
-let clase="";
-
-if(lote.Estado==="LIBRE"){
-clase="estado-libre";
-}
-else if(lote.Estado==="RESERVADO"){
-clase="estado-reservado";
-}
-else{
-clase="estado-vendido";
-}
-
-html += `
-<tr>
-<td>${lote.Lote}</td>
-
-<td class="${clase}">
-${lote.Estado}
-</td>
-
-<td>${lote.Area}</td>
-
-<td>${lote.Ubicacion}</td>
-
-<td>
-
-<button
-onclick="cambiarEstado('${lote.Lote}')">
-
-Cambiar
-
-</button>
-
-</td>
-
-</tr>
-`;
-
-});
-
-html += "</table>";
-
-document
-.getElementById(
-"contenedorLotes"
-)
-.innerHTML =
-html;
-
-}
 function renderizarLotes(datos){
 
 let html = `
@@ -980,83 +927,66 @@ document
 
 }
 document
-.getElementById("buscarLote")
+.getElementById("btnAsesores")
 .addEventListener(
-"input",
-filtrarLotes
+"click",
+cargarAsesores
 );
 
-function filtrarLotes(){
+function cargarAsesores(){
 
-const texto =
-document
-.getElementById(
-"buscarLote"
-)
-.value
-.toUpperCase();
+    document
+    .getElementById(
+    "contenedorLotes"
+    )
+    .style.display =
+    "none";
 
-let datos =
-todosLosLotes.filter(
-lote=>
+    document
+    .getElementById(
+    "contenedorAuditoria"
+    )
+    .style.display =
+    "none";
 
-lote.Lote
-.toUpperCase()
-.includes(texto)
-);
+    document
+    .getElementById(
+    "dashboard"
+    )
+    .style.display =
+    "none";
 
-if(
-filtroActual !==
-"TODOS"
-){
+    document
+    .getElementById(
+    "herramientas"
+    )
+    .style.display =
+    "none";
 
-datos =
-datos.filter(
-lote=>
-lote.Estado ===
-filtroActual
-);
+    document
+    .getElementById(
+    "contenedorAsesores"
+    )
+    .style.display =
+    "block";
+
+    document
+    .getElementById(
+    "contenedorAsesores"
+    )
+    .innerHTML = `
+
+    <h2>Administración de Asesores</h2>
+
+    <p>
+    Próximo paso:
+    crear, activar y desactivar asesores.
+    </p>
+
+    `;
 
 }
 
-renderizarLotes(datos);
-
-}
-document
-.getElementById(
-"filtroTodos"
-)
-.onclick=()=>{
-filtroActual="TODOS";
-filtrarLotes();
-};
-
-document
-.getElementById(
-"filtroLibres"
-)
-.onclick=()=>{
-filtroActual="LIBRE";
-filtrarLotes();
-};
-
-document
-.getElementById(
-"filtroReservados"
-)
-.onclick=()=>{
-filtroActual="RESERVADO";
-filtrarLotes();
-};
-
-document
-.getElementById(
-"filtroVendidos"
-)
-.onclick=()=>{
-filtroActual="VENDIDO";
-filtrarLotes();
-};
 document
 .getElementById(
 "cerrarSesion"
