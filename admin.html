@@ -78,7 +78,13 @@ button{
     border-radius:15px;
     margin-bottom:20px;
 }
+#usuarioHeader{
 
+    position:relative;
+
+    margin-bottom:20px;
+
+}
 #contenedorLotes{
     margin-top:20px;
 }
@@ -266,17 +272,17 @@ button{
 }
 #cerrarSesion{
 
-    position:fixed;
+    position:absolute;
 
     top:20px;
 
-    right:200px;
+    right:20px;
 
     width:auto;
 
-    padding:12px 25px;
+    margin:0;
 
-    z-index:9999;
+    padding:12px 25px;
 
     background:#dc2626;
 
@@ -312,12 +318,17 @@ button{
 
 <div id="panel">
 
+    <div id="usuarioHeader">
+
     <div id="usuarioLogeado"></div>
-<button id="cerrarSesion">
 
-    Cerrar Sesión
+    <button id="cerrarSesion">
 
-</button>
+        Cerrar Sesión
+
+    </button>
+
+</div>
     <div id="dashboard"></div>
 
     <div id="menuAdmin">
