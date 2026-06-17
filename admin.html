@@ -430,16 +430,47 @@ document
 
 }
 let loteActual = "";
-async function cambiarEstado(lote){
+function cambiarEstado(lote){
 
-const nuevoEstado =
-prompt(
-"Ingrese:\n\nLIBRE\nRESERVADO\nVENDIDO"
+
+loteActual = lote;
+
+document
+.getElementById("loteSeleccionado")
+.textContent =
+lote;
+
+document
+.getElementById("modalEstado")
+.style.display =
+"flex";
+
+}
+
+document
+.getElementById("btnCancelarEstado")
+.addEventListener(
+"click",
+()=>{
+document
+.getElementById("modalEstado")
+.style.display =
+"none";
+});
+
+document
+.getElementById("btnGuardarEstado")
+.addEventListener(
+"click",
+guardarEstado
 );
 
-if(!nuevoEstado){
-    return;
-}
+async function guardarEstado(){
+
+const estado =
+document
+.getElementById("nuevoEstado")
+.value;
 
 const usuario =
 document
@@ -457,38 +488,36 @@ await fetch(
 
         action:"actualizarEstado",
 
-        lote:lote,
+        lote:loteActual,
 
-        estado:nuevoEstado.toUpperCase(),
+        estado:estado,
 
         usuario:usuario
 
     })
 
-}
-);
+});
 
 const resultado =
 await respuesta.json();
 
 if(resultado.ok){
 
-    alert(
-    "Estado actualizado correctamente"
-    );
+    document
+    .getElementById("modalEstado")
+    .style.display =
+    "none";
 
     cargarLotes();
 
-}
-else{
-
     alert(
-    "No se pudo actualizar"
+    "Estado actualizado"
     );
 
 }
 
 }
+
 document
 .getElementById(
 "btnCancelarEstado"
@@ -535,7 +564,6 @@ function cambiarEstado(lote){
 
 }
 
-}
 </script>
 
 </body>
