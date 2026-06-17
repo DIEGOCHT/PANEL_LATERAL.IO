@@ -201,6 +201,29 @@ button{
     margin-top:20px;
 
 }
+#herramientas{
+
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+
+}
+
+#buscarLote{
+
+    width:250px;
+    margin:0;
+
+}
+
+#herramientas button{
+
+    width:auto;
+    margin:0;
+    padding:10px 18px;
+
+}
 </style>
 
 </head>
@@ -246,7 +269,51 @@ button{
 
     </div>
 
-    <div id="contenedorLotes"></div>
+    <div id="herramientas">
+
+    <input
+    type="text"
+    id="buscarLote"
+    placeholder="🔍 Buscar lote...">
+
+    <button
+    id="filtroTodos">
+
+        TODOS
+
+    </button>
+
+    <button
+    id="filtroLibres">
+
+        LIBRES
+
+    </button>
+
+    <button
+    id="filtroReservados">
+
+        RESERVADOS
+
+    </button>
+
+    <button
+    id="filtroVendidos">
+
+        VENDIDOS
+
+    </button>
+
+    <button
+    id="cerrarSesion">
+
+        Cerrar Sesión
+
+    </button>
+
+</div>
+
+<div id="contenedorLotes"></div>
 
     <div id="contenedorAuditoria"
          style="display:none">
@@ -411,17 +478,78 @@ async function login(){
 
 }
 
-async function cargarLotes(){
+let todosLosLotes = [];
 
+let filtroActual = "TODOS";
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-);
+function renderizarLotes(datos){
 
-const datos =
-await respuesta.json();
+let html = `
+<table class="tabla">
+<tr>
+<th>Lote</th>
+<th>Estado</th>
+<th>Área</th>
+<th>Ubicación</th>
+<th>Acción</th>
+</tr>
+`;
 
+datos.forEach(lote=>{
+
+let clase="";
+
+if(lote.Estado==="LIBRE"){
+clase="estado-libre";
+}
+else if(lote.Estado==="RESERVADO"){
+clase="estado-reservado";
+}
+else{
+clase="estado-vendido";
+}
+
+html += `
+<tr>
+<td>${lote.Lote}</td>
+
+<td class="${clase}">
+${lote.Estado}
+</td>
+
+<td>${lote.Area}</td>
+
+<td>${lote.Ubicacion}</td>
+
+<td>
+
+<button
+onclick="cambiarEstado('${lote.Lote}')">
+
+Cambiar
+
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById(
+"contenedorLotes"
+)
+.innerHTML =
+html;
+
+}
+function renderizarLotes(datos){
+
+```
 let html = `
 <table class="tabla">
     <tr>
@@ -449,6 +577,7 @@ datos.forEach(lote=>{
 
     html += `
     <tr>
+
         <td>${lote.Lote}</td>
 
         <td class="${clase}">
@@ -478,12 +607,30 @@ datos.forEach(lote=>{
 html += "</table>";
 
 document
-.getElementById("contenedorLotes")
-.innerHTML = html;
-
+.getElementById(
+"contenedorLotes"
+)
+.innerHTML =
+html;
+```
 
 }
 
+async function cargarLotes(){
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+    );
+
+    const datos =
+    await respuesta.json();
+
+    todosLosLotes = datos;
+
+    renderizarLotes(datos);
+
+}
 document
 .getElementById(
 "btnCancelarEstado"
@@ -692,6 +839,95 @@ async function cargarAuditoria(){
     html;
 
 }
+document
+.getElementById("buscarLote")
+.addEventListener(
+"input",
+filtrarLotes
+);
+
+function filtrarLotes(){
+
+const texto =
+document
+.getElementById(
+"buscarLote"
+)
+.value
+.toUpperCase();
+
+let datos =
+todosLosLotes.filter(
+lote=>
+
+lote.Lote
+.toUpperCase()
+.includes(texto)
+);
+
+if(
+filtroActual !==
+"TODOS"
+){
+
+datos =
+datos.filter(
+lote=>
+lote.Estado ===
+filtroActual
+);
+
+}
+
+renderizarLotes(datos);
+
+}
+document
+.getElementById(
+"filtroTodos"
+)
+.onclick=()=>{
+filtroActual="TODOS";
+filtrarLotes();
+};
+
+document
+.getElementById(
+"filtroLibres"
+)
+.onclick=()=>{
+filtroActual="LIBRE";
+filtrarLotes();
+};
+
+document
+.getElementById(
+"filtroReservados"
+)
+.onclick=()=>{
+filtroActual="RESERVADO";
+filtrarLotes();
+};
+
+document
+.getElementById(
+"filtroVendidos"
+)
+.onclick=()=>{
+filtroActual="VENDIDO";
+filtrarLotes();
+};
+document
+.getElementById(
+"cerrarSesion"
+)
+.onclick=()=>{
+
+localStorage.clear();
+
+location.reload();
+
+};
 </script>
 
 </body>
