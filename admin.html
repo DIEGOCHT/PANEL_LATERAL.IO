@@ -928,6 +928,97 @@ localStorage.clear();
 location.reload();
 
 };
+document
+.getElementById("buscarLote")
+.addEventListener(
+"input",
+filtrarLotes
+);
+
+function filtrarLotes(){
+
+    const texto =
+    document
+    .getElementById(
+    "buscarLote"
+    )
+    .value
+    .toUpperCase();
+
+    let datos =
+    todosLosLotes.filter(
+    lote=>
+
+    lote.Lote
+    .toUpperCase()
+    .includes(texto)
+    );
+
+    if(
+    filtroActual !==
+    "TODOS"
+    ){
+
+        datos =
+        datos.filter(
+        lote=>
+
+        lote.Estado ===
+        filtroActual
+        );
+
+    }
+
+    renderizarLotes(datos);
+
+}
+document
+.getElementById(
+"filtroTodos"
+)
+.onclick=()=>{
+
+    filtroActual="TODOS";
+
+    filtrarLotes();
+
+};
+
+document
+.getElementById(
+"filtroLibres"
+)
+.onclick=()=>{
+
+    filtroActual="LIBRE";
+
+    filtrarLotes();
+
+};
+
+document
+.getElementById(
+"filtroReservados"
+)
+.onclick=()=>{
+
+    filtroActual="RESERVADO";
+
+    filtrarLotes();
+
+};
+
+document
+.getElementById(
+"filtroVendidos"
+)
+.onclick=()=>{
+
+    filtroActual="VENDIDO";
+
+    filtrarLotes();
+
+};
 </script>
 
 </body>
