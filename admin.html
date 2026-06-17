@@ -118,6 +118,69 @@ button{
     font-weight:bold;
 }
 
+#modalEstado{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.4);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+#ventanaEstado{
+
+    width:400px;
+
+    max-width:95vw;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px;
+
+}
+
+#ventanaEstado select{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+}
+
+.accionesModal{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+.accionesModal button{
+
+    flex:1;
+
+}
 </style>
 
 </head>
@@ -152,6 +215,45 @@ button{
     <div id="usuarioLogeado"></div>
 
     <div id="contenedorLotes"></div>
+
+</div>
+<div id="modalEstado">
+
+    <div id="ventanaEstado">
+
+        <h2>Cambiar Estado</h2>
+
+        <p id="loteSeleccionado"></p>
+
+        <select id="nuevoEstado">
+
+            <option value="LIBRE">LIBRE</option>
+
+            <option value="RESERVADO">RESERVADO</option>
+
+            <option value="VENDIDO">VENDIDO</option>
+
+        </select>
+
+        <div class="accionesModal">
+
+            <button
+            id="btnCancelarEstado">
+
+                Cancelar
+
+            </button>
+
+            <button
+            id="btnGuardarEstado">
+
+                Guardar
+
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -327,6 +429,7 @@ document
 
 
 }
+let loteActual = "";
 async function cambiarEstado(lote){
 
 const nuevoEstado =
@@ -382,6 +485,53 @@ else{
     alert(
     "No se pudo actualizar"
     );
+
+}
+
+}
+document
+.getElementById(
+"btnCancelarEstado"
+)
+.addEventListener(
+"click",
+()=>{
+
+    document
+    .getElementById(
+    "modalEstado"
+    )
+    .style.display =
+    "none";
+
+});
+
+document
+.getElementById(
+"btnGuardarEstado"
+)
+.addEventListener(
+"click",
+guardarEstado
+);
+
+function cambiarEstado(lote){
+
+    loteActual = lote;
+
+    document
+    .getElementById(
+        "loteSeleccionado"
+    )
+    .textContent =
+    lote;
+
+    document
+    .getElementById(
+        "modalEstado"
+    )
+    .style.display =
+    "flex";
 
 }
 
