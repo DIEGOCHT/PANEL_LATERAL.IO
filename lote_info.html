@@ -633,52 +633,58 @@ imagenContainer.classList
 
 }
 
-
 const botonConsulta =
 document.getElementById("consultarPrecio");
 
 if(estado === "RESERVADO"){
 
-    botonConsulta.disabled = true;
+```
+botonConsulta.disabled = true;
 
-    botonConsulta.style.background =
-    "#eab308";
+botonConsulta.style.background =
+"#eab308";
 
-    botonConsulta.style.color =
-    "#ffffff";
+botonConsulta.style.color =
+"#ffffff";
 
-    botonConsulta.innerHTML =
-    "⏳ Lote reservado";
+botonConsulta.innerHTML =
+"⏳ Lote reservado";
+```
 
 }
 else if(estado === "VENDIDO"){
 
-    botonConsulta.disabled = true;
+```
+botonConsulta.disabled = true;
 
-    botonConsulta.style.background =
-    "#dc2626";
+botonConsulta.style.background =
+"#dc2626";
 
-    botonConsulta.style.color =
-    "#ffffff";
+botonConsulta.style.color =
+"#ffffff";
 
-    botonConsulta.innerHTML =
-    "✖ Lote vendido";
+botonConsulta.innerHTML =
+"✖ Lote vendido";
+```
 
 }
 else{
 
-    botonConsulta.disabled = false;
+```
+botonConsulta.disabled = false;
 
-    botonConsulta.style.background =
-    "#3f4d5d";
+botonConsulta.style.background =
+"#3f4d5d";
 
-    botonConsulta.style.color =
-    "#ffffff";
+botonConsulta.style.color =
+"#ffffff";
 
-    botonConsulta.innerHTML =
-    "✉ Consultar precio";
+botonConsulta.innerHTML =
+"✉ Consultar precio";
+```
 
 }
+
 
     if(
         lote.Imagen &&
