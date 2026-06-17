@@ -181,6 +181,26 @@ button{
     flex:1;
 
 }
+#menuAdmin{
+
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+
+}
+
+#menuAdmin button{
+
+    width:auto;
+    padding:12px 25px;
+
+}
+
+#contenedorAuditoria{
+
+    margin-top:20px;
+
+}
 </style>
 
 </head>
@@ -214,7 +234,23 @@ button{
 
     <div id="usuarioLogeado"></div>
 
+    <div id="menuAdmin">
+
+        <button id="btnLotes">
+            LOTES
+        </button>
+
+        <button id="btnAuditoria">
+            AUDITORÍA
+        </button>
+
+    </div>
+
     <div id="contenedorLotes"></div>
+
+    <div id="contenedorAuditoria"
+         style="display:none">
+    </div>
 
 </div>
 <div id="modalEstado">
@@ -297,28 +333,46 @@ async function login(){
 
             body:JSON.stringify({
 
-                action:"login",
+    action:"login",
 
-                usuario:usuario,
+    usuario:usuario,
 
-                password:password
+    password:password
 
-            })
+})
 
-        });
+});
 
         const resultado =
         await respuesta.json();
 
         if(resultado.ok){
 
-            document
-            .getElementById("loginBox")
-            .style.display = "none";
+    localStorage.setItem(
+    "rol",
+    resultado.rol
+    );
 
-            document
-            .getElementById("panel")
-            .style.display = "block";
+    localStorage.setItem(
+    "usuario",
+    resultado.nombre
+    );
+
+    document
+    .getElementById("loginBox")
+    .style.display = "none";
+
+    document
+    .getElementById("panel")
+    .style.display = "block";
+
+    if(resultado.rol !== "ADMIN"){
+
+        document
+        .getElementById("btnAuditoria")
+        .style.display = "none";
+
+    }
 
             document
             .getElementById("usuarioLogeado")
@@ -332,7 +386,7 @@ async function login(){
             resultado.rol +
             "</p>";
 
-            cargarLotes();;
+            cargarLotes();
         }
         else{
 
@@ -429,94 +483,6 @@ document
 
 
 }
-let loteActual = "";
-function cambiarEstado(lote){
-
-
-loteActual = lote;
-
-document
-.getElementById("loteSeleccionado")
-.textContent =
-lote;
-
-document
-.getElementById("modalEstado")
-.style.display =
-"flex";
-
-}
-
-document
-.getElementById("btnCancelarEstado")
-.addEventListener(
-"click",
-()=>{
-document
-.getElementById("modalEstado")
-.style.display =
-"none";
-});
-
-document
-.getElementById("btnGuardarEstado")
-.addEventListener(
-"click",
-guardarEstado
-);
-
-async function guardarEstado(){
-
-const estado =
-document
-.getElementById("nuevoEstado")
-.value;
-
-const usuario =
-document
-.querySelector("#usuarioLogeado h2")
-.innerText
-.replace("Bienvenido ","");
-
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-    method:"POST",
-
-    body:JSON.stringify({
-
-        action:"actualizarEstado",
-
-        lote:loteActual,
-
-        estado:estado,
-
-        usuario:usuario
-
-    })
-
-});
-
-const resultado =
-await respuesta.json();
-
-if(resultado.ok){
-
-    document
-    .getElementById("modalEstado")
-    .style.display =
-    "none";
-
-    cargarLotes();
-
-    alert(
-    "Estado actualizado"
-    );
-
-}
-
-}
 
 document
 .getElementById(
@@ -543,7 +509,65 @@ document
 "click",
 guardarEstado
 );
+let loteActual = "";
+async function guardarEstado(){
 
+    const estado =
+    document
+    .getElementById("nuevoEstado")
+    .value;
+
+    const usuario =
+    localStorage.getItem(
+    "usuario"
+    );
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:"actualizarEstado",
+
+            lote:loteActual,
+
+            estado:estado,
+
+            usuario:usuario
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        document
+        .getElementById("modalEstado")
+        .style.display =
+        "none";
+
+        cargarLotes();
+
+        alert(
+        "Estado actualizado correctamente"
+        );
+
+    }
+    else{
+
+        alert(
+        "No se pudo actualizar"
+        );
+
+    }
+
+}
 function cambiarEstado(lote){
 
     loteActual = lote;
@@ -564,6 +588,61 @@ function cambiarEstado(lote){
 
 }
 
+document
+.getElementById("btnLotes")
+.addEventListener(
+"click",
+()=>{
+
+    document
+    .getElementById(
+    "contenedorLotes"
+    )
+    .style.display =
+    "block";
+
+    document
+    .getElementById(
+    "contenedorAuditoria"
+    )
+    .style.display =
+    "none";
+
+});
+
+document
+.getElementById("btnAuditoria")
+.addEventListener(
+"click",
+cargarAuditoria
+);
+async function cargarAuditoria(){
+
+    document
+    .getElementById(
+    "contenedorLotes"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorAuditoria"
+    )
+    .style.display =
+    "block";
+
+    document
+    .getElementById(
+    "contenedorAuditoria"
+    )
+    .innerHTML =
+
+    "<h2>Auditoría</h2>" +
+
+    "<p>Preparando conexión con Google Sheets...</p>";
+
+}
 </script>
 
 </body>
