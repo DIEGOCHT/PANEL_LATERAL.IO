@@ -632,15 +632,64 @@ async function cargarAuditoria(){
     .style.display =
     "block";
 
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=auditoria"
+    );
+
+    const datos =
+    await respuesta.json();
+
+    let html = `
+
+    <table class="tabla">
+
+      <tr>
+
+        <th>Fecha</th>
+
+        <th>Usuario</th>
+
+        <th>Lote</th>
+
+        <th>Antes</th>
+
+        <th>Después</th>
+
+      </tr>
+
+    `;
+
+    datos.forEach(item=>{
+
+      html += `
+
+      <tr>
+
+        <td>${item.Fecha || ""}</td>
+
+        <td>${item.Usuario || ""}</td>
+
+        <td>${item.Lote || ""}</td>
+
+        <td>${item.Antes || ""}</td>
+
+        <td>${item.Despues || ""}</td>
+
+      </tr>
+
+      `;
+
+    });
+
+    html += "</table>";
+
     document
     .getElementById(
     "contenedorAuditoria"
     )
     .innerHTML =
-
-    "<h2>Auditoría</h2>" +
-
-    "<p>Preparando conexión con Google Sheets...</p>";
+    html;
 
 }
 </script>
