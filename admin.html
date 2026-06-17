@@ -440,7 +440,15 @@ button{
 document
 .getElementById("btnLogin")
 .addEventListener("click",login);
+document
+.getElementById("password")
+.addEventListener(
+"focus",
+function(){
 
+    this.select();
+
+});
 async function login(){
 
     const usuario =
@@ -536,12 +544,21 @@ async function login(){
         }
         else{
 
-            document
-            .getElementById("error")
-            .textContent =
-            "Usuario o contraseña incorrectos";
+    document
+    .getElementById("error")
+    .textContent =
+    "Usuario o contraseña incorrectos";
 
-        }
+    const campoPassword =
+    document.getElementById(
+    "password"
+    );
+
+    campoPassword.value = "";
+
+    campoPassword.focus();
+
+}
 
     }
     catch(error){
