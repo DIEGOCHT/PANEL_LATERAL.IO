@@ -1027,7 +1027,7 @@ async function cargarAsesores(){
 
             <th>Estado</th>
 
-            <th>Acción</th>
+            <th>Acciones</th>
 
         </tr>
 
@@ -1047,19 +1047,29 @@ async function cargarAsesores(){
 
             <td>
 
-                <button
-                onclick="
-                cambiarEstadoAsesor(
-                '${a.usuario}'
-                )">
+    <button
+    onclick="
+    cambiarEstadoAsesor(
+    '${a.usuario}'
+    )">
 
-                ${a.estado==="ACTIVO"
-                ? "Desactivar"
-                : "Activar"}
+    ${a.estado==="ACTIVO"
+    ? "Desactivar"
+    : "Activar"}
 
-                </button>
+    </button>
 
-            </td>
+    <button
+    onclick="
+    cambiarPasswordAsesor(
+    '${a.usuario}'
+    )">
+
+    Cambiar Clave
+
+    </button>
+
+</td>
 
         </tr>
 
@@ -1126,13 +1136,20 @@ async function crearAsesor(){
 
     if(resultado.ok){
 
-        alert(
-        "Asesor creado correctamente"
-        );
+    alert(
+    "Asesor creado correctamente"
+    );
 
-        cargarAsesores();
+    cargarAsesores();
 
-    }
+}
+else{
+
+    alert(
+    resultado.mensaje
+    );
+
+}
 
 }
 async function cambiarEstadoAsesor(usuario){
@@ -1164,7 +1181,49 @@ async function cambiarEstadoAsesor(usuario){
     }
 
 }
+async function cambiarPasswordAsesor(usuario){
 
+    const nuevaPassword =
+    prompt(
+    "Nueva contraseña para " +
+    usuario
+    );
+
+    if(!nuevaPassword){
+        return;
+    }
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:
+            "cambiarPasswordAsesor",
+
+            usuario:usuario,
+
+            password:nuevaPassword
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        alert(
+        "Contraseña actualizada"
+        );
+
+    }
+
+}
 document
 .getElementById(
 "cerrarSesion"
