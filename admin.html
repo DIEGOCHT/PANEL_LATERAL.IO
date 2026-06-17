@@ -169,34 +169,54 @@ document
 .getElementById("btnLogin")
 .addEventListener("click",login);
 
-function login(){
+async function login(){
 
-    const usuario =
-    document.getElementById("usuario")
-    .value.trim();
+const usuario =
+document.getElementById("usuario")
+.value.trim();
 
-    const password =
-    document.getElementById("password")
-    .value.trim();
+const password =
+document.getElementById("password")
+.value.trim();
 
-    if(
-        usuario === "" ||
-        password === ""
-    ){
+if(
+    usuario === "" ||
+    password === ""
+){
 
-        document
-        .getElementById("error")
-        .textContent =
-        "Ingrese usuario y contraseña";
+    document
+    .getElementById("error")
+    .textContent =
+    "Ingrese usuario y contraseña";
 
-        return;
+    return;
 
-    }
+}
 
-    if(
-        usuario === "admin" &&
-        password === "admin123"
-    ){
+try{
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:"login",
+
+            usuario:usuario,
+
+            password:password
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
 
         document
         .getElementById("loginBox")
@@ -209,7 +229,14 @@ function login(){
         document
         .getElementById("usuarioLogeado")
         .innerHTML =
-        "<b>Bienvenido:</b> ADMIN";
+
+        "<h2>Bienvenido " +
+        resultado.nombre +
+        "</h2>" +
+
+        "<p><b>Rol:</b> " +
+        resultado.rol +
+        "</p>";
 
     }
     else{
@@ -222,7 +249,16 @@ function login(){
     }
 
 }
+catch(error){
 
+    document
+    .getElementById("error")
+    .textContent =
+    "Error de conexión";
+
+    console.log(error);
+
+}
 </script>
 
 </body>
