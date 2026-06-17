@@ -933,7 +933,7 @@ document
 cargarAsesores
 );
 
-function cargarAsesores(){
+async function cargarAsesores(){
 
     document
     .getElementById(
@@ -970,20 +970,198 @@ function cargarAsesores(){
     .style.display =
     "block";
 
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+        body:JSON.stringify({
+            action:"listarAsesores"
+        })
+    });
+
+    const asesores =
+    await respuesta.json();
+
+    let html = `
+
+    <h2>Administración de Asesores</h2>
+
+    <div style="
+        background:white;
+        padding:20px;
+        border-radius:15px;
+        margin-bottom:20px;
+    ">
+
+        <h3>Nuevo Asesor</h3>
+
+        <input
+        id="nuevoUsuario"
+        placeholder="Usuario">
+
+        <input
+        id="nuevoPassword"
+        placeholder="Contraseña">
+
+        <input
+        id="nuevoNombre"
+        placeholder="Nombre">
+
+        <button
+        onclick="crearAsesor()">
+
+            Guardar Asesor
+
+        </button>
+
+    </div>
+
+    <table class="tabla">
+
+        <tr>
+
+            <th>Usuario</th>
+
+            <th>Nombre</th>
+
+            <th>Estado</th>
+
+            <th>Acción</th>
+
+        </tr>
+
+    `;
+
+    asesores.forEach(a=>{
+
+        html += `
+
+        <tr>
+
+            <td>${a.usuario}</td>
+
+            <td>${a.nombre}</td>
+
+            <td>${a.estado}</td>
+
+            <td>
+
+                <button
+                onclick="
+                cambiarEstadoAsesor(
+                '${a.usuario}'
+                )">
+
+                ${a.estado==="ACTIVO"
+                ? "Desactivar"
+                : "Activar"}
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+    html += `
+    </table>
+    `;
+
     document
     .getElementById(
     "contenedorAsesores"
     )
-    .innerHTML = `
+    .innerHTML = html;
 
-    <h2>Administración de Asesores</h2>
+}
+async function crearAsesor(){
 
-    <p>
-    Próximo paso:
-    crear, activar y desactivar asesores.
-    </p>
+    const usuario =
+    document
+    .getElementById(
+    "nuevoUsuario"
+    )
+    .value;
 
-    `;
+    const password =
+    document
+    .getElementById(
+    "nuevoPassword"
+    )
+    .value;
+
+    const nombre =
+    document
+    .getElementById(
+    "nuevoNombre"
+    )
+    .value;
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:"crearAsesor",
+
+            usuario:usuario,
+
+            password:password,
+
+            nombre:nombre
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        alert(
+        "Asesor creado correctamente"
+        );
+
+        cargarAsesores();
+
+    }
+
+}
+async function cambiarEstadoAsesor(usuario){
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:
+            "cambiarEstadoAsesor",
+
+            usuario:usuario
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        cargarAsesores();
+
+    }
 
 }
 
