@@ -79,6 +79,45 @@ button{
     margin-bottom:20px;
 }
 
+#contenedorLotes{
+    margin-top:20px;
+}
+
+.tabla{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.tabla th{
+    background:#3f4d5d;
+    color:white;
+    padding:15px;
+    text-align:left;
+}
+
+.tabla td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.estado-libre{
+    color:#16a34a;
+    font-weight:bold;
+}
+
+.estado-reservado{
+    color:#eab308;
+    font-weight:bold;
+}
+
+.estado-vendido{
+    color:#dc2626;
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -111,6 +150,8 @@ button{
 <div id="panel">
 
     <div id="usuarioLogeado"></div>
+
+    <div id="contenedorLotes"></div>
 
 </div>
 
@@ -189,6 +230,7 @@ async function login(){
             resultado.rol +
             "</p>";
 
+            cargarLotes();;
         }
         else{
 
@@ -213,6 +255,60 @@ async function login(){
 
 }
 
+async function cargarLotes(){
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+    );
+
+    const datos =
+    await respuesta.json();
+
+    let html = `
+    <table class="tabla">
+        <tr>
+            <th>Lote</th>
+            <th>Estado</th>
+            <th>Área</th>
+            <th>Ubicación</th>
+        </tr>
+    `;
+
+    datos.forEach(lote=>{
+
+        let clase = "";
+
+        if(lote.Estado === "LIBRE"){
+            clase = "estado-libre";
+        }
+        else if(lote.Estado === "RESERVADO"){
+            clase = "estado-reservado";
+        }
+        else{
+            clase = "estado-vendido";
+        }
+
+        html += `
+        <tr>
+            <td>${lote.Lote}</td>
+            <td class="${clase}">
+                ${lote.Estado}
+            </td>
+            <td>${lote.Area}</td>
+            <td>${lote.Ubicacion}</td>
+        </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    document
+    .getElementById("contenedorLotes")
+    .innerHTML = html;
+
+}
 </script>
 
 </body>
