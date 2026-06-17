@@ -712,22 +712,8 @@ document
     "none";
 
 });
-document
-.getElementById(
-"btnCerrarPassword"
-)
-.addEventListener(
-"click",
-()=>{
 
-    document
-    .getElementById(
-    "modalPassword"
-    )
-    .style.display =
-    "none";
 
-});
 document
 .getElementById(
 "btnGuardarEstado"
@@ -1451,12 +1437,16 @@ z-index:9999;
         ********
         </div>
 
-        <button
-        id="btnCerrarPassword">
+       <button
+onclick="
+document
+.getElementById('modalPassword')
+.style.display='none'
+">
 
-            Cerrar
+Cerrar
 
-        </button>
+</button>
 
     </div>
 
