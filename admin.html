@@ -712,7 +712,22 @@ document
     "none";
 
 });
+document
+.getElementById(
+"btnCerrarPassword"
+)
+.addEventListener(
+"click",
+()=>{
 
+    document
+    .getElementById(
+    "modalPassword"
+    )
+    .style.display =
+    "none";
+
+});
 document
 .getElementById(
 "btnGuardarEstado"
@@ -1047,7 +1062,18 @@ async function cargarAsesores(){
 
             <td>
 
+<div style="
+display:flex;
+gap:10px;
+align-items:center;
+">
+
     <button
+    style="
+    width:auto;
+    padding:10px 18px;
+    margin:0;
+    "
     onclick="
     cambiarEstadoAsesor(
     '${a.usuario}'
@@ -1060,6 +1086,26 @@ async function cargarAsesores(){
     </button>
 
     <button
+    style="
+    width:auto;
+    padding:10px 18px;
+    margin:0;
+    "
+    onclick="
+    verPasswordAsesor(
+    '${a.usuario}'
+    )">
+
+    Contraseña
+
+    </button>
+
+    <button
+    style="
+    width:auto;
+    padding:10px 18px;
+    margin:0;
+    "
     onclick="
     cambiarPasswordAsesor(
     '${a.usuario}'
@@ -1068,6 +1114,8 @@ async function cargarAsesores(){
     Cambiar Clave
 
     </button>
+
+</div>
 
 </td>
 
@@ -1224,6 +1272,47 @@ async function cambiarPasswordAsesor(usuario){
     }
 
 }
+async function verPasswordAsesor(usuario){
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:
+            "obtenerPasswordAsesor",
+
+            usuario:usuario
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        document
+        .getElementById(
+        "passwordAsesor"
+        )
+        .textContent =
+        resultado.password;
+
+        document
+        .getElementById(
+        "modalPassword"
+        )
+        .style.display =
+        "flex";
+
+    }
+
+}
 document
 .getElementById(
 "cerrarSesion"
@@ -1327,6 +1416,50 @@ document
 
 };
 </script>
+<div id="modalPassword" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
 
+    <div style="
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    min-width:350px;
+    text-align:center;
+    ">
+
+        <h3>
+            Contraseña del asesor
+        </h3>
+
+        <div
+        id="passwordAsesor"
+        style="
+        font-size:22px;
+        font-weight:bold;
+        margin:20px 0;
+        ">
+        ********
+        </div>
+
+        <button
+        id="btnCerrarPassword">
+
+            Cerrar
+
+        </button>
+
+    </div>
+
+</div>
 </body>
 </html>
