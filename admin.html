@@ -509,6 +509,11 @@ async function login(){
     localStorage.setItem(
     "rol",
     resultado.rol
+localStorage.setItem(
+"rol",
+resultado.rol
+);
+
 if(resultado.rol === "ASESOR"){
 
     document
@@ -572,7 +577,12 @@ else{
     .getElementById("panel")
     .style.display = "block";
 
-    if(resultado.rol !== "ADMIN"){
+    localStorage.setItem(
+"rol",
+resultado.rol
+);
+
+if(resultado.rol === "ASESOR"){
 
     document
     .getElementById("btnAuditoria")
@@ -582,20 +592,31 @@ else{
     .getElementById("btnAsesores")
     .style.display = "none";
 
-}
-
-if(resultado.rol === "ADMIN"){
-
     document
-    .getElementById(
-    "btnConsultas"
-    )
-    .style.display =
-    "inline-block";
+    .getElementById("btnConsultas")
+    .style.display = "none";
 
 }
 else{
 
+    document
+    .getElementById("btnAuditoria")
+    .style.display = "inline-block";
+
+    document
+    .getElementById("btnAsesores")
+    .style.display = "inline-block";
+
+    document
+    .getElementById("btnConsultas")
+    .style.display = "inline-block";
+
+}
+
+localStorage.setItem(
+"usuario",
+resultado.nombre
+);
     document
     .getElementById(
     "btnConsultas"
