@@ -644,21 +644,25 @@ resultado.nombre
 
             cargarLotes();
 
-document.getElementById(
-"badgeConsultas"
-).textContent = "1";
+if(resultado.rol === "ADMIN"){
 
-document.getElementById(
-"badgeConsultas"
-).style.display = "flex";
+    document.getElementById(
+    "badgeConsultas"
+    ).textContent = "1";
 
-document.getElementById(
-"badgeAuditoria"
-).textContent = "1";
+    document.getElementById(
+    "badgeConsultas"
+    ).style.display = "flex";
 
-document.getElementById(
-"badgeAuditoria"
-).style.display = "flex";
+    document.getElementById(
+    "badgeAuditoria"
+    ).textContent = "1";
+
+    document.getElementById(
+    "badgeAuditoria"
+    ).style.display = "flex";
+
+}
         }
         else{
 
@@ -1694,24 +1698,30 @@ async function cargarConsultas(){
 
         html += `
 
-        <div style="
-        padding:10px 0;
-        border-bottom:1px solid #eee;
-        ">
+<div style="
+padding:10px 0;
+border-bottom:1px solid #eee;
+">
 
-            <b>${c.Nombre || "Sin nombre"}</b>
+    <b>${c.Nombre || "Sin nombre"}</b>
 
-            <br>
+    <br>
 
-            ${c.Telefono || ""}
+    📍 ${c.Lote || "Sin lote"}
 
-            <br>
+    <br>
 
-            <small>${formatearFecha(c.Fecha)}</small>
+    📞 ${c.Telefono || ""}
 
-        </div>
+    <br>
 
-        `;
+    <small>
+    ${formatearFecha(c.Fecha)}
+    </small>
+
+</div>
+
+`;
 
     });
 
