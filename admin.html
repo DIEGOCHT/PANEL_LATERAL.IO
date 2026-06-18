@@ -643,25 +643,11 @@ resultado.nombre
             "</p>";
 
             cargarLotes();
+verificarNotificaciones();
 
 if(resultado.rol === "ADMIN"){
 
-    document.getElementById(
-    "badgeConsultas"
-    ).textContent = "1";
-
-    document.getElementById(
-    "badgeConsultas"
-    ).style.display = "flex";
-
-    document.getElementById(
-    "badgeAuditoria"
-    ).textContent = "1";
-
-    document.getElementById(
-    "badgeAuditoria"
-    ).style.display = "flex";
-
+    
 }
         }
         else{
@@ -767,7 +753,84 @@ document
 html;
 
 }
+async function verificarNotificaciones(){
 
+    const rol =
+    localStorage.getItem("rol");
+
+    if(rol !== "ADMIN"){
+        return;
+    }
+
+    // CONSULTAS
+
+    const r1 =
+    await fetch(
+    "TU_URL?action=ultimaConsulta"
+    );
+
+    const consulta =
+    await r1.json();
+
+    const ultimaVistaConsulta =
+    localStorage.getItem(
+    "consultasVistas"
+    ) || 0;
+
+    if(
+      new Date(
+      consulta.fecha
+      ).getTime()
+      >
+      Number(
+      ultimaVistaConsulta
+      )
+    ){
+
+        document
+        .getElementById(
+        "badgeConsultas"
+        )
+        .style.display =
+        "flex";
+
+    }
+
+    // AUDITORIA
+
+    const r2 =
+    await fetch(
+    "TU_URL?action=ultimaAuditoria"
+    );
+
+    const auditoria =
+    await r2.json();
+
+    const ultimaVistaAuditoria =
+    localStorage.getItem(
+    "auditoriaVista"
+    ) || 0;
+
+    if(
+      new Date(
+      auditoria.fecha
+      ).getTime()
+      >
+      Number(
+      ultimaVistaAuditoria
+      )
+    ){
+
+        document
+        .getElementById(
+        "badgeAuditoria"
+        )
+        .style.display =
+        "flex";
+
+    }
+
+}
 function actualizarDashboard(datos){
 
 const total =
