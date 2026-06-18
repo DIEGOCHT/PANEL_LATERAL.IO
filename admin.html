@@ -1426,46 +1426,28 @@ async function eliminarAsesor(usuario){
 async function cargarConsultas(){
 
     document
-    .getElementById(
-    "contenedorLotes"
-    )
-    .style.display =
-    "none";
+    .getElementById("contenedorLotes")
+    .style.display = "none";
 
     document
-    .getElementById(
-    "contenedorAuditoria"
-    )
-    .style.display =
-    "none";
+    .getElementById("contenedorAuditoria")
+    .style.display = "none";
 
     document
-    .getElementById(
-    "contenedorAsesores"
-    )
-    .style.display =
-    "none";
+    .getElementById("contenedorAsesores")
+    .style.display = "none";
 
     document
-    .getElementById(
-    "dashboard"
-    )
-    .style.display =
-    "none";
+    .getElementById("dashboard")
+    .style.display = "none";
 
     document
-    .getElementById(
-    "herramientas"
-    )
-    .style.display =
-    "none";
+    .getElementById("herramientas")
+    .style.display = "none";
 
     document
-    .getElementById(
-    "contenedorConsultas"
-    )
-    .style.display =
-    "block";
+    .getElementById("contenedorConsultas")
+    .style.display = "block";
 
     const respuesta =
     await fetch(
@@ -1475,7 +1457,7 @@ async function cargarConsultas(){
     const datos =
     await respuesta.json();
 
-    // MÁS RECIENTES ARRIBA
+    // Más recientes primero
     datos.sort((a,b)=>{
 
         return new Date(b.Fecha)
@@ -1483,70 +1465,66 @@ async function cargarConsultas(){
         new Date(a.Fecha);
 
     });
-datos
-.slice(0,5)
-.forEach(c=>{
-
-    html += `
-
-    <div style="
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-    ">
-
-        <b>
-        ${c.Nombre || "Sin nombre"}
-        </b>
-
-        <br>
-
-        ${c.Telefono || ""}
-
-        <br>
-
-        <small>
-        ${c.Fecha || ""}
-        </small>
-
-    </div>
-
-    `;
-
-});
 
     let html = `
 
-<h2>Consultas Recibidas</h2>
+    <h2>Consultas Recibidas</h2>
 
-<div style="
-background:#fff;
-padding:20px;
-border-radius:15px;
-margin-bottom:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-">
+    <div style="
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    ">
 
-<h3>
-🔔 Últimas Consultas
-</h3>
-`;
+    <h3>
+    🔔 Últimas Consultas
+    </h3>
+
+    `;
+
+    datos
+    .slice(0,5)
+    .forEach(c=>{
+
+        html += `
+
+        <div style="
+        padding:10px 0;
+        border-bottom:1px solid #eee;
+        ">
+
+            <b>${c.Nombre || "Sin nombre"}</b>
+
+            <br>
+
+            ${c.Telefono || ""}
+
+            <br>
+
+            <small>${c.Fecha || ""}</small>
+
+        </div>
+
+        `;
+
+    });
+
+    html += `
+
+    </div>
 
     <table class="tabla">
 
         <tr>
 
             <th>Fecha</th>
-
             <th>Lote</th>
-
             <th>Estado</th>
-
             <th>Nombre</th>
-
             <th>Email</th>
-
             <th>Teléfono</th>
-
             <th>Mensaje</th>
 
         </tr>
@@ -1560,17 +1538,11 @@ box-shadow:0 5px 15px rgba(0,0,0,.08);
         <tr>
 
             <td>${c.Fecha || ""}</td>
-
             <td>${c.Lote || ""}</td>
-
             <td>${c.Estado || ""}</td>
-
             <td>${c.Nombre || ""}</td>
-
             <td>${c.Email || ""}</td>
-
             <td>${c.Telefono || ""}</td>
-
             <td>${c.Mensaje || ""}</td>
 
         </tr>
@@ -1578,24 +1550,10 @@ box-shadow:0 5px 15px rgba(0,0,0,.08);
         `;
 
     });
-html += `
-</div>
 
-<table class="tabla">
-
-<tr>
-
-<th>Fecha</th>
-<th>Lote</th>
-<th>Estado</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Teléfono</th>
-<th>Mensaje</th>
-
-</tr>
-`;
-    html += "</table>";
+    html += `
+    </table>
+    `;
 
     document
     .getElementById(
