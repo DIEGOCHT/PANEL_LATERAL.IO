@@ -507,77 +507,6 @@ async function login(){
         if(resultado.ok){
 
     localStorage.setItem(
-    "rol",
-    resultado.rol
-localStorage.setItem(
-"rol",
-resultado.rol
-);
-
-if(resultado.rol === "ASESOR"){
-
-    document
-    .getElementById(
-    "btnAuditoria"
-    )
-    .style.display =
-    "none";
-
-    document
-    .getElementById(
-    "btnAsesores"
-    )
-    .style.display =
-    "none";
-
-    document
-    .getElementById(
-    "btnConsultas"
-    )
-    .style.display =
-    "none";
-
-}
-else{
-
-    document
-    .getElementById(
-    "btnAuditoria"
-    )
-    .style.display =
-    "inline-block";
-
-    document
-    .getElementById(
-    "btnAsesores"
-    )
-    .style.display =
-    "inline-block";
-
-    document
-    .getElementById(
-    "btnConsultas"
-    )
-    .style.display =
-    "inline-block";
-
-}
-    );
-
-    localStorage.setItem(
-    "usuario",
-    resultado.nombre
-    );
-
-    document
-    .getElementById("loginBox")
-    .style.display = "none";
-
-    document
-    .getElementById("panel")
-    .style.display = "block";
-
-    localStorage.setItem(
 "rol",
 resultado.rol
 );
@@ -618,13 +547,13 @@ localStorage.setItem(
 resultado.nombre
 );
     document
-    .getElementById(
-    "btnConsultas"
-    )
-    .style.display =
-    "none";
+    .getElementById("loginBox")
+    .style.display = "none";
 
-}
+    document
+    .getElementById("panel")
+    .style.display = "block";
+
             document
             .getElementById("usuarioLogeado")
             .innerHTML =
