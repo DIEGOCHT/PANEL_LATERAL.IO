@@ -345,9 +345,11 @@ button{
         ASESORES
     </button>
 
-    <button id="btnConsultas">
-        CONSULTAS
-    </button>
+    <button
+id="btnConsultas"
+style="display:none;">
+    CONSULTAS
+</button>
 </div>
 
     <div id="herramientas">
@@ -507,6 +509,54 @@ async function login(){
     localStorage.setItem(
     "rol",
     resultado.rol
+if(resultado.rol === "ASESOR"){
+
+    document
+    .getElementById(
+    "btnAuditoria"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "btnAsesores"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "btnConsultas"
+    )
+    .style.display =
+    "none";
+
+}
+else{
+
+    document
+    .getElementById(
+    "btnAuditoria"
+    )
+    .style.display =
+    "inline-block";
+
+    document
+    .getElementById(
+    "btnAsesores"
+    )
+    .style.display =
+    "inline-block";
+
+    document
+    .getElementById(
+    "btnConsultas"
+    )
+    .style.display =
+    "inline-block";
+
+}
     );
 
     localStorage.setItem(
@@ -534,6 +584,26 @@ async function login(){
 
 }
 
+if(resultado.rol === "ADMIN"){
+
+    document
+    .getElementById(
+    "btnConsultas"
+    )
+    .style.display =
+    "inline-block";
+
+}
+else{
+
+    document
+    .getElementById(
+    "btnConsultas"
+    )
+    .style.display =
+    "none";
+
+}
             document
             .getElementById("usuarioLogeado")
             .innerHTML =
@@ -875,6 +945,12 @@ document
 cargarAuditoria
 );
 async function cargarAuditoria(){
+const rol =
+localStorage.getItem("rol");
+
+if(rol !== "ADMIN"){
+    return;
+}
 document
 .getElementById(
 "dashboard"
@@ -975,6 +1051,12 @@ cargarConsultas
 );
 
 async function cargarAsesores(){
+const rol =
+localStorage.getItem("rol");
+
+if(rol !== "ADMIN"){
+    return;
+}
 
     document
     .getElementById(
@@ -1424,6 +1506,15 @@ async function eliminarAsesor(usuario){
 
 }
 async function cargarConsultas(){
+
+    const rol =
+    localStorage.getItem(
+    "rol"
+    );
+
+    if(rol !== "ADMIN"){
+        return;
+    }
 
     document
     .getElementById("contenedorLotes")
