@@ -622,6 +622,10 @@ localStorage.setItem(
 "usuario",
 resultado.nombre
 );
+localStorage.setItem(
+"logeado",
+"SI"
+);
     document
     .getElementById("loginBox")
     .style.display = "none";
@@ -1852,14 +1856,72 @@ document
 "none";
 
 }
+window.onload = ()=>{
 
+    if(
+        localStorage.getItem(
+        "logeado"
+        ) === "SI"
+    ){
+
+        document
+        .getElementById(
+        "loginBox"
+        )
+        .style.display =
+        "none";
+
+        document
+        .getElementById(
+        "panel"
+        )
+        .style.display =
+        "block";
+
+        document
+        .getElementById(
+        "usuarioLogeado"
+        )
+        .innerHTML =
+
+        "<h2>Bienvenido " +
+
+        localStorage.getItem(
+        "usuario"
+        ) +
+
+        "</h2>" +
+
+        "<p><b>Rol:</b> " +
+
+        localStorage.getItem(
+        "rol"
+        ) +
+
+        "</p>";
+
+        cargarLotes();
+
+    }
+
+};
 document
 .getElementById(
 "cerrarSesion"
 )
 .onclick=()=>{
 
-localStorage.clear();
+localStorage.removeItem(
+"logeado"
+);
+
+localStorage.removeItem(
+"usuario"
+);
+
+localStorage.removeItem(
+"rol"
+);
 
 location.reload();
 
