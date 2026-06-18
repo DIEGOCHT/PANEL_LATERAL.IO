@@ -1108,7 +1108,17 @@ ${datos.length}
     )
     .innerHTML =
     html;
+localStorage.setItem(
+"auditoriaVista",
+Date.now()
+);
 
+document
+.getElementById(
+"badgeAuditoria"
+)
+.style.display =
+"none";
 }
 document
 .getElementById("btnAsesores")
@@ -1124,33 +1134,13 @@ cargarConsultas
 );
 
 async function cargarAsesores(){
+
 const rol =
 localStorage.getItem("rol");
 
 if(rol !== "ADMIN"){
     return;
-document
-.getElementById(
-"contenedorAuditoria"
-)
-.innerHTML =
-html;
-
-localStorage.setItem(
-"auditoriaVista",
-Date.now()
-);
-
-document
-.getElementById(
-"badgeAuditoria"
-)
-.style.display =
-"none";
-
 }
-}
-
     document
     .getElementById(
     "contenedorLotes"
