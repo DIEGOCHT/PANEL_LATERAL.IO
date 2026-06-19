@@ -1122,6 +1122,13 @@ datos.sort((a,b)=>{
     let html = `
 
 <h2>Auditoría de Cambios</h2>
+<input
+id="buscarAuditoria"
+placeholder="🔍 Buscar usuario..."
+style="
+width:300px;
+margin-bottom:15px;
+">
 
 <div style="
 background:white;
@@ -1183,6 +1190,39 @@ ${datos.length}
     )
     .innerHTML =
     html;
+document
+.getElementById(
+"buscarAuditoria"
+)
+.addEventListener(
+"input",
+function(){
+
+const texto =
+this.value.toUpperCase();
+
+const filas =
+document.querySelectorAll(
+"#contenedorAuditoria table tr"
+);
+
+filas.forEach((fila,i)=>{
+
+if(i===0)return;
+
+const usuario =
+fila.children[1]
+.textContent
+.toUpperCase();
+
+fila.style.display =
+usuario.includes(texto)
+? ""
+: "none";
+
+});
+
+});
 localStorage.setItem(
 "auditoriaVista",
 Date.now()
@@ -1301,6 +1341,12 @@ document
             Guardar Asesor
 
         </button>
+<input
+    id="buscarAsesor"
+    placeholder="🔍 Buscar asesor por nombre"
+    style="
+    margin-top:20px;
+    ">
 
     </div>
 
@@ -1424,7 +1470,39 @@ Eliminar
     "contenedorAsesores"
     )
     .innerHTML = html;
+document
+.getElementById(
+"buscarAsesor"
+)
+.addEventListener(
+"input",
+function(){
 
+const texto =
+this.value.toUpperCase();
+
+const filas =
+document.querySelectorAll(
+"#contenedorAsesores table tr"
+);
+
+filas.forEach((fila,i)=>{
+
+if(i===0)return;
+
+const nombre =
+fila.children[1]
+.textContent
+.toUpperCase();
+
+fila.style.display =
+nombre.includes(texto)
+? ""
+: "none";
+
+});
+
+});
 }
 async function crearAsesor(){
 
@@ -1764,8 +1842,48 @@ async function cargarConsultas(){
     `;
 
     datos
-    .slice(0,5)
-    .forEach(c=>{
+.slice(0,5)
+.forEach(c=>{
+
+html += `
+
+<div style="
+padding:15px 0;
+border-bottom:1px solid #eee;
+">
+
+    <div>
+        <b>Nombre:</b>
+        ${c.Nombre || ""}
+    </div>
+
+    <div>
+        <b>Lote:</b>
+        ${c.Lote || ""}
+    </div>
+
+    <div>
+        <b>Teléfono:</b>
+        ${c.Telefono || ""}
+    </div>
+
+    <div>
+        <b>Mensaje:</b>
+        ${c.Mensaje || ""}
+    </div>
+
+    <div style="
+    color:#666;
+    margin-top:5px;
+    ">
+        ${formatearFecha(c.Fecha)}
+    </div>
+
+</div>
+
+`;
+
+});
 
         html += `
 
