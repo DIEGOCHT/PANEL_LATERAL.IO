@@ -533,6 +533,40 @@ function(){
     this.select();
 
 });
+function aplicarPermisosRol(rol){
+
+    if(rol === "ASESOR"){
+
+        document
+        .getElementById("btnAuditoria")
+        .style.display = "none";
+
+        document
+        .getElementById("btnAsesores")
+        .style.display = "none";
+
+        document
+        .getElementById("btnConsultas")
+        .style.display = "none";
+
+    }
+    else{
+
+        document
+        .getElementById("btnAuditoria")
+        .style.display = "inline-block";
+
+        document
+        .getElementById("btnAsesores")
+        .style.display = "inline-block";
+
+        document
+        .getElementById("btnConsultas")
+        .style.display = "inline-block";
+
+    }
+
+}
 async function login(){
 
     const usuario =
@@ -587,36 +621,9 @@ async function login(){
 resultado.rol
 );
 
-if(resultado.rol === "ASESOR"){
-
-    document
-    .getElementById("btnAuditoria")
-    .style.display = "none";
-
-    document
-    .getElementById("btnAsesores")
-    .style.display = "none";
-
-    document
-    .getElementById("btnConsultas")
-    .style.display = "none";
-
-}
-else{
-
-    document
-    .getElementById("btnAuditoria")
-    .style.display = "inline-block";
-
-    document
-    .getElementById("btnAsesores")
-    .style.display = "inline-block";
-
-    document
-    .getElementById("btnConsultas")
-    .style.display = "inline-block";
-
-}
+aplicarPermisosRol(
+resultado.rol
+);
 
 localStorage.setItem(
 "usuario",
@@ -649,10 +656,6 @@ localStorage.setItem(
             cargarLotes();
 verificarNotificaciones();
 
-if(resultado.rol === "ADMIN"){
-
-    
-}
         }
         else{
 
@@ -757,6 +760,7 @@ document
 html;
 
 }
+
 async function verificarNotificaciones(){
 
     const rol =
@@ -770,7 +774,7 @@ async function verificarNotificaciones(){
 
     const r1 =
     await fetch(
-    "TU_URL?action=ultimaConsulta"
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=ultimaConsulta"
     );
 
     const consulta =
@@ -804,7 +808,7 @@ async function verificarNotificaciones(){
 
     const r2 =
     await fetch(
-    "TU_URL?action=ultimaAuditoria"
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=ultimaAuditoria"
     );
 
     const auditoria =
@@ -1901,6 +1905,11 @@ window.onload = ()=>{
         "</p>";
 
         cargarLotes();
+aplicarPermisosRol(
+localStorage.getItem("rol")
+);
+
+verificarNotificaciones();
 
     }
 
@@ -1923,6 +1932,17 @@ localStorage.removeItem(
 "rol"
 );
 
+document.getElementById(
+"btnAuditoria"
+).style.display = "none";
+
+document.getElementById(
+"btnAsesores"
+).style.display = "none";
+
+document.getElementById(
+"btnConsultas"
+).style.display = "none";
 location.reload();
 
 };
