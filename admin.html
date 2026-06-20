@@ -1031,15 +1031,13 @@ return;
 
         body:JSON.stringify({
 
-            action:"actualizarEstado",
-
-            lote:loteActual,
-
-            estado:estado,
-
-            usuario:usuario
-
-        })
+            {
+  action:"actualizarEstado",
+  lote:loteActual,
+  estado:estado,
+  usuario:usuario,
+  estadoOriginal:estadoOriginal
+}
 
     });
 
