@@ -1231,6 +1231,13 @@ await fetch(
 
 const datos =
 await respuesta.json();
+datos.sort((a,b)=>{
+
+    return new Date(b.Fecha)
+    -
+    new Date(a.Fecha);
+
+});
 
 const reservados =
 datos.filter(
@@ -2152,14 +2159,29 @@ document
 
     const datos =
     await respuesta.json();
+datos.sort((a,b)=>{
+
+    return new Date(b.Fecha)
+    -
+    new Date(a.Fecha);
+
+});
 
     let html = `
 
-    <h2>
-    Solicitudes Pendientes
-    </h2>
+<h2>
+Solicitudes Pendientes
+</h2>
 
-    <table class="tabla">
+<input
+id="buscarSolicitud"
+placeholder="🔍 Buscar usuario..."
+style="
+width:300px;
+margin-bottom:20px;
+">
+
+<table class="tabla">
 
     <tr>
 
@@ -2168,12 +2190,13 @@ document
         <th>Lote</th>
         <th>Actual</th>
         <th>Solicita</th>
+<th>Acción</th>
 
     </tr>
 
     `;
 
-    datos.forEach(s=>{
+    datos.forEach((s,i)=>{
 
         if(
         s.Estado !==
@@ -2183,34 +2206,55 @@ document
         }
 
         html += `
+<tr>
 
-        <tr>
+<td>${formatearFecha(s.Fecha)}</td>
 
-            <td>
-            ${formatearFecha(
-            s.Fecha
-            )}
-            </td>
+<td>${s.Usuario}</td>
 
-            <td>
-            ${s.Usuario}
-            </td>
+<td>${s.Lote}</td>
 
-            <td>
-            ${s.Lote}
-            </td>
+<td>${s.EstadoActual}</td>
 
-            <td>
-            ${s.EstadoActual}
-            </td>
+<td>${s.EstadoSolicitado}</td>
 
-            <td>
-            ${s.EstadoSolicitado}
-            </td>
+<td>
 
-        </tr>
+<button
+onclick="
+aprobarSolicitud(
+${i}
+)"
+style="
+width:auto;
+padding:8px 15px;
+background:#16a34a;
+margin-right:5px;
+">
 
-        `;
+Aprobar
+
+</button>
+
+<button
+onclick="
+rechazarSolicitud(
+${i}
+)"
+style="
+width:auto;
+padding:8px 15px;
+background:#dc2626;
+">
+
+Rechazar
+
+</button>
+
+</td>
+
+</tr>
+`;
 
     });
 
@@ -2224,6 +2268,39 @@ document
     )
     .innerHTML =
     html;
+document
+.getElementById(
+"buscarSolicitud"
+)
+.addEventListener(
+"input",
+function(){
+
+const texto =
+this.value.toUpperCase();
+
+const filas =
+document.querySelectorAll(
+"#contenedorSolicitudes table tr"
+);
+
+filas.forEach((fila,i)=>{
+
+    if(i===0)return;
+
+    const usuario =
+    fila.children[1]
+    .textContent
+    .toUpperCase();
+
+    fila.style.display =
+    usuario.includes(texto)
+    ? ""
+    : "none";
+
+});
+
+});
 
 }
 window.onload = ()=>{
@@ -2407,6 +2484,69 @@ document
     filtrarLotes();
 
 };
+async function aprobarSolicitud(indice){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:"aprobarSolicitud",
+
+indice:indice
+
+})
+
+}
+);
+
+const resultado =
+await respuesta.json();
+
+if(resultado.ok){
+
+cargarSolicitudes();
+cargarLotes();
+cargarAuditoria();
+
+}
+
+}
+
+
+
+async function rechazarSolicitud(indice){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:"rechazarSolicitud",
+
+indice:indice
+
+})
+
+}
+);
+
+const resultado =
+await respuesta.json();
+
+if(resultado.ok){
+
+cargarSolicitudes();
+
+}
+
+}
 </script>
 <div id="modalPassword" style="
 display:none;
