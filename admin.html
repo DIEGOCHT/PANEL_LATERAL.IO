@@ -2678,34 +2678,6 @@ accionConfirmada();
 }
 );
 
-datos.forEach(s=>{
-
-if(
-s.Usuario === usuario &&
-s.Notificado === "NO" &&
-(
-s.Estado === "APROBADO" ||
-s.Estado === "RECHAZADO"
-)
-){
-
-mostrarNotificacion(
-
-"Solicitud respondida",
-
-"Su solicitud para el lote <b>" +
-s.Lote +
-"</b> fue <b>" +
-s.Estado +
-"</b>"
-
-);
-
-}
-
-});
-
-}
 window.onload = ()=>{
 
     if(
