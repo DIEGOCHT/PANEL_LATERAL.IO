@@ -973,11 +973,12 @@ document
 guardarEstado
 );
 let loteActual = "";
+let estadoOriginal = "";
 async function guardarEstado(){
 
 const verificacion =
 await fetch(
-URL_APPS_SCRIPT
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
 );
 
 const lotes =
@@ -1024,25 +1025,51 @@ return;
     );
 
  const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+    method:"POST",
 
-        body:JSON.stringify({
+    body:JSON.stringify({
 
-            {
-  action:"actualizarEstado",
-  lote:loteActual,
-  estado:estado,
-  usuario:usuario,
-  estadoOriginal:estadoOriginal
+        action:"actualizarEstado",
+        lote:loteActual,
+        estado:estado,
+        usuario:usuario,
+        estadoOriginal:estadoOriginal
+
+    })
+
 }
-
-    });
+);
 
     const resultado =
     await respuesta.json();
+if(
+resultado.mensaje ===
+"LOTE_MODIFICADO"
+){
+
+document
+.getElementById(
+"modalEstado"
+)
+.style.display =
+"none";
+
+mostrarNotificacion(
+
+"Lote actualizado",
+
+"Otro usuario realizó un cambio antes que usted."
+
+);
+
+cargarLotes();
+
+return;
+
+}
 
     if(resultado.ok){
 
@@ -1089,6 +1116,36 @@ async function cambiarEstado(lote){
     datos.find(
     x => x.Lote === lote
     );
+const rol =
+localStorage.getItem("rol");
+
+if(
+
+rol === "ASESOR"
+
+&&
+
+(
+loteActualizado.Estado === "RESERVADO"
+||
+loteActualizado.Estado === "VENDIDO"
+)
+
+){
+
+mostrarNotificacion(
+
+"Acceso restringido",
+
+"No puede modificar lotes Reservados o Vendidos."
+
+);
+
+cargarLotes();
+
+return;
+
+}
 loteActual = lote;
 
 estadoOriginal =
@@ -1108,8 +1165,6 @@ loteActualizado.Estado;
 
 }
    
-    loteActual = lote;
-
     document
     .getElementById(
     "loteSeleccionado"
