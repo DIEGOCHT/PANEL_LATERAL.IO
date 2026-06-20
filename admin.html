@@ -418,7 +418,13 @@ button{
     style="display:none;">
         CONSULTAS
     </button>
+<button
+id="btnSolicitudes"
+style="display:none;">
 
+SOLICITUDES
+
+</button>
     <span
     id="badgeConsultas"
     class="badgeNotificacion"
@@ -476,6 +482,10 @@ button{
 </div>
 <div id="contenedorConsultas"
      style="display:none">
+</div>
+<div
+id="contenedorSolicitudes"
+style="display:none;">
 </div>
 
 </div>
@@ -562,7 +572,9 @@ function aplicarPermisosRol(rol){
         document
         .getElementById("btnConsultas")
         .style.display = "none";
-
+document
+.getElementById("btnSolicitudes")
+.style.display = "none";
     }
     else{
 
@@ -577,6 +589,9 @@ function aplicarPermisosRol(rol){
         document
         .getElementById("btnConsultas")
         .style.display = "inline-block";
+document
+.getElementById("btnSolicitudes")
+.style.display = "inline-block";
 
     }
 
@@ -990,7 +1005,7 @@ estadoActual.includes("VENDIDO")
 ){
 
     await fetch(
-    "TU_URL_APPS_SCRIPT",
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
     {
         method:"POST",
 
@@ -1445,6 +1460,14 @@ document
 .addEventListener(
 "click",
 cargarConsultas
+);
+document
+.getElementById(
+"btnSolicitudes"
+)
+.addEventListener(
+"click",
+cargarSolicitudes
 );
 
 async function cargarAsesores(){
@@ -2150,6 +2173,68 @@ document
 )
 .style.display =
 "none";
+
+}
+async function cargarSolicitudes(){
+
+    document
+    .getElementById(
+    "dashboard"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "herramientas"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorLotes"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorAuditoria"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorAsesores"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorConsultas"
+    )
+    .style.display =
+    "none";
+
+    document
+    .getElementById(
+    "contenedorSolicitudes"
+    )
+    .style.display =
+    "block";
+
+    document
+    .getElementById(
+    "contenedorSolicitudes"
+    )
+    .innerHTML =
+
+    "<h2>Solicitudes</h2>" +
+
+    "<p>Pestaña creada correctamente.</p>";
 
 }
 window.onload = ()=>{
