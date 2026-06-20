@@ -1018,6 +1018,15 @@ async function cambiarEstado(lote){
     );
 
     if(!loteActualizado){
+
+    alert(
+    "No se pudo obtener el estado actual del lote"
+    );
+
+    return;
+
+}
+
 const rol =
 localStorage.getItem(
 "rol"
@@ -1188,7 +1197,6 @@ document
 cargarAuditoria
 );
 async function cargarAuditoria(){
-cargarAuditoria();
 const rol =
 localStorage.getItem("rol");
 
