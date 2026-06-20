@@ -1204,39 +1204,6 @@ return;
 
 }
 
-if(
-
-rol === "ASESOR"
-
-&&
-
-(
-loteActualizado.Estado === "RESERVADO"
-||
-loteActualizado.Estado === "VENDIDO"
-)
-
-){
-
-mostrarNotificacion(
-
-"Acceso restringido",
-
-"No puede modificar lotes Reservados o Vendidos."
-
-);
-
-cargarLotes();
-
-return;
-
-}
-
-loteActual = lote;
-
-estadoOriginal =
-loteActualizado.Estado;
-
     document
     .getElementById(
     "loteSeleccionado"
@@ -1246,6 +1213,12 @@ loteActualizado.Estado;
     " (" +
     loteActualizado.Estado +
     ")";
+document
+.getElementById(
+"nuevoEstado"
+)
+.value =
+loteActualizado.Estado;
 
     document
     .getElementById(
