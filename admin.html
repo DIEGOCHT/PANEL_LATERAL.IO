@@ -1112,6 +1112,15 @@ document
 
     const datos =
     await respuesta.json();
+const reservados =
+datos.filter(
+x => x.Despues === "RESERVADO"
+).length;
+
+const vendidos =
+datos.filter(
+x => x.Despues === "VENDIDO"
+).length;
 datos.sort((a,b)=>{
 
     return new Date(b.Fecha)
@@ -1120,25 +1129,55 @@ datos.sort((a,b)=>{
 
 });
     let html = `
-
-<h2>Auditoría de Cambios</h2>
 <input
 id="buscarAuditoria"
 placeholder="🔍 Buscar usuario..."
 style="
 width:300px;
-margin-bottom:15px;
+margin-bottom:20px;
 ">
-
-<div style="
-background:white;
-padding:20px;
-border-radius:15px;
+<div id="resumenAuditoria"
+style="
+display:flex;
+gap:20px;
 margin-bottom:20px;
 ">
 
-<b>Total de cambios:</b>
+<div class="cardDashboard">
+
+<h3 id="totalCambios">
 ${datos.length}
+</h3>
+
+<p>
+Total Cambios
+</p>
+
+</div>
+
+<div class="cardDashboard">
+
+<h3 id="totalReservados">
+${reservados}
+</h3>
+
+<p>
+🟡 Reservados
+</p>
+
+</div>
+
+<div class="cardDashboard">
+
+<h3 id="totalVendidos">
+${vendidos}
+</h3>
+
+<p>
+🔴 Vendidos
+</p>
+
+</div>
 
 </div>
 
@@ -1197,7 +1236,11 @@ document
 .addEventListener(
 "input",
 function(){
+let total = 0;
 
+let reservados = 0;
+
+let vendidos = 0;
 const texto =
 this.value.toUpperCase();
 
@@ -1215,12 +1258,45 @@ fila.children[1]
 .textContent
 .toUpperCase();
 
-fila.style.display =
-usuario.includes(texto)
-? ""
-: "none";
+if(usuario.includes(texto)){
+
+    fila.style.display = "";
+
+    total++;
+
+    const despues =
+    fila.children[4]
+    .textContent
+    .trim();
+
+    if(despues === "RESERVADO"){
+        reservados++;
+    }
+
+    if(despues === "VENDIDO"){
+        vendidos++;
+    }
+
+}
+else{
+
+    fila.style.display = "none";
+
+}
 
 });
+
+document.getElementById(
+"totalCambios"
+).textContent = total;
+
+document.getElementById(
+"totalReservados"
+).textContent = reservados;
+
+document.getElementById(
+"totalVendidos"
+).textContent = vendidos;
 
 });
 localStorage.setItem(
