@@ -771,16 +771,24 @@ datos.forEach(lote=>{
 
         <td>${lote.Ubicacion}</td>
 
-        <td>
+        <td style="
+text-align:center;
+vertical-align:middle;
+">
 
-            <button
-            onclick="cambiarEstado('${lote.Lote}')">
+<button
+style="
+width:180px;
+margin:0 auto;
+display:block;
+"
+onclick="cambiarEstado('${lote.Lote}')">
 
-                Cambiar
+Cambiar
 
-            </button>
+</button>
 
-        </td>
+</td>
 
     </tr>
     `;
@@ -969,6 +977,8 @@ document
     .style.display =
     "none";
 
+    cargarLotes();
+
 });
 
 
@@ -1104,6 +1114,7 @@ async function cambiarEstado(lote){
     datos.find(
     x => x.Lote === lote
     );
+cargarLotes();
 
     if(!loteActualizado){
 
@@ -1189,6 +1200,12 @@ document.getElementById(
 ).style.display = "block";
 
 });
+document
+.getElementById("btnAuditoria")
+.addEventListener(
+"click",
+cargarAuditoria
+);
 async function cargarAuditoria(){
 
 const rol =
