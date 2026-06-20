@@ -1164,13 +1164,15 @@ mostrarNotificacion(
 
 "Estado actualizado",
 
-"El lote ahora se encuentra en estado: " +
+"El lote ahora se encuentra en estado: <b>" +
 
-loteActualizado.Estado
+loteActualizado.Estado +
+
+"</b>"
 
 );
 
-cargarLotes();
+window.actualizarPendiente = true;
 
 return;
 
@@ -2212,6 +2214,14 @@ document
 )
 .style.display =
 "none";
+
+if(window.actualizarPendiente){
+
+window.actualizarPendiente = false;
+
+cargarLotes();
+
+}
 
 };
 let accionConfirmada = null;
