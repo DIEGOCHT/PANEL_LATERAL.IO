@@ -1014,9 +1014,17 @@ document
 
 mostrarNotificacion(
 
-"Lote actualizado",
+"Estado actualizado",
 
-"Otro usuario modificó este lote antes que usted. Actualice la lista."
+"Este lote ya no se encuentra en estado " +
+
+estadoOriginal +
+
+".<br><br>Estado actual: <b>" +
+
+loteServidor.Estado +
+
+"</b>"
 
 );
 
@@ -1071,9 +1079,9 @@ document
 
 mostrarNotificacion(
 
-"Lote actualizado",
+"Estado actualizado",
 
-"Otro usuario realizó un cambio antes que usted."
+"Este lote ya fue modificado por otro usuario.<br><br>La tabla será actualizada."
 
 );
 
@@ -1091,14 +1099,6 @@ return;
     "none";
 
     cargarLotes();
-
-    mostrarNotificacion(
-
-    "Estado actualizado",
-
-    "El lote fue actualizado correctamente."
-
-    );
 
 }
     else{
