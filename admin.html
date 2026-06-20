@@ -2477,7 +2477,8 @@ margin-bottom:20px;
 <button
 onclick="
 aprobarSolicitud(
-${i}
+'${s.Fecha}',
+'${s.Lote}'
 )"
 style="
 width:auto;
@@ -2493,7 +2494,8 @@ Aprobar
 <button
 onclick="
 rechazarSolicitud(
-${i}
+'${s.Fecha}',
+'${s.Lote}'
 )"
 style="
 width:auto;
@@ -2911,7 +2913,10 @@ solicitud.estado
 );
 
 }
-async function aprobarSolicitud(indice){
+async function aprobarSolicitud(
+fecha,
+lote
+){
 
 const respuesta =
 await fetch(
@@ -2923,10 +2928,11 @@ body:JSON.stringify({
 
 action:"aprobarSolicitud",
 
-indice:indice
+fecha:fecha,
+
+lote:lote
 
 })
-
 }
 );
 
@@ -2945,7 +2951,10 @@ cargarAuditoria();
 
 
 
-async function rechazarSolicitud(indice){
+async function rechazarSolicitud(
+fecha,
+lote
+){
 
 const respuesta =
 await fetch(
@@ -2957,7 +2966,9 @@ body:JSON.stringify({
 
 action:"rechazarSolicitud",
 
-indice:indice
+fecha:fecha,
+
+lote:lote
 
 })
 
