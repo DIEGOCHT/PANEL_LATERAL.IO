@@ -486,6 +486,20 @@ button{
         <h2>Cambiar Estado</h2>
 
         <p id="loteSeleccionado"></p>
+<div
+id="mensajeAutorizacion"
+style="
+display:none;
+background:#fff3cd;
+color:#856404;
+padding:12px;
+border-radius:10px;
+margin-bottom:15px;
+font-weight:bold;
+">
+⚠ Este lote requiere autorización
+del administrador para ser modificado.
+</div>
 
         <select id="nuevoEstado">
 
@@ -950,13 +964,64 @@ async function guardarEstado(){
     document
     .getElementById("nuevoEstado")
     .value;
+const rol =
+localStorage.getItem(
+"rol"
+);
+
+const estadoActual =
+document
+.getElementById(
+"loteSeleccionado"
+)
+.textContent;
 
     const usuario =
     localStorage.getItem(
     "usuario"
     );
 
-    const respuesta =
+    if(
+rol === "ASESOR" &&
+(
+estadoActual.includes("RESERVADO") ||
+estadoActual.includes("VENDIDO")
+)
+){
+
+    await fetch(
+    "TU_URL_APPS_SCRIPT",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:"crearSolicitud",
+
+            usuario:usuario,
+
+            lote:loteActual,
+
+            estadoActual:
+            estadoActual,
+
+            estadoSolicitado:
+            estado
+
+        })
+
+    });
+
+    document
+    .getElementById(
+    "modalEstado"
+    )
+    .style.display =
+    "none";
+
+    return;
+}
+const respuesta =
     await fetch(
     "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
     {
@@ -1032,78 +1097,35 @@ localStorage.getItem(
 "rol"
 );
 
-if(
+return;
+
+    const requiereAutorizacion =
 rol === "ASESOR" &&
 (
 loteActualizado.Estado === "RESERVADO" ||
 loteActualizado.Estado === "VENDIDO"
+);
+
+document
+.getElementById(
+"mensajeAutorizacion"
 )
-){
+.style.display =
+requiereAutorizacion
+? "block"
+: "none";
 
-    const nuevoEstado =
-    prompt(
-
-    "El lote está " +
-
-    loteActualizado.Estado +
-
-    "\n\n" +
-
-    "Ingrese el estado solicitado:\n\n" +
-
-    "LIBRE\n" +
-
-    "RESERVADO\n" +
-
-    "VENDIDO"
-
-    );
-
-    if(!nuevoEstado){
-        return;
-    }
-
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "crearSolicitud",
-
-            usuario:
-            localStorage.getItem(
-            "usuario"
-            ),
-
-            lote:lote,
-
-            estadoActual:
-            loteActualizado.Estado,
-
-            estadoSolicitado:
-            nuevoEstado
-
-        })
-
-    });
-
-    alert(
-    "Solicitud enviada al administrador"
-    );
-
-    return;
-
+document
+.getElementById(
+"btnGuardarEstado"
+)
+.textContent =
+requiereAutorizacion
+? "Solicitar Cambio"
+: "Guardar";
 }
 
     loteActual = lote;
-
-    alert(
-    "Estado actual del lote:\n\n" +
-    loteActualizado.Estado
-    );
 
     document
     .getElementById(
