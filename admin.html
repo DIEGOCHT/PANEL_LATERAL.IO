@@ -498,6 +498,49 @@ style="overflow-x:auto;">
 
 </div>
 <div id="modalEstado">
+<div id="modalNotificacion"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:15px;
+width:450px;
+max-width:90%;
+text-align:center;
+">
+
+<h2 id="tituloNotificacion">
+Notificación
+</h2>
+
+<div
+id="mensajeNotificacion"
+style="
+margin:20px 0;
+line-height:1.6;
+">
+</div>
+
+<button
+id="btnCerrarNotificacion">
+Aceptar
+</button>
+
+</div>
+
+</div>
 
     <div id="ventanaEstado">
 
@@ -730,6 +773,7 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
+let solicitudesPendientes = [];
 
 function renderizarLotes(datos){
 
@@ -745,6 +789,18 @@ let html = `
 `;
 
 datos.forEach(lote=>{
+
+const pendiente =
+solicitudesPendientes.find(
+s =>
+s.Lote === lote.Lote &&
+s.Estado === "PENDIENTE"
+);
+
+const indicador =
+pendiente
+? " ⏳"
+: "";
 
     let clase = "";
 
@@ -764,8 +820,9 @@ datos.forEach(lote=>{
         <td>${lote.Lote}</td>
 
         <td class="${clase}">
-            ${lote.Estado}
-        </td>
+    ${lote.Estado}
+    ${indicador}
+</td>
 
         <td>${lote.Area}</td>
 
@@ -777,11 +834,16 @@ vertical-align:middle;
 ">
 
 <button
+
+${pendiente ? "disabled" : ""}
+
 style="
 width:180px;
 margin:0 auto;
 display:block;
+opacity:${pendiente ? "0.5" : "1"};
 "
+
 onclick="cambiarEstado('${lote.Lote}')">
 
 Cambiar
@@ -956,8 +1018,17 @@ async function cargarLotes(){
     const datos =
     await respuesta.json();
 
+    const respuestaSolicitudes =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+    );
+
+    solicitudesPendientes =
+    await respuestaSolicitudes.json();
+
     todosLosLotes = datos;
-actualizarDashboard(datos);
+
+    actualizarDashboard(datos);
 
     renderizarLotes(datos);
 
@@ -1036,7 +1107,8 @@ estadoActual.includes("VENDIDO")
             lote:loteActual,
 
             estadoActual:
-            estadoActual,
+estadoActual
+.match(/\((.*?)\)/)?.[1] || "",
 
             estadoSolicitado:
             estado
@@ -1052,7 +1124,14 @@ estadoActual.includes("VENDIDO")
     .style.display =
     "none";
 
-    return;
+   mostrarNotificacion(
+
+"Solicitud enviada",
+
+"Tu solicitud fue enviada al administrador."
+
+);
+return;
 }
 const respuesta =
     await fetch(
@@ -1079,25 +1158,33 @@ const respuesta =
 
     if(resultado.ok){
 
-        document
-        .getElementById("modalEstado")
-        .style.display =
-        "none";
+    document
+    .getElementById("modalEstado")
+    .style.display =
+    "none";
 
-        cargarLotes();
+    cargarLotes();
 
-        alert(
-        "Estado actualizado correctamente"
-        );
+    mostrarNotificacion(
 
-    }
+    "Estado actualizado",
+
+    "El lote fue actualizado correctamente."
+
+    );
+
+}
     else{
 
-        alert(
-        "No se pudo actualizar"
-        );
+    mostrarNotificacion(
 
-    }
+    "Error",
+
+    "No se pudo actualizar el lote."
+
+    );
+
+}
 
 }
 async function cambiarEstado(lote){
@@ -1118,20 +1205,73 @@ cargarLotes();
 
     if(!loteActualizado){
 
-    alert(
-    "No se pudo obtener el estado actual del lote"
+    mostrarNotificacion(
+
+    "Error",
+
+    "No se pudo obtener el estado actual del lote."
+
     );
 
     return;
 
 }
-
 const rol =
 localStorage.getItem(
 "rol"
 );
+const solicitud =
+await fetch(
 
-    const requiereAutorizacion =
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudPendiente&lote="
+
++
+
+encodeURIComponent(lote)
+
+);
+
+const infoSolicitud =
+await solicitud.json();
+
+if(
+
+rol === "ADMIN" &&
+
+infoSolicitud.pendiente
+
+){
+
+mostrarNotificacion(
+
+"Solicitud Pendiente",
+
+"Existe una solicitud pendiente para este lote.<br><br>" +
+
+"<b>Asesor:</b> " +
+
+infoSolicitud.usuario +
+
+"<br><br>" +
+
+"<b>Solicita:</b><br>" +
+
+infoSolicitud.actual +
+
+" → " +
+
+infoSolicitud.solicitado +
+
+"<br><br>" +
+
+"Primero debe aprobar o rechazar la solicitud."
+
+);
+
+return;
+
+}    
+const requiereAutorizacion =
 rol === "ASESOR" &&
 (
 loteActualizado.Estado === "RESERVADO" ||
@@ -1725,8 +1865,12 @@ async function crearAsesor(){
 
     if(resultado.ok){
 
-    alert(
-    "Asesor creado correctamente"
+    mostrarNotificacion(
+
+    "Asesor creado",
+
+    "El asesor fue registrado correctamente."
+
     );
 
     cargarAsesores();
@@ -1734,12 +1878,15 @@ async function crearAsesor(){
 }
 else{
 
-    alert(
+    mostrarNotificacion(
+
+    "No se pudo crear el asesor",
+
     resultado.mensaje
+
     );
 
 }
-
 }
 async function cambiarEstadoAsesor(usuario){
 
@@ -1806,9 +1953,13 @@ async function cambiarPasswordAsesor(usuario){
 
     if(resultado.ok){
 
-        alert(
-        "Contraseña actualizada"
-        );
+        mostrarNotificacion(
+
+"Contraseña actualizada",
+
+"La contraseña fue modificada correctamente."
+
+);
 
     }
 
@@ -1855,32 +2006,17 @@ async function verPasswordAsesor(usuario){
 
 }
 async function eliminarAsesor(usuario){
+mostrarConfirmacion(
 
-    const texto =
-    prompt(
+"Eliminar Asesor",
 
-    "ATENCIÓN\n\n" +
+"¿Desea eliminar el asesor?<br><br><b>" +
 
-    "Va a eliminar el asesor:\n\n" +
+usuario +
 
-    usuario +
+"</b>",
 
-    "\n\nEscriba:\n\nELIMINAR"
-
-    );
-
-    if(
-        texto !==
-        "ELIMINAR"
-    ){
-
-        alert(
-        "Operación cancelada"
-        );
-
-        return;
-
-    }
+async ()=>{
 
     const respuesta =
     await fetch(
@@ -1906,9 +2042,64 @@ async function eliminarAsesor(usuario){
 
         cargarAsesores();
 
-        alert(
-        "Asesor eliminado correctamente"
+        mostrarNotificacion(
+
+        "Asesor eliminado",
+
+        "El asesor fue eliminado correctamente."
+
         );
+
+    }
+    else{
+
+        mostrarNotificacion(
+
+        "Error",
+
+        "No se pudo eliminar."
+
+        );
+
+    }
+
+}
+
+);
+
+return;
+    }
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:
+            "eliminarAsesor",
+
+            usuario:usuario
+
+        })
+
+    });
+
+    const resultado =
+    await respuesta.json();
+
+    if(resultado.ok){
+
+        cargarAsesores();
+
+        mostrarNotificacion(
+
+"Asesor eliminado",
+
+"El asesor fue eliminado correctamente."
+
+);
 
     }
     else{
@@ -2303,6 +2494,117 @@ filas.forEach((fila,i)=>{
 });
 
 }
+function mostrarNotificacion(
+titulo,
+mensaje
+){
+
+document
+.getElementById(
+"tituloNotificacion"
+)
+.innerHTML =
+titulo;
+
+document
+.getElementById(
+"mensajeNotificacion"
+)
+.innerHTML =
+mensaje;
+
+document
+.getElementById(
+"modalNotificacion"
+)
+.style.display =
+"flex";
+
+}
+
+document
+.getElementById(
+"btnCerrarNotificacion"
+)
+.onclick = ()=>{
+
+document
+.getElementById(
+"modalNotificacion"
+)
+.style.display =
+"none";
+
+};
+let accionConfirmada = null;
+
+function mostrarConfirmacion(
+titulo,
+mensaje,
+callback
+){
+
+document
+.getElementById(
+"tituloConfirmacion"
+)
+.innerHTML =
+titulo;
+
+document
+.getElementById(
+"mensajeConfirmacion"
+)
+.innerHTML =
+mensaje;
+
+accionConfirmada =
+callback;
+
+document
+.getElementById(
+"modalConfirmacion"
+)
+.style.display =
+"flex";
+
+}
+
+document
+.getElementById(
+"btnCancelarConfirmacion"
+)
+.onclick = ()=>{
+
+document
+.getElementById(
+"modalConfirmacion"
+)
+.style.display =
+"none";
+
+};
+
+document
+.getElementById(
+"btnAceptarConfirmacion"
+)
+.onclick = ()=>{
+
+document
+.getElementById(
+"modalConfirmacion"
+)
+.style.display =
+"none";
+
+if(accionConfirmada){
+
+accionConfirmada();
+
+}
+
+};
 window.onload = ()=>{
 
     if(
@@ -2353,6 +2655,7 @@ localStorage.getItem("rol")
 );
 
 verificarNotificaciones();
+verificarMisSolicitudes();
 
     }
 
@@ -2484,6 +2787,60 @@ document
     filtrarLotes();
 
 };
+async function verificarMisSolicitudes(){
+
+const rol =
+localStorage.getItem(
+"rol"
+);
+
+if(rol !== "ASESOR"){
+return;
+}
+
+const usuario =
+localStorage.getItem(
+"usuario"
+);
+
+const respuesta =
+await fetch(
+
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=misSolicitudes&usuario="
+
++
+
+encodeURIComponent(usuario)
+
+);
+
+const datos =
+await respuesta.json();
+
+if(datos.length === 0){
+return;
+}
+
+const solicitud =
+datos[0];
+
+mostrarNotificacion(
+
+"Solicitud Resuelta",
+
+"Lote: " +
+
+solicitud.lote +
+
+"<br><br>" +
+
+"Resultado: " +
+
+solicitud.estado
+
+);
+
+}
 async function aprobarSolicitud(indice){
 
 const respuesta =
@@ -2548,6 +2905,64 @@ cargarSolicitudes();
 
 }
 </script>
+<div id="modalConfirmacion"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+<div style="
+background:white;
+padding:30px;
+border-radius:15px;
+width:450px;
+max-width:90%;
+text-align:center;
+">
+
+<h2 id="tituloConfirmacion">
+Confirmación
+</h2>
+
+<div
+id="mensajeConfirmacion"
+style="
+margin:20px 0;
+line-height:1.6;
+">
+</div>
+
+<div style="
+display:flex;
+gap:10px;
+">
+
+<button
+id="btnCancelarConfirmacion"
+style="
+background:#6b7280;
+">
+Cancelar
+</button>
+
+<button
+id="btnAceptarConfirmacion">
+Aceptar
+</button>
+
+</div>
+
+</div>
+
+</div>
 <div id="modalPassword" style="
 display:none;
 position:fixed;
