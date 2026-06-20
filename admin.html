@@ -975,6 +975,44 @@ guardarEstado
 let loteActual = "";
 async function guardarEstado(){
 
+const verificacion =
+await fetch(
+URL_APPS_SCRIPT
+);
+
+const lotes =
+await verificacion.json();
+
+const loteServidor =
+lotes.find(
+x => x.Lote === loteActual
+);
+
+if(
+loteServidor.Estado !==
+estadoOriginal
+){
+
+document
+.getElementById(
+"modalEstado"
+)
+.style.display =
+"none";
+
+mostrarNotificacion(
+
+"Lote actualizado",
+
+"Otro usuario modificó este lote antes que usted. Actualice la lista."
+
+);
+
+cargarLotes();
+
+return;
+
+}
     const estado =
     document
     .getElementById("nuevoEstado")
@@ -1053,6 +1091,10 @@ async function cambiarEstado(lote){
     datos.find(
     x => x.Lote === lote
     );
+loteActual = lote;
+
+estadoOriginal =
+loteActualizado.Estado;
 
     if(!loteActualizado){
 
