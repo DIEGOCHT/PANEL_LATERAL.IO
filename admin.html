@@ -2889,6 +2889,10 @@ encodeURIComponent(usuario)
 
 const datos =
 await respuesta.json();
+console.log(
+"Mis solicitudes:",
+datos
+);
 
 if(datos.length === 0){
 return;
