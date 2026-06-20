@@ -1103,13 +1103,17 @@ return;
 }
     else{
 
-    mostrarNotificacion(
+mostrarNotificacion(
 
-    "Error",
+"Estado actualizado",
 
-    "No se pudo actualizar el lote."
+resultado.mensaje ||
 
-    );
+"El estado del lote cambió mientras realizaba la operación."
+
+);
+
+cargarLotes();
 
 }
 
@@ -1128,8 +1132,77 @@ async function cambiarEstado(lote){
     datos.find(
     x => x.Lote === lote
     );
+if(!loteActualizado){
+
+mostrarNotificacion(
+"Error",
+"No se encontró el lote."
+);
+
+return;
+
+}
+loteActual = lote;
+
+estadoOriginal =
+loteActualizado.Estado;
+const filaTabla =
+todosLosLotes.find(
+x => x.Lote === lote
+);
+
+if(
+
+filaTabla &&
+
+filaTabla.Estado !==
+loteActualizado.Estado
+
+){
+
+mostrarNotificacion(
+
+"Estado actualizado",
+
+"El lote ahora se encuentra en estado: " +
+
+loteActualizado.Estado
+
+);
+
+cargarLotes();
+
+return;
+
+}
 const rol =
 localStorage.getItem("rol");
+if(
+loteActualizado.Estado === "VENDIDO" ||
+loteActualizado.Estado === "RESERVADO"
+){
+
+const rol =
+localStorage.getItem("rol");
+
+if(rol === "ASESOR"){
+
+mostrarNotificacion(
+
+"Acceso restringido",
+
+"Este lote ya se encuentra " +
+loteActualizado.Estado
+
+);
+
+cargarLotes();
+
+return;
+
+}
+
+}
 
 if(
 
@@ -1157,15 +1230,6 @@ cargarLotes();
 
 return;
 
-}
-if(!loteActualizado){
-
-    mostrarNotificacion(
-        "Error",
-        "No se pudo obtener el estado actual del lote."
-    );
-
-    return;
 }
 
 loteActual = lote;
