@@ -2069,49 +2069,7 @@ async ()=>{
 
 return;
     }
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "eliminarAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
-    const resultado =
-    await respuesta.json();
-
-    if(resultado.ok){
-
-        cargarAsesores();
-
-        mostrarNotificacion(
-
-"Asesor eliminado",
-
-"El asesor fue eliminado correctamente."
-
-);
-
-    }
-    else{
-
-        alert(
-        "No se pudo eliminar"
-        );
-
-    }
-
-}
-
+    
 function formatearFecha(fecha){
 
     const f =
