@@ -1002,20 +1002,139 @@ async function guardarEstado(){
     }
 
 }
-function cambiarEstado(lote){
+async function cambiarEstado(lote){
+
+    const respuesta =
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+    );
+
+    const datos =
+    await respuesta.json();
+
+    const loteActualizado =
+    datos.find(
+    x => x.Lote === lote
+    );
+
+    if(!loteActualizado){
+const rol =
+localStorage.getItem(
+"rol"
+);
+
+if(
+rol === "ASESOR" &&
+(
+loteActualizado.Estado === "RESERVADO" ||
+loteActualizado.Estado === "VENDIDO"
+)
+){
+
+    const nuevoEstado =
+    prompt(
+
+    "El lote está " +
+
+    loteActualizado.Estado +
+
+    "\n\n" +
+
+    "Ingrese el estado solicitado:\n\n" +
+
+    "LIBRE\n" +
+
+    "RESERVADO\n" +
+
+    "VENDIDO"
+
+    );
+
+    if(!nuevoEstado){
+        return;
+    }
+
+    await fetch(
+    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+    {
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:
+            "crearSolicitud",
+
+            usuario:
+            localStorage.getItem(
+            "usuario"
+            ),
+
+            lote:lote,
+
+            estadoActual:
+            loteActualizado.Estado,
+
+            estadoSolicitado:
+            nuevoEstado
+
+        })
+
+    });
+
+    alert(
+    "Solicitud enviada al administrador"
+    );
+
+    return;
+
+}
+
+    alert(
+
+    "ATENCIÓN\n\n" +
+
+    "Este lote actualmente está:\n\n" +
+
+    loteActualizado.Estado +
+
+    "\n\n" +
+
+    "El cambio debe ser aprobado por un administrador."
+
+    );
+
+    return;
+
+}
+
+        alert(
+        "No se pudo obtener el estado actual del lote"
+        );
+
+        return;
+
+    }
 
     loteActual = lote;
 
-    document
-    .getElementById(
-        "loteSeleccionado"
-    )
-    .textContent =
-    lote;
+    alert(
+    "Estado actual del lote:\n\n" +
+    loteActualizado.Estado
+    );
 
     document
     .getElementById(
-        "modalEstado"
+    "loteSeleccionado"
+    )
+    .textContent =
+    lote +
+    " (" +
+    loteActualizado.Estado +
+    ")";
+
+    document
+    .getElementById(
+    "modalEstado"
     )
     .style.display =
     "flex";
@@ -1027,6 +1146,8 @@ document
 .addEventListener(
 "click",
 ()=>{
+cargarLotes();
+verificarNotificaciones();
 document
 .getElementById(
 "contenedorConsultas"
@@ -1067,6 +1188,7 @@ document
 cargarAuditoria
 );
 async function cargarAuditoria(){
+cargarAuditoria();
 const rol =
 localStorage.getItem("rol");
 
@@ -1325,6 +1447,7 @@ cargarConsultas
 );
 
 async function cargarAsesores(){
+verificarNotificaciones();
 
 const rol =
 localStorage.getItem("rol");
@@ -1848,6 +1971,7 @@ function formatearFecha(fecha){
 
 }
 async function cargarConsultas(){
+verificarNotificaciones();
 
     const rol =
     localStorage.getItem(
