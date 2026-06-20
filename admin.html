@@ -2677,6 +2677,58 @@ accionConfirmada();
 
 }
 );
+async function verificarMisSolicitudes(){
+
+const usuario =
+localStorage.getItem(
+"usuario"
+);
+
+const rol =
+localStorage.getItem(
+"rol"
+);
+
+if(rol !== "ASESOR"){
+return;
+}
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+);
+
+const datos =
+await respuesta.json();
+
+datos.forEach(s=>{
+
+if(
+s.Usuario === usuario &&
+s.Notificado === "NO" &&
+(
+s.Estado === "APROBADO" ||
+s.Estado === "RECHAZADO"
+)
+){
+
+mostrarNotificacion(
+
+"Solicitud respondida",
+
+"Su solicitud para el lote <b>" +
+s.Lote +
+"</b> fue <b>" +
+s.Estado +
+"</b>"
+
+);
+
+}
+
+});
+
+}
 window.onload = ()=>{
 
     if(
