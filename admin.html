@@ -1185,7 +1185,12 @@ mostrarNotificacion(
 
 );
 
-await cargarLotes();
+setTimeout(
+()=>{
+cargarLotes();
+},
+500
+);
 
 return;
 
