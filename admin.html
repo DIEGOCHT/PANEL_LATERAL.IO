@@ -2522,9 +2522,14 @@ await respuesta.json();
 
 if(resultado.ok){
 
-cargarSolicitudes();
-cargarLotes();
-cargarAuditoria();
+await cargarSolicitudes();
+
+await cargarLotes();
+
+mostrarNotificacion(
+"Solicitud aprobada",
+"La solicitud fue aprobada correctamente."
+);
 
 }
 
@@ -2554,7 +2559,12 @@ await respuesta.json();
 
 if(resultado.ok){
 
-cargarSolicitudes();
+await cargarSolicitudes();
+
+mostrarNotificacion(
+"Solicitud rechazada",
+"La solicitud fue rechazada correctamente."
+);
 
 }
 
