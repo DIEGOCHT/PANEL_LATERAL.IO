@@ -2361,10 +2361,17 @@ Date.now()
 
 }
 let solicitudesGlobal = [];
+
 async function cargarSolicitudes(){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+);
 
 const solicitudes =
 await respuesta.json();
+
 solicitudesGlobal =
 solicitudes;
 
@@ -2372,9 +2379,12 @@ renderizarSolicitudes(
 solicitudes
 );
 
+}
+
 function renderizarSolicitudes(
 solicitudes
 ){
+
 let html = `
 
 <table class="tabla">
@@ -2382,15 +2392,10 @@ let html = `
 <tr>
 
 <th>Fecha</th>
-
 <th>Usuario</th>
-
 <th>Lote</th>
-
 <th>Actual</th>
-
 <th>Solicita</th>
-
 <th>Acción</th>
 
 </tr>
@@ -2398,6 +2403,7 @@ let html = `
 `;
 
 solicitudes.forEach(s=>{
+
 const fecha =
 new Date(s.fecha);
 
@@ -2431,23 +2437,15 @@ html += `
 <td>
 
 <button
-
 class="btn-verde"
-
 onclick="aprobarSolicitud(${s.fila})">
-
 Aprobar
-
 </button>
 
 <button
-
 class="btn-rojo"
-
 onclick="rechazarSolicitud(${s.fila})">
-
 Rechazar
-
 </button>
 
 </td>
@@ -2466,6 +2464,38 @@ document
 )
 .innerHTML =
 html;
+
+}
+
+function filtrarSolicitudes(){
+
+const texto =
+document
+.getElementById(
+"buscarSolicitud"
+)
+.value
+.toUpperCase();
+
+const filtradas =
+solicitudesGlobal.filter(s=>
+
+s.usuario
+.toUpperCase()
+.includes(texto)
+
+||
+
+s.lote
+.toUpperCase()
+.includes(texto)
+
+);
+
+renderizarSolicitudes(
+filtradas
+);
+
 }
 async function aprobarSolicitud(fila){
 
