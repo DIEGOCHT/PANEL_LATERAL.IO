@@ -532,11 +532,12 @@ Aceptar
             </button>
 
             <button
-            id="btnGuardarEstado">
+type="button"
+id="btnGuardarEstado">
 
-                Guardar
+Guardar
 
-            </button>
+</button>
 
         </div>
 
@@ -1061,10 +1062,15 @@ document
 .getElementById(
 "btnGuardarEstado"
 )
-.addEventListener(
-"click",
-guardarEstado
-);
+.onclick = async (e)=>{
+
+if(e){
+e.preventDefault();
+}
+
+await guardarEstado();
+
+};
 let loteActual = "";
 let estadoOriginal = "";
 
@@ -2580,7 +2586,7 @@ titulo,
 mensaje
 ){
 
-console.log("NOTIFICACION EJECUTADA");
+alert("NOTIFICACION");
 
 document
 .getElementById(
