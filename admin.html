@@ -349,6 +349,13 @@ button{
 <button id="btnConsultas">
     CONSULTAS
 </button>
+<button
+id="btnSolicitudes"
+class="menu-btn">
+
+SOLICITUDES
+
+</button>
     
 </div>
 
@@ -406,6 +413,25 @@ style="overflow-x:auto;">
 <div
 id="contenedorConsultas"
 style="overflow-x:auto;">
+</div>
+<div
+id="contenedorSolicitudes"
+style="display:none;">
+
+<h2
+style="
+text-align:center;
+margin-bottom:30px;
+">
+
+Solicitudes Pendientes
+
+</h2>
+
+<div
+id="listaSolicitudes">
+</div>
+
 </div>
 
 </div>
@@ -628,6 +654,14 @@ function aplicarPermisosRol(rol){
         .style.display = "none";
 
     }
+document
+.getElementById(
+"btnSolicitudes"
+)
+.style.display =
+"none";
+
+}
     else{
 
         document
@@ -642,6 +676,12 @@ function aplicarPermisosRol(rol){
         .getElementById("btnConsultas")
         .style.display = "inline-block";
 
+document
+.getElementById(
+"btnSolicitudes"
+)
+.style.display =
+"inline-block";
 
     }
 
@@ -770,6 +810,7 @@ localStorage.setItem(
 let todosLosLotes = [];
 
 let filtroActual = "TODOS";
+let solicitudesPendientes = [];
 
 
 function renderizarLotes(datos){
@@ -789,7 +830,13 @@ datos.forEach(lote=>{
 const rol =
 localStorage.getItem("rol");
 
-const bloqueado =
+const pendiente =
+solicitudesPendientes.find(
+s =>
+s.Lote === lote.Lote
+);
+
+const bloqueadoEstado =
 
 rol === "ASESOR" &&
 
@@ -797,6 +844,10 @@ rol === "ASESOR" &&
 lote.Estado === "RESERVADO" ||
 lote.Estado === "VENDIDO"
 );
+
+const bloqueado =
+bloqueadoEstado ||
+pendiente;
 
     let clase = "";
 
@@ -843,7 +894,7 @@ cursor:${bloqueado ? "not-allowed" : "pointer"};
 
 onclick="cambiarEstado('${lote.Lote}')">
 
-Cambiar
+${pendiente ? "En Espera ⏳" : "Cambiar"}
 
 </button>
 
@@ -939,9 +990,26 @@ async function cargarLotes(){
 
     todosLosLotes = datos;
 
-    actualizarDashboard(datos);
+try{
 
-    renderizarLotes(datos);
+const respSolicitudes =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+);
+
+solicitudesPendientes =
+await respSolicitudes.json();
+
+}
+catch(error){
+
+solicitudesPendientes = [];
+
+}
+
+actualizarDashboard(datos);
+
+renderizarLotes(datos);
 
 }
 document
@@ -1042,8 +1110,77 @@ return;
     localStorage.getItem(
     "usuario"
     );
+const rol =
+localStorage.getItem(
+"rol"
+);
 
- const respuesta =
+if(rol === "ASESOR"){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:"crearSolicitud",
+
+usuario:usuario,
+
+lote:loteActual,
+
+estadoActual:estadoOriginal,
+
+estadoSolicitado:estado
+
+})
+
+}
+);
+
+const resultado =
+await respuesta.json();
+
+if(resultado.ok){
+
+document
+.getElementById(
+"modalEstado"
+)
+.style.display =
+"none";
+
+mostrarNotificacion(
+
+"Solicitud enviada",
+
+"Su solicitud fue enviada al administrador."
+
+);
+
+await cargarLotes();
+
+}
+else{
+
+mostrarNotificacion(
+
+"Solicitud existente",
+
+resultado.mensaje ||
+
+"Ya existe una solicitud pendiente para este lote."
+
+);
+
+}
+
+return;
+
+} 
+const respuesta =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
@@ -1093,12 +1230,14 @@ return;
 
     if(resultado.ok){
 
-    document
-    .getElementById("modalEstado")
-    .style.display =
-    "none";
+document
+.getElementById(
+"modalEstado"
+)
+.style.display =
+"none";
 
-    cargarLotes();
+await cargarLotes();
 
 }
     else{
@@ -1489,6 +1628,27 @@ document
 .addEventListener(
 "click",
 cargarConsultas
+);
+document
+.getElementById(
+"btnSolicitudes"
+)
+.addEventListener(
+"click",
+()=>{
+
+ocultarTodo();
+
+document
+.getElementById(
+"contenedorSolicitudes"
+)
+.style.display =
+"block";
+
+cargarSolicitudes();
+
+}
 );
 
 async function cargarAsesores(){
@@ -2171,6 +2331,159 @@ localStorage.setItem(
 "consultasVistas",
 Date.now()
 );
+
+}
+
+async function cargarSolicitudes(){
+
+const respuesta =
+await fetch(
+
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+
+);
+
+const solicitudes =
+await respuesta.json();
+
+let html = `
+
+<table class="tabla">
+
+<tr>
+
+<th>Fecha</th>
+
+<th>Usuario</th>
+
+<th>Lote</th>
+
+<th>Actual</th>
+
+<th>Solicita</th>
+
+<th>Acción</th>
+
+</tr>
+
+`;
+
+solicitudes.forEach(s=>{
+
+html += `
+
+<tr>
+
+<td>${s.fecha}</td>
+
+<td>${s.usuario}</td>
+
+<td>${s.lote}</td>
+
+<td>${s.actual}</td>
+
+<td>${s.solicita}</td>
+
+<td>
+
+<button
+
+class="btn-verde"
+
+onclick="aprobarSolicitud(${s.fila})">
+
+Aprobar
+
+</button>
+
+<button
+
+class="btn-rojo"
+
+onclick="rechazarSolicitud(${s.fila})">
+
+Rechazar
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html += "</table>";
+
+document
+.getElementById(
+"listaSolicitudes"
+)
+.innerHTML =
+html;
+
+}
+async function aprobarSolicitud(fila){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:
+"aprobarSolicitud",
+
+fila:fila
+
+})
+
+}
+);
+
+const resultado =
+await respuesta.json();
+
+if(resultado.ok){
+
+cargarSolicitudes();
+cargarLotes();
+cargarAuditoria();
+
+}
+
+}
+async function rechazarSolicitud(fila){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:
+"rechazarSolicitud",
+
+fila:fila
+
+})
+
+}
+);
+
+const resultado =
+await respuesta.json();
+
+if(resultado.ok){
+
+cargarSolicitudes();
+
+}
 
 }
 
