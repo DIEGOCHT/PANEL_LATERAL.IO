@@ -429,6 +429,32 @@ Solicitudes Pendientes
 </h2>
 
 <div
+style="
+margin-bottom:20px;
+">
+
+<input
+
+type="text"
+
+id="buscarSolicitud"
+
+placeholder="Buscar usuario o lote..."
+
+style="
+width:350px;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:16px;
+"
+
+onkeyup="filtrarSolicitudes()"
+
+>
+
+</div>
+<div
 id="listaSolicitudes">
 </div>
 
@@ -1151,6 +1177,8 @@ document
 .style.display =
 "none";
 
+await cargarLotes();
+
 mostrarNotificacion(
 
 "Solicitud enviada",
@@ -1159,7 +1187,7 @@ mostrarNotificacion(
 
 );
 
-await cargarLotes();
+return;
 
 }
 else{
@@ -2332,19 +2360,21 @@ Date.now()
 );
 
 }
-
+let solicitudesGlobal = [];
 async function cargarSolicitudes(){
-
-const respuesta =
-await fetch(
-
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
-
-);
 
 const solicitudes =
 await respuesta.json();
+solicitudesGlobal =
+solicitudes;
 
+renderizarSolicitudes(
+solicitudes
+);
+
+function renderizarSolicitudes(
+solicitudes
+){
 let html = `
 
 <table class="tabla">
@@ -2368,12 +2398,27 @@ let html = `
 `;
 
 solicitudes.forEach(s=>{
+const fecha =
+new Date(s.fecha);
+
+const fechaFormateada =
+fecha.toLocaleString(
+'es-PE',
+{
+day:'2-digit',
+month:'2-digit',
+year:'numeric',
+hour:'2-digit',
+minute:'2-digit',
+hour12:true
+}
+);
 
 html += `
 
 <tr>
 
-<td>${s.fecha}</td>
+<td>${fechaFormateada}</td>
 
 <td>${s.usuario}</td>
 
@@ -2421,7 +2466,6 @@ document
 )
 .innerHTML =
 html;
-
 }
 async function aprobarSolicitud(fila){
 
