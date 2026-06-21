@@ -1177,8 +1177,6 @@ document
 .style.display =
 "none";
 
-await cargarLotes();
-
 mostrarNotificacion(
 
 "Solicitud enviada",
@@ -1186,6 +1184,8 @@ mostrarNotificacion(
 "Su solicitud fue enviada al administrador."
 
 );
+
+await cargarLotes();
 
 return;
 
@@ -2610,7 +2610,7 @@ document
 )
 .style.display =
 "none";
-
+console.log(window.actualizarPendiente);
 if(window.actualizarPendiente){
 
 window.actualizarPendiente = false;
