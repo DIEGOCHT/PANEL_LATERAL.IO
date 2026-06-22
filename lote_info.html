@@ -476,6 +476,24 @@ const imagenEl = document.getElementById("imagen");
 document.getElementById("cerrar")
 .addEventListener("click",()=>{
 
+    try{
+
+        const overlay =
+        window.parent.document
+        .getElementById(
+        "overlayLote"
+        );
+
+        if(overlay){
+
+            overlay.remove();
+
+            return;
+
+        }
+
+    }catch(e){}
+
     panel.classList.remove("visible");
 
     document
