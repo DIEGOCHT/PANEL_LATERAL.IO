@@ -867,6 +867,8 @@ let solicitudesPendientes = [];
 let totalSolicitudesAnterior = 0;
 let colaNotificaciones = [];
 
+let ultimaSolicitudDetectada = "";
+
 
 function renderizarLotes(datos){
 
@@ -2485,10 +2487,7 @@ await fetch(
 
 const solicitudes =
 await respuesta.json();
-console.log(
-"Solicitudes recibidas:",
-solicitudes
-);
+console.table(solicitudes);
 
 const totalActual =
 solicitudes.length;
@@ -2520,28 +2519,46 @@ totalActual;
 }
 
 if(
-totalSolicitudesAnterior > 0 &&
 totalActual > totalSolicitudesAnterior
 ){
 
-const ultima =
-solicitudes[
-solicitudes.length - 1
-];
-console.log(
-"MOSTRANDO NOTIFICACION"
+const nuevaSolicitud =
+solicitudes.find(s =>
+
+(s.fecha + "|" +
+s.usuario + "|" +
+s.lote)
+
+!==
+
+ultimaSolicitudDetectada
+
 );
+
+if(nuevaSolicitud){
+
+ultimaSolicitudDetectada =
+
+nuevaSolicitud.fecha + "|" +
+nuevaSolicitud.usuario + "|" +
+nuevaSolicitud.lote;
+
+console.log(
+"NUEVA SOLICITUD:",
+nuevaSolicitud.lote
+);
+
 mostrarNotificacion(
 
 "🔔 Nueva solicitud",
 
 "El asesor <b>" +
 
-ultima.usuario +
+nuevaSolicitud.usuario +
 
 "</b> solicitó cambiar el estado del lote <b>" +
 
-ultima.lote +
+nuevaSolicitud.lote +
 
 "</b>"
 
@@ -2549,6 +2566,7 @@ ultima.lote +
 
 }
 
+}
 totalSolicitudesAnterior =
 totalActual;
 
