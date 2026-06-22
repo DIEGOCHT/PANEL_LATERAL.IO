@@ -2450,10 +2450,12 @@ total > 0
 }
 async function verificarNuevasSolicitudes(){
 
+try{
+
 const rol =
 localStorage.getItem("rol");
 
-if(rol !== "ADMINISTRADOR"){
+if(rol !== "ADMIN"){
 return;
 }
 
@@ -2467,6 +2469,16 @@ await respuesta.json();
 
 const totalActual =
 solicitudes.length;
+
+document
+.getElementById(
+"contadorSolicitudes"
+)
+.innerHTML =
+totalActual > 0
+? ` (${totalActual})`
+: "";
+
 if(totalSolicitudesAnterior === 0){
 
 totalSolicitudesAnterior =
@@ -2504,6 +2516,16 @@ ultima.lote +
 
 totalSolicitudesAnterior =
 totalActual;
+
+}
+catch(error){
+
+console.log(
+"Error verificando solicitudes:",
+error
+);
+
+}
 
 }
 async function sincronizarPanel(){
@@ -3059,7 +3081,7 @@ await verificarNuevasSolicitudes();
 
 setInterval(
 verificarNuevasSolicitudes,
-30000
+5000
 );
 setInterval(
 sincronizarPanel,
