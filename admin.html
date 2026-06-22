@@ -3045,12 +3045,19 @@ accionConfirmada();
 
 window.onload = ()=>{
 console.log("WINDOW ONLOAD");
+console.log(
+"LOGEADO:",
+localStorage.getItem("logeado")
+);
 
     if(
         localStorage.getItem(
         "logeado"
         ) === "SI"
     ){
+console.log(
+"ENTRO AL IF LOGEADO"
+);
 
         document
         .getElementById(
