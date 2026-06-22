@@ -2473,6 +2473,12 @@ console.log(
 "Solicitudes pendientes:",
 totalActual
 );
+console.log(
+"Anterior:",
+totalSolicitudesAnterior,
+"Actual:",
+totalActual
+);
 
 document
 .getElementById(
@@ -2498,7 +2504,9 @@ totalActual > totalSolicitudesAnterior
 ){
 
 const ultima =
-solicitudes[0];
+solicitudes[
+solicitudes.length - 1
+];
 
 mostrarNotificacion(
 
