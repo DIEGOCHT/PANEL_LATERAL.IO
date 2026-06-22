@@ -2661,11 +2661,26 @@ await fetch(
 const notificaciones =
 await respuesta.json();
 
-colaNotificaciones = notificaciones;
+colaNotificaciones =
+notificaciones;
 
 mostrarSiguienteNotificacion();
 
-if(n.estado === "APROBADO"){
+}
+function mostrarSiguienteNotificacion(){
+
+if(
+colaNotificaciones.length === 0
+){
+return;
+}
+
+const n =
+colaNotificaciones.shift();
+
+if(
+n.estado === "APROBADO"
+){
 
 mostrarNotificacion(
 
@@ -2696,7 +2711,7 @@ n.lote +
 
 }
 
-await fetch(
+fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
 method:"POST",
@@ -2714,19 +2729,6 @@ fila:n.fila
 );
 
 }
-
-}
-function mostrarSiguienteNotificacion(){
-
-if(
-colaNotificaciones.length === 0
-){
-return;
-}
-
-const n =
-colaNotificaciones.shift();
-
 document
 .getElementById(
 "btnCerrarNotificacion"
