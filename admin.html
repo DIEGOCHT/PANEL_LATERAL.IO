@@ -812,6 +812,20 @@ await cargarLotes();
 
 await verificarNotificaciones();
 
+await actualizarContadorSolicitudes();
+
+await verificarNuevasSolicitudes();
+
+setInterval(
+verificarNuevasSolicitudes,
+5000
+);
+
+setInterval(
+sincronizarPanel,
+60000
+);
+
         }
         else{
 
@@ -2458,6 +2472,7 @@ try{
 
 const rol =
 localStorage.getItem("rol");
+console.log("ROL ACTUAL:", rol);
 
 if(rol !== "ADMIN"){
 return;
@@ -2470,6 +2485,10 @@ await fetch(
 
 const solicitudes =
 await respuesta.json();
+console.log(
+"Solicitudes recibidas:",
+solicitudes
+);
 
 const totalActual =
 solicitudes.length;
@@ -2497,8 +2516,6 @@ if(totalSolicitudesAnterior === 0){
 
 totalSolicitudesAnterior =
 totalActual;
-
-return;
 
 }
 
