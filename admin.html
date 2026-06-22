@@ -2727,57 +2727,6 @@ return;
 const n =
 colaNotificaciones.shift();
 
-if(
-n.estado === "APROBADO"
-){
-
-mostrarNotificacion(
-
-"Solicitud aprobada",
-
-"Su solicitud para el lote <b>" +
-
-n.lote +
-
-"</b> fue aprobada."
-
-);
-
-}
-else{
-
-mostrarNotificacion(
-
-"Solicitud rechazada",
-
-"Su solicitud para el lote <b>" +
-
-n.lote +
-
-"</b> fue rechazada."
-
-);
-
-}
-
-fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
-"marcarNotificacionLeida",
-
-fila:n.fila
-
-})
-
-}
-);
-
-}
 document
 .getElementById(
 "btnCerrarNotificacion"
