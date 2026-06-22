@@ -324,6 +324,16 @@ button{
     <div id="usuarioHeader">
 
     <div id="usuarioLogeado"></div>
+<div
+id="ultimaActualizacion"
+style="
+text-align:center;
+font-size:13px;
+margin-bottom:15px;
+color:#666;
+">
+🟢 Sistema conectado
+</div>
 
     <button id="cerrarSesion">
 
@@ -354,6 +364,7 @@ id="btnSolicitudes"
 class="menu-btn">
 
 SOLICITUDES
+<span id="contadorSolicitudes"></span>
 
 </button>
     
@@ -838,6 +849,7 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 let solicitudesPendientes = [];
+let totalSolicitudesAnterior = 0;
 let colaNotificaciones = [];
 
 
@@ -2397,6 +2409,155 @@ Date.now()
 }
 let solicitudesGlobal = [];
 
+async function actualizarContadorSolicitudes(){
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+);
+
+const solicitudes =
+await respuesta.json();
+
+const total =
+solicitudes.length;
+
+document
+.getElementById(
+"contadorSolicitudes"
+)
+.innerHTML =
+total > 0
+? ` (${total})`
+: "";
+
+}
+async function verificarNuevasSolicitudes(){
+
+const rol =
+localStorage.getItem("rol");
+
+if(rol !== "ADMINISTRADOR"){
+return;
+}
+
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+);
+
+const solicitudes =
+await respuesta.json();
+
+const totalActual =
+solicitudes.length;
+if(totalSolicitudesAnterior === 0){
+
+totalSolicitudesAnterior =
+totalActual;
+
+return;
+
+}
+
+if(
+totalSolicitudesAnterior > 0 &&
+totalActual > totalSolicitudesAnterior
+){
+
+const ultima =
+solicitudes[0];
+
+mostrarNotificacion(
+
+"🔔 Nueva solicitud",
+
+"El asesor <b>" +
+
+ultima.usuario +
+
+"</b> solicitó cambiar el estado del lote <b>" +
+
+ultima.lote +
+
+"</b>"
+
+);
+
+}
+
+totalSolicitudesAnterior =
+totalActual;
+
+}
+async function sincronizarPanel(){
+
+const rol =
+localStorage.getItem("rol");
+
+try{
+
+await cargarLotes();
+
+if(
+rol === "ADMINISTRADOR"
+){
+
+actualizarContadorSolicitudes();
+
+if(
+document.getElementById(
+"contenedorSolicitudes"
+).style.display !== "none"
+){
+
+cargarSolicitudes();
+
+}
+
+if(
+document.getElementById(
+"contenedorConsultas"
+).style.display !== "none"
+){
+
+cargarConsultas();
+
+}
+
+if(
+document.getElementById(
+"contenedorAuditoria"
+).style.display !== "none"
+){
+
+cargarAuditoria();
+
+}
+
+}
+document
+.getElementById(
+"ultimaActualizacion"
+)
+.innerHTML =
+
+"🟢 Última actualización: " +
+
+new Date()
+.toLocaleString(
+"es-PE"
+);
+}catch(error){
+
+console.log(
+"Error sincronizando:",
+error
+);
+
+}
+
+}
 async function cargarSolicitudes(){
 
 const respuesta =
@@ -2406,6 +2567,7 @@ await fetch(
 
 const solicitudes =
 await respuesta.json();
+actualizarContadorSolicitudes();
 
 solicitudesGlobal =
 solicitudes;
@@ -2556,7 +2718,7 @@ const resultado =
 await respuesta.json();
 
 if(resultado.ok){
-
+actualizarContadorSolicitudes();
 await cargarSolicitudes();
 
 await cargarLotes();
@@ -2596,6 +2758,7 @@ const resultado =
 await respuesta.json();
 
 if(resultado.ok){
+actualizarContadorSolicitudes();
 
 await cargarSolicitudes();
 
@@ -2887,6 +3050,17 @@ window.onload = ()=>{
 await cargarLotes();
 
 await verificarNotificaciones();
+await actualizarContadorSolicitudes();
+await verificarNuevasSolicitudes();
+
+setInterval(
+verificarNuevasSolicitudes,
+15000
+);
+setInterval(
+sincronizarPanel,
+30000
+);
 
 })();
 
