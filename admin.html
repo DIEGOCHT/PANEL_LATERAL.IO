@@ -786,18 +786,20 @@ localStorage.setItem(
     .style.display = "block";
 
             document
-            .getElementById("usuarioLogeado")
-            .innerHTML =
+.getElementById("usuarioLogeado")
+.innerHTML =
 
-            "<h2>Bienvenido " +
-            resultado.nombre +
-            "</h2>" +
+"<h2>Bienvenido " +
+resultado.nombre +
+"</h2>" +
 
-            "<p><b>Rol:</b> " +
-            resultado.rol +
-            "</p>";
+"<p><b>Rol:</b> " +
+resultado.rol +
+"</p>";
 
-            cargarLotes();
+await cargarLotes();
+
+await verificarNotificaciones();
 
         }
         else{
@@ -1275,6 +1277,22 @@ document
 "none";
 
 await cargarLotes();
+
+mostrarNotificacion(
+
+"Estado actualizado",
+
+"El lote <b>" +
+
+loteActual +
+
+"</b> fue cambiado a <b>" +
+
+estado +
+
+"</b>."
+
+);
 
 }
     else{
@@ -2543,8 +2561,11 @@ await cargarSolicitudes();
 await cargarLotes();
 
 mostrarNotificacion(
+
 "Solicitud aprobada",
-"La solicitud fue aprobada correctamente."
+
+"La solicitud fue aprobada y el lote fue actualizado correctamente."
+
 );
 
 }
@@ -2578,8 +2599,11 @@ if(resultado.ok){
 await cargarSolicitudes();
 
 mostrarNotificacion(
+
 "Solicitud rechazada",
-"La solicitud fue rechazada correctamente."
+
+"El cambio solicitado fue rechazado."
+
 );
 
 }
@@ -2611,6 +2635,82 @@ document
 )
 .style.display =
 "flex";
+
+}
+async function verificarNotificaciones(){
+
+const usuario =
+localStorage.getItem(
+"usuario"
+);
+
+if(!usuario){
+return;
+}
+
+const respuesta =
+await fetch(
+
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=notificaciones&usuario="
+
++ encodeURIComponent(usuario)
+
+);
+
+const notificaciones =
+await respuesta.json();
+
+for(const n of notificaciones){
+
+if(n.estado === "APROBADO"){
+
+mostrarNotificacion(
+
+"Solicitud aprobada",
+
+"Su solicitud para el lote <b>" +
+
+n.lote +
+
+"</b> fue aprobada."
+
+);
+
+}
+else{
+
+mostrarNotificacion(
+
+"Solicitud rechazada",
+
+"Su solicitud para el lote <b>" +
+
+n.lote +
+
+"</b> fue rechazada."
+
+);
+
+}
+
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:
+"marcarNotificacionLeida",
+
+fila:n.fila
+
+})
+
+}
+);
+
+}
 
 }
 
@@ -2757,7 +2857,14 @@ window.onload = ()=>{
 
         "</p>";
 
-        cargarLotes();
+        (async()=>{
+
+await cargarLotes();
+
+await verificarNotificaciones();
+
+})();
+
 aplicarPermisosRol(
 localStorage.getItem("rol")
 );
