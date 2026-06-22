@@ -848,6 +848,7 @@ await verificarNotificaciones();
 let todosLosLotes = [];
 
 let filtroActual = "TODOS";
+let pestañaActiva = "LOTES";
 let solicitudesPendientes = [];
 let totalSolicitudesAnterior = 0;
 let colaNotificaciones = [];
@@ -1443,6 +1444,7 @@ document
 .addEventListener(
 "click",
 ()=>{
+pestañaActiva = "LOTES";
 cargarLotes();
 
 ocultarTodo();
@@ -1464,7 +1466,13 @@ document
 .getElementById("btnAuditoria")
 .addEventListener(
 "click",
-cargarAuditoria
+()=>{
+
+pestañaActiva = "AUDITORIA";
+
+cargarAuditoria();
+
+}
 );
 async function cargarAuditoria(){
 
@@ -1695,7 +1703,13 @@ document
 .getElementById("btnConsultas")
 .addEventListener(
 "click",
-cargarConsultas
+()=>{
+
+pestañaActiva = "CONSULTAS";
+
+cargarConsultas();
+
+}
 );
 document
 .getElementById(
@@ -1704,6 +1718,8 @@ document
 .addEventListener(
 "click",
 ()=>{
+
+pestañaActiva = "SOLICITUDES";
 
 ocultarTodo();
 
@@ -2492,63 +2508,40 @@ totalActual;
 }
 async function sincronizarPanel(){
 
-const rol =
-localStorage.getItem("rol");
-
 try{
+
+switch(pestañaActiva){
+
+case "LOTES":
 
 await cargarLotes();
 
-if(
-rol === "ADMINISTRADOR"
-){
+break;
 
-actualizarContadorSolicitudes();
+case "SOLICITUDES":
 
-if(
-document.getElementById(
-"contenedorSolicitudes"
-).style.display !== "none"
-){
+await cargarSolicitudes();
 
-cargarSolicitudes();
+await actualizarContadorSolicitudes();
 
-}
+break;
 
-if(
-document.getElementById(
-"contenedorConsultas"
-).style.display !== "none"
-){
+case "CONSULTAS":
 
-cargarConsultas();
+await cargarConsultas();
 
-}
+break;
 
-if(
-document.getElementById(
-"contenedorAuditoria"
-).style.display !== "none"
-){
+case "AUDITORIA":
 
-cargarAuditoria();
+await cargarAuditoria();
+
+break;
 
 }
 
 }
-document
-.getElementById(
-"ultimaActualizacion"
-)
-.innerHTML =
-
-"🟢 Última actualización: " +
-
-new Date()
-.toLocaleString(
-"es-PE"
-);
-}catch(error){
+catch(error){
 
 console.log(
 "Error sincronizando:",
@@ -2840,6 +2833,8 @@ return;
 
 const n =
 colaNotificaciones.shift();
+window.notificacionActual =
+n;
 
 if(
 n.estado === "APROBADO"
@@ -2874,23 +2869,6 @@ n.lote +
 
 }
 
-fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
-"marcarNotificacionLeida",
-
-fila:n.fila
-
-})
-
-}
-);
-
 }
 document
 .getElementById(
@@ -2904,6 +2882,32 @@ document
 )
 .style.display =
 "none";
+if(
+window.notificacionActual
+){
+
+fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:
+"marcarNotificacionLeida",
+
+fila:
+window.notificacionActual.fila
+
+})
+
+}
+);
+
+window.notificacionActual =
+null;
+
+}
 if(
 colaNotificaciones.length > 0
 ){
@@ -3055,11 +3059,11 @@ await verificarNuevasSolicitudes();
 
 setInterval(
 verificarNuevasSolicitudes,
-15000
+30000
 );
 setInterval(
 sincronizarPanel,
-30000
+60000
 );
 
 })();
