@@ -486,11 +486,10 @@ document.getElementById("cerrar")
 
 document.addEventListener("click",(e)=>{
 
+    console.log("CLICK HTML");
+
     const modal =
     document.getElementById("modalConsulta");
-
-    const modalVisible =
-    modal.style.display === "flex";
 
     const clickDentroPanel =
     panel.contains(e.target);
@@ -500,10 +499,18 @@ document.addEventListener("click",(e)=>{
     .getElementById("ventanaConsulta")
     ?.contains(e.target);
 
+    console.log({
+        clickDentroPanel,
+        clickDentroVentana,
+        elemento:e.target
+    });
+
     if(
         !clickDentroPanel &&
         !clickDentroVentana
     ){
+
+        console.log("CERRAR");
 
         panel.classList.remove("visible");
 
