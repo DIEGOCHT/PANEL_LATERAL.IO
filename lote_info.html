@@ -518,9 +518,11 @@ document.addEventListener("click",(e)=>{
     console.log("SOLICITAR CIERRE");
 
     window.parent.postMessage(
-        "CERRAR_WEBPOP",
-        "*"
-    );
+   {
+      accion:"CERRAR_PANEL"
+   },
+   "*"
+);
 
 }
 
