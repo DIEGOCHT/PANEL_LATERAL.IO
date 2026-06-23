@@ -511,17 +511,18 @@ document.addEventListener("click",(e)=>{
     });
 
     if(
-        !clickDentroPanel &&
-        !clickDentroVentana
-    ){
+    !clickDentroPanel &&
+    !clickDentroVentana
+){
 
-        console.log("CERRAR");
+    console.log("SOLICITAR CIERRE");
 
-        panel.style.display = "none";
+    window.parent.postMessage(
+        "CERRAR_WEBPOP",
+        "*"
+    );
 
-        modal.style.display = "none";
-
-    }
+}
 
 });
 
