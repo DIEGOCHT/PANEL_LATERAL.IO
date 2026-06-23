@@ -465,6 +465,27 @@ html,body{
 <script>
 
 const panel = document.getElementById("panel");
+function cerrarWebPop(){
+
+    panel.classList.remove("visible");
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="none";
+
+    try{
+        parent.document.getElementById("51")?.remove();
+    }catch(e){}
+
+    try{
+        parent.document.getElementById("124")?.remove();
+    }catch(e){}
+
+    try{
+        parent.document.getElementById("126")?.remove();
+    }catch(e){}
+
+}
 document.addEventListener("click", function(e){
 
     console.log("CLICK HTML");
@@ -479,15 +500,7 @@ const ubicacionEl = document.getElementById("ubicacion");
 const imagenEl = document.getElementById("imagen");
 
 document.getElementById("cerrar")
-.addEventListener("click",()=>{
-
-    panel.classList.remove("visible");
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-});
+.addEventListener("click", cerrarWebPop);
 
 document.addEventListener("click",(e)=>{
 
