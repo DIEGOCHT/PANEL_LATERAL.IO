@@ -486,21 +486,28 @@ document.getElementById("cerrar")
 
 document.addEventListener("click",(e)=>{
 
+    const modal =
+    document.getElementById("modalConsulta");
+
+    const modalVisible =
+    modal.style.display === "flex";
+
     const clickDentroPanel =
     panel.contains(e.target);
 
-    const clickDentroModal =
+    const clickDentroVentana =
     document
-    .getElementById("modalConsulta")
-    .contains(e.target);
+    .getElementById("ventanaConsulta")
+    ?.contains(e.target);
 
     if(
         !clickDentroPanel &&
-        !clickDentroModal &&
-        panel.classList.contains("visible")
+        !clickDentroVentana
     ){
 
         panel.classList.remove("visible");
+
+        modal.style.display = "none";
 
     }
 
@@ -725,12 +732,10 @@ document
 .addEventListener("click",(e)=>{
 
     if(
-        e.target.id === "modalConsulta"
+        e.target === this
     ){
 
-        document
-        .getElementById("modalConsulta")
-        .style.display="none";
+        this.style.display="none";
 
     }
 
@@ -844,19 +849,7 @@ ${mensaje}`;
 
 });
 cargarLote();
-window.addEventListener("message", function(e){
 
-    if(e.data === "CERRAR_PANEL"){
-
-        panel.classList.remove("visible");
-
-        document
-        .getElementById("modalConsulta")
-        .style.display = "none";
-
-    }
-
-});
 </script>
 
 </body>
