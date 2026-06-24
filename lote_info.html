@@ -482,10 +482,6 @@ document.getElementById("cerrar")
     .getElementById("modalConsulta")
     .style.display="none";
 
-    parent.postMessage({
-        accion:"CERRAR_PANEL"
-    },"*");
-
 });
 
 document.addEventListener("click",(e)=>{
@@ -499,18 +495,14 @@ document.addEventListener("click",(e)=>{
     .contains(e.target);
 
     if(
-    !clickDentroPanel &&
-    !clickDentroModal &&
-    panel.classList.contains("visible")
-){
+        !clickDentroPanel &&
+        !clickDentroModal &&
+        panel.classList.contains("visible")
+    ){
 
-    panel.classList.remove("visible");
+        panel.classList.remove("visible");
 
-    parent.postMessage({
-        accion:"CERRAR_PANEL"
-    },"*");
-
-}
+    }
 
 });
 
