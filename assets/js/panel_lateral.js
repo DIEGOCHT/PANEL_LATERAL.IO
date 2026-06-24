@@ -78,21 +78,41 @@
 
     function escucharMensajes(){
 
-        window.addEventListener("message",e=>{
+    window.addEventListener("message",(e)=>{
 
-            if(
-                e.data &&
-                e.data.origen==="PanelLateral" &&
-                e.data.accion==="cerrar"
-            ){
+        if(!e.data) return;
+
+        if(e.data.origen!=="PanelLateral") return;
+
+        switch(e.data.accion){
+
+            case "cerrar":
 
                 PanelLateral.cerrar();
 
-            }
+                break;
 
-        });
+            case "ABRIR_FORMULARIO":
 
-    }
+                console.log(
+                    "Formulario solicitado",
+                    e.data.datos
+                );
+
+                break;
+
+            default:
+
+                console.log(
+                    "Acción no reconocida:",
+                    e.data.accion
+                );
+
+        }
+
+    });
+
+}
 
     window.PanelLateral={
 
