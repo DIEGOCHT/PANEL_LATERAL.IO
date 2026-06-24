@@ -465,36 +465,6 @@ html,body{
 <script>
 
 const panel = document.getElementById("panel");
-function cerrarWebPop(){
-
-    console.log("51:", parent.document.getElementById("51"));
-    console.log("124:", parent.document.getElementById("124"));
-    console.log("126:", parent.document.getElementById("126"));
-
-    panel.classList.remove("visible");
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-    try{
-        parent.document.getElementById("51")?.remove();
-    }catch(e){}
-
-    try{
-        parent.document.getElementById("124")?.remove();
-    }catch(e){}
-
-    try{
-        parent.document.getElementById("126")?.remove();
-    }catch(e){}
-
-}
-document.addEventListener("click", function(e){
-
-    console.log("CLICK HTML");
-
-}, true);
 
 const loteEl = document.getElementById("lote");
 const estadoEl = document.getElementById("estado");
@@ -504,42 +474,41 @@ const ubicacionEl = document.getElementById("ubicacion");
 const imagenEl = document.getElementById("imagen");
 
 document.getElementById("cerrar")
-.addEventListener("click", cerrarWebPop);
+.addEventListener("click",()=>{
+
+    panel.classList.remove("visible");
+
+    document
+    .getElementById("modalConsulta")
+    .style.display="none";
+
+    parent.postMessage({
+        accion:"CERRAR_PANEL"
+    },"*");
+
+});
 
 document.addEventListener("click",(e)=>{
-
-    console.log("CLICK HTML");
-
-    const modal =
-    document.getElementById("modalConsulta");
 
     const clickDentroPanel =
     panel.contains(e.target);
 
-    const clickDentroVentana =
+    const clickDentroModal =
     document
-    .getElementById("ventanaConsulta")
-    ?.contains(e.target);
-
-    console.log({
-        clickDentroPanel,
-        clickDentroVentana,
-        elemento:e.target
-    });
+    .getElementById("modalConsulta")
+    .contains(e.target);
 
     if(
     !clickDentroPanel &&
-    !clickDentroVentana
+    !clickDentroModal &&
+    panel.classList.contains("visible")
 ){
 
-    console.log("SOLICITAR CIERRE");
+    panel.classList.remove("visible");
 
-    window.parent.postMessage(
-   {
-      accion:"CERRAR_PANEL"
-   },
-   "*"
-);
+    parent.postMessage({
+        accion:"CERRAR_PANEL"
+    },"*");
 
 }
 
@@ -764,10 +733,12 @@ document
 .addEventListener("click",(e)=>{
 
     if(
-        e.target === this
+        e.target.id === "modalConsulta"
     ){
 
-        this.style.display="none";
+        document
+        .getElementById("modalConsulta")
+        .style.display="none";
 
     }
 
