@@ -680,25 +680,35 @@ document
 .getElementById("consultarPrecio")
 .addEventListener("click",()=>{
 
-       if(
+    if(
         document
         .getElementById("consultarPrecio")
         .disabled
     ){
-
         return;
-
     }
-    document
-    .getElementById("modalConsulta")
-    .style.display="flex";
 
-    document
-    .getElementById("datosLote")
-    .textContent =
-    loteEl.textContent +
-    " - " +
-    ubicacionEl.textContent;
+    parent.postMessage({
+
+        origen:"PanelLateral",
+
+        accion:"ABRIR_FORMULARIO",
+
+        datos:{
+
+            lote:loteEl.textContent,
+
+            estado:estadoEl.textContent,
+
+            area:areaEl.textContent,
+
+            medidas:medidasEl.textContent,
+
+            ubicacion:ubicacionEl.textContent
+
+        }
+
+    },"*");
 
 });
 
