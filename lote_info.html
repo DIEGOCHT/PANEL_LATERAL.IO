@@ -476,35 +476,27 @@ const imagenEl = document.getElementById("imagen");
 document.getElementById("cerrar")
 .addEventListener("click",()=>{
 
-    panel.classList.remove("visible");
-
     document
     .getElementById("modalConsulta")
     .style.display="none";
 
+    parent.postMessage({
+
+        origen:"PanelLateral",
+
+        accion:"cerrar"
+
+    },"*");
+
 });
 
+/*
 document.addEventListener("click",(e)=>{
 
-    const clickDentroPanel =
-    panel.contains(e.target);
-
-    const clickDentroModal =
-    document
-    .getElementById("modalConsulta")
-    .contains(e.target);
-
-    if(
-        !clickDentroPanel &&
-        !clickDentroModal &&
-        panel.classList.contains("visible")
-    ){
-
-        panel.classList.remove("visible");
-
-    }
+    ...
 
 });
+*/
 
 function obtenerParametro(nombre){
 
