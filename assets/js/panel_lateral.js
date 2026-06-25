@@ -13,17 +13,19 @@
 
     const estado = {
 
-        iniciado:false,
+    iniciado:false,
 
-        panel:null,
+    panel:null,
 
-        iframe:null,
+    iframe:null,
 
-        loteActual:null,
+    modal:null,
 
-        abierto:false
+    loteActual:null,
 
-    };
+    abierto:false
+
+};
 
     function crearPanel(){
 
@@ -59,6 +61,34 @@
         estado.iframe=iframe;
 
     }
+function crearModal(){
+
+    if(estado.modal) return;
+
+    const modal = document.createElement("div");
+
+    modal.id = "modal-consulta-assturias";
+
+    modal.style.position = "fixed";
+    modal.style.left = "0";
+    modal.style.top = "0";
+    modal.style.width = "100vw";
+    modal.style.height = "100vh";
+
+    modal.style.display = "none";
+
+    modal.style.justifyContent = "center";
+    modal.style.alignItems = "center";
+
+    modal.style.background = "rgba(0,0,0,.45)";
+
+    modal.style.zIndex = CONFIG.zIndex + 1;
+
+    document.body.appendChild(modal);
+
+    estado.modal = modal;
+
+}
 
     function mostrar(){
 
@@ -78,7 +108,42 @@
 
 function abrirFormulario(datos){
 
-    console.log("Abrir formulario", datos);
+    estado.modal.style.display = "flex";
+
+    estado.modal.innerHTML = `
+
+        <div style="
+            width:600px;
+            background:white;
+            border-radius:18px;
+            padding:40px;
+            font-family:Arial;
+            box-shadow:0 20px 60px rgba(0,0,0,.35);
+        ">
+
+            <h2>Formulario de prueba</h2>
+
+            <p><b>Lote:</b> ${datos.lote}</p>
+
+            <p><b>Estado:</b> ${datos.estado}</p>
+
+            <button id="cerrarFormularioTemporal">
+
+                Cerrar
+
+            </button>
+
+        </div>
+
+    `;
+
+    document
+    .getElementById("cerrarFormularioTemporal")
+    .onclick=()=>{
+
+        estado.modal.style.display="none";
+
+    };
 
 }    
 function escucharMensajes(){
@@ -126,7 +191,9 @@ function escucharMensajes(){
 
             crearPanel();
 
-            escucharMensajes();
+crearModal();
+
+escucharMensajes();
 
             estado.iniciado=true;
 
