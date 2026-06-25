@@ -463,7 +463,6 @@ html,body{
 
 </div>
 <script>
-console.log("LOTE_INFO VERSION 24-06-2026");
 
 const panel = document.getElementById("panel");
 
@@ -477,27 +476,35 @@ const imagenEl = document.getElementById("imagen");
 document.getElementById("cerrar")
 .addEventListener("click",()=>{
 
+    panel.classList.remove("visible");
+
     document
     .getElementById("modalConsulta")
     .style.display="none";
 
-    parent.postMessage({
-
-        origen:"PanelLateral",
-
-        accion:"cerrar"
-
-    },"*");
-
 });
 
-/*
 document.addEventListener("click",(e)=>{
 
-    ...
+    const clickDentroPanel =
+    panel.contains(e.target);
+
+    const clickDentroModal =
+    document
+    .getElementById("modalConsulta")
+    .contains(e.target);
+
+    if(
+        !clickDentroPanel &&
+        !clickDentroModal &&
+        panel.classList.contains("visible")
+    ){
+
+        panel.classList.remove("visible");
+
+    }
 
 });
-*/
 
 function obtenerParametro(nombre){
 
@@ -681,37 +688,25 @@ document
 .getElementById("consultarPrecio")
 .addEventListener("click",()=>{
 
-    console.log("BOTON NUEVO EJECUTADO");
-
-    if(
+       if(
         document
         .getElementById("consultarPrecio")
         .disabled
     ){
+
         return;
+
     }
+    document
+    .getElementById("modalConsulta")
+    .style.display="flex";
 
-    parent.postMessage({
-
-        origen:"PanelLateral",
-
-        accion:"ABRIR_FORMULARIO",
-
-        datos:{
-
-            lote:loteEl.textContent,
-
-            estado:estadoEl.textContent,
-
-            area:areaEl.textContent,
-
-            medidas:medidasEl.textContent,
-
-            ubicacion:ubicacionEl.textContent
-
-        }
-
-    },"*");
+    document
+    .getElementById("datosLote")
+    .textContent =
+    loteEl.textContent +
+    " - " +
+    ubicacionEl.textContent;
 
 });
 
