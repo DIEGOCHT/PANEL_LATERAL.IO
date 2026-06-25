@@ -142,10 +142,12 @@
 
             estado.loteActual=lote;
 
-            estado.iframe.src=
-                CONFIG.urlBase+
-                "?lote="+
-                encodeURIComponent(lote);
+            estado.iframe.src =
+    CONFIG.urlBase +
+    "?lote=" +
+    encodeURIComponent(lote) +
+    "&v=" +
+    Date.now();
 
             mostrar();
 
