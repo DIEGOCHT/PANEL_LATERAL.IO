@@ -76,7 +76,12 @@
 
     }
 
-    function escucharMensajes(){
+function abrirFormulario(datos){
+
+    console.log("Abrir formulario", datos);
+
+}    
+function escucharMensajes(){
 
     window.addEventListener("message",(e)=>{
 
@@ -94,12 +99,9 @@
 
             case "ABRIR_FORMULARIO":
 
-                console.log(
-                    "Formulario solicitado",
-                    e.data.datos
-                );
+    abrirFormulario(e.data.datos);
 
-                break;
+    break;
 
             default:
 
