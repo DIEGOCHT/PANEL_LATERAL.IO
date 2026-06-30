@@ -514,176 +514,140 @@ function obtenerParametro(nombre){
 
 }
 
-function cargarLote(){
+async function cargarLote(){
 
-    const script = document.createElement("script");
-
-    script.src =
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?callback=procesarDatos";
-
-    document.body.appendChild(script);
-
-}
-
-function procesarDatos(datos){
-
-    const loteBuscado =
-    obtenerParametro("lote");
+    const loteBuscado = obtenerParametro("lote");
 
     if(!loteBuscado){
 
-        loteEl.textContent =
-        "No se indicó lote";
-
+        loteEl.textContent = "No se indicó lote";
         return;
 
     }
 
-    const lote =
-    datos.find(item =>
-        item.Lote === loteBuscado
-    );
+    // Mostrar el panel inmediatamente
+    panel.classList.add("visible");
 
-    if(!lote){
+    // Mostrar datos temporales mientras carga
+    loteEl.textContent = "Cargando...";
+    estadoEl.textContent = "...";
+    medidasEl.textContent = "...";
+    areaEl.textContent = "...";
+    ubicacionEl.textContent = "...";
 
-        loteEl.textContent =
-        "Lote no encontrado";
+    try{
 
-        return;
+        const respuesta = await fetch(
+
+            "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=lote&lote=" +
+
+            encodeURIComponent(loteBuscado)
+
+        );
+
+        const lote = await respuesta.json();
+
+        if(!lote || !lote.Lote){
+
+            loteEl.textContent = "Lote no encontrado";
+            return;
+
+        }
+
+        actualizarPanel(lote);
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        loteEl.textContent = "Error de conexión";
 
     }
 
-    loteEl.textContent =
-    lote.Lote;
+}
 
-    medidasEl.textContent =
-    lote.Medidas || "-";
+function actualizarPanel(lote){
 
-    areaEl.textContent =
-    lote.Area || "-";
+    loteEl.textContent = lote.Lote;
 
-    ubicacionEl.textContent =
-    lote.Ubicacion || "-";
+    medidasEl.textContent = lote.Medidas || "-";
 
-    estadoEl.textContent =
-    lote.Estado || "";
+    areaEl.textContent = lote.Area || "-";
+
+    ubicacionEl.textContent = lote.Ubicacion || "-";
+
+    estadoEl.textContent = lote.Estado || "";
 
     estadoEl.className = "";
 
-    const estado =
-    (lote.Estado || "")
-    .toUpperCase();
+    const estado = (lote.Estado || "").toUpperCase();
 
-    if(estado === "LIBRE"){
+    if(estado==="LIBRE"){
 
-        estadoEl.classList
-        .add("estado-libre");
+        estadoEl.classList.add("estado-libre");
 
     }
-    else if(
-        estado === "RESERVADO"
-    ){
+    else if(estado==="RESERVADO"){
 
-        estadoEl.classList
-        .add("estado-reservado");
+        estadoEl.classList.add("estado-reservado");
 
     }
     else{
 
-        estadoEl.classList
-        .add("estado-vendido");
+        estadoEl.classList.add("estado-vendido");
 
     }
 
-const imagenContainer =
-document.getElementById("imagenContainer");
+    const imagenContainer =
+    document.getElementById("imagenContainer");
 
-if(
-    estado === "RESERVADO" ||
-    estado === "VENDIDO"
-){
+    if(estado==="RESERVADO" || estado==="VENDIDO"){
 
-    imagenContainer.classList
-    .add("no-disponible");
+        imagenContainer.classList.add("no-disponible");
 
-}
-else{
+    }else{
 
-    imagenContainer.classList
-    .remove("no-disponible");
+        imagenContainer.classList.remove("no-disponible");
 
-}
+    }
 
-const botonConsulta =
-document.getElementById("consultarPrecio");
+    if(lote.Imagen && lote.Imagen.trim()!=""){
 
-if(estado === "RESERVADO"){
+        imagenEl.src = lote.Imagen;
 
-    botonConsulta.disabled = true;
+    }else{
 
-    botonConsulta.style.background =
-    "#eab308";
+        imagenEl.src = "thumbnail.png";
 
-    botonConsulta.style.color =
-    "#ffffff";
+    }
 
-    botonConsulta.innerHTML =
-    "⏳ Lote reservado";
+    const boton =
+    document.getElementById("consultarPrecio");
 
-}
-else if(estado === "VENDIDO"){
+    if(estado==="LIBRE"){
 
-    botonConsulta.disabled = true;
+        boton.disabled=false;
+        boton.innerHTML="✉ Consultar precio";
+        boton.style.background="#3f4d5d";
 
-    botonConsulta.style.background =
-    "#dc2626";
+    }
+    else if(estado==="RESERVADO"){
 
-    botonConsulta.style.color =
-    "#ffffff";
-
-    botonConsulta.innerHTML =
-    "✖ Lote vendido";
-
-}
-else{
-
-    botonConsulta.disabled = false;
-
-    botonConsulta.style.background =
-    "#3f4d5d";
-
-    botonConsulta.style.color =
-    "#ffffff";
-
-    botonConsulta.innerHTML =
-    "✉ Consultar precio";
-
-}
-    if(
-        lote.Imagen &&
-        lote.Imagen.trim() !== ""
-    ){
-
-        imagenEl.src =
-        lote.Imagen;
+        boton.disabled=true;
+        boton.innerHTML="⏳ Lote reservado";
+        boton.style.background="#eab308";
 
     }
     else{
 
-        imagenEl.src =
-        "thumbnail.png";
+        boton.disabled=true;
+        boton.innerHTML="✖ Lote vendido";
+        boton.style.background="#dc2626";
 
     }
 
-    setTimeout(()=>{
-
-        panel.classList
-        .add("visible");
-
-    },100);
-
 }
-
 document
 .getElementById("consultarPrecio")
 .addEventListener("click",()=>{
