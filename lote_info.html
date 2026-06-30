@@ -525,17 +525,7 @@ async function cargarLote(){
 
     }
 
-    // Mostrar el panel inmediatamente
-    panel.classList.add("visible");
-
-    // Mostrar datos temporales mientras carga
-    loteEl.textContent = "Cargando...";
-    estadoEl.textContent = "...";
-    medidasEl.textContent = "...";
-    areaEl.textContent = "...";
-    ubicacionEl.textContent = "...";
-
-    try{
+     try{
 
         const respuesta = await fetch(
 
@@ -647,6 +637,11 @@ function actualizarPanel(lote){
 
     }
 
+setTimeout(()=>{
+
+    panel.classList.add("visible");
+
+},80);
 }
 document
 .getElementById("consultarPrecio")
