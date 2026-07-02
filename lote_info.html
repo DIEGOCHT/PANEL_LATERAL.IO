@@ -378,9 +378,7 @@ html,body{
 
         <img id="imagen" src="" alt="Imagen del lote">
 
-        <button id="cerrar">×</button>
-
-    </div>
+</div>
 
     <div id="contenido">
 
@@ -428,9 +426,7 @@ html,body{
 
     <div id="ventanaConsulta">
 
-        <button id="cerrarModal">×</button>
-
-        <h2>Consultar precio</h2>
+    <h2>Consultar precio</h2>
 
         <p id="datosLote"></p>
 
@@ -472,39 +468,6 @@ const medidasEl = document.getElementById("medidas");
 const areaEl = document.getElementById("area");
 const ubicacionEl = document.getElementById("ubicacion");
 const imagenEl = document.getElementById("imagen");
-
-document.getElementById("cerrar")
-.addEventListener("click",()=>{
-
-    panel.classList.remove("visible");
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-});
-
-document.addEventListener("click",(e)=>{
-
-    const clickDentroPanel =
-    panel.contains(e.target);
-
-    const clickDentroModal =
-    document
-    .getElementById("modalConsulta")
-    .contains(e.target);
-
-    if(
-        !clickDentroPanel &&
-        !clickDentroModal &&
-        panel.classList.contains("visible")
-    ){
-
-        panel.classList.remove("visible");
-
-    }
-
-});
 
 function obtenerParametro(nombre){
 
@@ -707,46 +670,6 @@ document
     loteEl.textContent +
     " - " +
     ubicacionEl.textContent;
-
-});
-
-document
-.getElementById("cerrarModal")
-.addEventListener("click",()=>{
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-});
-
-document
-.getElementById("modalConsulta")
-.addEventListener("click",(e)=>{
-
-    if(
-        e.target.id === "modalConsulta"
-    ){
-
-        document
-        .getElementById("modalConsulta")
-        .style.display="none";
-
-    }
-
-});
-
-document.addEventListener("keydown",(e)=>{
-
-    if(
-        e.key === "Escape"
-    ){
-
-        document
-        .getElementById("modalConsulta")
-        .style.display="none";
-
-    }
 
 });
 
