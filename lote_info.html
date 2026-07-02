@@ -95,30 +95,6 @@ html,body{
 
 }
 
-#cerrar{
-
-    position:absolute;
-
-    top:15px;
-    right:15px;
-
-    width:52px;
-    height:52px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:white;
-
-    cursor:pointer;
-
-    font-size:30px;
-
-    box-shadow:0 2px 10px rgba(0,0,0,.25);
-
-}
-
 #contenido{
 
     padding:19px;
@@ -270,30 +246,6 @@ html,body{
 
 }
 
-#cerrarModal{
-
-    position:absolute;
-
-    right:20px;
-
-    top:20px;
-
-    width:50px;
-
-    height:50px;
-
-    border:none;
-
-    border-radius:50%;
-
-    background:#f2f2f2;
-
-    cursor:pointer;
-
-    font-size:34px;
-
-}
-
 #datosLote{
 
     color:#777;
@@ -378,9 +330,7 @@ html,body{
 
         <img id="imagen" src="" alt="Imagen del lote">
 
-        <button id="cerrar">×</button>
-
-    </div>
+</div>
 
     <div id="contenido">
 
@@ -428,9 +378,7 @@ html,body{
 
     <div id="ventanaConsulta">
 
-        <button id="cerrarModal">×</button>
-
-        <h2>Consultar precio</h2>
+    <h2>Consultar precio</h2>
 
         <p id="datosLote"></p>
 
@@ -472,39 +420,6 @@ const medidasEl = document.getElementById("medidas");
 const areaEl = document.getElementById("area");
 const ubicacionEl = document.getElementById("ubicacion");
 const imagenEl = document.getElementById("imagen");
-
-document.getElementById("cerrar")
-.addEventListener("click",()=>{
-
-    panel.classList.remove("visible");
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-});
-
-document.addEventListener("click",(e)=>{
-
-    const clickDentroPanel =
-    panel.contains(e.target);
-
-    const clickDentroModal =
-    document
-    .getElementById("modalConsulta")
-    .contains(e.target);
-
-    if(
-        !clickDentroPanel &&
-        !clickDentroModal &&
-        panel.classList.contains("visible")
-    ){
-
-        panel.classList.remove("visible");
-
-    }
-
-});
 
 function obtenerParametro(nombre){
 
@@ -707,46 +622,6 @@ document
     loteEl.textContent +
     " - " +
     ubicacionEl.textContent;
-
-});
-
-document
-.getElementById("cerrarModal")
-.addEventListener("click",()=>{
-
-    document
-    .getElementById("modalConsulta")
-    .style.display="none";
-
-});
-
-document
-.getElementById("modalConsulta")
-.addEventListener("click",(e)=>{
-
-    if(
-        e.target.id === "modalConsulta"
-    ){
-
-        document
-        .getElementById("modalConsulta")
-        .style.display="none";
-
-    }
-
-});
-
-document.addEventListener("keydown",(e)=>{
-
-    if(
-        e.key === "Escape"
-    ){
-
-        document
-        .getElementById("modalConsulta")
-        .style.display="none";
-
-    }
 
 });
 
