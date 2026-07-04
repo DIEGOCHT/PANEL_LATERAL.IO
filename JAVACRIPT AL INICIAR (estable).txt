@@ -1,0 +1,822 @@
+(function () {
+
+window.APP = {};
+
+APP.version = "2.0";
+
+APP.api = "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec";
+
+APP.debug = true;
+
+APP.data = [];
+
+APP.log = function(){
+
+    if(APP.debug){
+
+        console.log.apply(console,arguments);
+
+    }
+
+};
+
+APP.log("APP V2 OK");
+
+})();
+
+APP.Panel={};
+
+APP.Panel.crear=function(){
+
+if(document.getElementById("panel")) return;
+
+var css=document.createElement("style");
+
+css.id="APP_PANEL_CSS";
+
+css.innerHTML=`
+
+#panel{
+
+position:fixed;
+
+top:124px;
+
+left:0;
+
+width:336px;
+
+max-width:calc(100vw - 20px);
+
+background:#fff;
+
+border-radius:22px;
+
+overflow:hidden;
+
+box-shadow:0 12px 40px rgba(0,0,0,.25);
+
+transform:translateX(-120%);
+
+transition:.40s ease;
+
+z-index:999999;
+
+font-family:Arial,Helvetica,sans-serif;
+
+}
+
+#panel.visible{
+
+transform:translateX(0);
+
+}
+
+#imagenContainer{
+
+position:relative;
+
+height:192px;
+
+background:#f3f3f3;
+
+overflow:hidden;
+
+}
+
+#imagen{
+
+width:100%;
+
+height:100%;
+
+display:block;
+
+object-fit:cover;
+
+}
+
+#contenido{
+
+position:relative;
+
+padding:19px 19px 6px 19px;
+
+}
+#cerrarPanel{
+
+position:absolute;
+
+top:14px;
+
+right:14px;
+
+width:42px;
+
+height:42px;
+
+border:none;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.95);
+
+box-shadow:0 4px 12px rgba(0,0,0,.18);
+
+cursor:pointer;
+
+font-size:22px;
+
+font-weight:bold;
+
+z-index:99999;
+
+transition:.25s;
+
+}
+
+width:36px;
+
+height:36px;
+
+border:none;
+
+border-radius:50%;
+
+background:#f3f3f3;
+
+cursor:pointer;
+
+font-size:18px;
+
+font-weight:bold;
+
+transition:.25s;
+
+}
+
+#cerrarPanel:hover{
+
+background:#e8e8e8;
+
+}
+
+#cabecera{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:12px;
+
+}
+
+#lote{
+
+margin:0;
+
+font-size:18px;
+
+font-weight:700;
+
+line-height:1.2;
+
+text-transform:uppercase;
+
+letter-spacing:.2px;
+
+max-width:180px;
+
+}
+
+#estado{
+
+padding:8px 18px;
+
+border-radius:30px;
+
+font-size:13px;
+
+font-weight:700;
+
+color:#fff;
+
+min-width:105px;
+
+text-align:center;
+
+letter-spacing:.3px;
+
+}
+
+.estado-libre{
+
+background:#16a34a;
+
+}
+
+.estado-reservado{
+
+background:#eab308;
+
+}
+
+.estado-vendido{
+
+background:#dc2626;
+
+}
+
+.fila{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:13px 0;
+
+border-bottom:1px solid #e5e5e5;
+
+}
+
+.label{
+
+color:#666;
+
+font-size:12px;
+
+}
+
+.valor{
+
+font-size:13px;
+
+font-weight:bold;
+
+padding-right:18px;
+
+text-align:right;
+
+}
+
+#consultarPrecio{
+
+width:70%;
+
+height:40px;
+
+margin:14px auto 6px auto;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border:none;
+
+border-radius:22px;
+
+background:#3f4d5d;
+
+color:#fff;
+
+font-size:14px;
+
+font-weight:700;
+
+text-transform:uppercase;
+
+letter-spacing:.5px;
+
+cursor:pointer;
+
+}
+
+align-items:center;
+
+justify-content:center;
+
+border:none;
+
+border-radius:22px;
+
+background:#3f4d5d;
+
+color:#fff;
+
+font-size:14px;
+
+font-weight:700;
+
+text-transform:uppercase;
+
+letter-spacing:.5px;
+
+cursor:pointer;
+
+}
+
+`;
+
+document.head.appendChild(css);
+
+document.body.insertAdjacentHTML("beforeend",`
+
+<div id="panel">
+
+<button id="cerrarPanel">
+
+✕
+
+</button>
+
+<div id="imagenContainer">
+
+<img id="imagen">
+
+</div>
+
+<div id="contenido">
+
+<div id="cabecera">
+
+<h2 id="lote">Cargando...</h2>
+
+<span id="estado">...</span>
+
+</div>
+
+<div class="fila">
+
+<span class="label">Medidas</span>
+
+<span class="valor" id="medidas">-</span>
+
+</div>
+
+<div class="fila">
+
+<span class="label">Área</span>
+
+<span class="valor" id="area">-</span>
+
+</div>
+
+<div class="fila">
+
+<span class="label">Ubicación</span>
+
+<span class="valor" id="ubicacion">-</span>
+
+</div>
+
+<button id="consultarPrecio">
+
+✉ Consultar precio
+
+</button>
+
+</div>
+
+</div>
+
+`);
+
+APP.log("PANEL CREADO");
+
+};
+
+APP.Panel.abrir=function(){
+
+document.getElementById("panel").classList.add("visible");
+
+};
+
+APP.Panel.cerrar=function(){
+
+document.getElementById("panel").classList.remove("visible");
+
+};
+
+APP.Panel.crear();
+document.getElementById("cerrarPanel").onclick=function(){
+
+APP.Panel.cerrar();
+
+};
+
+APP.Google={};
+
+APP.Google.cargar=function(){
+
+APP.log("Consultando Google...");
+
+var script=document.createElement("script");
+
+script.src=
+
+APP.api+
+
+"?callback=APP.Google.recibir&_="+
+
+Date.now();
+
+document.body.appendChild(script);
+
+};
+
+APP.Google.recibir=function(datos){
+
+APP.data=datos;
+
+APP.log("Lotes cargados:",datos.length);
+
+};
+
+APP.Google.buscar=function(nombre){
+
+for(var i=0;i<APP.data.length;i++){
+
+if(APP.data[i].Lote===nombre){
+
+return APP.data[i];
+
+}
+
+}
+
+return null;
+
+};
+
+APP.Google.cargar();
+APP.Panel.mostrar=function(nombre){
+
+var lote=APP.Google.buscar(nombre);
+
+if(!lote){
+
+alert("No existe el lote");
+
+return;
+
+}
+
+document.getElementById("lote").textContent=lote.Lote;
+
+document.getElementById("medidas").textContent=lote.Medidas;
+
+document.getElementById("area").textContent=lote.Area;
+
+document.getElementById("ubicacion").textContent=lote.Ubicacion;
+
+document.getElementById("estado").textContent=lote.Estado;
+
+document.getElementById("imagen").src=lote.Imagen;
+
+var estado=document.getElementById("estado");
+
+estado.className="";
+
+var boton=document.getElementById("consultarPrecio");
+
+var imagenContainer=document.getElementById("imagenContainer");
+
+imagenContainer.style.position="relative";
+
+imagenContainer.style.overflow="hidden";
+
+if(!document.getElementById("capaOscura")){
+
+var capa=document.createElement("div");
+
+capa.id="capaOscura";
+
+capa.style.position="absolute";
+
+capa.style.left="0";
+
+capa.style.top="0";
+
+capa.style.right="0";
+
+capa.style.bottom="0";
+
+capa.style.background="rgba(0,0,0,.35)";
+
+capa.style.display="none";
+
+imagenContainer.appendChild(capa);
+
+}
+
+var capa=document.getElementById("capaOscura");
+
+switch((lote.Estado||"").toUpperCase()){
+
+case "LIBRE":
+
+estado.classList.add("estado-libre");
+
+boton.disabled=false;
+boton.onclick=function(){
+
+APP.Formulario.abrir();
+
+};
+
+boton.innerHTML="✉ CONSULTAR PRECIO";
+
+boton.style.background="#3f4d5d";
+
+capa.style.display="none";
+
+break;
+
+case "RESERVADO":
+
+estado.classList.add("estado-reservado");
+
+boton.disabled=true;
+
+boton.innerHTML="⏳ LOTE RESERVADO";
+
+boton.style.background="#eab308";
+
+capa.style.display="block";
+
+break;
+
+default:
+
+estado.classList.add("estado-vendido");
+
+boton.disabled=true;
+
+boton.innerHTML="✖ LOTE VENDIDO";
+
+boton.style.background="#dc2626";
+
+capa.style.display="block";
+
+}
+
+APP.Panel.abrir();
+
+};
+
+APP.Formulario={};
+
+APP.Formulario.crear=function(){
+
+if(document.getElementById("modalConsulta")) return;
+
+var css=document.createElement("style");
+
+css.id="APP_FORM_CSS";
+
+css.innerHTML=`
+
+#modalConsulta{
+
+position:fixed;
+
+inset:0;
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+background:rgba(0,0,0,.45);
+
+z-index:99999999;
+
+}
+
+#ventanaConsulta{
+
+width:500px;
+
+max-width:95vw;
+
+background:#fff;
+
+border-radius:22px;
+
+padding:30px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+position:relative;
+
+font-family:Arial,Helvetica,sans-serif;
+
+}
+
+#cerrarFormulario{
+
+position:absolute;
+
+top:18px;
+
+right:18px;
+
+width:46px;
+
+height:46px;
+
+border:none;
+
+border-radius:50%;
+
+background:#f3f3f3;
+
+font-size:28px;
+
+cursor:pointer;
+
+}
+
+#formLote{
+
+margin:18px 0 25px;
+
+font-size:15px;
+
+color:#666;
+
+}
+
+.campo{
+
+width:100%;
+
+padding:14px 18px;
+
+margin-bottom:14px;
+
+border:1px solid #ddd;
+
+border-radius:30px;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+outline:none;
+
+}
+
+#mensaje{
+
+height:110px;
+
+border-radius:18px;
+
+resize:none;
+
+}
+
+#btnEnviar{
+
+width:100%;
+
+height:48px;
+
+border:none;
+
+border-radius:28px;
+
+background:#3f4d5d;
+
+color:#fff;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+
+text-transform:uppercase;
+
+}
+
+`;
+
+document.head.appendChild(css);
+
+document.body.insertAdjacentHTML("beforeend",`
+
+<div id="modalConsulta">
+
+<div id="ventanaConsulta">
+
+<button id="cerrarFormulario">×</button>
+
+<h2>CONSULTAR PRECIO</h2>
+
+<p id="formLote"></p>
+
+<input id="nombre" class="campo" placeholder="Nombre">
+
+<input id="correo" class="campo" placeholder="Correo electrónico">
+
+<input id="telefono" class="campo" placeholder="Teléfono">
+
+<textarea id="mensaje" class="campo" placeholder="Mensaje"></textarea>
+
+<button id="btnEnviar">
+
+ENVIAR CONSULTA
+
+</button>
+
+</div>
+
+</div>
+
+`);
+
+document.getElementById("cerrarFormulario").onclick=function(){
+
+APP.Formulario.cerrar();
+
+};
+
+};
+
+APP.Formulario.abrir=function(){
+
+document.getElementById("formLote").innerHTML=
+
+"<b>"+document.getElementById("lote").textContent+"</b><br>"+
+
+document.getElementById("ubicacion").textContent;
+
+document.getElementById("modalConsulta").style.display="flex";
+
+};
+
+APP.Formulario.cerrar=function(){
+
+document.getElementById("modalConsulta").style.display="none";
+
+};
+
+APP.Formulario.crear();
+
+APP.Formulario.obtenerDatos=function(){
+
+return{
+
+lote:document.getElementById("lote").textContent,
+
+estado:document.getElementById("estado").textContent,
+
+area:document.getElementById("area").textContent,
+
+medidas:document.getElementById("medidas").textContent,
+
+ubicacion:document.getElementById("ubicacion").textContent,
+
+nombre:document.getElementById("nombre").value.trim(),
+
+correo:document.getElementById("correo").value.trim(),
+
+telefono:document.getElementById("telefono").value.trim(),
+
+mensaje:document.getElementById("mensaje").value.trim()
+
+};
+
+};
+APP.Formulario.validar=function(){
+
+var d=APP.Formulario.obtenerDatos();
+
+if(d.nombre===""){
+
+alert("Ingrese su nombre");
+
+return false;
+
+}
+
+if(d.telefono===""){
+
+alert("Ingrese su teléfono");
+
+return false;
+
+}
+
+return true;
+
+};
