@@ -466,8 +466,6 @@ html,body{
 
 const panel = document.getElementById("panel");
 
-let loteBuscado = "";
-let datosLotes = [];
 const loteEl = document.getElementById("lote");
 const estadoEl = document.getElementById("estado");
 const medidasEl = document.getElementById("medidas");
@@ -515,21 +513,6 @@ function obtenerParametro(nombre){
     return url.searchParams.get(nombre);
 
 }
-window.mostrarLote = function(nombreLote){
-
-    loteBuscado = nombreLote;
-
-    if(datosLotes.length){
-
-        procesarDatos(datosLotes);
-
-    }else{
-
-        cargarLote();
-
-    }
-
-}
 
 function cargarLote(){
 
@@ -543,15 +526,9 @@ function cargarLote(){
 }
 
 function procesarDatos(datos){
-datosLotes = datos;
 
-    if(!loteBuscado){
-
-    loteEl.textContent = "No se indicó lote";
-
-    return;
-
-}
+    const loteBuscado =
+    obtenerParametro("lote");
 
     if(!loteBuscado){
 
@@ -866,7 +843,7 @@ ${mensaje}`;
     );
 
 });
-// Esperando que 3DVista llame a mostrarLote()
+cargarLote();
 
 </script>
 
