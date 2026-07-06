@@ -1,4 +1,6 @@
 {
-    "pago":"SI",
-    "mensaje":""
+  "pago": "SI",
+  "mensaje": "",
+  "mantenimiento": "NO",
+  "version": "3.0"
 }
