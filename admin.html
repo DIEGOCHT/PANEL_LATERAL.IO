@@ -812,20 +812,6 @@ await cargarLotes();
 
 await verificarNotificaciones();
 
-await actualizarContadorSolicitudes();
-
-await verificarNuevasSolicitudes();
-
-setInterval(
-verificarNuevasSolicitudes,
-5000
-);
-
-setInterval(
-sincronizarPanel,
-60000
-);
-
         }
         else{
 
@@ -862,12 +848,9 @@ sincronizarPanel,
 let todosLosLotes = [];
 
 let filtroActual = "TODOS";
-let pestañaActiva = "LOTES";
 let solicitudesPendientes = [];
 let totalSolicitudesAnterior = 0;
 let colaNotificaciones = [];
-
-let ultimaSolicitudDetectada = "";
 
 
 function renderizarLotes(datos){
@@ -949,7 +932,7 @@ opacity:${bloqueado ? "0.5" : "1"};
 cursor:${bloqueado ? "not-allowed" : "pointer"};
 "
 
-onclick="cambiarEstado('${lote.Lote}')">
+onclick="cambiarEstado('${lote.Etapa}','${lote.Lote}')">
 
 ${pendiente ? "En Espera ⏳" : "Cambiar"}
 
@@ -1102,7 +1085,10 @@ e.preventDefault();
 await guardarEstado();
 
 };
+let etapaActual = "";
+
 let loteActual = "";
+
 let estadoOriginal = "";
 
 async function guardarEstado(){
@@ -1117,7 +1103,12 @@ await verificacion.json();
 
 const loteServidor =
 lotes.find(
-x => x.Lote === loteActual
+x =>
+
+x.Etapa === etapaActual &&
+
+x.Lote === loteActual
+
 );
 
 if(!loteServidor){
@@ -1257,13 +1248,19 @@ await fetch(
 
     body:JSON.stringify({
 
-        action:"actualizarEstado",
-        lote:loteActual,
-        estado:estado,
-        usuario:usuario,
-        estadoOriginal:estadoOriginal
+    action:"actualizarEstado",
 
-    })
+    etapa:etapaActual,
+
+    lote:loteActual,
+
+    estado:estado,
+
+    usuario:usuario,
+
+    estadoOriginal:estadoOriginal
+
+})
 
 }
 );
@@ -1342,7 +1339,7 @@ cargarLotes();
 }
 
 }
-async function cambiarEstado(lote){
+async function cambiarEstado(etapa,lote){
 
     const respuesta =
     await fetch(
@@ -1353,9 +1350,14 @@ async function cambiarEstado(lote){
     await respuesta.json();
 
     const loteActualizado =
-    datos.find(
-    x => x.Lote === lote
-    );
+datos.find(
+x =>
+
+x.Etapa === etapa &&
+
+x.Lote === lote
+
+);
 if(!loteActualizado){
 
 mostrarNotificacion(
@@ -1367,13 +1369,22 @@ return;
 
 }
 loteActual = lote;
+etapaActual = loteActualizado.Etapa;
 
 estadoOriginal =
 loteActualizado.Estado;
 const filaTabla =
-todosLosLotes.find(
-x => x.Lote === lote
+todosLosLotes.find(function(x){
+
+return(
+
+x.Etapa===etapa &&
+
+x.Lote===lote
+
 );
+
+});
 
 if(
 
@@ -1460,7 +1471,6 @@ document
 .addEventListener(
 "click",
 ()=>{
-pestañaActiva = "LOTES";
 cargarLotes();
 
 ocultarTodo();
@@ -1482,13 +1492,7 @@ document
 .getElementById("btnAuditoria")
 .addEventListener(
 "click",
-()=>{
-
-pestañaActiva = "AUDITORIA";
-
-cargarAuditoria();
-
-}
+cargarAuditoria
 );
 async function cargarAuditoria(){
 
@@ -1719,13 +1723,7 @@ document
 .getElementById("btnConsultas")
 .addEventListener(
 "click",
-()=>{
-
-pestañaActiva = "CONSULTAS";
-
-cargarConsultas();
-
-}
+cargarConsultas
 );
 document
 .getElementById(
@@ -1734,8 +1732,6 @@ document
 .addEventListener(
 "click",
 ()=>{
-
-pestañaActiva = "SOLICITUDES";
 
 ocultarTodo();
 
@@ -2353,9 +2349,14 @@ border-bottom:1px solid #eee;
     </div>
 
     <div>
-        <b>Lote:</b>
-        ${c.Lote || ""}
-    </div>
+    <b>Etapa:</b>
+    ${c.Etapa || ""}
+</div>
+
+<div>
+    <b>Lote:</b>
+    ${c.Lote || ""}
+</div>
 
     <div>
         <b>Teléfono:</b>
@@ -2391,12 +2392,13 @@ border-bottom:1px solid #eee;
         <tr>
 
             <th>Fecha</th>
-            <th>Lote</th>
-            <th>Estado</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Mensaje</th>
+<th>Etapa</th>
+<th>Lote</th>
+<th>Estado</th>
+<th>Nombre</th>
+<th>Email</th>
+<th>Teléfono</th>
+<th>Mensaje</th>
 
         </tr>
 
@@ -2409,12 +2411,13 @@ border-bottom:1px solid #eee;
         <tr>
 
             <td>${formatearFecha(c.Fecha)}</td>
-            <td>${c.Lote || ""}</td>
-            <td>${c.Estado || ""}</td>
-            <td>${c.Nombre || ""}</td>
-            <td>${c.Email || ""}</td>
-            <td>${c.Telefono || ""}</td>
-            <td>${c.Mensaje || ""}</td>
+<td>${c.Etapa || ""}</td>
+<td>${c.Lote || ""}</td>
+<td>${c.Estado || ""}</td>
+<td>${c.Nombre || ""}</td>
+<td>${c.Email || ""}</td>
+<td>${c.Telefono || ""}</td>
+<td>${c.Mensaje || ""}</td>
 
         </tr>
 
@@ -2466,17 +2469,10 @@ total > 0
 }
 async function verificarNuevasSolicitudes(){
 
-console.log(
-"VERIFICANDO SOLICITUDES..."
-);
-
-try{
-
 const rol =
 localStorage.getItem("rol");
-console.log("ROL ACTUAL:", rol);
 
-if(rol !== "ADMIN"){
+if(rol !== "ADMINISTRADOR"){
 return;
 }
 
@@ -2487,66 +2483,25 @@ await fetch(
 
 const solicitudes =
 await respuesta.json();
-console.table(solicitudes);
 
 const totalActual =
 solicitudes.length;
-console.log(
-"Solicitudes pendientes:",
-totalActual
-);
-console.log(
-"Anterior:",
-totalSolicitudesAnterior,
-"Actual:",
-totalActual
-);
-
-document
-.getElementById(
-"contadorSolicitudes"
-)
-.innerHTML =
-totalActual > 0
-? ` (${totalActual})`
-: "";
-
 if(totalSolicitudesAnterior === 0){
 
 totalSolicitudesAnterior =
 totalActual;
 
+return;
+
 }
 
 if(
+totalSolicitudesAnterior > 0 &&
 totalActual > totalSolicitudesAnterior
 ){
 
-const nuevaSolicitud =
-solicitudes.find(s =>
-
-(s.fecha + "|" +
-s.usuario + "|" +
-s.lote)
-
-!==
-
-ultimaSolicitudDetectada
-
-);
-
-if(nuevaSolicitud){
-
-ultimaSolicitudDetectada =
-
-nuevaSolicitud.fecha + "|" +
-nuevaSolicitud.usuario + "|" +
-nuevaSolicitud.lote;
-
-console.log(
-"NUEVA SOLICITUD:",
-nuevaSolicitud.lote
-);
+const ultima =
+solicitudes[0];
 
 mostrarNotificacion(
 
@@ -2554,11 +2509,11 @@ mostrarNotificacion(
 
 "El asesor <b>" +
 
-nuevaSolicitud.usuario +
+ultima.usuario +
 
 "</b> solicitó cambiar el estado del lote <b>" +
 
-nuevaSolicitud.lote +
+ultima.lote +
 
 "</b>"
 
@@ -2566,57 +2521,69 @@ nuevaSolicitud.lote +
 
 }
 
-}
 totalSolicitudesAnterior =
 totalActual;
 
 }
-catch(error){
-
-console.log(
-"Error verificando solicitudes:",
-error
-);
-
-}
-
-}
 async function sincronizarPanel(){
+
+const rol =
+localStorage.getItem("rol");
 
 try{
 
-switch(pestañaActiva){
-
-case "LOTES":
-
 await cargarLotes();
 
-break;
+if(
+rol === "ADMINISTRADOR"
+){
 
-case "SOLICITUDES":
+actualizarContadorSolicitudes();
 
-await cargarSolicitudes();
+if(
+document.getElementById(
+"contenedorSolicitudes"
+).style.display !== "none"
+){
 
-await actualizarContadorSolicitudes();
+cargarSolicitudes();
 
-break;
+}
 
-case "CONSULTAS":
+if(
+document.getElementById(
+"contenedorConsultas"
+).style.display !== "none"
+){
 
-await cargarConsultas();
+cargarConsultas();
 
-break;
+}
 
-case "AUDITORIA":
+if(
+document.getElementById(
+"contenedorAuditoria"
+).style.display !== "none"
+){
 
-await cargarAuditoria();
-
-break;
+cargarAuditoria();
 
 }
 
 }
-catch(error){
+document
+.getElementById(
+"ultimaActualizacion"
+)
+.innerHTML =
+
+"🟢 Última actualización: " +
+
+new Date()
+.toLocaleString(
+"es-PE"
+);
+}catch(error){
 
 console.log(
 "Error sincronizando:",
@@ -2908,8 +2875,6 @@ return;
 
 const n =
 colaNotificaciones.shift();
-window.notificacionActual =
-n;
 
 if(
 n.estado === "APROBADO"
@@ -2944,6 +2909,23 @@ n.lote +
 
 }
 
+fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+{
+method:"POST",
+
+body:JSON.stringify({
+
+action:
+"marcarNotificacionLeida",
+
+fila:n.fila
+
+})
+
+}
+);
+
 }
 document
 .getElementById(
@@ -2957,32 +2939,6 @@ document
 )
 .style.display =
 "none";
-if(
-window.notificacionActual
-){
-
-fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
-"marcarNotificacionLeida",
-
-fila:
-window.notificacionActual.fila
-
-})
-
-}
-);
-
-window.notificacionActual =
-null;
-
-}
 if(
 colaNotificaciones.length > 0
 ){
@@ -3081,20 +3037,12 @@ accionConfirmada();
 );
 
 window.onload = ()=>{
-console.log("WINDOW ONLOAD");
-console.log(
-"LOGEADO:",
-localStorage.getItem("logeado")
-);
 
     if(
         localStorage.getItem(
         "logeado"
         ) === "SI"
     ){
-console.log(
-"ENTRO AL IF LOGEADO"
-);
 
         document
         .getElementById(
@@ -3142,11 +3090,11 @@ await verificarNuevasSolicitudes();
 
 setInterval(
 verificarNuevasSolicitudes,
-5000
+15000
 );
 setInterval(
 sincronizarPanel,
-60000
+30000
 );
 
 })();
