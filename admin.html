@@ -858,11 +858,12 @@ function renderizarLotes(datos){
 let html = `
 <table class="tabla">
     <tr>
-        <th>Lote</th>
-        <th>Estado</th>
-        <th>Área</th>
-        <th>Ubicación</th>
-        <th>Acción</th>
+        <th>Etapa</th>
+<th>Lote</th>
+<th>Estado</th>
+<th>Área</th>
+<th>Ubicación</th>
+<th>Acción</th>
     </tr>
 `;
 
@@ -904,7 +905,9 @@ pendiente;
     html += `
     <tr>
 
-        <td>${lote.Lote}</td>
+        <td>${lote.Etapa}</td>
+
+<td>${lote.Lote}</td>
 
         <td class="${clase}">
     ${lote.Estado}
@@ -1595,13 +1598,15 @@ ${vendidos}
 
         <th>Fecha</th>
 
-        <th>Usuario</th>
+<th>Usuario</th>
 
-        <th>Lote</th>
+<th>Etapa</th>
 
-        <th>Antes</th>
+<th>Lote</th>
 
-        <th>Después</th>
+<th>Antes</th>
+
+<th>Después</th>
 
       </tr>
 
@@ -1615,13 +1620,15 @@ ${vendidos}
 
         <td>${formatearFecha(item.Fecha)}</td>
 
-        <td>${item.Usuario || ""}</td>
+<td>${item.Usuario || ""}</td>
 
-        <td>${item.Lote || ""}</td>
+<td>${item.Etapa || ""}</td>
 
-        <td>${item.Antes || ""}</td>
+<td>${item.Lote || ""}</td>
 
-        <td>${item.Despues || ""}</td>
+<td>${item.Antes || ""}</td>
+
+<td>${item.Despues || ""}</td>
 
       </tr>
 
