@@ -848,8 +848,15 @@ await verificarNotificaciones();
 let todosLosLotes = [];
 
 let filtroActual = "TODOS";
+
 let solicitudesPendientes = [];
+
+let auditoriaCache = [];
+
+let consultasCache = [];
+
 let totalSolicitudesAnterior = 0;
+
 let colaNotificaciones = [];
 
 
@@ -962,6 +969,97 @@ html;
 
 }
 
+function actualizarFila(lote){
+
+const id =
+
+"fila_" +
+
+(lote.Etapa+"_"+lote.Lote)
+
+.replace(/\s+/g,"_");
+
+const fila =
+document.getElementById(id);
+
+if(!fila){
+return;
+}
+
+let clase="";
+
+if(lote.Estado==="LIBRE"){
+
+clase="estado-libre";
+
+}
+else if(lote.Estado==="RESERVADO"){
+
+clase="estado-reservado";
+
+}
+else{
+
+clase="estado-vendido";
+
+}
+
+fila.children[2].className = clase;
+
+fila.children[2].textContent = lote.Estado;
+
+const boton = fila.children[5].querySelector("button");
+
+if(boton){
+
+const rol =
+localStorage.getItem("rol");
+
+const pendiente =
+solicitudesPendientes.find(function(s){
+
+return(
+
+s.Etapa===lote.Etapa &&
+
+s.Lote===lote.Lote
+
+);
+
+});
+
+const bloqueado =
+
+(rol==="ASESOR" &&
+
+(
+
+lote.Estado==="VENDIDO" ||
+
+lote.Estado==="RESERVADO"
+
+))
+
+||
+
+pendiente;
+
+boton.disabled = bloqueado;
+
+boton.style.opacity =
+bloqueado ? "0.5":"1";
+
+boton.textContent =
+pendiente
+?
+"En Espera ⏳"
+:
+"Cambiar";
+
+}
+
+}
+
 function actualizarDashboard(datos){
 
 const total =
@@ -1053,9 +1151,9 @@ solicitudesPendientes = [];
 
 }
 
-actualizarDashboard(datos);
+actualizarDashboard(todosLosLotes);
 
-renderizarLotes(datos);
+filtrarLotes();
 
 }
 document
@@ -1064,7 +1162,7 @@ document
 )
 .addEventListener(
 "click",
-()=>{
+async ()=>{
 
     document
     .getElementById(
@@ -1073,7 +1171,7 @@ document
     .style.display =
     "none";
 
-    cargarLotes();
+    await sincronizarPanel();
 
 });
 
@@ -1156,7 +1254,7 @@ loteServidor.Estado +
 
 );
 
-cargarLotes();
+await sincronizarPanel();
 
 return;
 
@@ -1223,8 +1321,10 @@ mostrarNotificacion(
 );
 
 setTimeout(
-()=>{
-cargarLotes();
+async ()=>{
+
+await sincronizarPanel();
+
 },
 500
 );
@@ -1297,7 +1397,7 @@ mostrarNotificacion(
 
 );
 
-cargarLotes();
+await sincronizarPanel();
 
 return;
 
@@ -1312,7 +1412,7 @@ document
 .style.display =
 "none";
 
-await cargarLotes();
+await sincronizarPanel();
 
 mostrarNotificacion(
 
@@ -1343,7 +1443,7 @@ resultado.mensaje ||
 
 );
 
-cargarLotes();
+await sincronizarPanel();
 
 }
 
@@ -1443,7 +1543,7 @@ loteActualizado.Estado
 
 );
 
-cargarLotes();
+await sincronizarPanel();
 
 return;
 
@@ -1514,9 +1614,8 @@ document
 .getElementById("btnLotes")
 .addEventListener(
 "click",
-()=>{
-cargarLotes();
-
+async ()=>{
+await sincronizarPanel();
 ocultarTodo();
  document
 .getElementById(
@@ -1536,7 +1635,13 @@ document
 .getElementById("btnAuditoria")
 .addEventListener(
 "click",
-cargarAuditoria
+async ()=>{
+
+await sincronizarPanel();
+
+await cargarAuditoria();
+
+}
 );
 async function cargarAuditoria(){
 
@@ -1766,7 +1871,13 @@ document
 .getElementById("btnConsultas")
 .addEventListener(
 "click",
-cargarConsultas
+async ()=>{
+
+await sincronizarPanel();
+
+await cargarConsultas();
+
+}
 );
 document
 .getElementById(
@@ -1774,7 +1885,9 @@ document
 )
 .addEventListener(
 "click",
-()=>{
+async ()=>{
+
+await sincronizarPanel();
 
 ocultarTodo();
 
@@ -1785,7 +1898,7 @@ document
 .style.display =
 "block";
 
-cargarSolicitudes();
+await cargarSolicitudes();
 
 }
 );
@@ -2430,7 +2543,10 @@ border-bottom:1px solid #eee;
         <tr>
 
             <th>Fecha</th>
-            <th>Lote</th>
+
+<th>Etapa</th>
+
+<th>Lote</th>
             <th>Estado</th>
             <th>Nombre</th>
             <th>Email</th>
@@ -2448,7 +2564,10 @@ border-bottom:1px solid #eee;
         <tr>
 
             <td>${formatearFecha(c.Fecha)}</td>
-            <td>${c.Lote || ""}</td>
+
+<td>${c.Etapa || ""}</td>
+
+<td>${c.Lote || ""}</td>
             <td>${c.Estado || ""}</td>
             <td>${c.Nombre || ""}</td>
             <td>${c.Email || ""}</td>
@@ -2508,7 +2627,7 @@ async function verificarNuevasSolicitudes(){
 const rol =
 localStorage.getItem("rol");
 
-if(rol !== "ADMINISTRADOR"){
+if(rol !== "ADMIN"){
 return;
 }
 
@@ -2568,11 +2687,62 @@ localStorage.getItem("rol");
 
 try{
 
-await cargarLotes();
+const respuesta =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+);
 
-if(
-rol === "ADMINISTRADOR"
-){
+const nuevos =
+await respuesta.json();
+
+let huboCambios = false;
+
+const cambios = [];
+
+nuevos.forEach(function(nuevo){
+
+const actual =
+todosLosLotes.find(function(x){
+
+return(
+
+x.Etapa===nuevo.Etapa &&
+
+x.Lote===nuevo.Lote
+
+);
+
+});
+
+if(!actual){
+return;
+}
+
+if(actual.Estado!==nuevo.Estado){
+
+actual.Estado = nuevo.Estado;
+
+cambios.push(actual);
+
+huboCambios = true;
+
+}
+
+});
+
+if(huboCambios){
+
+cambios.forEach(function(lote){
+
+actualizarFila(lote);
+
+});
+
+actualizarDashboard(todosLosLotes);
+
+}
+
+if(rol === "ADMIN"){
 
 actualizarContadorSolicitudes();
 
@@ -2660,7 +2830,11 @@ let html = `
 <tr>
 
 <th>Fecha</th>
+
 <th>Usuario</th>
+
+<th>Etapa</th>
+
 <th>Lote</th>
 <th>Actual</th>
 <th>Solicita</th>
@@ -2695,6 +2869,8 @@ html += `
 <td>${fechaFormateada}</td>
 
 <td>${s.usuario}</td>
+
+<td>${s.etapa}</td>
 
 <td>${s.lote}</td>
 
@@ -2792,7 +2968,7 @@ if(resultado.ok){
 actualizarContadorSolicitudes();
 await cargarSolicitudes();
 
-await cargarLotes();
+await sincronizarPanel();
 
 mostrarNotificacion(
 
@@ -2833,6 +3009,7 @@ actualizarContadorSolicitudes();
 
 await cargarSolicitudes();
 
+await sincronizarPanel();
 mostrarNotificacion(
 
 "Solicitud rechazada",
@@ -2967,7 +3144,7 @@ document
 .getElementById(
 "btnCerrarNotificacion"
 )
-.onclick = ()=>{
+.onclick = async ()=>{
 
 document
 .getElementById(
@@ -2990,7 +3167,7 @@ if(window.actualizarPendiente){
 
 window.actualizarPendiente = false;
 
-cargarLotes();
+await sincronizarPanel();
 
 }
 
@@ -3222,11 +3399,13 @@ document
 .getElementById(
 "filtroTodos"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-    filtroActual="TODOS";
+await sincronizarPanel();
 
-    filtrarLotes();
+filtroActual = "TODOS";
+
+filtrarLotes();
 
 };
 
@@ -3234,11 +3413,13 @@ document
 .getElementById(
 "filtroLibres"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-    filtroActual="LIBRE";
+await sincronizarPanel();
 
-    filtrarLotes();
+filtroActual = "LIBRE";
+
+filtrarLotes();
 
 };
 
@@ -3246,11 +3427,13 @@ document
 .getElementById(
 "filtroReservados"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-    filtroActual="RESERVADO";
+await sincronizarPanel();
 
-    filtrarLotes();
+filtroActual = "RESERVADO";
+
+filtrarLotes();
 
 };
 
@@ -3258,11 +3441,13 @@ document
 .getElementById(
 "filtroVendidos"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-    filtroActual="VENDIDO";
+await sincronizarPanel();
 
-    filtrarLotes();
+filtroActual = "VENDIDO";
+
+filtrarLotes();
 
 };
 
