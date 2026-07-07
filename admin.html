@@ -2941,44 +2941,130 @@ filtradas
 );
 
 }
-async function aprobarSolicitud(fila){
+function aprobarSolicitud(fila){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
+  const libro =
+  SpreadsheetApp.getActiveSpreadsheet();
 
-body:JSON.stringify({
+  const hojaSolicitudes =
+  libro.getSheetByName("SOLICITUDES");
 
-action:
-"aprobarSolicitud",
+  const BD =
+  obtenerBaseDatos();
 
-fila:fila
+  const hojaBD =
+  BD.hoja;
 
-})
+  const registros =
+  BD.datos;
 
-}
-);
+  const COL =
+  BD.COL;
 
-const resultado =
-await respuesta.json();
+  const hojaAuditoria =
+  libro.getSheetByName("AUDITORIA");
 
-if(resultado.ok){
-actualizarContadorSolicitudes();
-await cargarSolicitudes();
+  // Leer solicitud
+  const solicitud =
+  hojaSolicitudes
+  .getRange(fila,1,1,10)
+  .getValues()[0];
 
-await sincronizarPanel();
+  const usuario =
+  solicitud[1];
 
-mostrarNotificacion(
+  const etapa =
+  solicitud[2];
 
-"Solicitud aprobada",
+  const lote =
+  solicitud[3];
 
-"La solicitud fue aprobada y el lote fue actualizado correctamente."
+  const estadoActual =
+  solicitud[4];
 
-);
+  const estadoSolicitado =
+  solicitud[5];
 
-}
+  let encontrado = false;
+
+  for(let i=0;i<registros.length;i++){
+
+    if(
+
+      String(registros[i][COL.ETAPA]).trim() === String(etapa).trim()
+
+      &&
+
+      String(registros[i][COL.LOTE]).trim() === String(lote).trim()
+
+    ){
+
+      hojaBD
+      .getRange(
+        i + 2,
+        COL.ESTADO + 1
+      )
+      .setValue(
+        estadoSolicitado
+      );
+
+      encontrado = true;
+
+      break;
+
+    }
+
+  }
+
+  if(!encontrado){
+
+    return{
+
+      ok:false,
+
+      mensaje:"LOTE_NO_ENCONTRADO"
+
+    };
+
+  }
+
+  hojaAuditoria.appendRow([
+
+    new Date(),
+
+    usuario,
+
+    etapa,
+
+    lote,
+
+    estadoActual,
+
+    estadoSolicitado
+
+  ]);
+
+  hojaSolicitudes
+  .getRange(fila,7)
+  .setValue("APROBADO");
+
+  hojaSolicitudes
+  .getRange(fila,8)
+  .setValue("NO");
+
+  hojaSolicitudes
+  .getRange(fila,9)
+  .setValue(new Date());
+
+  hojaSolicitudes
+  .getRange(fila,10)
+  .setValue("ADMIN");
+
+  return{
+
+    ok:true
+
+  };
 
 }
 async function rechazarSolicitud(fila){
