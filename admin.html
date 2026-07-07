@@ -1312,21 +1312,14 @@ document
 .style.display =
 "none";
 
+await cargarLotes();
+
 mostrarNotificacion(
 
 "Solicitud enviada",
 
 "Su solicitud fue enviada al administrador."
 
-);
-
-setTimeout(
-async ()=>{
-
-await sincronizarPanel();
-
-},
-500
 );
 
 return;
