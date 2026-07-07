@@ -1445,14 +1445,48 @@ return;
 }
 
     document
-    .getElementById(
-    "loteSeleccionado"
-    )
-    .textContent =
-    lote +
-    " (" +
-    loteActualizado.Estado +
-    ")";
+.getElementById(
+"loteSeleccionado"
+)
+.innerHTML =
+
+"<div style='font-size:15px;font-weight:700;color:#64748b;'>"
+
++
+
+loteActualizado.Etapa
+
++
+
+"</div>"
+
++
+
+"<div style='font-size:30px;font-weight:700;margin:8px 0;color:#111827;'>"
+
++
+
+lote
+
++
+
+"</div>"
+
++
+
+"<div style='font-size:16px;color:#6b7280;'>"
+
++
+
+"Estado actual: <b>"
+
++
+
+loteActualizado.Estado
+
++
+
+"</b></div>";
 document
 .getElementById(
 "nuevoEstado"
