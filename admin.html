@@ -483,7 +483,7 @@ height:100%;
 background:rgba(0,0,0,0.5);
 justify-content:center;
 align-items:center;
-z-index:9999;
+z-index:10001;
 ">
 
 <div style="
@@ -565,7 +565,7 @@ height:100%;
 background:rgba(0,0,0,.5);
 justify-content:center;
 align-items:center;
-z-index:9999;
+z-index:10002;
 ">
 
 <div style="
@@ -1136,6 +1136,8 @@ document
 .style.display =
 "none";
 
+setTimeout(function(){
+
 mostrarNotificacion(
 
 "Estado actualizado",
@@ -1151,6 +1153,8 @@ loteServidor.Estado +
 "</b>"
 
 );
+
+},150);
 
 cargarLotes();
 
@@ -1208,6 +1212,8 @@ document
 .style.display =
 "none";
 
+setTimeout(function(){
+
 mostrarNotificacion(
 
 "Solicitud enviada",
@@ -1215,6 +1221,8 @@ mostrarNotificacion(
 "Su solicitud fue enviada al administrador."
 
 );
+
+},150);
 
 setTimeout(
 ()=>{
@@ -1283,6 +1291,8 @@ document
 .style.display =
 "none";
 
+setTimeout(function(){
+
 mostrarNotificacion(
 
 "Estado actualizado",
@@ -1290,6 +1300,8 @@ mostrarNotificacion(
 "Este lote ya fue modificado por otro usuario.<br><br>La tabla será actualizada."
 
 );
+
+},150);
 
 cargarLotes();
 
@@ -1308,6 +1320,8 @@ document
 
 await cargarLotes();
 
+setTimeout(function(){
+
 mostrarNotificacion(
 
 "Estado actualizado",
@@ -1323,6 +1337,8 @@ estado +
 "</b>."
 
 );
+
+},150);
 
 }
     else{
