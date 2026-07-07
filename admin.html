@@ -1124,6 +1124,10 @@ mostrarNotificacion(
 return;
 
 }
+console.log("Lote modal:", loteActual);
+console.log("Etapa modal:", etapaActual);
+console.log("Estado original:", estadoOriginal);
+console.log("Servidor:", loteServidor);
 if(
 loteServidor.Estado !==
 estadoOriginal
@@ -1634,14 +1638,11 @@ ${vendidos}
 <tr>
 
         <th>Fecha</th>
-
-        <th>Usuario</th>
-
-        <th>Lote</th>
-
-        <th>Antes</th>
-
-        <th>Después</th>
+<th>Usuario</th>
+<th>Etapa</th>
+<th>Lote</th>
+<th>Antes</th>
+<th>Después</th>
 
       </tr>
 
@@ -1657,7 +1658,9 @@ ${vendidos}
 
         <td>${item.Usuario || ""}</td>
 
-        <td>${item.Lote || ""}</td>
+<td>${item.Etapa || ""}</td>
+
+<td>${item.Lote || ""}</td>
 
         <td>${item.Antes || ""}</td>
 
