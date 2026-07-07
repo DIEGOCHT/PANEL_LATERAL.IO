@@ -1130,26 +1130,39 @@ await respuesta.json();
 
 let huboCambios = false;
 
-nuevosLotes.forEach(function(nuevo){
+for(const nuevo of nuevosLotes){
 
-const actual =
+const cache =
 buscarLoteCache(
 nuevo.Etapa,
 nuevo.Lote
 );
 
-if(!actual)return;
+if(!cache){
+continue;
+}
 
-if(actual.Estado!==nuevo.Estado){
+if(
 
-actual.Estado =
-nuevo.Estado;
+cache.Estado !== nuevo.Estado ||
+
+cache.Area !== nuevo.Area ||
+
+cache.Ubicacion !== nuevo.Ubicacion
+
+){
+
+cache.Estado = nuevo.Estado;
+cache.Area = nuevo.Area;
+cache.Ubicacion = nuevo.Ubicacion;
+
+actualizarFila(cache);
 
 huboCambios = true;
 
 }
 
-});
+}
 
 if(huboCambios){
 
@@ -1157,16 +1170,9 @@ actualizarDashboard(
 todosLosLotes
 );
 
-nuevosLotes.forEach(function(nuevo){
-
-actualizarFila(nuevo);
-
-});
-
 }
 
-}
-catch(error){
+}catch(error){
 
 console.error(error);
 
@@ -1186,6 +1192,8 @@ document.getElementById(id);
 
 if(!fila)return;
 
+// ========= ESTADO =========
+
 let clase="estado-vendido";
 
 if(lote.Estado==="LIBRE"){
@@ -1195,9 +1203,58 @@ else if(lote.Estado==="RESERVADO"){
 clase="estado-reservado";
 }
 
-fila.children[2].className = clase;
+fila.children[2].className=clase;
+fila.children[2].textContent=lote.Estado;
 
-fila.children[2].textContent = lote.Estado;
+// ========= BOTÓN =========
+
+const boton =
+fila.querySelector("button");
+
+if(!boton)return;
+
+const rol =
+localStorage.getItem("rol");
+
+const pendiente =
+solicitudesPendientes.find(s=>
+
+s.Lote===lote.Lote
+
+);
+
+const bloqueadoEstado=
+
+rol==="ASESOR" &&
+
+(
+lote.Estado==="RESERVADO" ||
+lote.Estado==="VENDIDO"
+);
+
+const bloqueado=
+bloqueadoEstado ||
+pendiente;
+
+boton.disabled=bloqueado;
+
+boton.style.opacity=
+bloqueado?"0.5":"1";
+
+boton.style.cursor=
+bloqueado?"not-allowed":"pointer";
+
+boton.textContent=
+
+pendiente
+
+?
+
+"En Espera ⏳"
+
+:
+
+"Cambiar";
 
 }
 async function guardarEstado(){
@@ -1287,7 +1344,7 @@ localStorage.getItem(
 
 if(rol === "ASESOR"){
 
-const respuesta =
+const respuestaAsesor =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
@@ -1311,7 +1368,7 @@ estadoSolicitado:estado
 );
 
 const resultado =
-await respuesta.json();
+await respuestaAsesor.json();
 
 if(resultado.ok){
 
@@ -1363,7 +1420,7 @@ resultado.mensaje ||
 return;
 
 } 
-const respuesta =
+const respuestaAdmin =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
@@ -1388,8 +1445,8 @@ await fetch(
 }
 );
 
-    const resultado =
-await respuesta.json();
+const resultado =
+await respuestaAdmin.json();
 
 if(
 resultado.mensaje ===
