@@ -903,9 +903,11 @@ pendiente;
     }
 
     html += `
-    <tr>
-
-        <td>${lote.Etapa}</td>
+<tr id="fila_${
+(lote.Etapa+"_"+lote.Lote)
+.replace(/\s+/g,"_")
+}">
+<td>${lote.Etapa}</td>
 
 <td>${lote.Lote}</td>
 
@@ -1061,7 +1063,7 @@ document
 )
 .addEventListener(
 "click",
-()=>{
+async ()=>{
 
     document
     .getElementById(
@@ -1070,7 +1072,7 @@ document
     .style.display =
     "none";
 
-    cargarLotes();
+    await sincronizarLotes();
 
 });
 
@@ -1093,26 +1095,134 @@ let etapaActual = "";
 let loteActual = "";
 
 let estadoOriginal = "";
+function buscarLoteCache(etapa,lote){
 
-async function guardarEstado(){
+return todosLosLotes.find(function(x){
 
-const verificacion =
+return(
+
+x.Etapa===etapa &&
+
+x.Lote===lote
+
+);
+
+});
+
+}
+
+
+// ===========================
+// SINCRONIZAR LOTES
+// ===========================
+
+async function sincronizarLotes(){
+
+try{
+
+const respuesta =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
 );
 
-const lotes =
-await verificacion.json();
+const nuevosLotes =
+await respuesta.json();
 
-const loteServidor =
-lotes.find(
-x =>
+let huboCambios = false;
 
-x.Etapa === etapaActual &&
+nuevosLotes.forEach(function(nuevo){
 
-x.Lote === loteActual
+const actual =
+buscarLoteCache(
+nuevo.Etapa,
+nuevo.Lote
+);
+
+if(!actual)return;
+
+if(actual.Estado!==nuevo.Estado){
+
+actual.Estado =
+nuevo.Estado;
+
+huboCambios = true;
+
+}
+
+});
+
+if(huboCambios){
+
+actualizarDashboard(
+todosLosLotes
+);
+
+nuevosLotes.forEach(function(nuevo){
+
+actualizarFila(nuevo);
+
+});
+
+}
+
+}
+catch(error){
+
+console.error(error);
+
+}
+
+}
+
+function actualizarFila(lote){
+
+const id =
+"fila_" +
+(lote.Etapa + "_" + lote.Lote)
+.replace(/\s+/g,"_");
+
+const fila =
+document.getElementById(id);
+
+if(!fila)return;
+
+let clase="estado-vendido";
+
+if(lote.Estado==="LIBRE"){
+clase="estado-libre";
+}
+else if(lote.Estado==="RESERVADO"){
+clase="estado-reservado";
+}
+
+fila.children[2].className = clase;
+
+fila.children[2].textContent = lote.Estado;
+
+}
+async function guardarEstado(){
+
+const respuesta =
+await fetch(
+
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+
++
+
+"?etapa=" +
+
+encodeURIComponent(etapaActual)
+
++
+
+"&lote=" +
+
+encodeURIComponent(loteActual)
 
 );
+
+const loteServidor =
+await respuesta.json();
 
 if(!loteServidor){
 
@@ -1156,7 +1266,7 @@ loteServidor.Estado +
 
 },150);
 
-cargarLotes();
+await sincronizarLotes();
 
 return;
 
@@ -1225,8 +1335,10 @@ mostrarNotificacion(
 },150);
 
 setTimeout(
-()=>{
-cargarLotes();
+async ()=>{
+
+await sincronizarLotes();
+
 },
 500
 );
@@ -1303,7 +1415,7 @@ mostrarNotificacion(
 
 },150);
 
-cargarLotes();
+await sincronizarLotes();
 
 return;
 
@@ -1318,7 +1430,7 @@ document
 .style.display =
 "none";
 
-await cargarLotes();
+await sincronizarLotes();
 
 setTimeout(function(){
 
@@ -1353,30 +1465,19 @@ resultado.mensaje ||
 
 );
 
-cargarLotes();
+await sincronizarLotes();
 
 }
 
 }
 async function cambiarEstado(etapa,lote){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-    );
-
-    const datos =
-    await respuesta.json();
-
-    const loteActualizado =
-datos.find(
-x =>
-
-x.Etapa === etapa &&
-
-x.Lote === lote
-
+const loteActualizado =
+buscarLoteCache(
+etapa,
+lote
 );
+
 if(!loteActualizado){
 
 mostrarNotificacion(
@@ -1385,6 +1486,73 @@ mostrarNotificacion(
 );
 
 return;
+
+}
+
+try{
+
+const respuesta =
+await fetch(
+
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+
++
+
+"?etapa=" +
+
+encodeURIComponent(etapa)
+
++
+
+"&lote=" +
+
+encodeURIComponent(lote)
+
+);
+
+const loteServidor =
+await respuesta.json();
+
+if(
+
+loteServidor &&
+
+loteServidor.Estado !== loteActualizado.Estado
+
+){
+
+// Actualizar cache
+
+loteActualizado.Estado =
+loteServidor.Estado;
+
+// Actualizar también la tabla
+
+const fila =
+todosLosLotes.find(function(x){
+
+return(
+
+x.Etapa===etapa &&
+
+x.Lote===lote
+
+);
+
+});
+
+if(fila){
+
+fila.Estado =
+loteServidor.Estado;
+
+}
+
+}
+
+}catch(error){
+
+console.log(error);
 
 }
 loteActual = lote;
