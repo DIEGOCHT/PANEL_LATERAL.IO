@@ -483,7 +483,7 @@ height:100%;
 background:rgba(0,0,0,0.5);
 justify-content:center;
 align-items:center;
-z-index:10001;
+z-index:9999;
 ">
 
 <div style="
@@ -565,7 +565,7 @@ height:100%;
 background:rgba(0,0,0,.5);
 justify-content:center;
 align-items:center;
-z-index:10002;
+z-index:9999;
 ">
 
 <div style="
@@ -903,10 +903,11 @@ pendiente;
     }
 
     html += `
-<tr id="fila_${
+    <tr id="fila_${
 (lote.Etapa+"_"+lote.Lote)
 .replace(/\s+/g,"_")
 }">
+
 <td>${lote.Etapa}</td>
 
 <td>${lote.Lote}</td>
@@ -1063,7 +1064,7 @@ document
 )
 .addEventListener(
 "click",
-async ()=>{
+()=>{
 
     document
     .getElementById(
@@ -1072,7 +1073,7 @@ async ()=>{
     .style.display =
     "none";
 
-    await sincronizarLotes();
+    cargarLotes();
 
 });
 
@@ -1091,195 +1092,27 @@ await guardarEstado();
 
 };
 let etapaActual = "";
-
 let loteActual = "";
-
 let estadoOriginal = "";
-function buscarLoteCache(etapa,lote){
 
-return todosLosLotes.find(function(x){
-
-return(
-
-x.Etapa===etapa &&
-
-x.Lote===lote
-
-);
-
-});
-
-}
-
-
-// ===========================
-// SINCRONIZAR LOTES
-// ===========================
-
-async function sincronizarLotes(){
-
-try{
-
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-);
-
-const nuevosLotes =
-await respuesta.json();
-
-let huboCambios = false;
-
-for(const nuevo of nuevosLotes){
-
-const cache =
-buscarLoteCache(
-nuevo.Etapa,
-nuevo.Lote
-);
-
-if(!cache){
-continue;
-}
-
-if(
-
-cache.Estado !== nuevo.Estado ||
-
-cache.Area !== nuevo.Area ||
-
-cache.Ubicacion !== nuevo.Ubicacion
-
-){
-
-cache.Estado = nuevo.Estado;
-cache.Area = nuevo.Area;
-cache.Ubicacion = nuevo.Ubicacion;
-
-actualizarFila(cache);
-
-huboCambios = true;
-
-}
-
-}
-
-if(huboCambios){
-
-actualizarDashboard(
-todosLosLotes
-);
-
-}
-
-}catch(error){
-
-console.error(error);
-
-}
-
-}
-
-function actualizarFila(lote){
-
-const id =
-"fila_" +
-(lote.Etapa + "_" + lote.Lote)
-.replace(/\s+/g,"_");
-
-const fila =
-document.getElementById(id);
-
-if(!fila)return;
-
-// ========= ESTADO =========
-
-let clase="estado-vendido";
-
-if(lote.Estado==="LIBRE"){
-clase="estado-libre";
-}
-else if(lote.Estado==="RESERVADO"){
-clase="estado-reservado";
-}
-
-fila.children[2].className=clase;
-fila.children[2].textContent=lote.Estado;
-
-// ========= BOTÓN =========
-
-const boton =
-fila.querySelector("button");
-
-if(!boton)return;
-
-const rol =
-localStorage.getItem("rol");
-
-const pendiente =
-solicitudesPendientes.find(s=>
-
-s.Lote===lote.Lote
-
-);
-
-const bloqueadoEstado=
-
-rol==="ASESOR" &&
-
-(
-lote.Estado==="RESERVADO" ||
-lote.Estado==="VENDIDO"
-);
-
-const bloqueado=
-bloqueadoEstado ||
-pendiente;
-
-boton.disabled=bloqueado;
-
-boton.style.opacity=
-bloqueado?"0.5":"1";
-
-boton.style.cursor=
-bloqueado?"not-allowed":"pointer";
-
-boton.textContent=
-
-pendiente
-
-?
-
-"En Espera ⏳"
-
-:
-
-"Cambiar";
-
-}
 async function guardarEstado(){
 
-const respuesta =
+const verificacion =
 await fetch(
-
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-
-+
-
-"?etapa=" +
-
-encodeURIComponent(etapaActual)
-
-+
-
-"&lote=" +
-
-encodeURIComponent(loteActual)
-
 );
 
+const lotes =
+await verificacion.json();
+
 const loteServidor =
-await respuesta.json();
+lotes.find(x=>
+
+x.Etapa===etapaActual &&
+
+x.Lote===loteActual
+
+);
 
 if(!loteServidor){
 
@@ -1303,8 +1136,6 @@ document
 .style.display =
 "none";
 
-setTimeout(function(){
-
 mostrarNotificacion(
 
 "Estado actualizado",
@@ -1321,9 +1152,7 @@ loteServidor.Estado +
 
 );
 
-},150);
-
-await sincronizarLotes();
+cargarLotes();
 
 return;
 
@@ -1344,7 +1173,7 @@ localStorage.getItem(
 
 if(rol === "ASESOR"){
 
-const respuestaAsesor =
+const respuesta =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
@@ -1355,6 +1184,8 @@ body:JSON.stringify({
 action:"crearSolicitud",
 
 usuario:usuario,
+
+etapa:etapaActual,
 
 lote:loteActual,
 
@@ -1368,7 +1199,7 @@ estadoSolicitado:estado
 );
 
 const resultado =
-await respuestaAsesor.json();
+await respuesta.json();
 
 if(resultado.ok){
 
@@ -1379,8 +1210,6 @@ document
 .style.display =
 "none";
 
-setTimeout(function(){
-
 mostrarNotificacion(
 
 "Solicitud enviada",
@@ -1389,13 +1218,9 @@ mostrarNotificacion(
 
 );
 
-},150);
-
 setTimeout(
-async ()=>{
-
-await sincronizarLotes();
-
+()=>{
+cargarLotes();
 },
 500
 );
@@ -1420,7 +1245,7 @@ resultado.mensaje ||
 return;
 
 } 
-const respuestaAdmin =
+const respuesta =
 await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
 {
@@ -1445,13 +1270,13 @@ await fetch(
 }
 );
 
-const resultado =
-await respuestaAdmin.json();
+    const resultado =
+await respuesta.json();
 
-console.log(
-"RESPUESTA GOOGLE:",
-resultado
-);
+if(
+resultado.mensaje ===
+"LOTE_MODIFICADO"
+){
 
 document
 .getElementById(
@@ -1459,8 +1284,6 @@ document
 )
 .style.display =
 "none";
-
-setTimeout(function(){
 
 mostrarNotificacion(
 
@@ -1470,9 +1293,7 @@ mostrarNotificacion(
 
 );
 
-},150);
-
-await sincronizarLotes();
+cargarLotes();
 
 return;
 
@@ -1487,9 +1308,7 @@ document
 .style.display =
 "none";
 
-await sincronizarLotes();
-
-setTimeout(function(){
+await cargarLotes();
 
 mostrarNotificacion(
 
@@ -1507,8 +1326,6 @@ estado +
 
 );
 
-},150);
-
 }
     else{
 
@@ -1522,34 +1339,15 @@ resultado.mensaje ||
 
 );
 
-await sincronizarLotes();
+cargarLotes();
 
 }
 
 }
 async function cambiarEstado(etapa,lote){
 
-const loteActualizado =
-buscarLoteCache(
-etapa,
-lote
-);
-
-if(!loteActualizado){
-
-mostrarNotificacion(
-"Error",
-"No se encontró el lote."
-);
-
-return;
-
-}
-
-try{
-
-const respuesta =
-await fetch(
+    const respuesta =
+    await fetch(
 
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
 
@@ -1567,68 +1365,32 @@ encodeURIComponent(lote)
 
 );
 
-const loteServidor =
+    const loteActualizado =
 await respuesta.json();
+if(!loteActualizado){
 
-if(
-
-loteServidor &&
-
-loteServidor.Estado !== loteActualizado.Estado
-
-){
-
-// Actualizar cache
-
-loteActualizado.Estado =
-loteServidor.Estado;
-
-// Actualizar también la tabla
-
-const fila =
-todosLosLotes.find(function(x){
-
-return(
-
-x.Etapa===etapa &&
-
-x.Lote===lote
-
+mostrarNotificacion(
+"Error",
+"No se encontró el lote."
 );
 
-});
-
-if(fila){
-
-fila.Estado =
-loteServidor.Estado;
-
-}
-
-}
-
-}catch(error){
-
-console.log(error);
+return;
 
 }
 loteActual = lote;
-etapaActual = loteActualizado.Etapa;
-
+etapaActual =
+loteActualizado.Etapa;
 estadoOriginal =
 loteActualizado.Estado;
 const filaTabla =
-todosLosLotes.find(function(x){
-
-return(
+todosLosLotes.find(
+x =>
 
 x.Etapa===etapa &&
 
 x.Lote===lote
 
 );
-
-});
 
 if(
 
@@ -1873,15 +1635,13 @@ ${vendidos}
 
         <th>Fecha</th>
 
-<th>Usuario</th>
+        <th>Usuario</th>
 
-<th>Etapa</th>
+        <th>Lote</th>
 
-<th>Lote</th>
+        <th>Antes</th>
 
-<th>Antes</th>
-
-<th>Después</th>
+        <th>Después</th>
 
       </tr>
 
@@ -1895,15 +1655,13 @@ ${vendidos}
 
         <td>${formatearFecha(item.Fecha)}</td>
 
-<td>${item.Usuario || ""}</td>
+        <td>${item.Usuario || ""}</td>
 
-<td>${item.Etapa || ""}</td>
+        <td>${item.Lote || ""}</td>
 
-<td>${item.Lote || ""}</td>
+        <td>${item.Antes || ""}</td>
 
-<td>${item.Antes || ""}</td>
-
-<td>${item.Despues || ""}</td>
+        <td>${item.Despues || ""}</td>
 
       </tr>
 
@@ -2631,14 +2389,9 @@ border-bottom:1px solid #eee;
     </div>
 
     <div>
-    <b>Etapa:</b>
-    ${c.Etapa || ""}
-</div>
-
-<div>
-    <b>Lote:</b>
-    ${c.Lote || ""}
-</div>
+        <b>Lote:</b>
+        ${c.Lote || ""}
+    </div>
 
     <div>
         <b>Teléfono:</b>
@@ -2674,13 +2427,12 @@ border-bottom:1px solid #eee;
         <tr>
 
             <th>Fecha</th>
-<th>Etapa</th>
-<th>Lote</th>
-<th>Estado</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Teléfono</th>
-<th>Mensaje</th>
+            <th>Lote</th>
+            <th>Estado</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Mensaje</th>
 
         </tr>
 
@@ -2693,13 +2445,12 @@ border-bottom:1px solid #eee;
         <tr>
 
             <td>${formatearFecha(c.Fecha)}</td>
-<td>${c.Etapa || ""}</td>
-<td>${c.Lote || ""}</td>
-<td>${c.Estado || ""}</td>
-<td>${c.Nombre || ""}</td>
-<td>${c.Email || ""}</td>
-<td>${c.Telefono || ""}</td>
-<td>${c.Mensaje || ""}</td>
+            <td>${c.Lote || ""}</td>
+            <td>${c.Estado || ""}</td>
+            <td>${c.Nombre || ""}</td>
+            <td>${c.Email || ""}</td>
+            <td>${c.Telefono || ""}</td>
+            <td>${c.Mensaje || ""}</td>
 
         </tr>
 
