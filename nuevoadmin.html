@@ -214,15 +214,85 @@ button{
     flex:1;
 
 }
-#menuAdmin{
+#panelPrincipal{
+
+    display:grid;
+
+    grid-template-columns:260px 1fr;
+
+    gap:25px;
+
+    align-items:start;
+
+}
+
+#sidebar{
+
+    background:#0F172A;
+
+    border-radius:24px;
+
+    padding:20px;
 
     display:flex;
-    gap:10px;
-    margin-bottom:20px;
 
-    flex-wrap:wrap;
+    flex-direction:column;
 
-    justify-content:center;
+    gap:14px;
+
+    position:sticky;
+
+    top:20px;
+
+}
+
+.menuItem{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    background:transparent;
+
+    color:#CBD5E1;
+
+    border:none;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.menuItem:hover{
+
+    background:#1E293B;
+
+}
+
+.menuItem.activo{
+
+    background:#2563EB;
+
+    color:white;
+
+}
+
+#contenido{
+
+    width:100%;
 
 }
 
@@ -422,6 +492,201 @@ button{
     font-size:15px;
 
 }
+/*======================================
+        PANEL V2
+======================================*/
+
+#panelPrincipal{
+
+    display:grid;
+
+    grid-template-columns:260px 1fr;
+
+    gap:30px;
+
+    align-items:start;
+
+}
+
+/* SIDEBAR */
+
+#sidebar{
+
+    background:#0F172A;
+
+    border-radius:24px;
+
+    padding:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    position:sticky;
+
+    top:20px;
+
+    height:fit-content;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+
+}
+
+.menuItem{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    width:100%;
+
+    background:transparent;
+
+    border:none;
+
+    color:#CBD5E1;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.menuItem:hover{
+
+    background:#1E293B;
+
+    color:white;
+
+}
+
+.menuItem.activo{
+
+    background:#2563EB;
+
+    color:white;
+
+}
+
+/* CONTENIDO */
+
+#contenido{
+
+    width:100%;
+
+}
+
+/* DASHBOARD */
+
+#dashboard{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.cardDashboard{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.08);
+
+    transition:.25s;
+
+}
+
+.cardDashboard:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.cardDashboard h3{
+
+    font-size:40px;
+
+    margin:0;
+
+}
+
+.cardDashboard p{
+
+    margin-top:12px;
+
+    color:#64748B;
+
+    font-size:16px;
+
+}
+
+/* HERRAMIENTAS */
+
+#herramientas{
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    margin-top:30px;
+
+    margin-bottom:25px;
+
+}
+
+#buscarLote{
+
+    width:340px;
+
+    height:48px;
+
+}
+
+/* TABLAS */
+
+.tabla{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+}
+
+.tabla th{
+
+    background:#0F172A;
+
+}
+
+.tabla tr:hover{
+
+    background:#F8FAFC;
+
+}
 </style>
 
 </head>
@@ -499,35 +764,43 @@ button{
 
 </div>
 
-<div id="dashboard"></div>
+<div id="panelPrincipal">
 
-    <div id="menuAdmin">
+    <aside id="sidebar">
 
-    <button id="btnLotes">
-        LOTES
-    </button>
+        <button id="btnLotes" class="menuItem activo">
+            🏡
+            <span>Lotes</span>
+        </button>
 
-    <button id="btnAuditoria">
-    AUDITORÍA
-</button>
-    <button id="btnAsesores">
-        ASESORES
-    </button>
-<button id="btnConsultas">
-    CONSULTAS
-</button>
-<button
-id="btnSolicitudes"
-class="menu-btn">
+        <button id="btnSolicitudes" class="menuItem">
+            📋
+            <span>Solicitudes</span>
+            <span id="contadorSolicitudes"></span>
+        </button>
 
-SOLICITUDES
-<span id="contadorSolicitudes"></span>
+        <button id="btnConsultas" class="menuItem">
+            📞
+            <span>Consultas</span>
+        </button>
 
-</button>
-    
-</div>
+        <button id="btnAsesores" class="menuItem">
+            👥
+            <span>Asesores</span>
+        </button>
 
-    <div id="herramientas">
+        <button id="btnAuditoria" class="menuItem">
+            📑
+            <span>Auditoría</span>
+        </button>
+
+    </aside>
+
+    <div id="contenido">
+
+        <div id="dashboard"></div>
+
+        <div id="herramientas">
 
     <input
     type="text"
