@@ -1550,6 +1550,36 @@ return;
 
 }
 
+if(rol==="ADMIN"){
+
+const pendiente =
+solicitudesPendientes.find(function(s){
+
+return(
+
+s.Etapa===etapaActual &&
+
+s.Lote===loteActual
+
+);
+
+});
+
+if(pendiente){
+
+mostrarNotificacion(
+
+"Solicitud pendiente",
+
+"Este lote tiene una <b>solicitud de cambio de estado pendiente</b>.<br><br>Diríjase a la pestaña <b>SOLICITUDES</b> para aprobarla o rechazarla antes de realizar un nuevo cambio."
+
+);
+
+return;
+
+}
+
+}
     document
 .getElementById(
 "loteSeleccionado"
