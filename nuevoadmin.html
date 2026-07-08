@@ -17,11 +17,11 @@ body{
 
     margin:0;
 
+    min-height:100vh;
+
     background:#F8FAFC;
 
     color:#0F172A;
-
-    overflow-x:hidden;
 
     font-family:Inter,Arial,sans-serif;
 
@@ -29,19 +29,27 @@ body{
 
 #loginBox{
 
-    width:430px;
+    width:420px;
 
     max-width:92vw;
 
-    background:rgba(255,255,255,.95);
+    background:#FFFFFF;
 
-    padding:45px;
+    border:1px solid #E2E8F0;
 
-    border-radius:28px;
+    border-radius:26px;
 
-    box-shadow:0 30px 80px rgba(0,0,0,.15);
+    padding:42px;
 
-    backdrop-filter:blur(12px);
+    box-shadow:0 20px 60px rgba(15,23,42,.10);
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
 
 }
 
@@ -112,17 +120,17 @@ button{
 
     align-items:center;
 
+    padding:20px 28px;
+
+    border-radius:22px;
+
     background:#FFFFFF;
 
-    padding:22px 30px;
-
-    border-radius:24px;
-
-    margin-bottom:30px;
-
-    box-shadow:0 15px 40px rgba(15,23,42,.08);
-
     border:1px solid #E2E8F0;
+
+    box-shadow:0 8px 25px rgba(15,23,42,.05);
+
+    margin-bottom:22px;
 
 }
 #contenedorLotes{
@@ -250,23 +258,21 @@ button{
 
     background:#FFFFFF;
 
-    border:1px solid #E5E7EB;
+    border:1px solid #E2E8F0;
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:18px;
+    padding:24px 18px;
 
     display:flex;
 
     flex-direction:column;
 
-    gap:10px;
+    justify-content:space-between;
 
-    box-shadow:0 4px 20px rgba(15,23,42,.05);
+    min-height:720px;
 
-    position:sticky;
-
-    top:24px;
+    box-shadow:0 12px 35px rgba(15,23,42,.06);
 
 }
 
@@ -280,23 +286,23 @@ button{
 
     width:100%;
 
-    background:transparent;
+    height:48px;
 
     border:none;
 
+    background:transparent;
+
+    border-radius:12px;
+
     color:#475569;
 
-    padding:14px 16px;
-
-    border-radius:14px;
-
-    font-size:15px;
+    font-size:14px;
 
     font-weight:600;
 
-    transition:.25s;
-
     cursor:pointer;
+
+    transition:.25s;
 
 }
 
@@ -314,7 +320,7 @@ button{
 
     color:white;
 
-    box-shadow:0 8px 20px rgba(37,99,235,.25);
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
 
 }
 
@@ -368,11 +374,13 @@ button{
 
     border:1px solid #E5E7EB;
 
+    border-left:5px solid #2563EB;
+
     border-radius:18px;
 
-    padding:22px;
+    padding:18px;
 
-    min-height:130px;
+    min-height:95px;
 
     overflow:hidden;
 
@@ -416,21 +424,19 @@ button{
 
 .cardDashboard h3{
 
-    font-size:46px;
-
-    font-weight:700;
+    font-size:30px;
 
     margin:0;
 
-    color:#0F172A;
+    font-weight:700;
 
 }
 
 .cardDashboard p{
 
-    margin-top:14px;
+    margin-top:8px;
 
-    font-size:15px;
+    font-size:14px;
 
     font-weight:600;
 
@@ -585,6 +591,235 @@ button{
     gap:16px;
 
 }
+/*======================================
+        HEADER V3
+======================================*/
+
+.headerInfo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.saludo{
+
+    font-size:13px;
+
+    color:#64748B;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:6px;
+
+}
+
+#usuarioLogeado{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+.subtitulo{
+
+    margin-top:6px;
+
+    color:#64748B;
+
+    font-size:15px;
+
+}
+
+#fechaActual{
+
+    margin-top:10px;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+.headerAcciones{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+/*======================================
+            LOGIN V2
+======================================*/
+
+.loginLogo{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.logoCirculo{
+
+    width:78px;
+
+    height:78px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#2563EB;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:18px;
+
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
+
+}
+
+.loginLogo h1{
+
+    margin:0;
+
+    font-size:30px;
+
+    color:#0F172A;
+
+}
+
+.loginLogo p{
+
+    margin-top:10px;
+
+    color:#64748B;
+
+    font-size:15px;
+
+}
+
+#loginBox input{
+
+    margin-top:18px;
+
+    height:52px;
+
+}
+
+#btnLogin{
+
+    margin-top:28px;
+
+    height:52px;
+
+    border-radius:14px;
+
+    background:#2563EB;
+
+    transition:.25s;
+
+}
+
+#btnLogin:hover{
+
+    background:#1D4ED8;
+
+}
+/*======================================
+        SIDEBAR V3
+======================================*/
+
+#sidebarHeader{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    margin-bottom:20px;
+
+}
+
+.logoSidebar{
+
+    width:56px;
+
+    height:56px;
+
+    border-radius:16px;
+
+    background:#2563EB;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    box-shadow:0 10px 25px rgba(37,99,235,.20);
+
+}
+
+.tituloSidebar{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+.subtituloSidebar{
+
+    font-size:13px;
+
+    color:#64748B;
+
+    margin-top:4px;
+
+}
+
+.separadorSidebar{
+
+    border:none;
+
+    border-top:1px solid #E2E8F0;
+
+    margin:6px 0 18px;
+
+}
 </style>
 
 </head>
@@ -628,23 +863,31 @@ button{
 
     <div id="usuarioHeader">
 
-    <div class="headerLeft">
+    <div class="headerInfo">
 
-        <div>
+        <div class="saludo">
 
-            <div class="tituloSistema">
+            👋 Bienvenido
 
-                PANEL ADMINISTRATIVO
+        </div>
 
-            </div>
+        <h1 id="usuarioLogeado"></h1>
 
-            <div id="usuarioLogeado"></div>
+        <div class="subtitulo">
+
+            Panel Administrativo
+
+        </div>
+
+        <div id="fechaActual">
+
+            Martes, 08 Julio 2026
 
         </div>
 
     </div>
 
-    <div class="headerRight">
+    <div class="headerAcciones">
 
         <div id="ultimaActualizacion">
 
@@ -665,6 +908,33 @@ button{
 <div id="panelPrincipal">
 
     <aside id="sidebar">
+<div id="sidebarHeader">
+
+    <div class="logoSidebar">
+
+        A
+
+    </div>
+
+    <div>
+
+        <div class="tituloSidebar">
+
+            ASSTURIAS
+
+        </div>
+
+        <div class="subtituloSidebar">
+
+            Panel Administrativo
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr class="separadorSidebar">
 
         <button id="btnLotes" class="menuItem activo">
             🏡
@@ -691,6 +961,38 @@ button{
             📑
             <span>Auditoría</span>
         </button>
+<hr style="border:none;border-top:1px solid #E2E8F0;margin:18px 0;">
+
+<div id="sidebarInfo">
+
+    <div style="font-size:13px;color:#64748B;font-weight:600;">
+        SISTEMA
+    </div>
+
+    <div style="margin-top:12px;font-size:14px;">
+        🟢 En línea
+    </div>
+
+    <div style="margin-top:18px;font-size:13px;color:#94A3B8;">
+        Última sincronización
+    </div>
+
+    <div id="horaSidebar"
+         style="margin-top:6px;font-weight:600;">
+        --
+    </div>
+
+    <hr style="border:none;border-top:1px solid #E2E8F0;margin:20px 0;">
+
+    <div style="font-size:13px;color:#94A3B8;">
+        ASSTURIAS
+    </div>
+
+    <div style="font-size:13px;color:#64748B;">
+        Panel Administrativo v2.0
+    </div>
+
+</div>
 
     </aside>
 
@@ -1126,7 +1428,8 @@ localStorage.setItem(
 
             document
 .getElementById("usuarioLogeado")
-.innerHTML =
+.textContent =
+resultado.nombre;
 
 "<h2>Bienvenido " +
 resultado.nombre +
@@ -1980,7 +2283,7 @@ ocultarTodo();
 "dashboard"
 )
 .style.display =
-"flex";
+"grid";
 document.getElementById(
 "herramientas"
 ).style.display = "grid";
@@ -3760,10 +4063,11 @@ localStorage.getItem(
         "block";
 
         document
-        .getElementById(
-        "usuarioLogeado"
-        )
-        .innerHTML =
+.getElementById(
+"usuarioLogeado"
+)
+.textContent =
+localStorage.getItem("usuario");
 
         "<h2>Bienvenido " +
 
