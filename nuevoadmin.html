@@ -153,8 +153,15 @@ button{
 }
 
 .tabla td{
-    padding:12px;
-    border-bottom:1px solid #eee;
+
+    padding:18px 16px;
+
+    border-bottom:1px solid #F1F5F9;
+
+    font-size:14px;
+
+    color:#334155;
+
 }
 
 .estado-libre{
@@ -244,11 +251,13 @@ button{
 
     display:grid;
 
-    grid-template-columns:230px 1fr;
+    grid-template-columns:220px 1fr;
 
-    gap:24px;
+    gap:18px;
 
     align-items:start;
+
+    margin-top:18px;
 
 }
 
@@ -258,11 +267,11 @@ button{
 
     background:#FFFFFF;
 
-    border:1px solid #E2E8F0;
+    border:1px solid #E5E7EB;
 
-    border-radius:22px;
+    border-radius:18px;
 
-    padding:24px 18px;
+    padding:18px;
 
     display:flex;
 
@@ -270,9 +279,13 @@ button{
 
     justify-content:space-between;
 
-    min-height:720px;
+    min-height:620px;
 
-    box-shadow:0 12px 35px rgba(15,23,42,.06);
+    box-shadow:0 10px 35px rgba(15,23,42,.06);
+
+    position:sticky;
+
+    top:20px;
 
 }
 
@@ -338,11 +351,11 @@ button{
 
     display:grid;
 
-    grid-template-columns:repeat(4,minmax(180px,1fr));
+    grid-template-columns:repeat(4,1fr);
 
-    gap:18px;
+    gap:14px;
 
-    margin-bottom:28px;
+    margin-bottom:18px;
 
 }
 
@@ -368,25 +381,21 @@ button{
 
 .cardDashboard{
 
-    position:relative;
-
     background:#FFFFFF;
 
     border:1px solid #E5E7EB;
 
-    border-left:5px solid #2563EB;
-
-    border-radius:18px;
+    border-radius:16px;
 
     padding:18px;
 
-    min-height:95px;
+    min-height:82px;
 
-    overflow:hidden;
+    border-left:4px solid #2563EB;
+
+    box-shadow:0 8px 18px rgba(15,23,42,.05);
 
     transition:.25s;
-
-    box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 }
 
@@ -424,7 +433,7 @@ button{
 
 .cardDashboard h3{
 
-    font-size:30px;
+    font-size:22px;
 
     margin:0;
 
@@ -434,11 +443,9 @@ button{
 
 .cardDashboard p{
 
-    margin-top:8px;
+    margin-top:6px;
 
     font-size:14px;
-
-    font-weight:600;
 
     color:#64748B;
 
@@ -450,23 +457,21 @@ button{
 
     display:flex;
 
-    gap:15px;
+    gap:12px;
 
     align-items:center;
 
     flex-wrap:wrap;
 
-    margin-top:30px;
-
-    margin-bottom:25px;
+    margin:18px 0;
 
 }
 
 #buscarLote{
 
-    width:340px;
+    width:360px;
 
-    height:48px;
+    height:46px;
 
     border:1px solid #CBD5E1;
 
@@ -474,11 +479,11 @@ button{
 
     padding:0 18px;
 
-    font-size:15px;
+    background:#FFFFFF;
+
+    font-size:14px;
 
     transition:.25s;
-
-    background:white;
 
 }
 
@@ -543,17 +548,41 @@ button{
 
 .tabla{
 
+    width:100%;
+
+    border-collapse:separate;
+
+    border-spacing:0;
+
+    background:#FFFFFF;
+
+    border:1px solid #E5E7EB;
+
     border-radius:18px;
 
     overflow:hidden;
 
-    box-shadow:0 15px 40px rgba(0,0,0,.08);
+    box-shadow:0 8px 20px rgba(15,23,42,.05);
 
 }
 
 .tabla th{
 
-    background:#0F172A;
+    background:#F8FAFC;
+
+    color:#475569;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+
+    padding:16px;
+
+    border-bottom:1px solid #E2E8F0;
 
 }
 
@@ -1569,9 +1598,13 @@ vertical-align:middle;
 ${bloqueado ? "disabled" : ""}
 
 style="
-width:180px;
+width:120px;
+height:40px;
 margin:0 auto;
 display:block;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
 opacity:${bloqueado ? "0.5" : "1"};
 cursor:${bloqueado ? "not-allowed" : "pointer"};
 "
