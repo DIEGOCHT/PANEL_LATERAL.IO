@@ -4,7 +4,6 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-fila.children[4]
 <title>Panel Administrativo</title>
 
 <style>
@@ -1027,6 +1026,12 @@ s.Lote===lote.Lote
 );
 
 });
+console.log(
+"Pendiente:",
+lote.Lote,
+pendiente,
+solicitudesPendientes
+);
 
 const bloqueado =
 
@@ -1307,7 +1312,7 @@ await fetch(
 "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
 );
 
-const solicitudesPendientes =
+solicitudesPendientes =
 await respuestaSolicitudes.json();
 
 if(resultado.ok){
