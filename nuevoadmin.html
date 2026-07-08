@@ -335,7 +335,11 @@ button{
 
     display:grid;
 
-    grid-template-columns:280px 1fr;
+    grid-template-columns:260px 1fr;
+
+    gap:25px;
+
+    padding:25px;
 
     min-height:100vh;
 
@@ -347,11 +351,21 @@ button{
 
     color:white;
 
-    padding:30px 22px;
+    padding:25px;
 
     display:flex;
 
     flex-direction:column;
+
+    border-radius:28px;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.20);
+
+    height:calc(100vh - 50px);
+
+    position:sticky;
+
+    top:25px;
 
 }
 
@@ -361,21 +375,25 @@ button{
 
     align-items:center;
 
-    gap:15px;
+    gap:18px;
 
-    margin-bottom:45px;
+    padding-bottom:28px;
+
+    margin-bottom:35px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
 
 }
 
 .logoIcon{
 
-    width:60px;
+    width:74px;
 
-    height:60px;
+    height:74px;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    background:var(--primary);
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
 
     display:flex;
 
@@ -383,15 +401,25 @@ button{
 
     align-items:center;
 
-    font-size:28px;
+    color:white;
 
-    font-weight:bold;
+    font-size:34px;
+
+    font-weight:700;
+
+    box-shadow:0 15px 30px rgba(37,99,235,.35);
 
 }
 
 .logoArea h2{
 
-    font-size:22px;
+    margin:0;
+
+    font-size:30px;
+
+    letter-spacing:1px;
+
+    color:white;
 
 }
 
@@ -399,7 +427,11 @@ button{
 
     color:#94A3B8;
 
-    font-size:14px;
+    font-size:15px;
+
+    display:block;
+
+    margin-top:6px;
 
 }
 
@@ -409,7 +441,9 @@ button{
 
     flex-direction:column;
 
-    gap:8px;
+    gap:12px;
+
+    margin-top:10px;
 
 }
 
@@ -419,7 +453,7 @@ button{
 
     border:none;
 
-    background:none;
+    background:transparent;
 
     color:#CBD5E1;
 
@@ -427,17 +461,19 @@ button{
 
     align-items:center;
 
-    gap:15px;
+    gap:18px;
 
-    padding:15px;
+    padding:18px;
 
-    border-radius:14px;
+    border-radius:18px;
 
     cursor:pointer;
 
     transition:.25s;
 
-    font-size:16px;
+    font-size:17px;
+
+    font-weight:600;
 
 }
 
@@ -459,9 +495,100 @@ button{
 
 #mainContent{
 
-    padding:35px;
-
     overflow:auto;
+
+}
+/*========== TOPBAR ==========*/
+
+#topbar{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:25px 30px;
+
+    margin-bottom:30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+}
+
+.topbarLeft{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.saludo{
+
+    color:#64748B;
+
+    font-size:14px;
+
+    margin-bottom:5px;
+
+}
+
+#usuarioLogeado h2{
+
+    margin:0;
+
+    font-size:26px;
+
+}
+
+#usuarioLogeado p{
+
+    margin-top:4px;
+
+    color:#64748B;
+
+}
+
+.topbarRight{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+
+}
+
+#estadoSistema{
+
+    color:#16A34A;
+
+    font-size:14px;
+
+}
+
+#ultimaActualizacion{
+
+    color:#64748B;
+
+    font-size:13px;
+
+}
+
+#cerrarSesion{
+
+    position:static;
+
+    margin:0;
+
+    width:auto;
+
+    padding:12px 22px;
 
 }
 </style>
@@ -546,19 +673,47 @@ button{
 
     <main id="mainContent">
 
-    <div id="usuarioHeader">
+    <header id="topbar">
 
-    <div id="usuarioLogeado"></div>
-<div
-id="ultimaActualizacion"
-style="
-text-align:center;
-font-size:13px;
-margin-bottom:15px;
-color:#666;
-">
-🟢 Sistema conectado
-</div>
+    <div class="topbarLeft">
+
+        <div>
+
+            <div class="saludo">
+
+                Buenos días
+
+            </div>
+
+            <div id="usuarioLogeado"></div>
+
+        </div>
+
+    </div>
+
+    <div class="topbarRight">
+
+        <div id="estadoSistema">
+
+            🟢 Sistema conectado
+
+        </div>
+
+        <div id="ultimaActualizacion">
+
+            Esperando sincronización...
+
+        </div>
+
+        <button id="cerrarSesion">
+
+            Salir
+
+        </button>
+
+    </div>
+
+</header>
 
     <button id="cerrarSesion">
 
@@ -1028,13 +1183,9 @@ localStorage.setItem(
 .getElementById("usuarioLogeado")
 .innerHTML =
 
-"<h2>Bienvenido " +
-resultado.nombre +
-"</h2>" +
+"<h2>"+resultado.nombre+"</h2>" +
 
-"<p><b>Rol:</b> " +
-resultado.rol +
-"</p>";
+"<p>"+resultado.rol+"</p>";
 
 await cargarLotes();
 
