@@ -154,13 +154,13 @@ button{
 
 .tabla td{
 
-    padding:18px 16px;
+    padding:14px 18px;
 
     border-bottom:1px solid #F1F5F9;
 
     font-size:14px;
 
-    color:#334155;
+    vertical-align:middle;
 
 }
 
@@ -271,7 +271,7 @@ button{
 
     border-radius:18px;
 
-    padding:18px;
+    padding:16px;
 
     display:flex;
 
@@ -295,17 +295,23 @@ button{
 
     align-items:center;
 
-    gap:14px;
+    justify-content:flex-start;
+
+    gap:12px;
 
     width:100%;
 
-    height:48px;
+    height:46px;
+
+    padding-left:14px;
+
+    margin:2px 0;
 
     border:none;
 
-    background:transparent;
-
     border-radius:12px;
+
+    background:transparent;
 
     color:#475569;
 
@@ -331,9 +337,9 @@ button{
 
     background:#2563EB;
 
-    color:white;
+    color:#FFFFFF;
 
-    box-shadow:0 10px 25px rgba(37,99,235,.25);
+    box-shadow:0 8px 18px rgba(37,99,235,.20);
 
 }
 
@@ -570,23 +576,29 @@ button{
 
     background:#F8FAFC;
 
-    color:#475569;
+    color:#64748B;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
 
     text-transform:uppercase;
 
-    letter-spacing:.6px;
+    letter-spacing:.8px;
 
-    padding:16px;
+    padding:15px 18px;
 
-    border-bottom:1px solid #E2E8F0;
+    border-bottom:1px solid #E5E7EB;
 
 }
 
-.tabla tr:hover{
+.tabla tbody tr{
+
+    transition:.25s;
+
+}
+
+.tabla tbody tr:hover{
 
     background:#F8FAFC;
 
@@ -788,23 +800,25 @@ button{
 
     align-items:center;
 
+    justify-content:flex-start;
+
     gap:14px;
 
-    margin-bottom:20px;
+    margin-bottom:22px;
 
 }
 
 .logoSidebar{
 
-    width:56px;
+    width:44px;
 
-    height:56px;
+    height:44px;
 
-    border-radius:16px;
+    border-radius:12px;
 
     background:#2563EB;
 
-    color:white;
+    color:#FFFFFF;
 
     display:flex;
 
@@ -812,31 +826,33 @@ button{
 
     align-items:center;
 
-    font-size:28px;
+    font-size:22px;
 
     font-weight:700;
 
-    box-shadow:0 10px 25px rgba(37,99,235,.20);
+    flex-shrink:0;
 
 }
 
 .tituloSidebar{
 
-    font-size:18px;
+    font-size:20px;
 
     font-weight:700;
 
     color:#0F172A;
 
+    line-height:1;
+
 }
 
 .subtituloSidebar{
 
-    font-size:13px;
+    font-size:12px;
 
     color:#64748B;
 
-    margin-top:4px;
+    margin-top:3px;
 
 }
 
@@ -847,6 +863,53 @@ button{
     border-top:1px solid #E2E8F0;
 
     margin:6px 0 18px;
+
+}
+/*======================================
+        BADGES ESTADO
+======================================*/
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.3px;
+
+}
+
+.badge.libre{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.badge.reservado{
+
+    background:#FEF3C7;
+
+    color:#B45309;
+
+}
+
+.badge.vendido{
+
+    background:#FEE2E2;
+
+    color:#B91C1C;
 
 }
 </style>
@@ -1579,9 +1642,14 @@ pendiente;
 
 <td>${lote.Lote}</td>
 
-        <td class="${clase}">
-    ${lote.Estado}
-    
+        <td>
+
+    <span class="badge ${lote.Estado.toLowerCase()}">
+
+        ${lote.Estado}
+
+    </span>
+
 </td>
 
         <td>${lote.Area}</td>
@@ -1598,12 +1666,12 @@ vertical-align:middle;
 ${bloqueado ? "disabled" : ""}
 
 style="
-width:120px;
-height:40px;
+width:100px;
+height:36px;
 margin:0 auto;
 display:block;
-border-radius:12px;
-font-size:14px;
+border-radius:10px;
+font-size:13px;
 font-weight:600;
 opacity:${bloqueado ? "0.5" : "1"};
 cursor:${bloqueado ? "not-allowed" : "pointer"};
@@ -1668,9 +1736,11 @@ clase="estado-vendido";
 
 }
 
-fila.children[2].className = clase;
-
-fila.children[2].textContent = lote.Estado;
+fila.children[2].innerHTML = `
+<span class="badge ${lote.Estado.toLowerCase()}">
+${lote.Estado}
+</span>
+`;
 
 const boton = fila.children[5].querySelector("button");
 
