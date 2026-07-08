@@ -4,7 +4,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+fila.children[4]
 <title>Panel Administrativo</title>
 
 <style>
@@ -1302,6 +1302,13 @@ estadoSolicitado:estado
 
 const resultado =
 await respuesta.json();
+const respuestaSolicitudes =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+);
+
+const solicitudesPendientes =
+await respuestaSolicitudes.json();
 
 if(resultado.ok){
 
@@ -1814,7 +1821,7 @@ if(usuario.includes(texto)){
     total++;
 
     const despues =
-    fila.children[4]
+    fila.children[5]
     .textContent
     .trim();
 
@@ -2726,6 +2733,19 @@ huboCambios = true;
 if(huboCambios){
 
 cambios.forEach(function(lote){
+
+lote.pendiente =
+solicitudesPendientes.some(function(s){
+
+return(
+
+s.Etapa===lote.Etapa &&
+
+s.Lote===lote.Lote
+
+);
+
+});
 
 actualizarFila(lote);
 
