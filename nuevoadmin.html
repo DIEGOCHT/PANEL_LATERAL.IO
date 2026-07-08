@@ -14,12 +14,17 @@
 }
 
 body{
+
     margin:0;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#f3f4f6;
+
+    background:#F8FAFC;
+
+    color:#0F172A;
+
+    overflow-x:hidden;
+
+    font-family:Inter,Arial,sans-serif;
+
 }
 
 #loginBox{
@@ -79,9 +84,15 @@ button{
 }
 
 #panel{
+
     display:none;
-    width:95%;
-    max-width:1200px;
+
+    width:100%;
+
+    max-width:none;
+
+    padding:24px 32px;
+
 }
 
 #usuarioLogeado{
@@ -216,304 +227,7 @@ button{
     flex:1;
 
 }
-#panelPrincipal{
 
-    display:grid;
-
-    grid-template-columns:260px 1fr;
-
-    gap:25px;
-
-    align-items:start;
-
-}
-
-#sidebar{
-
-    background:#0F172A;
-
-    border-radius:24px;
-
-    padding:20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:14px;
-
-    position:sticky;
-
-    top:20px;
-
-}
-
-.menuItem{
-
-    width:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-    padding:18px;
-
-    background:transparent;
-
-    color:#CBD5E1;
-
-    border:none;
-
-    border-radius:16px;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-    font-size:16px;
-
-    font-weight:600;
-
-}
-
-.menuItem:hover{
-
-    background:#1E293B;
-
-}
-
-.menuItem.activo{
-
-    background:#2563EB;
-
-    color:white;
-
-}
-
-#contenido{
-
-    width:100%;
-
-}
-
-#menuAdmin button{
-
-    width:auto;
-    padding:12px 25px;
-
-}
-
-#contenedorAuditoria{
-
-    margin-top:20px;
-
-}
-#herramientas{
-
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-
-}
-
-#buscarLote{
-
-    width:250px;
-    margin:0;
-
-}
-
-#herramientas button{
-
-    width:auto;
-    margin:0;
-    padding:10px 18px;
-
-}
-#dashboard{
-
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-
-    justify-content:center;
-
-}
-
-.cardDashboard{
-
-    width:220px;
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:15px;
-
-}
-
-.cardDashboard h3{
-
-    margin:0;
-
-    font-size:28px;
-
-}
-
-.cardDashboard p{
-
-    margin:5px 0 0 0;
-
-    font-weight:bold;
-
-}
-#cerrarSesion{
-
-    position:static;
-
-    width:auto;
-
-    margin:0;
-
-    padding:12px 22px;
-
-    background:#EF4444;
-
-    border-radius:12px;
-
-    font-size:15px;
-
-    transition:.25s;
-
-    box-shadow:0 10px 25px rgba(239,68,68,.25);
-
-}
-
-#cerrarSesion:hover{
-
-    background:#DC2626;
-
-    transform:translateY(-2px);
-
-}
-.loginLogo{
-
-    text-align:center;
-
-    margin-bottom:35px;
-
-}
-
-.logoCirculo{
-
-    width:90px;
-
-    height:90px;
-
-    margin:auto;
-
-    border-radius:24px;
-
-    background:linear-gradient(135deg,#2563EB,#3B82F6);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:42px;
-
-    font-weight:bold;
-
-    margin-bottom:20px;
-
-    box-shadow:0 15px 35px rgba(37,99,235,.35);
-
-}
-
-.loginLogo h1{
-
-    margin:0;
-
-    font-size:34px;
-
-    color:#0F172A;
-
-}
-
-.loginLogo p{
-
-    margin-top:8px;
-
-    color:#64748B;
-
-    font-size:16px;
-
-}
-.headerLeft{
-
-    display:flex;
-
-    align-items:center;
-
-}
-
-.headerRight{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:20px;
-
-}
-
-.tituloSistema{
-
-    font-size:13px;
-
-    letter-spacing:2px;
-
-    color:#64748B;
-
-    font-weight:700;
-
-    text-transform:uppercase;
-
-}
-
-#usuarioLogeado h2{
-
-    margin:6px 0 4px;
-
-    font-size:34px;
-
-    font-weight:700;
-
-    color:#0F172A;
-
-    line-height:1.1;
-
-}
-
-#usuarioLogeado p{
-
-    margin:0;
-
-    color:#64748B;
-
-    font-size:14px;
-
-    font-weight:600;
-
-}
 /*======================================
         PANEL V2
 ======================================*/
@@ -522,9 +236,9 @@ button{
 
     display:grid;
 
-    grid-template-columns:260px 1fr;
+    grid-template-columns:230px 1fr;
 
-    gap:30px;
+    gap:24px;
 
     align-items:start;
 
@@ -534,25 +248,25 @@ button{
 
 #sidebar{
 
-    background:#0F172A;
+    background:#FFFFFF;
 
-    border-radius:24px;
+    border:1px solid #E5E7EB;
 
-    padding:20px;
+    border-radius:20px;
+
+    padding:18px;
 
     display:flex;
 
     flex-direction:column;
 
-    gap:14px;
+    gap:10px;
+
+    box-shadow:0 4px 20px rgba(15,23,42,.05);
 
     position:sticky;
 
-    top:20px;
-
-    height:fit-content;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    top:24px;
 
 }
 
@@ -562,7 +276,7 @@ button{
 
     align-items:center;
 
-    gap:15px;
+    gap:14px;
 
     width:100%;
 
@@ -570,27 +284,27 @@ button{
 
     border:none;
 
-    color:#CBD5E1;
+    color:#475569;
 
-    padding:18px;
+    padding:14px 16px;
 
-    border-radius:16px;
+    border-radius:14px;
 
-    font-size:16px;
+    font-size:15px;
 
     font-weight:600;
 
-    cursor:pointer;
-
     transition:.25s;
+
+    cursor:pointer;
 
 }
 
 .menuItem:hover{
 
-    background:#1E293B;
+    background:#EFF6FF;
 
-    color:white;
+    color:#2563EB;
 
 }
 
@@ -599,6 +313,8 @@ button{
     background:#2563EB;
 
     color:white;
+
+    box-shadow:0 8px 20px rgba(37,99,235,.25);
 
 }
 
@@ -616,23 +332,79 @@ button{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(4,minmax(180px,1fr));
 
-    gap:20px;
+    gap:18px;
+
+    margin-bottom:28px;
+
+}
+
+@media(max-width:1200px){
+
+    #dashboard{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    #dashboard{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
 .cardDashboard{
 
-    background:white;
+    position:relative;
 
-    border-radius:20px;
+    background:#FFFFFF;
 
-    padding:25px;
+    border:1px solid #E5E7EB;
 
-    box-shadow:0 12px 35px rgba(0,0,0,.08);
+    border-radius:18px;
+
+    padding:22px;
+
+    min-height:130px;
+
+    overflow:hidden;
 
     transition:.25s;
+
+    box-shadow:0 8px 25px rgba(15,23,42,.05);
+
+}
+
+.cardDashboard::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:5px;
+
+    height:100%;
+
+    background:#2563EB;
+
+}
+
+.cardDashboard:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 40px rgba(15,23,42,.10);
 
 }
 
@@ -644,19 +416,25 @@ button{
 
 .cardDashboard h3{
 
-    font-size:40px;
+    font-size:46px;
+
+    font-weight:700;
 
     margin:0;
+
+    color:#0F172A;
 
 }
 
 .cardDashboard p{
 
-    margin-top:12px;
+    margin-top:14px;
+
+    font-size:15px;
+
+    font-weight:600;
 
     color:#64748B;
-
-    font-size:16px;
 
 }
 
@@ -683,6 +461,75 @@ button{
     width:340px;
 
     height:48px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:14px;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    transition:.25s;
+
+    background:white;
+
+}
+
+#buscarLote:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+/* BOTONES DE FILTRO */
+
+#filtroTodos,
+#filtroLibres,
+#filtroReservados,
+#filtroVendidos{
+
+    width:auto;
+
+    height:46px;
+
+    padding:0 24px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#FFFFFF;
+
+    border:1px solid #D6DCE5;
+
+    color:#475569;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+}
+
+#filtroTodos:hover,
+#filtroLibres:hover,
+#filtroReservados:hover,
+#filtroVendidos:hover{
+
+    background:#2563EB;
+
+    color:white;
+
+    border-color:#2563EB;
 
 }
 
@@ -2136,7 +1983,7 @@ ocultarTodo();
 "flex";
 document.getElementById(
 "herramientas"
-).style.display = "flex";
+).style.display = "grid";
     document.getElementById(
 "contenedorLotes"
 ).style.display = "block";
