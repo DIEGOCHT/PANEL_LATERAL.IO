@@ -2738,43 +2738,22 @@ huboCambios = true;
 
 if(huboCambios){
 
-cambios.forEach(function(lote){
+    cambios.forEach(function(lote){
 
-actualizarFila(lote);
+        actualizarFila(lote);
 
-});
+    });
 
 }
 
-// ACTUALIZAR BOTONES AUNQUE EL ESTADO NO CAMBIE
+// ACTUALIZAR TODOS LOS BOTONES
 todosLosLotes.forEach(function(lote){
 
-actualizarFila(lote);
+    actualizarFila(lote);
 
 });
 
 actualizarDashboard(todosLosLotes);
-
-lote.pendiente =
-solicitudesPendientes.some(function(s){
-
-return(
-
-s.Etapa===lote.Etapa &&
-
-s.Lote===lote.Lote
-
-);
-
-});
-
-actualizarFila(lote);
-
-});
-
-actualizarDashboard(todosLosLotes);
-
-}
 
 if(rol === "ADMIN"){
 
