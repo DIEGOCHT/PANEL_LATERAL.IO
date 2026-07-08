@@ -1026,12 +1026,6 @@ s.Lote===lote.Lote
 );
 
 });
-console.log(
-"Pendiente:",
-lote.Lote,
-pendiente,
-solicitudesPendientes
-);
 
 const bloqueado =
 
@@ -2699,6 +2693,13 @@ await fetch(
 
 const nuevos =
 await respuesta.json();
+const respuestaPendientes =
+await fetch(
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+);
+
+solicitudesPendientes =
+await respuestaPendientes.json();
 
 let huboCambios = false;
 
@@ -2738,6 +2739,21 @@ huboCambios = true;
 if(huboCambios){
 
 cambios.forEach(function(lote){
+
+actualizarFila(lote);
+
+});
+
+}
+
+// ACTUALIZAR BOTONES AUNQUE EL ESTADO NO CAMBIE
+todosLosLotes.forEach(function(lote){
+
+actualizarFila(lote);
+
+});
+
+actualizarDashboard(todosLosLotes);
 
 lote.pendiente =
 solicitudesPendientes.some(function(s){
