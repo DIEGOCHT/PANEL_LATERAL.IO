@@ -101,15 +101,17 @@ button{
 
     align-items:center;
 
-    background:white;
+    background:#FFFFFF;
 
-    padding:28px 35px;
+    padding:22px 30px;
 
-    border-radius:22px;
+    border-radius:24px;
 
-    margin-bottom:25px;
+    margin-bottom:30px;
 
-    box-shadow:0 12px 35px rgba(0,0,0,.08);
+    box-shadow:0 15px 40px rgba(15,23,42,.08);
+
+    border:1px solid #E2E8F0;
 
 }
 #contenedorLotes{
@@ -377,11 +379,25 @@ button{
 
     margin:0;
 
-    padding:14px 28px;
+    padding:12px 22px;
 
     background:#EF4444;
 
-    border-radius:14px;
+    border-radius:12px;
+
+    font-size:15px;
+
+    transition:.25s;
+
+    box-shadow:0 10px 25px rgba(239,68,68,.25);
+
+}
+
+#cerrarSesion:hover{
+
+    background:#DC2626;
+
+    transform:translateY(-2px);
 
 }
 .loginLogo{
@@ -475,21 +491,27 @@ button{
 
 #usuarioLogeado h2{
 
-    margin:0;
+    margin:6px 0 4px;
 
-    font-size:30px;
+    font-size:34px;
+
+    font-weight:700;
 
     color:#0F172A;
+
+    line-height:1.1;
 
 }
 
 #usuarioLogeado p{
 
-    margin-top:6px;
+    margin:0;
 
     color:#64748B;
 
-    font-size:15px;
+    font-size:14px;
+
+    font-weight:600;
 
 }
 /*======================================
@@ -685,6 +707,35 @@ button{
 .tabla tr:hover{
 
     background:#F8FAFC;
+
+}
+#ultimaActualizacion{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 16px;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+    color:#334155;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.headerRight{
+
+    gap:16px;
 
 }
 </style>
