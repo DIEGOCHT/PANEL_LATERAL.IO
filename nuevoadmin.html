@@ -1028,6 +1028,7 @@ button{
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -2049,20 +2050,11 @@ Object.keys(etapas).forEach(etapa=>{
 
 <h3>${etapa}</h3>
 
-<div style="
-height:170px;
-display:flex;
-justify-content:center;
-align-items:center;
-border:2px dashed #CBD5E1;
-border-radius:12px;
-color:#94A3B8;
-font-size:14px;
-">
-
-Aquí irá el gráfico
-
-</div>
+<canvas
+id="grafico_${etapa.replace(/\s+/g,'_')}"
+width="220"
+height="220">
+</canvas>
 
 <div style="
 margin-top:15px;
@@ -2085,6 +2077,93 @@ line-height:1.9;
 });
 
 panel.innerHTML=html;
+Object.keys(etapas).forEach(etapa=>{
+
+    const e=etapas[etapa];
+
+    const canvas=document.getElementById(
+        "grafico_"+etapa.replace(/\s+/g,"_")
+    );
+
+    new Chart(canvas,{
+
+        type:"pie",
+
+        data:{
+
+            labels:[
+
+                "Libres",
+
+                "Reservados",
+
+                "Vendidos"
+
+            ],
+
+            datasets:[{
+
+                data:[
+
+                    e.LIBRE,
+
+                    e.RESERVADO,
+
+                    e.VENDIDO
+
+                ],
+
+                backgroundColor:[
+
+                    "#22C55E",
+
+                    "#FACC15",
+
+                    "#EF4444"
+
+                ],
+
+                borderColor:"#FFFFFF",
+
+                borderWidth:2
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            plugins:{
+
+                legend:{
+
+                    position:"bottom",
+
+                    labels:{
+
+                        usePointStyle:true,
+
+                        boxWidth:10,
+
+                        font:{
+
+                            size:12
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+});
 
 }
 async function cargarLotes(){
@@ -2635,6 +2714,9 @@ document.getElementById(
 "contenedorLotes"
 ).style.display =
 "block";
+document.getElementById(
+"panelGraficos"
+).style.display="flex";
 
 });
 document
@@ -3434,6 +3516,10 @@ function activarMenu(id){
 
 }
 function ocultarTodo(){
+
+document.getElementById(
+"panelGraficos"
+).style.display="none";
 
 document.getElementById(
 "dashboard"
