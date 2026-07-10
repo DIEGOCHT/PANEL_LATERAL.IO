@@ -632,7 +632,7 @@ button{
 
     border-radius:18px;
 
-    padding:18px;
+    padding:14px;
 
     box-shadow:0 8px 20px rgba(15,23,42,.05);
 
@@ -640,7 +640,7 @@ button{
 
 .cardGrafico h3{
 
-    margin:0 0 15px;
+    margin:0 0 8px;
 
     text-align:center;
 
@@ -2050,23 +2050,45 @@ Object.keys(etapas).forEach(etapa=>{
 
 <h3>${etapa}</h3>
 
+<div style="
+width:160px;
+height:160px;
+margin:10px auto 18px;
+display:flex;
+justify-content:center;
+align-items:center;
+">
+
 <canvas
 id="grafico_${etapa.replace(/\s+/g,'_')}"
-width="220"
-height="220">
+width="140"
+height="140">
 </canvas>
 
 <div style="
-margin-top:15px;
-font-size:13px;
-line-height:1.9;
+margin-top:10px;
+font-size:14px;
+line-height:2;
 ">
 
-🟢 Libres: <b>${e.LIBRE}</b><br>
+🟢 Libres:
+<b>${e.LIBRE}</b><br>
 
-🟡 Reservados: <b>${e.RESERVADO}</b><br>
+🟡 Reservados:
+<b>${e.RESERVADO}</b><br>
 
-🔴 Vendidos: <b>${e.VENDIDO}</b>
+🔴 Vendidos:
+<b>${e.VENDIDO}</b>
+
+<hr style="
+margin:10px 0;
+border:none;
+border-top:1px solid #E2E8F0;
+">
+
+<b>Total:</b>
+
+${totalEtapa} lotes
 
 </div>
 
@@ -2080,6 +2102,10 @@ panel.innerHTML=html;
 Object.keys(etapas).forEach(etapa=>{
 
     const e=etapas[etapa];
+const totalEtapa =
+e.LIBRE +
+e.RESERVADO +
+e.VENDIDO;
 
     const canvas=document.getElementById(
         "grafico_"+etapa.replace(/\s+/g,"_")
@@ -2133,9 +2159,18 @@ Object.keys(etapas).forEach(etapa=>{
 
         options:{
 
-            responsive:true,
+    responsive:true,
 
-            plugins:{
+    maintainAspectRatio:false,
+aspectRatio:1,
+
+radius:"72%",
+
+    layout:{
+        padding:2
+    },
+
+    plugins:{
 
                 legend:{
 
@@ -2149,7 +2184,7 @@ Object.keys(etapas).forEach(etapa=>{
 
                         font:{
 
-                            size:12
+                            size:11
 
                         }
 
