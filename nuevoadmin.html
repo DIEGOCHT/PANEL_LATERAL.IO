@@ -137,34 +137,13 @@ button{
     margin-top:20px;
 }
 
-.tabla{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-    border-radius:15px;
-    overflow:hidden;
-}
-
-.tabla th{
-    background:#3f4d5d;
-    color:white;
-    padding:15px;
-    text-align:left;
-}
-
 .tabla td{
 
-    padding:12px 16px;
+padding:12px 14px;
 
-    height:60px;
+height:56px;
 
-    border-bottom:1px solid #EEF2F7;
-
-    font-size:13px;
-
-    color:#334155;
-
-    vertical-align:middle;
+vertical-align:middle;
 
 }
 
@@ -684,6 +663,7 @@ margin:auto;
 .tabla{
 
     width:100%;
+table-layout:fixed;
 
     border-collapse:separate;
 
@@ -722,6 +702,7 @@ color:#475569;
 border-bottom:2px solid #E2E8F0;
 
 text-align:center;
+vertical-align:middle;
 
 white-space:nowrap;
 
@@ -741,13 +722,15 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 250px);
+height:calc(100vh - 255px);
 
 overflow-y:auto;
 
 overflow-x:hidden;
 
-border-radius:14px;
+position:relative;
+
+border-radius:18px;
 
 }
 #ultimaActualizacion{
@@ -1761,14 +1744,27 @@ function renderizarLotes(datos){
 
 let html = `
 <div class="contenedorTablaScroll"><table class="tabla">
-    <tr>
-        <th>Etapa</th>
+    <thead>
+
+<tr>
+
+<th>Etapa</th>
+
 <th>Lote</th>
+
 <th>Estado</th>
+
 <th>Área</th>
+
 <th>Ubicación</th>
+
 <th>Acción</th>
-    </tr>
+
+</tr>
+
+</thead>
+
+<tbody>
 `;
 
 datos.forEach(lote=>{
@@ -1871,7 +1867,7 @@ ${pendiente ? "En Espera ⏳" : "Cambiar"}
 
 });
 
-html += "</table></div>";
+html += "</tbody></table></div>";
 
 document
 .getElementById(
