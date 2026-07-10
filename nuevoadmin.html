@@ -2042,55 +2042,58 @@ let html="";
 
 Object.keys(etapas).forEach(etapa=>{
 
-    const e=etapas[etapa];
+    const e = etapas[etapa];
 
-    html+=`
+    const totalEtapa =
+        e.LIBRE +
+        e.RESERVADO +
+        e.VENDIDO;
+
+    html += `
 
 <div class="cardGrafico">
 
-<h3>${etapa}</h3>
+    <h3>${etapa}</h3>
 
-<div style="
-width:160px;
-height:160px;
-margin:10px auto 18px;
-display:flex;
-justify-content:center;
-align-items:center;
-">
+    <div style="
+        width:140px;
+        height:140px;
+        margin:10px auto;
+    ">
 
-<canvas
-id="grafico_${etapa.replace(/\s+/g,'_')}"
-width="140"
-height="140">
-</canvas>
+        <canvas
+        id="grafico_${etapa.replace(/\s+/g,'_')}">
+        </canvas>
 
-<div style="
-margin-top:10px;
-font-size:14px;
-line-height:2;
-">
+    </div>
 
-🟢 Libres:
-<b>${e.LIBRE}</b><br>
+    <div style="
+        margin-top:14px;
+        font-size:14px;
+        line-height:1.9;
+        text-align:left;
+    ">
 
-🟡 Reservados:
-<b>${e.RESERVADO}</b><br>
+        🟢 Libres:
+        <b>${e.LIBRE}</b><br>
 
-🔴 Vendidos:
-<b>${e.VENDIDO}</b>
+        🟡 Reservados:
+        <b>${e.RESERVADO}</b><br>
 
-<hr style="
-margin:10px 0;
-border:none;
-border-top:1px solid #E2E8F0;
-">
+        🔴 Vendidos:
+        <b>${e.VENDIDO}</b>
 
-<b>Total:</b>
+        <hr style="
+        margin:10px 0;
+        border:none;
+        border-top:1px solid #E2E8F0;
+        ">
 
-${totalEtapa} lotes
+        <b>Total:</b>
 
-</div>
+        ${totalEtapa} lotes
+
+    </div>
 
 </div>
 
@@ -2102,10 +2105,6 @@ panel.innerHTML=html;
 Object.keys(etapas).forEach(etapa=>{
 
     const e=etapas[etapa];
-const totalEtapa =
-e.LIBRE +
-e.RESERVADO +
-e.VENDIDO;
 
     const canvas=document.getElementById(
         "grafico_"+etapa.replace(/\s+/g,"_")
@@ -2163,8 +2162,6 @@ e.VENDIDO;
 
     maintainAspectRatio:false,
 aspectRatio:1,
-
-radius:"72%",
 
     layout:{
         padding:2
