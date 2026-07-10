@@ -154,9 +154,9 @@ button{
 
 .tabla td{
 
-    padding:10px 16px;
+    padding:12px 16px;
 
-    height:48px;
+    height:60px;
 
     border-bottom:1px solid #EEF2F7;
 
@@ -275,7 +275,7 @@ button{
 
     border-radius:18px;
 
-    padding:22px;
+    padding:18px;
 
     display:flex;
 
@@ -300,18 +300,29 @@ button{
     display:flex;
 
     align-items:center;
-
-    justify-content:flex-start;
+justify-content:flex-start;
 
     gap:14px;
+padding-left:22px;
 
     width:100%;
 
-    height:52px;
+    height:58px;
 
-    padding:0 18px;
+    padding:0 14px;
 
-    text-align:left;
+    border-radius:14px;
+
+    background:transparent;
+
+    color:#334155;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.25s;
+
 }
 
 .menuItem:hover{
@@ -328,20 +339,19 @@ button{
 
     color:#FFFFFF;
 
-    box-shadow:0 8px 18px rgba(37,99,235,.20);
+    box-shadow:0 10px 25px rgba(37,99,235,.20);
 
 }
 .menuItem span{
 
-    display:flex;
+    display:block;
 
-    align-items:center;
-
-    justify-content:flex-start;
+    line-height:58px;
 
     text-align:left;
 
     flex:1;
+
 }
 
 .menuItem{
@@ -520,7 +530,7 @@ button{
 
     gap:12px;
 
-    align-items:center;
+    align-items:stretch;
 
     flex-wrap:wrap;
 
@@ -537,7 +547,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     width:360px;
 
-    height:46px;
+    height:48px;
 
     border:1px solid #CBD5E1;
 
@@ -571,7 +581,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     width:auto;
 
-    height:46px;
+    height:48px;
 
     padding:0 24px;
 
@@ -614,9 +624,9 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     display:grid;
 
-    grid-template-columns:minmax(0,1fr) 340px;
+    grid-template-columns:minmax(0,1fr) 275px;
 
-    gap:18px;
+    gap:20px;
 
     align-items:start;
 }
@@ -643,8 +653,11 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
     border:1px solid #E2E8F0;
 
     border-radius:22px;
+max-width:275px;
 
-    padding:18px;
+margin:auto;
+
+    padding:24px;
 
     box-shadow:
         0 10px 30px rgba(15,23,42,.06);
@@ -657,7 +670,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     text-align:center;
 
-    font-size:34px;
+    font-size:24px;
 
     font-weight:800;
 
@@ -690,27 +703,27 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 .tabla th{
 
-    background:#F8FAFC;
+position:sticky;
 
-    color:#475569;
+top:0;
 
-    font-size:12px;
+z-index:100;
 
-    font-weight:700;
+background:#F8FAFC;
 
-    text-transform:uppercase;
+padding:14px 16px;
 
-    letter-spacing:1px;
+font-size:13px;
 
-    padding:13px 16px;
+font-weight:700;
 
-    border-bottom:1px solid #E2E8F0;
+color:#475569;
 
-    position:sticky;
+border-bottom:2px solid #E2E8F0;
 
-    top:0;
+text-align:center;
 
-    z-index:20;
+white-space:nowrap;
 
 }
 
@@ -723,6 +736,18 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 .tabla tbody tr:hover{
 
     background:#F8FAFC;
+
+}
+
+.contenedorTablaScroll{
+
+height:calc(100vh - 250px);
+
+overflow-y:auto;
+
+overflow-x:hidden;
+
+border-radius:14px;
 
 }
 #ultimaActualizacion{
@@ -932,9 +957,9 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 .logoSidebar{
 
-    width:44px;
+    width:54px;
 
-    height:44px;
+    height:54px;
 
     border-radius:12px;
 
@@ -958,7 +983,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 .tituloSidebar{
 
-    font-size:20px;
+    font-size:17px;
 
     font-weight:700;
 
@@ -970,7 +995,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
 .subtituloSidebar{
 
-    font-size:12px;
+    font-size:13px;
 
     color:#64748B;
 
@@ -1275,12 +1300,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 <div id="contenedorLotesPrincipal">
 
     <div
-id="contenedorLotes"
-style="
-overflow-y:auto;
-overflow-x:hidden;
-height:calc(100vh - 210px);
-">
+id="contenedorLotes">
     </div>
 
     <div
@@ -1740,7 +1760,7 @@ let colaNotificaciones = [];
 function renderizarLotes(datos){
 
 let html = `
-<table class="tabla">
+<div class="contenedorTablaScroll"><table class="tabla">
     <tr>
         <th>Etapa</th>
 <th>Lote</th>
@@ -1820,16 +1840,17 @@ vertical-align:middle;
 ${bloqueado ? "disabled" : ""}
 
 style="
-width:92px;
-height:34px;
-display:inline-flex;
+width:96px;
+height:36px;
+display:flex;
+margin:auto;
 justify-content:center;
 align-items:center;
 border:none;
 border-radius:10px;
 background:#2563EB;
 color:#FFFFFF;
-font-size:12px;
+font-size:13px;
 font-weight:600;
 box-shadow:0 4px 12px rgba(37,99,235,.20);
 opacity:${bloqueado ? "0.5" : "1"};
@@ -1850,7 +1871,7 @@ ${pendiente ? "En Espera ⏳" : "Cambiar"}
 
 });
 
-html += "</table>";
+html += "</table></div>";
 
 document
 .getElementById(
@@ -2124,8 +2145,8 @@ Object.keys(etapas).forEach(etapa=>{
 
     <h3>${etapa}</h3>
     <div style="
-width:215px;
-height:215px;
+width:185px;
+height:185px;
 margin:10px auto 12px;
 ">
 
@@ -2880,17 +2901,17 @@ await sincronizarPanel();
 
 ocultarTodo();
 
-document
-.getElementById(
+document.getElementById(
+"cabeceraFija"
+).style.display="block";
+
+document.getElementById(
 "dashboard"
-)
-.style.display =
-"grid";
+).style.display="grid";
 
 document.getElementById(
 "herramientas"
-).style.display =
-"flex";
+).style.display="flex";
 
 document.getElementById(
 "contenedorLotes"
@@ -3698,7 +3719,7 @@ function activarMenu(id){
 
 }
 function ocultarTodo(){
-
+document.getElementById("cabeceraFija").style.display="none";
 document.getElementById(
 "panelGraficos"
 ).style.display="none";
