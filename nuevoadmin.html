@@ -603,6 +603,52 @@ button{
 
 }
 
+#contenedorLotesPrincipal{
+
+    display:grid;
+
+    grid-template-columns:1fr 320px;
+
+    gap:24px;
+
+    align-items:start;
+
+}
+
+#panelGraficos{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+.cardGrafico{
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    box-shadow:0 8px 20px rgba(15,23,42,.05);
+
+}
+
+.cardGrafico h3{
+
+    margin:0 0 15px;
+
+    text-align:center;
+
+    font-size:16px;
+
+    color:#0F172A;
+
+}
 /* TABLAS */
 
 .tabla{
@@ -1198,9 +1244,17 @@ button{
     
 </div>
 
-<div
-id="contenedorLotes"
-style="overflow-x:auto;">
+<div id="contenedorLotesPrincipal">
+
+    <div
+    id="contenedorLotes"
+    style="overflow-x:auto;">
+    </div>
+
+    <div
+    id="panelGraficos">
+    </div>
+
 </div>
 
     <div
@@ -1954,6 +2008,85 @@ document
 
 }
 
+function renderizarGraficosPorEtapa(datos){
+
+const panel =
+document.getElementById("panelGraficos");
+
+if(!panel){
+    return;
+}
+
+const etapas = {};
+
+datos.forEach(lote=>{
+
+    if(!etapas[lote.Etapa]){
+
+        etapas[lote.Etapa]={
+
+            LIBRE:0,
+            RESERVADO:0,
+            VENDIDO:0
+
+        };
+
+    }
+
+    etapas[lote.Etapa][lote.Estado]++;
+
+});
+
+let html="";
+
+Object.keys(etapas).forEach(etapa=>{
+
+    const e=etapas[etapa];
+
+    html+=`
+
+<div class="cardGrafico">
+
+<h3>${etapa}</h3>
+
+<div style="
+height:170px;
+display:flex;
+justify-content:center;
+align-items:center;
+border:2px dashed #CBD5E1;
+border-radius:12px;
+color:#94A3B8;
+font-size:14px;
+">
+
+Aquí irá el gráfico
+
+</div>
+
+<div style="
+margin-top:15px;
+font-size:13px;
+line-height:1.9;
+">
+
+🟢 Libres: <b>${e.LIBRE}</b><br>
+
+🟡 Reservados: <b>${e.RESERVADO}</b><br>
+
+🔴 Vendidos: <b>${e.VENDIDO}</b>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+panel.innerHTML=html;
+
+}
 async function cargarLotes(){
 
     const respuesta =
@@ -1984,6 +2117,8 @@ solicitudesPendientes = [];
 }
 
 actualizarDashboard(todosLosLotes);
+
+renderizarGraficosPorEtapa(todosLosLotes);
 
 filtrarLotes();
 
