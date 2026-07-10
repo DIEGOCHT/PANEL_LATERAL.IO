@@ -154,11 +154,15 @@ button{
 
 .tabla td{
 
-    padding:14px 18px;
+    padding:10px 16px;
 
-    border-bottom:1px solid #F1F5F9;
+    height:48px;
 
-    font-size:14px;
+    border-bottom:1px solid #EEF2F7;
+
+    font-size:13px;
+
+    color:#334155;
 
     vertical-align:middle;
 
@@ -625,7 +629,7 @@ button{
 
     background:#F8FAFC;
 
-    color:#64748B;
+    color:#475569;
 
     font-size:12px;
 
@@ -633,11 +637,11 @@ button{
 
     text-transform:uppercase;
 
-    letter-spacing:.8px;
+    letter-spacing:1px;
 
-    padding:15px 18px;
+    padding:13px 16px;
 
-    border-bottom:1px solid #E5E7EB;
+    border-bottom:1px solid #E2E8F0;
 
 }
 
@@ -1730,15 +1734,21 @@ vertical-align:middle;
 ${bloqueado ? "disabled" : ""}
 
 style="
-width:100px;
-height:36px;
-margin:0 auto;
-display:block;
+width:92px;
+height:34px;
+display:inline-flex;
+justify-content:center;
+align-items:center;
+border:none;
 border-radius:10px;
-font-size:13px;
+background:#2563EB;
+color:#FFFFFF;
+font-size:12px;
 font-weight:600;
+box-shadow:0 4px 12px rgba(37,99,235,.20);
 opacity:${bloqueado ? "0.5" : "1"};
 cursor:${bloqueado ? "not-allowed" : "pointer"};
+transition:.20s;
 "
 
 onclick="cambiarEstado('${lote.Etapa}','${lote.Lote}')">
