@@ -640,13 +640,15 @@ button{
 
 .cardGrafico h3{
 
-    margin:0 0 8px;
+    margin:0 0 12px;
 
     text-align:center;
 
-    font-size:16px;
+    font-size:30px;
 
-    color:#0F172A;
+    font-weight:800;
+
+    letter-spacing:.5px;
 
 }
 /* TABLAS */
@@ -2040,6 +2042,44 @@ datos.forEach(lote=>{
 
 let html="";
 
+const pluginTextoCentro = {
+
+    id:"textoCentro",
+
+    afterDraw(chart){
+
+        const {ctx} = chart;
+
+        const meta = chart.getDatasetMeta(0);
+
+        if(!meta.data.length) return;
+
+        const x = meta.data[0].x;
+        const y = meta.data[0].y;
+
+        const total = chart.data.datasets[0].data
+            .reduce((a,b)=>a+b,0);
+
+        ctx.save();
+
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
+
+        ctx.fillStyle="#0F172A";
+        ctx.font="bold 28px Segoe UI";
+
+        ctx.fillText(total,x,y-8);
+
+        ctx.fillStyle="#64748B";
+        ctx.font="12px Segoe UI";
+
+        ctx.fillText("LOTES",x,y+16);
+
+        ctx.restore();
+
+    }
+
+};
 Object.keys(etapas).forEach(etapa=>{
 
     const e = etapas[etapa];
@@ -2054,12 +2094,22 @@ Object.keys(etapas).forEach(etapa=>{
 <div class="cardGrafico">
 
     <h3>${etapa}</h3>
+<div style="
+text-align:center;
+font-size:13px;
+color:#64748B;
+margin-bottom:8px;
+">
+
+Distribución de estados
+
+</div>
 
     <div style="
-        width:140px;
-        height:140px;
-        margin:10px auto;
-    ">
+    width:205px;
+    height:205px;
+    margin:8px auto 4px;
+">
 
         <canvas
         id="grafico_${etapa.replace(/\s+/g,'_')}">
@@ -2074,24 +2124,51 @@ Object.keys(etapas).forEach(etapa=>{
         text-align:left;
     ">
 
-        🟢 Libres:
-        <b>${e.LIBRE}</b><br>
+        ${(() => {
 
-        🟡 Reservados:
-        <b>${e.RESERVADO}</b><br>
+const pLibre = totalEtapa ? ((e.LIBRE * 100) / totalEtapa).toFixed(1) : 0;
+const pReservado = totalEtapa ? ((e.RESERVADO * 100) / totalEtapa).toFixed(1) : 0;
+const pVendido = totalEtapa ? ((e.VENDIDO * 100) / totalEtapa).toFixed(1) : 0;
 
-        🔴 Vendidos:
-        <b>${e.VENDIDO}</b>
+return `
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
 
-        <hr style="
-        margin:10px 0;
-        border:none;
-        border-top:1px solid #E2E8F0;
-        ">
+<div style="display:flex;justify-content:space-between;">
+<span>🟢 Libres</span>
+<b>${e.LIBRE} (${pLibre}%)</b>
+</div>
 
-        <b>Total:</b>
+<div style="display:flex;justify-content:space-between;">
+<span>🟡 Reservados</span>
+<b>${e.RESERVADO} (${pReservado}%)</b>
+</div>
 
-        ${totalEtapa} lotes
+<div style="display:flex;justify-content:space-between;">
+<span>🔴 Vendidos</span>
+<b>${e.VENDIDO} (${pVendido}%)</b>
+</div>
+
+</div>
+`;
+
+})()}
+
+        <div style="
+margin-top:14px;
+padding-top:12px;
+border-top:1px solid #E2E8F0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:16px;
+font-weight:700;
+">
+
+<span>Total</span>
+
+<span>${totalEtapa} lotes</span>
+
+</div>
 
     </div>
 
@@ -2112,89 +2189,104 @@ Object.keys(etapas).forEach(etapa=>{
 
     new Chart(canvas,{
 
-        type:"pie",
+    plugins:[pluginTextoCentro],
 
-        data:{
+    type:"doughnut",
 
-            labels:[
+    data:{
 
-                "Libres",
+        labels:[
 
-                "Reservados",
+            "Libres",
 
-                "Vendidos"
+            "Reservados",
+
+            "Vendidos"
+
+        ],
+
+        datasets:[{
+
+            data:[
+
+                e.LIBRE,
+
+                e.RESERVADO,
+
+                e.VENDIDO
 
             ],
 
-            datasets:[{
+            backgroundColor:[
 
-                data:[
+                "#22C55E",
 
-                    e.LIBRE,
+                "#FACC15",
 
-                    e.RESERVADO,
+                "#EF4444"
 
-                    e.VENDIDO
+            ],
 
-                ],
+            borderColor:"#FFFFFF",
 
-                backgroundColor:[
+            borderWidth:3,
 
-                    "#22C55E",
+            hoverOffset:12
 
-                    "#FACC15",
+        }]
 
-                    "#EF4444"
+    },
 
-                ],
+    options:{
 
-                borderColor:"#FFFFFF",
+        responsive:true,
 
-                borderWidth:2
+        maintainAspectRatio:false,
 
-            }]
+        cutout:"58%",
+
+        animation:{
+
+            animateRotate:true,
+
+            duration:1200
 
         },
 
-        options:{
+        plugins:{
 
-    responsive:true,
-
-    maintainAspectRatio:false,
-aspectRatio:1,
-
-    layout:{
-        padding:2
+    legend:{
+        display:false
     },
 
-    plugins:{
+    tooltip:{
 
-                legend:{
+        callbacks:{
 
-                    position:"bottom",
+            label(context){
 
-                    labels:{
+                const valor=context.raw;
 
-                        usePointStyle:true,
+                const total=context.dataset.data
+                    .reduce((a,b)=>a+b,0);
 
-                        boxWidth:10,
+                const porcentaje=((valor*100)/total)
+                    .toFixed(1);
 
-                        font:{
-
-                            size:11
-
-                        }
-
-                    }
-
-                }
+                return `${valor} lotes (${porcentaje}%)`;
 
             }
 
         }
 
-    });
+    }
 
+},
+plugins:[pluginTextoCentro]
+
+    }
+
+});
 });
 
 }
