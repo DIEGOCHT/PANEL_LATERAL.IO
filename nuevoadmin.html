@@ -524,6 +524,16 @@ button{
 
     margin:18px 0;
 
+    position:sticky;
+
+    top:110px;
+
+    z-index:80;
+
+    background:#F8FAFC;
+
+    padding:12px 0;
+
 }
 
 #buscarLote{
@@ -607,7 +617,7 @@ button{
 
     display:grid;
 
-    grid-template-columns:1fr 320px;
+    grid-template-columns:1fr 360px;
 
     gap:24px;
 
@@ -621,20 +631,31 @@ button{
 
     flex-direction:column;
 
-    gap:22px;
+    gap:24px;
+
+    position:sticky;
+
+    top:18px;
+
+    max-height:calc(100vh - 30px);
+
+    overflow-y:auto;
+
+    padding-right:6px;
 
 }
 .cardGrafico{
 
-    background:#FFFFFF;
+    background:#FFF;
 
     border:1px solid #E2E8F0;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    padding:14px;
+    padding:22px;
 
-    box-shadow:0 8px 20px rgba(15,23,42,.05);
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.06);
 
 }
 
@@ -644,11 +665,13 @@ button{
 
     text-align:center;
 
-    font-size:30px;
+    font-size:42px;
 
     font-weight:800;
 
     letter-spacing:.5px;
+
+    color:#0F172A;
 
 }
 /* TABLAS */
@@ -690,6 +713,12 @@ button{
     padding:13px 16px;
 
     border-bottom:1px solid #E2E8F0;
+
+    position:sticky;
+
+    top:0;
+
+    z-index:20;
 
 }
 
@@ -1250,8 +1279,11 @@ button{
 <div id="contenedorLotesPrincipal">
 
     <div
-    id="contenedorLotes"
-    style="overflow-x:auto;">
+id="contenedorLotes"
+style="
+overflow:auto;
+max-height:calc(100vh - 190px);
+">
     </div>
 
     <div
@@ -2094,21 +2126,10 @@ Object.keys(etapas).forEach(etapa=>{
 <div class="cardGrafico">
 
     <h3>${etapa}</h3>
-<div style="
-text-align:center;
-font-size:13px;
-color:#64748B;
-margin-bottom:8px;
-">
-
-Distribución de estados
-
-</div>
-
     <div style="
-    width:205px;
-    height:205px;
-    margin:8px auto 4px;
+    width:265px;
+    height:265px;
+    margin:0 auto 8px;
 ">
 
         <canvas
@@ -2231,7 +2252,15 @@ Object.keys(etapas).forEach(etapa=>{
 
             borderWidth:3,
 
-            hoverOffset:12
+            hoverOffset:20,
+
+offset(context){
+
+    const index = context.dataIndex;
+
+    return index === window.estadoSeleccionado ? 18 : 0;
+
+}
 
         }]
 
@@ -2247,11 +2276,36 @@ Object.keys(etapas).forEach(etapa=>{
 
         animation:{
 
-            animateRotate:true,
+    animateRotate:true,
 
-            duration:1200
+    animateScale:true,
 
-        },
+    duration:1200,
+
+    easing:"easeOutQuart"
+
+},
+onClick(event,elements){
+
+    if(!elements.length) return;
+
+    const indice = elements[0].index;
+
+    const estados = [
+
+        "LIBRE",
+
+        "RESERVADO",
+
+        "VENDIDO"
+
+    ];
+
+    const estado = estados[indice];
+
+    filtrarPorEstadoDesdeGrafico(estado);
+
+},
 
         plugins:{
 
@@ -2282,12 +2336,19 @@ Object.keys(etapas).forEach(etapa=>{
     }
 
 },
-plugins:[pluginTextoCentro]
 
     }
 
 });
 });
+
+}
+
+function filtrarPorEstadoDesdeGrafico(estado){
+
+    filtroActual = estado;
+
+    filtrarLotes();
 
 }
 async function cargarLotes(){
