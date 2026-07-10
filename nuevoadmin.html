@@ -402,23 +402,34 @@ button{
 
 .cardDashboard{
 
-    position:relative;
-
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
-    border-radius:18px;
+    border-radius:16px;
 
-    padding:16px 18px;
+    padding:14px 16px;
 
-    min-height:150px;
+    height:86px;
 
-    overflow:hidden;
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
 
     transition:.25s;
 
-    box-shadow:0 8px 24px rgba(15,23,42,.05);
+}
+.cardInfo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
 
 }
 
@@ -434,9 +445,7 @@ button{
 
     margin:0;
 
-    margin-top:10px;
-
-    font-size:22px;
+    font-size:18px;
 
     font-weight:700;
 
@@ -446,9 +455,9 @@ button{
 
 .cardDashboard p{
 
-    margin-top:5px;
+    margin:2px 0 0;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748B;
 
@@ -1879,9 +1888,13 @@ document
 
     <div class="cardIcono">🏠</div>
 
-    <h3>${total}</h3>
+    <div class="cardInfo">
 
-    <p>Total de Lotes</p>
+        <h3>${total}</h3>
+
+        <p>Total de Lotes</p>
+
+    </div>
 
 </div>
 
@@ -1889,9 +1902,13 @@ document
 
     <div class="cardIcono libre">🟢</div>
 
-    <h3>${libres}</h3>
+    <div class="cardInfo">
 
-    <p>Libres</p>
+        <h3>${libres}</h3>
+
+        <p>Libres</p>
+
+    </div>
 
 </div>
 
@@ -1899,9 +1916,13 @@ document
 
     <div class="cardIcono reservado">🟡</div>
 
-    <h3>${reservados}</h3>
+    <div class="cardInfo">
 
-    <p>Reservados</p>
+        <h3>${reservados}</h3>
+
+        <p>Reservados</p>
+
+    </div>
 
 </div>
 
@@ -1909,9 +1930,13 @@ document
 
     <div class="cardIcono vendido">🔴</div>
 
-    <h3>${vendidos}</h3>
+    <div class="cardInfo">
 
-    <p>Vendidos</p>
+        <h3>${vendidos}</h3>
+
+        <p>Vendidos</p>
+
+    </div>
 
 </div>
 
