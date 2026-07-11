@@ -137,34 +137,13 @@ button{
     margin-top:20px;
 }
 
-.tabla{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-    border-radius:15px;
-    overflow:hidden;
-}
-
-.tabla th{
-    background:#3f4d5d;
-    color:white;
-    padding:15px;
-    text-align:left;
-}
-
 .tabla td{
 
-    padding:10px 16px;
+padding:12px 14px;
 
-    height:48px;
+height:56px;
 
-    border-bottom:1px solid #EEF2F7;
-
-    font-size:13px;
-
-    color:#334155;
-
-    vertical-align:middle;
+vertical-align:middle;
 
 }
 
@@ -303,6 +282,7 @@ button{
 justify-content:flex-start;
 
     gap:14px;
+padding-left:22px;
 
     width:100%;
 
@@ -343,17 +323,13 @@ justify-content:flex-start;
 }
 .menuItem span{
 
-    display:flex;
+    display:block;
 
-    align-items:center;
-
-    justify-content:flex-start;
+    line-height:58px;
 
     text-align:left;
 
     flex:1;
-
-    padding-left:4px;
 
 }
 
@@ -533,7 +509,7 @@ justify-content:flex-start;
 
     gap:12px;
 
-    align-items:center;
+    align-items:stretch;
 
     flex-wrap:wrap;
 
@@ -550,7 +526,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     width:360px;
 
-    height:46px;
+    height:48px;
 
     border:1px solid #CBD5E1;
 
@@ -584,7 +560,7 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     width:auto;
 
-    height:46px;
+    height:48px;
 
     padding:0 24px;
 
@@ -673,7 +649,7 @@ margin:auto;
 
     text-align:center;
 
-    font-size:34px;
+    font-size:24px;
 
     font-weight:800;
 
@@ -687,6 +663,7 @@ margin:auto;
 .tabla{
 
     width:100%;
+table-layout:fixed;
 
     border-collapse:separate;
 
@@ -706,27 +683,28 @@ margin:auto;
 
 .tabla th{
 
-    background:#F8FAFC;
+position:sticky;
 
-    color:#475569;
+top:0;
 
-    font-size:12px;
+z-index:100;
 
-    font-weight:700;
+background:#F8FAFC;
 
-    text-transform:uppercase;
+padding:14px 16px;
 
-    letter-spacing:1px;
+font-size:13px;
 
-    padding:13px 16px;
+font-weight:700;
 
-    border-bottom:1px solid #E2E8F0;
+color:#475569;
 
-    position:sticky;
+border-bottom:2px solid #E2E8F0;
 
-    top:0;
+text-align:center;
+vertical-align:middle;
 
-    z-index:20;
+white-space:nowrap;
 
 }
 
@@ -743,9 +721,17 @@ margin:auto;
 }
 
 .contenedorTablaScroll{
-height:calc(100vh - 260px);
+
+height:calc(100vh - 255px);
+
 overflow-y:auto;
+
 overflow-x:hidden;
+
+position:relative;
+
+border-radius:18px;
+
 }
 #ultimaActualizacion{
 
@@ -1009,6 +995,68 @@ overflow-x:hidden;
     margin:6px 0 18px;
 
 }
+
+/*======================================
+        TITULOS MODULOS
+======================================*/
+
+.tituloModulo{
+
+background:#FFFFFF;
+
+border:1px solid #E2E8F0;
+
+border-radius:18px;
+
+padding:22px;
+
+margin-bottom:20px;
+
+box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+}
+
+.tituloModulo h2{
+
+margin:0;
+
+font-size:28px;
+
+color:#0F172A;
+
+}
+
+.tituloModulo p{
+
+margin:8px 0 0;
+
+color:#64748B;
+
+font-size:15px;
+
+}
+.moduloContenido{
+
+background:#FFFFFF;
+
+border-radius:18px;
+
+padding:20px;
+
+box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+border:1px solid #E2E8F0;
+
+margin-top:18px;
+
+}
+
+.btnAccionAdmin{
+width:auto;
+padding:10px 18px;
+margin:0;
+}
+
 /*======================================
         BADGES ESTADO
 ======================================*/
@@ -1297,12 +1345,7 @@ overflow-x:hidden;
 <div id="contenedorLotesPrincipal">
 
     <div
-id="contenedorLotes"
-style="
-overflow-y:auto;
-overflow-x:hidden;
-height:calc(100vh - 210px);
-">
+id="contenedorLotes">
     </div>
 
     <div
@@ -1327,15 +1370,21 @@ style="overflow-x:auto;">
 id="contenedorSolicitudes"
 style="display:none;">
 
-<h2
-style="
-text-align:center;
-margin-bottom:30px;
-">
+<div class="tituloModulo">
 
-Solicitudes Pendientes
+<h2>
+
+📋 Solicitudes Pendientes
 
 </h2>
+
+<p>
+
+Administre las solicitudes enviadas por los asesores.
+
+</p>
+
+</div>
 
 <div
 style="
@@ -1763,14 +1812,27 @@ function renderizarLotes(datos){
 
 let html = `
 <div class="contenedorTablaScroll"><table class="tabla">
-    <tr>
-        <th>Etapa</th>
+    <thead>
+
+<tr>
+
+<th>Etapa</th>
+
 <th>Lote</th>
+
 <th>Estado</th>
+
 <th>Área</th>
+
 <th>Ubicación</th>
+
 <th>Acción</th>
-    </tr>
+
+</tr>
+
+</thead>
+
+<tbody>
 `;
 
 datos.forEach(lote=>{
@@ -1842,16 +1904,17 @@ vertical-align:middle;
 ${bloqueado ? "disabled" : ""}
 
 style="
-width:92px;
-height:34px;
-display:inline-flex;
+width:96px;
+height:36px;
+display:flex;
+margin:auto;
 justify-content:center;
 align-items:center;
 border:none;
 border-radius:10px;
 background:#2563EB;
 color:#FFFFFF;
-font-size:12px;
+font-size:13px;
 font-weight:600;
 box-shadow:0 4px 12px rgba(37,99,235,.20);
 opacity:${bloqueado ? "0.5" : "1"};
@@ -1872,7 +1935,7 @@ ${pendiente ? "En Espera ⏳" : "Cambiar"}
 
 });
 
-html += "</table></div>";
+html += "</tbody></table></div>";
 
 document
 .getElementById(
@@ -2146,8 +2209,8 @@ Object.keys(etapas).forEach(etapa=>{
 
     <h3>${etapa}</h3>
     <div style="
-width:195px;
-height:195px;
+width:185px;
+height:185px;
 margin:10px auto 12px;
 ">
 
@@ -2980,11 +3043,33 @@ datos.filter(
 x => x.Despues === "VENDIDO"
 ).length;
     let html = `
+
+<div class="tituloModulo">
+
+<h2>
+📑 Auditoría
+</h2>
+
+<p>
+Registro histórico de todos los cambios realizados en el sistema.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
 <input
+
 id="buscarAuditoria"
+
 placeholder="🔍 Buscar usuario..."
+
 style="
-width:300px;
+width:350px;
+padding:12px;
+border-radius:12px;
+border:1px solid #CBD5E1;
+font-size:15px;
 margin-bottom:20px;
 ">
 <div id="resumenAuditoria"
@@ -3034,6 +3119,7 @@ ${vendidos}
 
 <table class="tabla">
 
+<thead>
 <tr>
 
         <th>Fecha</th>
@@ -3071,7 +3157,7 @@ ${vendidos}
 
     });
 
-    html += "</table>";
+    html += "</table></div>";
 
     document
     .getElementById(
@@ -3237,16 +3323,28 @@ document
 
     let html = `
 
-    <h2>Administración de Asesores</h2>
+<div class="tituloModulo">
 
-    <div style="
-        background:white;
-        padding:20px;
-        border-radius:15px;
-        margin-bottom:20px;
-    ">
+<h2>
+👥 Asesores
+</h2>
 
-        <h3>Nuevo Asesor</h3>
+<p>
+Administre los usuarios asesores del sistema.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
+<h3 style="
+margin-top:0;
+margin-bottom:18px;
+font-size:20px;
+color:#0F172A;
+">
+Nuevo Asesor
+</h3>
 
         <input
         id="nuevoUsuario"
@@ -3315,11 +3413,7 @@ gap:10px;
 ">
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     cambiarEstadoAsesor(
     '${a.usuario}'
@@ -3332,11 +3426,7 @@ gap:10px;
     </button>
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     verPasswordAsesor(
     '${a.usuario}'
@@ -3347,11 +3437,7 @@ gap:10px;
     </button>
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     cambiarPasswordAsesor(
     '${a.usuario}'
@@ -3362,12 +3448,7 @@ gap:10px;
     </button>
 
 <button
-style="
-width:auto;
-padding:10px 18px;
-margin:0;
-background:#dc2626;
-"
+class="btnAccionAdmin" style="background:#dc2626;"
 onclick="
 eliminarAsesor(
 '${a.usuario}'
@@ -3387,8 +3468,10 @@ Eliminar
     });
 
     html += `
-    </table>
-    `;
+</table>
+
+</div>
+`;
 
     document
     .getElementById(
@@ -3793,19 +3876,30 @@ document
 
     let html = `
 
-    <h2>Consultas Recibidas</h2>
+<div class="tituloModulo">
 
-    <div style="
-    background:#fff;
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    ">
+<h2>
+📞 Consultas
+</h2>
 
-    <h3>
-    🔔 Últimas Consultas
-    </h3>
+<p>
+Historial de consultas realizadas por los clientes interesados.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
+<h3 style="
+margin-top:0;
+margin-bottom:18px;
+font-size:20px;
+color:#0F172A;
+">
+
+🔔 Últimas Consultas
+
+</h3>
 
     `;
 
@@ -3866,20 +3960,31 @@ border-bottom:1px solid #eee;
 
     <table class="tabla">
 
-        <tr>
+<thead>
 
-            <th>Fecha</th>
+<tr>
+
+<th>Fecha</th>
 
 <th>Etapa</th>
 
 <th>Lote</th>
-            <th>Estado</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Mensaje</th>
 
-        </tr>
+<th>Estado</th>
+
+<th>Nombre</th>
+
+<th>Email</th>
+
+<th>Teléfono</th>
+
+<th>Mensaje</th>
+
+</tr>
+
+</thead>
+
+<tbody>
 
     `;
 
@@ -3907,8 +4012,12 @@ border-bottom:1px solid #eee;
     });
 
     html += `
-    </table>
-    `;
+</tbody>
+
+</table>
+
+</div>
+`;
 
     document
 .getElementById(
@@ -4152,6 +4261,10 @@ let html = `
 
 </tr>
 
+</thead>
+
+<tbody>
+
 `;
 
 solicitudes.forEach(s=>{
@@ -4210,7 +4323,7 @@ Rechazar
 
 });
 
-html += "</table>";
+html += "</tbody></table>";
 
 document
 .getElementById(
