@@ -995,6 +995,68 @@ border-radius:18px;
     margin:6px 0 18px;
 
 }
+
+/*======================================
+        TITULOS MODULOS
+======================================*/
+
+.tituloModulo{
+
+background:#FFFFFF;
+
+border:1px solid #E2E8F0;
+
+border-radius:18px;
+
+padding:22px;
+
+margin-bottom:20px;
+
+box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+}
+
+.tituloModulo h2{
+
+margin:0;
+
+font-size:28px;
+
+color:#0F172A;
+
+}
+
+.tituloModulo p{
+
+margin:8px 0 0;
+
+color:#64748B;
+
+font-size:15px;
+
+}
+.moduloContenido{
+
+background:#FFFFFF;
+
+border-radius:18px;
+
+padding:20px;
+
+box-shadow:0 8px 24px rgba(15,23,42,.05);
+
+border:1px solid #E2E8F0;
+
+margin-top:18px;
+
+}
+
+.btnAccionAdmin{
+width:auto;
+padding:10px 18px;
+margin:0;
+}
+
 /*======================================
         BADGES ESTADO
 ======================================*/
@@ -1308,15 +1370,21 @@ style="overflow-x:auto;">
 id="contenedorSolicitudes"
 style="display:none;">
 
-<h2
-style="
-text-align:center;
-margin-bottom:30px;
-">
+<div class="tituloModulo">
 
-Solicitudes Pendientes
+<h2>
+
+📋 Solicitudes Pendientes
 
 </h2>
+
+<p>
+
+Administre las solicitudes enviadas por los asesores.
+
+</p>
+
+</div>
 
 <div
 style="
@@ -2975,11 +3043,33 @@ datos.filter(
 x => x.Despues === "VENDIDO"
 ).length;
     let html = `
+
+<div class="tituloModulo">
+
+<h2>
+📑 Auditoría
+</h2>
+
+<p>
+Registro histórico de todos los cambios realizados en el sistema.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
 <input
+
 id="buscarAuditoria"
+
 placeholder="🔍 Buscar usuario..."
+
 style="
-width:300px;
+width:350px;
+padding:12px;
+border-radius:12px;
+border:1px solid #CBD5E1;
+font-size:15px;
 margin-bottom:20px;
 ">
 <div id="resumenAuditoria"
@@ -3029,6 +3119,7 @@ ${vendidos}
 
 <table class="tabla">
 
+<thead>
 <tr>
 
         <th>Fecha</th>
@@ -3066,7 +3157,7 @@ ${vendidos}
 
     });
 
-    html += "</table>";
+    html += "</table></div>";
 
     document
     .getElementById(
@@ -3232,16 +3323,28 @@ document
 
     let html = `
 
-    <h2>Administración de Asesores</h2>
+<div class="tituloModulo">
 
-    <div style="
-        background:white;
-        padding:20px;
-        border-radius:15px;
-        margin-bottom:20px;
-    ">
+<h2>
+👥 Asesores
+</h2>
 
-        <h3>Nuevo Asesor</h3>
+<p>
+Administre los usuarios asesores del sistema.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
+<h3 style="
+margin-top:0;
+margin-bottom:18px;
+font-size:20px;
+color:#0F172A;
+">
+Nuevo Asesor
+</h3>
 
         <input
         id="nuevoUsuario"
@@ -3310,11 +3413,7 @@ gap:10px;
 ">
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     cambiarEstadoAsesor(
     '${a.usuario}'
@@ -3327,11 +3426,7 @@ gap:10px;
     </button>
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     verPasswordAsesor(
     '${a.usuario}'
@@ -3342,11 +3437,7 @@ gap:10px;
     </button>
 
     <button
-    style="
-    width:auto;
-    padding:10px 18px;
-    margin:0;
-    "
+    class="btnAccionAdmin"
     onclick="
     cambiarPasswordAsesor(
     '${a.usuario}'
@@ -3357,12 +3448,7 @@ gap:10px;
     </button>
 
 <button
-style="
-width:auto;
-padding:10px 18px;
-margin:0;
-background:#dc2626;
-"
+class="btnAccionAdmin" style="background:#dc2626;"
 onclick="
 eliminarAsesor(
 '${a.usuario}'
@@ -3382,8 +3468,10 @@ Eliminar
     });
 
     html += `
-    </table>
-    `;
+</table>
+
+</div>
+`;
 
     document
     .getElementById(
@@ -3788,19 +3876,30 @@ document
 
     let html = `
 
-    <h2>Consultas Recibidas</h2>
+<div class="tituloModulo">
 
-    <div style="
-    background:#fff;
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-    ">
+<h2>
+📞 Consultas
+</h2>
 
-    <h3>
-    🔔 Últimas Consultas
-    </h3>
+<p>
+Historial de consultas realizadas por los clientes interesados.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
+<h3 style="
+margin-top:0;
+margin-bottom:18px;
+font-size:20px;
+color:#0F172A;
+">
+
+🔔 Últimas Consultas
+
+</h3>
 
     `;
 
@@ -3861,20 +3960,31 @@ border-bottom:1px solid #eee;
 
     <table class="tabla">
 
-        <tr>
+<thead>
 
-            <th>Fecha</th>
+<tr>
+
+<th>Fecha</th>
 
 <th>Etapa</th>
 
 <th>Lote</th>
-            <th>Estado</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Mensaje</th>
 
-        </tr>
+<th>Estado</th>
+
+<th>Nombre</th>
+
+<th>Email</th>
+
+<th>Teléfono</th>
+
+<th>Mensaje</th>
+
+</tr>
+
+</thead>
+
+<tbody>
 
     `;
 
@@ -3902,8 +4012,12 @@ border-bottom:1px solid #eee;
     });
 
     html += `
-    </table>
-    `;
+</tbody>
+
+</table>
+
+</div>
+`;
 
     document
 .getElementById(
@@ -4147,6 +4261,10 @@ let html = `
 
 </tr>
 
+</thead>
+
+<tbody>
+
 `;
 
 solicitudes.forEach(s=>{
@@ -4205,7 +4323,7 @@ Rechazar
 
 });
 
-html += "</table>";
+html += "</tbody></table>";
 
 document
 .getElementById(
