@@ -4212,23 +4212,14 @@ solicitudes
 
 let html = `
 
-<div class="tituloModulo">
-
-<h2>📨 Solicitudes</h2>
-
-<p>
-Solicitudes de cambio de estado pendientes de aprobación.
-</p>
-
-</div>
-
-<div class="moduloContenido">
-
 <input
 id="buscarSolicitudes"
 placeholder="🔍 Buscar usuario o lote..."
 style="
-width:350px;
+width:420px;
+padding:14px;
+border:1px solid #D1D5DB;
+border-radius:14px;
 margin-bottom:18px;
 ">
 
@@ -4317,7 +4308,11 @@ Rechazar
 
 });
 
-html += "</tbody></table>";
+html += `
+</tbody>
+</table>
+</div>
+`;
 
 document
 .getElementById(
