@@ -234,17 +234,20 @@ vertical-align:middle;
 
     display:grid;
 
-    grid-template-columns:270px 1fr;
+    grid-template-columns:320px minmax(0,1fr);
 
-    gap:30px;
+    gap:22px;
 
     align-items:start;
 
-    margin-top:18px;
+}
+#workspace{
 
-    height:calc(100vh - 140px);
+    display:flex;
 
-    overflow:hidden;
+    flex-direction:column;
+
+    min-width:0;
 
 }
 
@@ -252,28 +255,17 @@ vertical-align:middle;
 
 #sidebar{
 
-    background:#FFFFFF;
+    position:sticky;
 
-    border:1px solid #E5E7EB;
+    top:20px;
 
-    border-radius:18px;
+    align-self:start;
 
-    padding:18px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:space-between;
-
-    height:100%;
+    height:calc(100vh - 40px);
 
     overflow:hidden;
 
-    box-shadow:0 10px 35px rgba(15,23,42,.06);
-
 }
-
 .menuItem{
 
     display:flex;
@@ -343,13 +335,13 @@ padding-left:22px;
 
 #contenido{
 
-    width:100%;
-
     display:flex;
 
     flex-direction:column;
 
-    min-height:100%;
+    gap:18px;
+
+    min-width:0;
 
 }
 
@@ -1307,52 +1299,40 @@ margin:0;
 </div>
 
     </aside>
+<main id="workspace">
 
     <div id="contenido">
 
         <div id="cabeceraFija">
 
-    <div id="dashboard"></div>
+            <div id="dashboard"></div>
 
-    <div id="herramientas">
+            <div id="herramientas">
 
-        <input
-        type="text"
-        id="buscarLote"
-    placeholder="🔍 Buscar lote...">
+                <input
+                    type="text"
+                    id="buscarLote"
+                    placeholder="🔍 Buscar lote...">
 
-    <button
-    id="filtroTodos">
+                <button id="filtroTodos">
+                    TODOS
+                </button>
 
-        TODOS
+                <button id="filtroLibres">
+                    LIBRES
+                </button>
 
-    </button>
+                <button id="filtroReservados">
+                    RESERVADOS
+                </button>
 
-    <button
-    id="filtroLibres">
+                <button id="filtroVendidos">
+                    VENDIDOS
+                </button>
 
-        LIBRES
+            </div>
 
-    </button>
-
-    <button
-    id="filtroReservados">
-
-        RESERVADOS
-
-    </button>
-
-    <button
-    id="filtroVendidos">
-
-        VENDIDOS
-
-    </button>
-
-    
-</div>
-
-</div>
+        </div>
 
 <div id="contenedorLotesPrincipal">
 
@@ -1431,6 +1411,11 @@ id="listaSolicitudes">
 </div>
 
 </div>
+
+</main>
+
+</div>
+
 <div id="modalNotificacion"
 style="
 display:none;
