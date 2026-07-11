@@ -2962,25 +2962,7 @@ await sincronizarPanel();
 
 ocultarTodo();
 
-document.getElementById(
-"cabeceraFija"
-).style.display="block";
-
-document.getElementById(
-"dashboard"
-).style.display="grid";
-
-document.getElementById(
-"herramientas"
-).style.display="flex";
-
-document.getElementById(
-"contenedorLotes"
-).style.display =
-"block";
-document.getElementById(
-"panelGraficos"
-).style.display="flex";
+document.getElementById("contenedorLotesPrincipal").style.display="grid";
 
 });
 document
@@ -3043,92 +3025,71 @@ x => x.Despues === "VENDIDO"
 
 <div class="tituloModulo">
 
-<h2>
-📑 Auditoría
-</h2>
+    <h2>📑 Auditoría</h2>
 
-<p>
-Registro histórico de todos los cambios realizados en el sistema.
-</p>
+    <p>Registro histórico de todos los cambios realizados en el sistema.</p>
 
 </div>
 
 <div class="moduloContenido">
 
-<input
+    <input
+        id="buscarAuditoria"
+        placeholder="🔍 Buscar usuario..."
+        style="
+        width:350px;
+        padding:12px;
+        border-radius:12px;
+        border:1px solid #CBD5E1;
+        font-size:15px;
+        margin-bottom:20px;
+    ">
 
-id="buscarAuditoria"
+    <div id="resumenAuditoria"
+    style="
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+    ">
 
-placeholder="🔍 Buscar usuario..."
+        <div class="cardDashboard">
+            <h3 id="totalCambios">${datos.length}</h3>
+            <p>Total Cambios</p>
+        </div>
 
-style="
-width:350px;
-padding:12px;
-border-radius:12px;
-border:1px solid #CBD5E1;
-font-size:15px;
-margin-bottom:20px;
-">
-<div id="resumenAuditoria"
-style="
-display:flex;
-gap:20px;
-margin-bottom:20px;
-">
+        <div class="cardDashboard">
+            <h3 id="totalReservados">${reservados}</h3>
+            <p>🟡 Reservados</p>
+        </div>
 
-<div class="cardDashboard">
+        <div class="cardDashboard">
+            <h3 id="totalVendidos">${vendidos}</h3>
+            <p>🔴 Vendidos</p>
+        </div>
 
-<h3 id="totalCambios">
-${datos.length}
-</h3>
+    </div>
 
-<p>
-Total Cambios
-</p>
-
-</div>
-
-<div class="cardDashboard">
-
-<h3 id="totalReservados">
-${reservados}
-</h3>
-
-<p>
-🟡 Reservados
-</p>
-
-</div>
-
-<div class="cardDashboard">
-
-<h3 id="totalVendidos">
-${vendidos}
-</h3>
-
-<p>
-🔴 Vendidos
-</p>
-
-</div>
-
-</div>
+<div class="contenedorTablaScroll">
 
 <table class="tabla">
 
 <thead>
+
 <tr>
 
-        <th>Fecha</th>
+<th>Fecha</th>
 <th>Usuario</th>
 <th>Etapa</th>
 <th>Lote</th>
 <th>Antes</th>
 <th>Después</th>
 
-      </tr>
+</tr>
 
-    `;
+</thead>
+
+<tbody>
+`;
 
     datos.forEach(item=>{
 
@@ -3154,7 +3115,15 @@ ${vendidos}
 
     });
 
-    html += "</table></div>";
+    html += `
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+`;
 
     document
     .getElementById(
@@ -3322,72 +3291,68 @@ document
 
 <div class="tituloModulo">
 
-<h2>
-👥 Asesores
-</h2>
+    <h2>👥 Asesores</h2>
 
-<p>
-Administre los usuarios asesores del sistema.
-</p>
+    <p>
+        Administración de usuarios asesores registrados.
+    </p>
 
 </div>
 
 <div class="moduloContenido">
 
-<h3 style="
-margin-top:0;
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
 margin-bottom:18px;
-font-size:20px;
-color:#0F172A;
+gap:15px;
+flex-wrap:wrap;
 ">
-Nuevo Asesor
-</h3>
 
-        <input
-        id="nuevoUsuario"
-        placeholder="Usuario">
-
-        <input
-        id="nuevoPassword"
-        placeholder="Contraseña">
-
-        <input
-        id="nuevoNombre"
-        placeholder="Nombre">
-
-        <button
-        onclick="crearAsesor()">
-
-            Guardar Asesor
-
-        </button>
 <input
-    id="buscarAsesor"
-    placeholder="🔍 Buscar asesor por nombre"
-    style="
-    margin-top:20px;
-    ">
+id="buscarAsesor"
+placeholder="🔍 Buscar asesor..."
+style="
+width:320px;
+padding:12px 14px;
+border:1px solid #CBD5E1;
+border-radius:12px;
+font-size:14px;
+">
 
-    </div>
+<button
+class="btnAzul"
+onclick="abrirModalAsesor()">
+➕ Nuevo Asesor
+</button>
 
-    <table class="tabla">
+</div>
 
-        <tr>
+<div class="contenedorTablaScroll">
 
-            <th>Usuario</th>
+<table class="tabla">
 
-            <th>Nombre</th>
+<thead>
 
-            <th>Estado</th>
+<tr>
 
-            <th style="text-align:center;">
-    Acciones
-</th>
+<th>Usuario</th>
 
-        </tr>
+<th>Nombre</th>
 
-    `;
+<th>Correo</th>
 
+<th>Estado</th>
+
+<th>Acción</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+`;
     asesores.forEach(a=>{
 
         html += `
@@ -3465,8 +3430,9 @@ Eliminar
     });
 
     html += `
+</tbody>
 </table>
-
+</div>
 </div>
 `;
 
@@ -3800,38 +3766,16 @@ function activarMenu(id){
 
 }
 function ocultarTodo(){
-document.getElementById("cabeceraFija").style.display="none";
-document.getElementById(
-"panelGraficos"
-).style.display="none";
 
-document.getElementById(
-"dashboard"
-).style.display="none";
+document.getElementById("contenedorLotesPrincipal").style.display="none";
 
-document.getElementById(
-"herramientas"
-).style.display="none";
+document.getElementById("contenedorAuditoria").style.display="none";
 
-document.getElementById(
-"contenedorLotes"
-).style.display="none";
+document.getElementById("contenedorAsesores").style.display="none";
 
-document.getElementById(
-"contenedorAuditoria"
-).style.display="none";
+document.getElementById("contenedorConsultas").style.display="none";
 
-document.getElementById(
-"contenedorAsesores"
-).style.display="none";
-
-document.getElementById(
-"contenedorConsultas"
-).style.display="none";
-
-document.getElementById(
-"contenedorSolicitudes"
-).style.display="none";
+document.getElementById("contenedorSolicitudes").style.display="none";
 
 }
 async function cargarConsultas(){
@@ -3875,13 +3819,11 @@ document
 
 <div class="tituloModulo">
 
-<h2>
-📞 Consultas
-</h2>
+    <h2>📞 Consultas</h2>
 
-<p>
-Historial de consultas realizadas por los clientes interesados.
-</p>
+    <p>
+        Historial de consultas realizadas por los clientes interesados.
+    </p>
 
 </div>
 
@@ -3898,7 +3840,7 @@ color:#0F172A;
 
 </h3>
 
-    `;
+`;
 
     datos
 .slice(0,5)
@@ -3953,9 +3895,11 @@ border-bottom:1px solid #eee;
 
     html += `
 
-    </div>
+</div>
 
-    <table class="tabla">
+<div class="contenedorTablaScroll">
+
+<table class="tabla">
 
 <thead>
 
@@ -4009,11 +3953,15 @@ border-bottom:1px solid #eee;
     });
 
     html += `
+
 </tbody>
 
 </table>
 
 </div>
+
+</div>
+
 `;
 
     document
@@ -4241,7 +4189,31 @@ solicitudes
 
 let html = `
 
+<div class="tituloModulo">
+
+<h2>📨 Solicitudes</h2>
+
+<p>
+Solicitudes de cambio de estado pendientes de aprobación.
+</p>
+
+</div>
+
+<div class="moduloContenido">
+
+<input
+id="buscarSolicitudes"
+placeholder="🔍 Buscar usuario o lote..."
+style="
+width:350px;
+margin-bottom:18px;
+">
+
+<div class="contenedorTablaScroll">
+
 <table class="tabla">
+
+<thead>
 
 <tr>
 
@@ -4252,8 +4224,11 @@ let html = `
 <th>Etapa</th>
 
 <th>Lote</th>
+
 <th>Actual</th>
+
 <th>Solicita</th>
+
 <th>Acción</th>
 
 </tr>
@@ -4261,7 +4236,6 @@ let html = `
 </thead>
 
 <tbody>
-
 `;
 
 solicitudes.forEach(s=>{
