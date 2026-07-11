@@ -2962,7 +2962,13 @@ await sincronizarPanel();
 
 ocultarTodo();
 
-document.getElementById("contenedorLotesPrincipal").style.display="grid";
+document
+.getElementById("cabeceraFija")
+.style.display="block";
+
+document
+.getElementById("contenedorLotesPrincipal")
+.style.display="grid";
 
 });
 document
@@ -2974,6 +2980,10 @@ async ()=>{
 activarMenu("btnAuditoria");
 
 await sincronizarPanel();
+
+document
+.getElementById("cabeceraFija")
+.style.display="none";
 
 await cargarAuditoria();
 
@@ -3215,6 +3225,10 @@ async ()=>{
 
 activarMenu("btnAsesores");
 
+document
+.getElementById("cabeceraFija")
+.style.display="none";
+
 await cargarAsesores();
 
 }
@@ -3224,9 +3238,14 @@ document
 .addEventListener(
 "click",
 async ()=>{
+
 activarMenu("btnConsultas");
 
 await sincronizarPanel();
+
+document
+.getElementById("cabeceraFija")
+.style.display="none";
 
 await cargarConsultas();
 
@@ -3239,6 +3258,7 @@ document
 .addEventListener(
 "click",
 async ()=>{
+
 activarMenu("btnSolicitudes");
 
 await sincronizarPanel();
@@ -3246,11 +3266,14 @@ await sincronizarPanel();
 ocultarTodo();
 
 document
+.getElementById("cabeceraFija")
+.style.display="none";
+
+document
 .getElementById(
 "contenedorSolicitudes"
 )
-.style.display =
-"block";
+.style.display="block";
 
 await cargarSolicitudes();
 
