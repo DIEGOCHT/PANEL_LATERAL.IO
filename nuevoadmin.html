@@ -279,7 +279,51 @@ font-size:13px;
     box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
+.menuItem{
 
+    width:100%;
+
+    height:52px;
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:14px;
+
+    padding:0 18px;
+
+    margin-bottom:8px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:transparent;
+
+    color:#334155;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+}
 .iconoMenu{
 
     width:24px;
@@ -389,6 +433,12 @@ font-size:13px;
     font-weight:700;
 
     color:#EF4444;
+
+}
+
+.menuItem{
+
+    line-height:1;
 
 }
 
@@ -1386,6 +1436,22 @@ position:relative;
 
 }
 
+.sidebarTitulo{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:#94A3B8;
+
+    text-transform:uppercase;
+
+    margin-bottom:10px;
+
+}
+
 .estadoSistema{
 
     display:flex;
@@ -1471,6 +1537,60 @@ position:relative;
     text-transform:uppercase;
 
     margin-bottom:12px;
+
+}
+
+.estadoSistema{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+    margin-bottom:12px;
+
+}
+
+.estadoSistema .punto{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 10px rgba(34,197,94,.45);
+
+    flex-shrink:0;
+
+}
+
+.estadoSistema .texto{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+}
+
+.estadoSistema .texto strong{
+
+    font-size:13px;
+
+    color:#0F172A;
 
 }
 
@@ -1724,7 +1844,6 @@ margin:0;
     justify-content:flex-start !important;
 
     gap:14px !important;
-line-height:1;
 
 }
 
@@ -3576,19 +3695,19 @@ document
 "click",
 async ()=>{
 
-    activarMenu("btnLotes");
+activarMenu("btnLotes");
 
-    ocultarTodo();
+await sincronizarPanel();
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="block";
+ocultarTodo();
 
-    document
-    .getElementById("contenedorLotesPrincipal")
-    .style.display="grid";
+document
+.getElementById("cabeceraFija")
+.style.display="block";
 
-    sincronizarPanel();
+document
+.getElementById("contenedorLotesPrincipal")
+.style.display="grid";
 
 });
 document
