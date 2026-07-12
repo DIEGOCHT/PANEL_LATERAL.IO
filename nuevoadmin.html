@@ -279,39 +279,58 @@ font-size:13px;
 }
 .menuItem{
 
+    width:100%;
+
+    height:48px;
+
     display:flex;
 
     align-items:center;
 
-    justify-content:flex-start;
-
     gap:12px;
 
-    width:100%;
+    padding:0 16px;
 
-    height:44px;
-
-    padding:0 14px;
+    border:none;
 
     border-radius:12px;
 
     background:transparent;
 
-    color:#334155;
+    color:#475569;
 
-    font-size:14px;
+    font-size:15px;
 
     font-weight:600;
 
-    transition:.25s;
+    text-align:left;
 
-    white-space:nowrap;
+    cursor:pointer;
+
+    transition:all .25s;
+
+}
+.iconoMenu{
+
+    width:22px;
+
+    min-width:22px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+    flex-shrink:0;
 
 }
 
 .menuItem:hover{
 
-    background:#EFF6FF;
+    background:#EEF4FF;
 
     color:#2563EB;
 
@@ -323,7 +342,7 @@ font-size:13px;
 
     color:#FFFFFF;
 
-    box-shadow:0 10px 25px rgba(37,99,235,.20);
+    box-shadow:0 8px 20px rgba(37,99,235,.20);
 
 }
 .menuItem span{
@@ -338,6 +357,19 @@ font-size:13px;
 
     line-height:1;
 white-space:nowrap;
+
+}
+#contadorSolicitudes{
+
+    flex:0;
+
+    margin-left:auto;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#EF4444;
 
 }
 
@@ -709,6 +741,31 @@ white-space:nowrap;
 
 }
 
+.modalPasswordCard{
+
+    background:#FFFFFF;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    min-width:350px;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(15,23,42,.20);
+
+}
+
+.passwordValor{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin:20px 0;
+
+}
 .btnGris{
 
     width:auto;
@@ -1330,6 +1387,113 @@ width:auto;
 padding:10px 18px;
 margin:0;
 }
+.barraModulo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+
+}
+
+.filaAcciones{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.btnEliminar{
+
+    background:#DC2626;
+
+}
+.btnCancelar{
+
+    background:#6B7280;
+
+}
+
+.btnCancelar:hover{
+
+    background:#4B5563;
+
+}
+
+.btnGuardar{
+
+    background:#2563EB;
+
+}
+
+.btnGuardar:hover{
+
+    background:#1D4ED8;
+
+}
+
+.btnEliminar:hover{
+
+    background:#B91C1C;
+
+}
+.filaBotones{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.inputModulo{
+
+    width:320px;
+
+    padding:12px 14px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    background:#FFFFFF;
+
+}
+
+.seccionBuscador{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+
+}
 
 /*======================================
         BADGES ESTADO
@@ -1510,30 +1674,29 @@ margin:0;
 
 <hr class="separadorSidebar">
 
-        <button id="btnLotes" class="menuItem activo">
-            🏡
-            <span>Lotes</span>
-        </button>
+        <button id="btnLotes" class="menuItem">
+    <span class="iconoMenu">🏡</span>
+    <span>Lotes</span>
+</button>
 
         <button id="btnSolicitudes" class="menuItem">
-            📋
-            <span>Solicitudes</span>
-            <span id="contadorSolicitudes"></span>
+            <span class="iconoMenu">📋</span>
+<span>Solicitudes</span>
         </button>
 
         <button id="btnConsultas" class="menuItem">
-            📞
-            <span>Consultas</span>
+            <span class="iconoMenu">📞</span>
+<span>Consultas</span>
         </button>
 
         <button id="btnAsesores" class="menuItem">
-            👥
-            <span>Asesores</span>
+            <span class="iconoMenu">👥</span>
+<span>Asesores</span>
         </button>
 
         <button id="btnAuditoria" class="menuItem">
-            📑
-            <span>Auditoría</span>
+            <span class="iconoMenu">📑</span>
+<span>Auditoría</span>
         </button>
 <hr style="border:none;border-top:1px solid #E2E8F0;margin:18px 0;">
 
@@ -1739,23 +1902,24 @@ Aceptar
 
         <div class="accionesModal">
 
-            <button
-            id="btnCancelarEstado">
+    <button
+    id="btnCancelarEstado"
+    class="btnGris">
 
-                Cancelar
+        Cancelar
 
-            </button>
+    </button>
 
-            <button
-type="button"
-id="btnGuardarEstado"
-class="btnAzul">
+    <button
+    type="button"
+    id="btnGuardarEstado"
+    class="btnAzul">
 
-Guardar
+        Guardar
 
-</button>
+    </button>
 
-        </div>
+</div>
 
     </div>
 
@@ -1819,33 +1983,22 @@ align-items:center;
 z-index:9999;
 ">
 
-    <div style="
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    min-width:350px;
-    text-align:center;
-    ">
+    <div class="modalPasswordCard">
 
         <h3>
             Contraseña del asesor
         </h3>
 
         <div
-        id="passwordAsesor"
-        style="
-        font-size:22px;
-        font-weight:bold;
-        margin:20px 0;
-        ">
+id="passwordAsesor"
+class="passwordValor">
         ********
         </div>
 
        <button
+class="btnGris"
 onclick="
-document
-.getElementById('modalPassword')
-.style.display='none'
+document.getElementById('modalPassword').style.display='none'
 ">
 
 Cerrar
@@ -3443,25 +3596,15 @@ await apiPost("listarAsesores");
 
 <div class="moduloContenido">
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
-gap:15px;
-flex-wrap:wrap;
-">
+<div class="seccionBuscador">
 
 <input
+
 id="buscarAsesor"
-placeholder="🔍 Buscar asesor..."
-style="
-width:320px;
-padding:12px 14px;
-border:1px solid #CBD5E1;
-border-radius:12px;
-font-size:14px;
-">
+
+class="inputModulo"
+
+placeholder="🔍 Buscar asesor...">
 
 <button
 class="btnAzul"
@@ -3509,12 +3652,7 @@ onclick="abrirModalAsesor()">
 
             <td style="text-align:center;">
 
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-">
+<div class="filaBotones">
 
     <button
     class="btnAccionAdmin"
@@ -3552,7 +3690,7 @@ gap:10px;
     </button>
 
 <button
-class="btnAccionAdmin" style="background:#dc2626;"
+class="btnAccionAdmin btnEliminar"
 onclick="
 eliminarAsesor(
 '${a.usuario}'
