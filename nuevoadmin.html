@@ -266,22 +266,24 @@ font-size:13px;
 
 #sidebar{
 
+    width:220px;
+
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
-    border-radius:18px;
+    border-radius:20px;
 
     padding:18px;
 
-    box-shadow:0 8px 24px rgba(15,23,42,.05);
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
 
 }
 .menuItem{
 
     width:100%;
 
-    height:48px;
+    height:42px;
 
     display:flex;
 
@@ -1265,7 +1267,7 @@ position:relative;
 
     gap:14px;
 
-    margin-bottom:22px;
+    margin-bottom:16px;
 
 }
 
@@ -1323,7 +1325,7 @@ position:relative;
 
     border-top:1px solid #E2E8F0;
 
-    margin:6px 0 18px;
+    margin:6px 0 12px;
 
 }
 
@@ -1680,9 +1682,14 @@ margin:0;
 </button>
 
         <button id="btnSolicitudes" class="menuItem">
-            <span class="iconoMenu">📋</span>
-<span>Solicitudes</span>
-        </button>
+
+    <span class="iconoMenu">📋</span>
+
+    <span>Solicitudes</span>
+
+    <span id="contadorSolicitudes"></span>
+
+</button>
 
         <button id="btnConsultas" class="menuItem">
             <span class="iconoMenu">📞</span>
@@ -1698,7 +1705,7 @@ margin:0;
             <span class="iconoMenu">📑</span>
 <span>Auditoría</span>
         </button>
-<hr style="border:none;border-top:1px solid #E2E8F0;margin:18px 0;">
+<hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
 
 <div id="sidebarInfo">
 
