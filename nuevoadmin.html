@@ -5694,56 +5694,39 @@ function filtrarLotes(){
 
     const texto =
     document
-    .getElementById(
-    "buscarLote"
-    )
+    .getElementById("buscarLote")
     .value
     .toUpperCase();
 
-    let datos = todosLosLotes;
+    let datos = todosLosLotes.filter(lote=>
 
-if(etapaSeleccionada !== ""){
-
-    datos = datos.filter(
-
-        lote => lote.Etapa === etapaSeleccionada
+        lote.Lote.toUpperCase().includes(texto)
 
     );
 
-}
+    if(filtroActual !== "TODOS"){
 
-datos = datos.filter(
+        datos = datos.filter(lote=>
 
-    lote =>
+            lote.Estado === filtroActual
 
-    lote.Lote
-    .toUpperCase()
-    .includes(texto)
-
-);
-
-    if(
-    filtroActual !==
-    "TODOS"
-    ){
-
-        datos =
-        datos.filter(
-        lote=>
-
-        lote.Estado ===
-        filtroActual
         );
 
     }
 
-    lotesFiltrados = datos;
+    if(etapaSeleccionada){
 
-cantidadVisible = CARGA_LOTES;
+        datos = datos.filter(lote=>
 
-renderizarLotes();
+            lote.Etapa === etapaSeleccionada
 
-actualizarFiltrosActivos();
+        );
+
+    }
+
+    renderizarLotes(datos);
+
+    actualizarFiltrosActivos();
 
 }
 document
