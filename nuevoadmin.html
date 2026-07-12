@@ -1774,15 +1774,17 @@ margin:0;
 
 .menuItem .iconoMenu{
 
-    display:flex;
+    display:inline-flex;
 
     align-items:center;
 
     justify-content:center;
 
-    width:28px;
+    width:22px;
 
-    min-width:28px;
+    min-width:22px;
+
+    height:22px;
 
     flex-shrink:0;
 
@@ -1790,21 +1792,27 @@ margin:0;
 
 .menuItem .iconoMenu svg{
 
-    width:20px;
+    width:18px;
 
-    height:20px;
+    height:18px;
 
     display:block;
+
+    flex-shrink:0;
 
 }
 
 .menuItem > span:not(.iconoMenu){
 
-    display:block;
+    display:flex;
+
+    align-items:center;
 
     line-height:1;
 
     white-space:nowrap;
+
+    flex:1;
 
 }
 </style>
