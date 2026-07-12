@@ -2561,9 +2561,9 @@ resultado.nombre +
 resultado.rol +
 "</p>";
 
-await cargarLotes();
+cargarLotes();
 
-await verificarNotificaciones();
+verificarNotificaciones();
 
         }
         else{
@@ -2608,9 +2608,33 @@ let auditoriaCache = [];
 
 let consultasCache = [];
 
+let asesoresCache = [];
+
+let solicitudesCache = [];
+
 let totalSolicitudesAnterior = 0;
 
 let colaNotificaciones = [];
+
+/*=========================================
+        CACHE DEL PANEL
+=========================================*/
+
+let cache = {
+
+    lotes:0,
+
+    consultas:0,
+
+    auditoria:0,
+
+    asesores:0,
+
+    solicitudes:0
+
+};
+
+const TIEMPO_CACHE = 30000; // 30 segundos
 
 
 function renderizarLotes(datos){
@@ -3641,15 +3665,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnAuditoria");
+    activarMenu("btnAuditoria");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-document
-.getElementById("cabeceraFija")
-.style.display="none";
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
 
-await cargarAuditoria();
+    document
+    .getElementById("contenedorAuditoria")
+    .style.display="block";
+
+    cargarAuditoria();
 
 }
 );
@@ -3884,13 +3912,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnAsesores");
+    activarMenu("btnAsesores");
 
-document
-.getElementById("cabeceraFija")
-.style.display="none";
+    ocultarTodo();
 
-await cargarAsesores();
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
+
+    document
+    .getElementById("contenedorAsesores")
+    .style.display="block";
+
+    cargarAsesores();
 
 }
 );
@@ -3900,15 +3934,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnConsultas");
+    activarMenu("btnConsultas");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-document
-.getElementById("cabeceraFija")
-.style.display="none";
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
 
-await cargarConsultas();
+    document
+    .getElementById("contenedorConsultas")
+    .style.display="block";
+
+    cargarConsultas();
 
 }
 );
@@ -3920,26 +3958,23 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnSolicitudes");
+    activarMenu("btnSolicitudes");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-ocultarTodo();
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
 
-document
-.getElementById("cabeceraFija")
-.style.display="none";
+    document
+    .getElementById(
+    "contenedorSolicitudes"
+    )
+    .style.display="block";
 
-document
-.getElementById(
-"contenedorSolicitudes"
-)
-.style.display="block";
+    await cargarSolicitudes();
 
-await cargarSolicitudes();
-
-}
-);
+});
 
 async function cargarAsesores(){
 
@@ -4394,10 +4429,32 @@ document
 .style.display =
 "block";
 
-    const datos =
-await apiGet(
-"?action=consultas"
-);
+    let datos;
+
+const ahora = Date.now();
+
+if(
+
+consultasCache.length > 0 &&
+
+(ahora - cache.consultas) < TIEMPO_CACHE
+
+){
+
+    datos = consultasCache;
+
+}
+else{
+
+    datos = await apiGet(
+    "?action=consultas"
+    );
+
+    consultasCache = datos;
+
+    cache.consultas = ahora;
+
+}
 
     // Más recientes primero
     datos.sort((a,b)=>{
@@ -4654,15 +4711,17 @@ localStorage.getItem("rol");
 
 try{
 
-const respuesta =
-await fetch(API_URL);
+const [respuestaLotes, respuestaPendientes] =
+await Promise.all([
+
+    fetch(API_URL),
+
+    fetch(API_URL + "?action=solicitudesPendientes")
+
+]);
 
 const nuevos =
-await respuesta.json();
-const respuestaPendientes =
-await fetch(
-API_URL + "?action=solicitudesPendientes"
-);
+await respuestaLotes.json();
 
 solicitudesPendientes =
 await respuestaPendientes.json();
@@ -4707,18 +4766,6 @@ error
 async function refrescarSistema(){
 
     await sincronizarPanel();
-
-    filtrarLotes();
-
-    actualizarDashboard(todosLosLotes);
-
-    renderizarGraficosPorEtapa(todosLosLotes);
-
-    if(localStorage.getItem("rol")==="ADMIN"){
-
-        actualizarContadorSolicitudes();
-
-    }
 
 }
 async function cargarSolicitudes(){
