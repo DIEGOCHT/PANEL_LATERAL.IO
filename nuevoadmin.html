@@ -3343,6 +3343,24 @@ function filtrarPorEstadoDesdeGrafico(estado){
     filtrarLotes();
 
 }
+function filtrarPorEtapa(etapa){
+
+    if(etapaSeleccionada===etapa){
+
+        etapaSeleccionada="";
+
+    }
+    else{
+
+        etapaSeleccionada=etapa;
+
+    }
+
+    filtroActual="TODOS";
+
+    filtrarLotes();
+
+}
 function actualizarFiltrosActivos(){
 
     const barra = document.getElementById("barraFiltrosActivos");
@@ -5696,16 +5714,6 @@ function filtrarLotes(){
 
     );
 
-    if(filtroActual !== "TODOS"){
-
-        datos = datos.filter(lote=>
-
-            lote.Estado === filtroActual
-
-        );
-
-    }
-
     if(etapaSeleccionada){
 
         datos = datos.filter(lote=>
@@ -5715,12 +5723,21 @@ function filtrarLotes(){
         );
 
     }
+if(filtroActual !== "TODOS"){
+
+        datos = datos.filter(lote=>
+
+            lote.Estado === filtroActual
+
+        );
+
+    }
 
     renderizarLotes(datos);
 
-actualizarDashboard(datos);
-
 actualizarFiltrosActivos();
+
+actualizarBotonesFiltro();
 
 }
 document
