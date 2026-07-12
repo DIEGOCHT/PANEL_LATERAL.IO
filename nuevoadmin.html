@@ -2691,6 +2691,11 @@ let filtroActual = "TODOS";
 let etapaSeleccionada = "";
 
 let solicitudesPendientes = [];
+let lotesFiltrados = [];
+
+let cantidadVisible = 50;
+
+const CARGA_LOTES = 50;
 
 let auditoriaCache = [];
 
@@ -3101,7 +3106,6 @@ transition:.2s;
 "
 onmouseover="this.style.color='#2563EB'"
 onmouseout="this.style.color='#0F172A'"
-onclick="filtrarPorEtapa('${etapa}')">
 onclick="filtrarPorEtapa('${etapa}')">
 
 ${etapa}
@@ -5733,7 +5737,11 @@ datos = datos.filter(
 
     }
 
-    renderizarLotes(datos);
+    lotesFiltrados = datos;
+
+cantidadVisible = CARGA_LOTES;
+
+renderizarLotes();
 
 actualizarFiltrosActivos();
 
