@@ -73,16 +73,25 @@ input{
 }
 
 button{
-    width:100%;
+
     margin-top:20px;
+
     padding:14px;
+
     border:none;
+
     border-radius:30px;
+
     background:#3f4d5d;
+
     color:white;
+
     font-size:16px;
+
     font-weight:bold;
+
     cursor:pointer;
+
 }
 
 #error{
@@ -814,6 +823,10 @@ font-size:13px;
 #filtroLibres,
 #filtroReservados,
 #filtroVendidos{
+
+    width:auto;
+
+    flex:none;
 
     height:42px;
 
@@ -2227,101 +2240,6 @@ document
 html;
 
 }
-
-/*
-function actualizarFila(lote){
-
-const id =
-
-"fila_" +
-
-(lote.Etapa+"_"+lote.Lote)
-
-.replace(/\s+/g,"_");
-
-const fila =
-document.getElementById(id);
-
-if(!fila){
-return;
-}
-
-let clase="";
-
-if(lote.Estado==="LIBRE"){
-
-clase="estado-libre";
-
-}
-else if(lote.Estado==="RESERVADO"){
-
-clase="estado-reservado";
-
-}
-else{
-
-clase="estado-vendido";
-
-}
-
-fila.children[2].innerHTML = `
-<span class="badge ${lote.Estado.toLowerCase()}">
-${lote.Estado}
-</span>
-`;
-
-const boton = fila.children[5].querySelector("button");
-
-if(boton){
-
-const rol =
-localStorage.getItem("rol");
-
-const pendiente =
-solicitudesPendientes.find(function(s){
-
-return(
-
-s.Etapa===lote.Etapa &&
-
-s.Lote===lote.Lote
-
-);
-
-});
-
-const bloqueado =
-
-(rol==="ASESOR" &&
-
-(
-
-lote.Estado==="VENDIDO" ||
-
-lote.Estado==="RESERVADO"
-
-))
-
-||
-
-pendiente;
-
-boton.disabled = bloqueado;
-
-boton.style.opacity =
-bloqueado ? "0.5":"1";
-
-boton.textContent =
-pendiente
-?
-"En Espera ⏳"
-:
-"Cambiar";
-
-}
-
-}
-*/
 
 function actualizarDashboard(datos){
 
