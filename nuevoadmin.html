@@ -322,6 +322,7 @@ font-size:13px;
     overflow:hidden;
 
     white-space:nowrap;
+line-height:1;
 
 }
 .iconoMenu{
@@ -433,12 +434,6 @@ font-size:13px;
     font-weight:700;
 
     color:#EF4444;
-
-}
-
-.menuItem{
-
-    line-height:1;
 
 }
 
@@ -1436,22 +1431,6 @@ position:relative;
 
 }
 
-.sidebarTitulo{
-
-    font-size:11px;
-
-    font-weight:700;
-
-    letter-spacing:1px;
-
-    color:#94A3B8;
-
-    text-transform:uppercase;
-
-    margin-bottom:10px;
-
-}
-
 .estadoSistema{
 
     display:flex;
@@ -1537,60 +1516,6 @@ position:relative;
     text-transform:uppercase;
 
     margin-bottom:12px;
-
-}
-
-.estadoSistema{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    background:#F8FAFC;
-
-    border:1px solid #E2E8F0;
-
-    margin-bottom:12px;
-
-}
-
-.estadoSistema .punto{
-
-    width:10px;
-
-    height:10px;
-
-    border-radius:50%;
-
-    background:#22C55E;
-
-    box-shadow:0 0 10px rgba(34,197,94,.45);
-
-    flex-shrink:0;
-
-}
-
-.estadoSistema .texto{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:2px;
-
-}
-
-.estadoSistema .texto strong{
-
-    font-size:13px;
-
-    color:#0F172A;
 
 }
 
@@ -3695,19 +3620,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnLotes");
+    activarMenu("btnLotes");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-ocultarTodo();
+    document
+    .getElementById("cabeceraFija")
+    .style.display="block";
 
-document
-.getElementById("cabeceraFija")
-.style.display="block";
+    document
+    .getElementById("contenedorLotesPrincipal")
+    .style.display="grid";
 
-document
-.getElementById("contenedorLotesPrincipal")
-.style.display="grid";
+    sincronizarPanel();
 
 });
 document
