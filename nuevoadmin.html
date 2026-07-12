@@ -2633,8 +2633,58 @@ let cache = {
     solicitudes:0
 
 };
+/*=========================================
+      ESTADO DEL DASHBOARD
+=========================================*/
 
+let resumenDashboard = {
+
+    total:-1,
+
+    libres:-1,
+
+    reservados:-1,
+
+    vendidos:-1
+
+};
+/*=========================================
+        CACHE DE GRÁFICOS
+=========================================*/
+
+let resumenGraficos = {};
+/*=========================================
+      ÚLTIMA SINCRONIZACIÓN
+=========================================*/
+
+let ultimoEstadoLotes = "";
 const TIEMPO_CACHE = 30000; // 30 segundos
+
+/*=========================================
+        REFERENCIAS DEL DOM
+=========================================*/
+
+const UI = {
+
+    dashboard: document.getElementById("dashboard"),
+
+    contenedorLotes: document.getElementById("contenedorLotes"),
+
+    panelGraficos: document.getElementById("panelGraficos"),
+
+    contadorSolicitudes: document.getElementById("contadorSolicitudes"),
+
+    ultimaActualizacion: document.getElementById("ultimaActualizacion"),
+
+    contenedorConsultas: document.getElementById("contenedorConsultas"),
+
+    contenedorAuditoria: document.getElementById("contenedorAuditoria"),
+
+    contenedorAsesores: document.getElementById("contenedorAsesores"),
+
+    listaSolicitudes: document.getElementById("listaSolicitudes")
+
+};
 
 
 function renderizarLotes(datos){
@@ -2754,13 +2804,7 @@ ${pendiente ? "En Espera ⏳" : "Cambiar"}
 });
 
 html += "</tbody></table></div>";
-
-document
-.getElementById(
-"contenedorLotes"
-)
-.innerHTML =
-html;
+UI.contenedorLotes.innerHTML = html;
 
 }
 
@@ -2783,12 +2827,31 @@ const vendidos =
 datos.filter(
 x=>x.Estado==="VENDIDO"
 ).length;
+if(
 
-document
-.getElementById(
-"dashboard"
-)
-.innerHTML = `
+    resumenDashboard.total === total &&
+
+    resumenDashboard.libres === libres &&
+
+    resumenDashboard.reservados === reservados &&
+
+    resumenDashboard.vendidos === vendidos
+
+){
+
+    return;
+
+}
+
+resumenDashboard.total = total;
+
+resumenDashboard.libres = libres;
+
+resumenDashboard.reservados = reservados;
+
+resumenDashboard.vendidos = vendidos;
+
+UI.dashboard.innerHTML = `
 
 <div class="cardDashboard">
 
@@ -2852,8 +2915,7 @@ document
 
 function renderizarGraficosPorEtapa(datos){
 
-const panel =
-document.getElementById("panelGraficos");
+const panel = UI.panelGraficos;
 
 if(!panel){
     return;
@@ -2927,6 +2989,13 @@ Object.keys(etapas).forEach(etapa=>{
         e.LIBRE +
         e.RESERVADO +
         e.VENDIDO;
+const estadoActual =
+
+e.LIBRE + "|" +
+
+e.RESERVADO + "|" +
+
+e.VENDIDO;
 
     html += `
 
@@ -2998,6 +3067,25 @@ return `
 });
 
 panel.innerHTML=html;
+if(
+
+JSON.stringify(resumenGraficos) ===
+
+JSON.stringify(etapas)
+
+){
+
+    return;
+
+}
+
+resumenGraficos =
+
+JSON.parse(
+
+JSON.stringify(etapas)
+
+);
 Object.keys(etapas).forEach(etapa=>{
 
     const e=etapas[etapa];
@@ -3160,22 +3248,32 @@ function filtrarPorEstadoDesdeGrafico(estado){
 }
 async function cargarLotes(){
 
-    const datos =
-await apiGet();
+    try{
 
-    todosLosLotes = datos;
+const [
 
-try{
+datos,
 
-solicitudesPendientes =
-await apiGet(
-"?action=solicitudesPendientes"
-);
+pendientes
+
+] = await Promise.all([
+
+    apiGet(),
+
+    apiGet("?action=solicitudesPendientes")
+
+]);
+
+todosLosLotes = datos;
+
+solicitudesPendientes = pendientes;
 
 }
 catch(error){
 
-solicitudesPendientes = [];
+    todosLosLotes = [];
+
+    solicitudesPendientes = [];
 
 }
 
@@ -3679,8 +3777,7 @@ async ()=>{
 
     cargarAuditoria();
 
-}
-);
+});
 async function cargarAuditoria(){
 
 const rol =
@@ -4728,13 +4825,24 @@ await respuestaPendientes.json();
 
 // Reemplazar completamente la información local
 todosLosLotes = nuevos;
+const estadoActualLotes = JSON.stringify(datos);
+
+if(estadoActualLotes === ultimoEstadoLotes){
+
+    actualizarContadorSolicitudes();
+
+    return;
+
+}
+
+ultimoEstadoLotes = estadoActualLotes;
 
 // Volver a pintar toda la interfaz
-filtrarLotes();
-
 actualizarDashboard(todosLosLotes);
 
 renderizarGraficosPorEtapa(todosLosLotes);
+
+filtrarLotes();
 
 if(rol === "ADMIN"){
 
@@ -5486,7 +5594,7 @@ document
 )
 .onclick = ()=>{
 
-filtroActual="TODOS";
+filtroActual = "TODOS";
 
 filtrarLotes();
 
