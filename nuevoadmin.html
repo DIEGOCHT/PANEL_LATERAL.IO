@@ -251,6 +251,8 @@ font-size:13px;
 
     align-items:start;
 
+    min-height:100vh;
+
 }
 #workspace{
 
@@ -265,6 +267,12 @@ font-size:13px;
 /* SIDEBAR */
 
 #sidebar{
+
+    position:sticky;
+
+    top:24px;
+
+    align-self:start;
 
     width:240px;
 
@@ -1064,11 +1072,8 @@ overflow-x:hidden;
     top:0;
 
     width:100%;
-min-width:0;
 
-    max-height:calc(100vh - 16px);
-
-    overflow-y:auto;
+    min-width:0;
 
     padding-right:4px;
 
@@ -3373,14 +3378,18 @@ function actualizarFiltrosActivos(){
         <div class="filtroActivo">
             📍 ${etapaSeleccionada}
             <button onclick="
-                etapaSeleccionada='';
+    etapaSeleccionada='';
 
-actualizarDashboard(todosLosLotes);
+    filtroActual='TODOS';
 
-filtrarLotes();
+    document.getElementById('buscarLote').value='';
 
-renderizarGraficosPorEtapa(todosLosLotes);
-            ">✕</button>
+    filtrarLotes();
+
+    renderizarGraficosPorEtapa(todosLosLotes);
+
+    actualizarBotonesFiltro();
+">✕</button>
         </div>`;
     }
 
