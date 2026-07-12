@@ -287,7 +287,11 @@ font-size:13px;
 
     display:flex;
 
+    flex-direction:row;
+
     align-items:center;
+
+    justify-content:flex-start;
 
     gap:14px;
 
@@ -311,24 +315,28 @@ font-size:13px;
 
     cursor:pointer;
 
-    transition:all .25s;
-position:relative;
+    transition:.25s;
 
-overflow:hidden;
+    position:relative;
+
+    overflow:hidden;
+
+    white-space:nowrap;
 
 }
 .iconoMenu{
 
     width:24px;
-min-width:24px;
 
-    height:22px;
+    min-width:24px;
+
+    height:24px;
 
     display:flex;
 
-    justify-content:center;
-
     align-items:center;
+
+    justify-content:center;
 
     flex-shrink:0;
 
@@ -1824,61 +1832,7 @@ margin:0;
     font-size:14px;
 
 }
-/* ===== CORRECCIÓN MENÚ LATERAL ===== */
 
-.menuItem{
-
-    display:flex !important;
-
-    flex-direction:row !important;
-
-    align-items:center !important;
-
-    justify-content:flex-start !important;
-
-    flex-wrap:nowrap !important;
-
-}
-
-.menuItem .iconoMenu{
-
-    display:flex !important;
-
-    align-items:center !important;
-
-    justify-content:center !important;
-
-    width:24px !important;
-
-    min-width:24px !important;
-
-    height:24px !important;
-
-    margin-right:14px !important;
-
-    flex-shrink:0 !important;
-
-}
-
-.menuItem .iconoMenu svg{
-
-    width:20px;
-
-    height:20px;
-
-    display:block;
-
-}
-
-.menuItem > span:not(.iconoMenu){
-
-    display:inline-block !important;
-
-    white-space:nowrap !important;
-
-    line-height:1 !important;
-
-}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
