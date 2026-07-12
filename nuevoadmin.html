@@ -1083,15 +1083,19 @@ min-width:0;
 
 .cardGrafico h3{
 
-    margin:0 0 8px;
+    margin:0;
 
     text-align:center;
 
-    font-size:28px;
+    font-size:13px;
 
-    font-weight:700;
+    font-weight:600;
 
     color:#0F172A;
+
+    letter-spacing:.5px;
+
+    line-height:1.2;
 
 }
 /* TABLAS */
@@ -2613,6 +2617,8 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
+let etapaSeleccionada = "";
+
 let solicitudesPendientes = [];
 
 let auditoriaCache = [];
@@ -3014,7 +3020,16 @@ e.VENDIDO;
 
 <div class="tituloGrafico">
 
-    <h3>${etapa}</h3>
+    <h3
+style="
+cursor:pointer;
+user-select:none;
+"
+onclick="filtrarPorEtapa('${etapa}')">
+
+${etapa}
+
+</h3>
 
 </div>
     <div style="
@@ -3182,11 +3197,34 @@ offset(context){
 },
 onClick(event,elements){
 
+    const chart = event.chart;
+
+    const meta = chart.getDatasetMeta(0);
+
+    if(!meta.data.length) return;
+
+    const centroX = meta.data[0].x;
+    const centroY = meta.data[0].y;
+
+    const dx = event.x - centroX;
+    const dy = event.y - centroY;
+
+    const distancia = Math.sqrt(dx*dx + dy*dy);
+
+    // Radio aproximado del agujero central
+    if(distancia < 45){
+
+        filtrarPorEtapa(etapa);
+
+        return;
+
+    }
+
     if(!elements.length) return;
 
     const indice = elements[0].index;
 
-    const estados = [
+    const estados=[
 
         "LIBRE",
 
@@ -3196,9 +3234,7 @@ onClick(event,elements){
 
     ];
 
-    const estado = estados[indice];
-
-    filtrarPorEstadoDesdeGrafico(estado);
+    filtrarPorEstadoDesdeGrafico(estados[indice]);
 
 },
 
@@ -3224,6 +3260,21 @@ onClick(event,elements){
 function filtrarPorEstadoDesdeGrafico(estado){
 
     filtroActual = estado;
+
+    filtrarLotes();
+
+}
+function filtrarPorEtapa(etapa){
+
+    if(etapaSeleccionada === etapa){
+
+        etapaSeleccionada = "";
+
+    }else{
+
+        etapaSeleccionada = etapa;
+
+    }
 
     filtrarLotes();
 
