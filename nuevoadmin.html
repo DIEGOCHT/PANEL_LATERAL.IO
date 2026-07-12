@@ -991,6 +991,7 @@ border-bottom:4px solid transparent;
     flex:1;
 
     min-height:0;
+overflow-x:hidden;
 
 }
 
@@ -1006,7 +1007,8 @@ border-bottom:4px solid transparent;
 
     top:0;
 
-    width:235px;
+    width:100%;
+min-width:0;
 
     max-height:calc(100vh - 16px);
 
@@ -1026,6 +1028,15 @@ border-bottom:4px solid transparent;
     padding:14px;
 
     box-shadow:0 6px 18px rgba(15,23,42,.05);
+
+}
+.tituloGrafico{
+
+    padding-bottom:12px;
+
+    margin-bottom:12px;
+
+    border-bottom:1px solid #E2E8F0;
 
 }
 .infoGrafico{
@@ -3001,11 +3012,18 @@ e.VENDIDO;
 
 <div class="cardGrafico">
 
+<div class="tituloGrafico">
+
     <h3>${etapa}</h3>
+
+</div>
     <div style="
-width:165px;
-height:165px;
-margin:4px auto 8px;
+width:175px;
+height:175px;
+margin:12px auto;
+display:flex;
+justify-content:center;
+align-items:center;
 ">
 
     <canvas
@@ -3129,7 +3147,7 @@ if(window.graficos[idGrafico]){
 
             borderWidth:3,
 
-            hoverOffset:20,
+            hoverOffset:4,
 
 offset(context){
 
@@ -3191,25 +3209,7 @@ onClick(event,elements){
     },
 
     tooltip:{
-
-        callbacks:{
-
-            label(context){
-
-                const valor=context.raw;
-
-                const total=context.dataset.data
-                    .reduce((a,b)=>a+b,0);
-
-                const porcentaje=((valor*100)/total)
-                    .toFixed(1);
-
-                return `${valor} lotes (${porcentaje}%)`;
-
-            }
-
-        }
-
+        enabled:false
     }
 
 },
