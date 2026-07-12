@@ -2652,7 +2652,7 @@ let resumenDashboard = {
         CACHE DE GRÁFICOS
 =========================================*/
 
-let resumenGraficos = {};
+
 /*=========================================
       ÚLTIMA SINCRONIZACIÓN
 =========================================*/
@@ -3067,25 +3067,7 @@ return `
 });
 
 panel.innerHTML=html;
-if(
 
-JSON.stringify(resumenGraficos) ===
-
-JSON.stringify(etapas)
-
-){
-
-    return;
-
-}
-
-resumenGraficos =
-
-JSON.parse(
-
-JSON.stringify(etapas)
-
-);
 Object.keys(etapas).forEach(etapa=>{
 
     const e=etapas[etapa];
