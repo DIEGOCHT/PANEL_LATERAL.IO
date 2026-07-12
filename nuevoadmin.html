@@ -936,9 +936,7 @@ border-bottom:4px solid transparent;
 }
 #barraFiltrosActivos{
 
-    min-height:34px;
-
-    display:flex;
+    display:none;
 
     align-items:center;
 
@@ -3358,28 +3356,22 @@ function actualizarFiltrosActivos(){
             📍 ${etapaSeleccionada}
             <button onclick="
                 etapaSeleccionada='';
-                filtrarLotes();
-                renderizarGraficosPorEtapa(todosLosLotes);
+
+actualizarDashboard(todosLosLotes);
+
+filtrarLotes();
+
+renderizarGraficosPorEtapa(todosLosLotes);
             ">✕</button>
         </div>`;
     }
 
     barra.innerHTML = html;
 
-}
-function filtrarPorEtapa(etapa){
-
-    if(etapaSeleccionada === etapa){
-
-        etapaSeleccionada = "";
-
-    }else{
-
-        etapaSeleccionada = etapa;
-
-    }
-
-    filtrarLotes();
+    barra.style.display =
+        html === ""
+        ? "none"
+        : "flex";
 
 }
 async function cargarLotes(){
@@ -5726,7 +5718,9 @@ function filtrarLotes(){
 
     renderizarLotes(datos);
 
-    actualizarFiltrosActivos();
+actualizarDashboard(datos);
+
+actualizarFiltrosActivos();
 
 }
 document
