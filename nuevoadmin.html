@@ -134,7 +134,7 @@ button{
 
 }
 #contenedorLotes{
-    margin-top:20px;
+    margin-top:6px;
 }
 
 .tabla td{
@@ -731,7 +731,7 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 270px);
+height:calc(100vh - 235px);
 
 overflow-y:auto;
 
@@ -2291,8 +2291,17 @@ Object.keys(etapas).forEach(etapa=>{
     const canvas=document.getElementById(
         "grafico_"+etapa.replace(/\s+/g,"_")
     );
+const idGrafico = "grafico_"+etapa.replace(/\s+/g,"_");
 
-    new Chart(canvas,{
+if(window.graficos === undefined){
+    window.graficos = {};
+}
+
+if(window.graficos[idGrafico]){
+    window.graficos[idGrafico].destroy();
+}
+
+    window.graficos[idGrafico] = new Chart(canvas,{
 
     plugins:[pluginTextoCentro],
 
@@ -2569,7 +2578,7 @@ loteServidor.Estado +
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 return;
 
@@ -2712,7 +2721,7 @@ mostrarNotificacion(
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 return;
 
@@ -2727,7 +2736,10 @@ document
 .style.display =
 "none";
 
-await sincronizarPanel();
+/* esperar que Google Sheets termine de guardar */
+await new Promise(resolve=>setTimeout(resolve,600));
+
+await refrescarSistema();
 
 mostrarNotificacion(
 
@@ -2758,7 +2770,7 @@ resultado.mensaje ||
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 }
 
@@ -4110,59 +4122,15 @@ await fetch(
 solicitudesPendientes =
 await respuestaPendientes.json();
 
-let huboCambios = false;
+// Reemplazar completamente la información local
+todosLosLotes = nuevos;
 
-const cambios = [];
-
-nuevos.forEach(function(nuevo){
-
-const actual =
-todosLosLotes.find(function(x){
-
-return(
-
-x.Etapa===nuevo.Etapa &&
-
-x.Lote===nuevo.Lote
-
-);
-
-});
-
-if(!actual){
-return;
-}
-
-if(actual.Estado!==nuevo.Estado){
-
-actual.Estado = nuevo.Estado;
-
-cambios.push(actual);
-
-huboCambios = true;
-
-}
-
-});
-
-if(huboCambios){
-
-    cambios.forEach(function(lote){
-
-        actualizarFila(lote);
-
-    });
-
-}
-
-// ACTUALIZAR TODOS LOS BOTONES
-todosLosLotes.forEach(function(lote){
-
-    actualizarFila(lote);
-
-});
+// Volver a pintar toda la interfaz
+filtrarLotes();
 
 actualizarDashboard(todosLosLotes);
+
+renderizarGraficosPorEtapa(todosLosLotes);
 
 if(rol === "ADMIN"){
 
@@ -4189,6 +4157,23 @@ error
 );
 
 }
+
+}
+async function refrescarSistema(){
+
+    await sincronizarPanel();
+
+    filtrarLotes();
+
+    actualizarDashboard(todosLosLotes);
+
+    renderizarGraficosPorEtapa(todosLosLotes);
+
+    if(localStorage.getItem("rol")==="ADMIN"){
+
+        actualizarContadorSolicitudes();
+
+    }
 
 }
 async function cargarSolicitudes(){
@@ -4947,11 +4932,9 @@ document
 .getElementById(
 "filtroTodos"
 )
-.onclick = async ()=>{
+.onclick = ()=>{
 
-await sincronizarPanel();
-
-filtroActual = "TODOS";
+filtroActual="TODOS";
 
 filtrarLotes();
 
@@ -4961,11 +4944,9 @@ document
 .getElementById(
 "filtroLibres"
 )
-.onclick = async ()=>{
+.onclick = ()=>{
 
-await sincronizarPanel();
-
-filtroActual = "LIBRE";
+filtroActual="LIBRE";
 
 filtrarLotes();
 
@@ -4975,9 +4956,7 @@ document
 .getElementById(
 "filtroReservados"
 )
-.onclick = async ()=>{
-
-await sincronizarPanel();
+.onclick = ()=>{
 
 filtroActual = "RESERVADO";
 
@@ -4989,9 +4968,7 @@ document
 .getElementById(
 "filtroVendidos"
 )
-.onclick = async ()=>{
-
-await sincronizarPanel();
+.onclick = ()=>{
 
 filtroActual = "VENDIDO";
 
