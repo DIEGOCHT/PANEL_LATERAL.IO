@@ -463,6 +463,15 @@ line-height:1;
 
     height:100%;
 
+    overflow:hidden;
+
+}
+#contenidoScrollable{
+
+    flex:1;
+
+    min-height:0;
+
     overflow-y:auto;
 
     overflow-x:hidden;
@@ -1077,10 +1086,6 @@ overflow-x:hidden;
     flex-direction:column;
 
     gap:12px;
-
-    position:sticky;
-
-    top:0;
 
     width:100%;
 
@@ -2217,38 +2222,13 @@ margin:0;
 
     <div id="panelSuperior">
 
-        <div id="dashboard"></div>
-
-        <div id="herramientas">
-
-            <input
-                type="text"
-                id="buscarLote"
-                placeholder="🔍 Buscar lote...">
-
-            <button id="filtroTodos">
-                TODOS
-            </button>
-
-            <button id="filtroLibres">
-                LIBRES
-            </button>
-
-            <button id="filtroReservados">
-                RESERVADOS
-            </button>
-
-            <button id="filtroVendidos">
-                VENDIDOS
-            </button>
-
-                </div>
-
-        <div id="barraFiltrosActivos"></div>
+        ...
 
     </div>
 
 </div>
+
+<div id="contenidoScrollable">
 
 <div id="contenedorLotesPrincipal">
 
@@ -2319,6 +2299,7 @@ id="listaSolicitudes">
 </div>
 
 </div>
+</div> <!-- contenidoScrollable -->
 
 </div>
 
