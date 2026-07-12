@@ -283,23 +283,25 @@ font-size:13px;
 
     width:100%;
 
-    height:42px;
+    height:52px;
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
-    padding:0 16px;
+    padding:0 18px;
+
+    margin-bottom:8px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:14px;
 
     background:transparent;
 
-    color:#475569;
+    color:#334155;
 
     font-size:15px;
 
@@ -310,13 +312,16 @@ font-size:13px;
     cursor:pointer;
 
     transition:all .25s;
+position:relative;
+
+overflow:hidden;
 
 }
 .iconoMenu{
 
     width:22px;
 
-    min-width:22px;
+    height:22px;
 
     display:flex;
 
@@ -324,9 +329,17 @@ font-size:13px;
 
     align-items:center;
 
-    font-size:18px;
-
     flex-shrink:0;
+
+}
+
+.iconoMenu svg{
+
+    width:18px;
+
+    height:18px;
+
+    stroke-width:2;
 
 }
 
@@ -336,15 +349,57 @@ font-size:13px;
 
     color:#2563EB;
 
-}
+    }
 
 .menuItem.activo{
 
+    background:#EEF4FF;
+
+    color:#2563EB;
+
+    box-shadow:none;
+
+}
+.menuItem.activo::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:8px;
+
+    bottom:8px;
+
+    width:4px;
+
+    border-radius:4px;
+
     background:#2563EB;
 
-    color:#FFFFFF;
+}
+.menuSalir{
 
-    box-shadow:0 8px 20px rgba(37,99,235,.20);
+    margin-top:18px;
+
+    border-top:1px solid #E2E8F0;
+
+    padding-top:18px;
+
+}
+
+.menuSalir:hover{
+
+    background:#FEF2F2;
+
+    color:#DC2626;
+
+}
+
+.menuSalir:hover svg{
+
+    stroke:#DC2626;
 
 }
 .menuItem span{
@@ -460,25 +515,53 @@ white-space:nowrap;
 
 .cardDashboard{
 
+    position:relative;
+
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
     border-radius:16px;
 
-    padding:12px 16px;
+    padding:12px 14px;
 
-    height:76px;
+    height:68px;
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    justify-content:space-between;
 
-    box-shadow:0 6px 18px rgba(15,23,42,.06);
+    overflow:hidden;
 
     transition:.25s;
+cursor:default;
+
+border-bottom:4px solid transparent;
+
+}
+.cardDashboard:nth-child(1){
+
+    border-bottom-color:#2563EB;
+
+}
+
+.cardDashboard:nth-child(2){
+
+    border-bottom-color:#22C55E;
+
+}
+
+.cardDashboard:nth-child(3){
+
+    border-bottom-color:#F59E0B;
+
+}
+
+.cardDashboard:nth-child(4){
+
+    border-bottom-color:#EF4444;
 
 }
 .cardInfo{
@@ -489,13 +572,17 @@ white-space:nowrap;
 
     justify-content:center;
 
+    flex:1;
+
 }
 
 .cardDashboard:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-2px);
 
-    box-shadow:0 18px 40px rgba(15,23,42,.10);
+    box-shadow:0 10px 24px rgba(15,23,42,.08);
+
+    border-color:#CBD5E1;
 
 }
 
@@ -503,36 +590,38 @@ white-space:nowrap;
 
     margin:0;
 
-    font-size:22px;
+    font-size:26px;
 
     font-weight:700;
 
     color:#0F172A;
 
+    line-height:1;
+
 }
 
 .cardDashboard p{
 
-    margin:1px 0 0;
+    margin-top:4px;
 
-    font-size:12px;
+    font-size:11px;
 
     color:#64748B;
 
-    font-weight:600;
-
     text-transform:uppercase;
 
-    letter-spacing:.5px;
+    letter-spacing:.8px;
+
+    font-weight:600;
 
 }
 .cardIcono{
 
-    width:40px;
+    width:42px;
 
-    height:40px;
+    height:42px;
 
-    border-radius:20px;
+    border-radius:12px;
 
     display:flex;
 
@@ -542,7 +631,8 @@ white-space:nowrap;
 
     font-size:18px;
 
-    background:#EFF6FF;
+    flex-shrink:0;
+opacity:.90;
 
 }
 
@@ -1328,6 +1418,181 @@ position:relative;
     margin:6px 0 12px;
 
 }
+.sidebarEstado{
+
+    margin-top:18px;
+
+    padding-top:18px;
+
+    border-top:1px solid #E2E8F0;
+
+}
+
+.sidebarTitulo{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:#94A3B8;
+
+    text-transform:uppercase;
+
+    margin-bottom:10px;
+
+}
+
+.estadoSistema{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+    transition:.25s;
+
+}
+
+.estadoSistema:hover{
+
+    background:#EFF6FF;
+
+    border-color:#BFDBFE;
+
+}
+
+.punto{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 10px rgba(34,197,94,.45);
+
+    flex-shrink:0;
+
+}
+
+.texto{
+
+    display:flex;
+
+    flex-direction:column;
+
+    line-height:1.2;
+
+}
+
+.texto strong{
+
+    font-size:13px;
+
+    color:#0F172A;
+
+}
+
+.texto span{
+
+    font-size:11px;
+
+    color:#64748B;
+
+}
+
+.sidebarTitulo{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:#94A3B8;
+
+    text-transform:uppercase;
+
+    margin-bottom:12px;
+
+}
+
+.estadoSistema{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+    margin-bottom:12px;
+
+}
+
+.estadoSistema .punto{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 10px rgba(34,197,94,.45);
+
+    flex-shrink:0;
+
+}
+
+.estadoSistema .texto{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+}
+
+.estadoSistema .texto strong{
+
+    font-size:13px;
+
+    color:#0F172A;
+
+}
+
+.estadoSistema .texto span{
+
+    font-size:11px;
+
+    color:#64748B;
+
+}
 
 /*======================================
         TITULOS MODULOS
@@ -1635,11 +1900,28 @@ margin:0;
 
         </div>
 
-        <button id="cerrarSesion">
+        <button id="cerrarSesion" class="menuItem menuSalir">
 
-            Salir
+    <span class="iconoMenu">
 
-        </button>
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+
+            <path d="M16 17l5-5-5-5"/>
+
+            <path d="M21 12H9"/>
+
+        </svg>
+
+    </span>
+
+    <span>Cerrar sesión</span>
+
+</button>
 
     </div>
 
@@ -1677,13 +1959,40 @@ margin:0;
 <hr class="separadorSidebar">
 
         <button id="btnLotes" class="menuItem">
-    <span class="iconoMenu">🏡</span>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M3 11L12 4L21 11"/>
+
+            <path d="M5 10V20H19V10"/>
+
+        </svg>
+
+    </span>
+
     <span>Lotes</span>
+
 </button>
 
         <button id="btnSolicitudes" class="menuItem">
 
-    <span class="iconoMenu">📋</span>
+    <span class="iconoMenu">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+<rect x="6" y="4" width="12" height="16" rx="2"/>
+
+<path d="M9 8H15"/>
+
+<path d="M9 12H15"/>
+
+<path d="M9 16H13"/>
+
+</svg>
+
+</span>
 
     <span>Solicitudes</span>
 
@@ -1692,49 +2001,129 @@ margin:0;
 </button>
 
         <button id="btnConsultas" class="menuItem">
-            <span class="iconoMenu">📞</span>
-<span>Consultas</span>
-        </button>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.4 2.6a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l2.6.4A2 2 0 0 1 22 16.9z"/>
+
+        </svg>
+
+    </span>
+
+    <span>Consultas</span>
+
+</button>
 
         <button id="btnAsesores" class="menuItem">
-            <span class="iconoMenu">👥</span>
-<span>Asesores</span>
-        </button>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+
+            <circle cx="9" cy="7" r="4"/>
+
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+        </svg>
+
+    </span>
+
+    <span>Asesores</span>
+
+</button>
 
         <button id="btnAuditoria" class="menuItem">
-            <span class="iconoMenu">📑</span>
-<span>Auditoría</span>
-        </button>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+
+            <path d="M14 2v6h6"/>
+
+            <path d="M8 13h8"/>
+
+            <path d="M8 17h5"/>
+
+        </svg>
+
+    </span>
+
+    <span>Auditoría</span>
+
+</button>
 <hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
 
 <div id="sidebarInfo">
 
-    <div style="font-size:13px;color:#64748B;font-weight:600;">
+    <div class="sidebarEstado">
+
+    <div class="sidebarTitulo">
+
         SISTEMA
+
     </div>
 
-    <div style="margin-top:12px;font-size:14px;">
-        🟢 En línea
+    <div class="estadoSistema">
+
+        <div class="punto"></div>
+
+        <div class="texto">
+
+            <strong>En línea</strong>
+
+            <span>Servidor operativo</span>
+
+        </div>
+
     </div>
 
-    <div style="margin-top:18px;font-size:13px;color:#94A3B8;">
-        Última sincronización
+    <div class="sidebarTitulo">
+
+        ÚLTIMA SINCRONIZACIÓN
+
     </div>
 
-    <div id="horaSidebar"
-         style="margin-top:6px;font-weight:600;">
-        --
+    <div class="estadoSistema">
+
+        <div class="punto"></div>
+
+        <div class="texto">
+
+            <strong id="horaSidebar">--</strong>
+
+            <span>Actualización automática</span>
+
+        </div>
+
     </div>
 
-    <hr style="border:none;border-top:1px solid #E2E8F0;margin:20px 0;">
+    <div class="sidebarTitulo">
 
-    <div style="font-size:13px;color:#94A3B8;">
-        ASSTURIAS
+        INFORMACIÓN
+
     </div>
 
-    <div style="font-size:13px;color:#64748B;">
-        Panel Administrativo v2.0
+    <div class="estadoSistema">
+
+        <div class="texto">
+
+            <strong>ASSTURIAS</strong>
+
+            <span>Panel Administrativo v2.0</span>
+
+        </div>
+
     </div>
+
+</div>
 
 </div>
 
