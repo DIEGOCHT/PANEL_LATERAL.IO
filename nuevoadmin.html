@@ -934,7 +934,65 @@ border-bottom:4px solid transparent;
     flex-wrap:nowrap;
 
 }
+#barraFiltrosActivos{
 
+    min-height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+    margin-top:12px;
+
+}
+
+.filtroActivo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    background:#DBEAFE;
+
+    color:#2563EB;
+
+    border:1px solid #BFDBFE;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.filtroActivo button{
+
+    width:auto;
+
+    margin:0;
+
+    padding:0;
+
+    background:none;
+
+    border:none;
+
+    color:#2563EB;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
 #buscarLote{
 
     width:340px;
@@ -1028,6 +1086,17 @@ min-width:0;
     padding:14px;
 
     box-shadow:0 6px 18px rgba(15,23,42,.05);
+
+}
+.graficoActivo{
+
+    border:2px solid #2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+    transform:scale(1.01);
+
+    transition:.25s;
 
 }
 .tituloGrafico{
@@ -2159,7 +2228,9 @@ margin:0;
                 VENDIDOS
             </button>
 
-        </div>
+                </div>
+
+        <div id="barraFiltrosActivos"></div>
 
     </div>
 
@@ -3016,7 +3087,9 @@ e.VENDIDO;
 
     html += `
 
-<div class="cardGrafico">
+<div class="cardGrafico ${
+    etapaSeleccionada === etapa ? "graficoActivo" : ""
+}">
 
 <div class="tituloGrafico">
 
@@ -3024,7 +3097,11 @@ e.VENDIDO;
 style="
 cursor:pointer;
 user-select:none;
+transition:.2s;
 "
+onmouseover="this.style.color='#2563EB'"
+onmouseout="this.style.color='#0F172A'"
+onclick="filtrarPorEtapa('${etapa}')">
 onclick="filtrarPorEtapa('${etapa}')">
 
 ${etapa}
@@ -3262,6 +3339,28 @@ function filtrarPorEstadoDesdeGrafico(estado){
     filtroActual = estado;
 
     filtrarLotes();
+
+}
+function actualizarFiltrosActivos(){
+
+    const barra = document.getElementById("barraFiltrosActivos");
+
+    let html = "";
+
+    if(etapaSeleccionada){
+
+        html += `
+        <div class="filtroActivo">
+            📍 ${etapaSeleccionada}
+            <button onclick="
+                etapaSeleccionada='';
+                filtrarLotes();
+                renderizarGraficosPorEtapa(todosLosLotes);
+            ">✕</button>
+        </div>`;
+    }
+
+    barra.innerHTML = html;
 
 }
 function filtrarPorEtapa(etapa){
@@ -5597,14 +5696,27 @@ function filtrarLotes(){
     .value
     .toUpperCase();
 
-    let datos =
-    todosLosLotes.filter(
-    lote=>
+    let datos = todosLosLotes;
+
+if(etapaSeleccionada !== ""){
+
+    datos = datos.filter(
+
+        lote => lote.Etapa === etapaSeleccionada
+
+    );
+
+}
+
+datos = datos.filter(
+
+    lote =>
 
     lote.Lote
     .toUpperCase()
     .includes(texto)
-    );
+
+);
 
     if(
     filtroActual !==
@@ -5623,6 +5735,8 @@ function filtrarLotes(){
 
     renderizarLotes(datos);
 
+actualizarFiltrosActivos();
+
 }
 document
 .getElementById(
@@ -5631,6 +5745,8 @@ document
 .onclick = ()=>{
 
 filtroActual = "TODOS";
+
+etapaSeleccionada = "";
 
 filtrarLotes();
 
