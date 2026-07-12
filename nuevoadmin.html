@@ -319,7 +319,8 @@ overflow:hidden;
 }
 .iconoMenu{
 
-    width:22px;
+    width:24px;
+min-width:24px;
 
     height:22px;
 
@@ -530,7 +531,7 @@ overflow:hidden;
 
     justify-content:flex-start;
 
-gap:12px;
+gap:16px;
     overflow:hidden;
 
     transition:.25s;
@@ -564,15 +565,15 @@ border-bottom:4px solid transparent;
 }
 .cardInfo{
 
-    flex:1;
-
     display:flex;
 
     flex-direction:column;
 
     justify-content:center;
 
-    padding-left:4px;
+    align-items:flex-start;
+
+    gap:2px;
 
 }
 
@@ -596,13 +597,13 @@ border-bottom:4px solid transparent;
 
     color:#0F172A;
 
-    line-height:1;
+    line-height:1.05;
 
 }
 
 .cardDashboard p{
 
-    margin-top:4px;
+    margin:0;
 
     font-size:11px;
 
@@ -621,18 +622,17 @@ border-bottom:4px solid transparent;
 
     height:48px;
 
-    border-radius:12px;
+    border-radius:14px;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    font-size:18px;
+    align-items:center;
 
     flex-shrink:0;
-opacity:.90;
+
+    margin-left:8px;
 
 }
 
@@ -1824,6 +1824,61 @@ margin:0;
     font-size:14px;
 
 }
+/* ===== CORRECCIÓN MENÚ LATERAL ===== */
+
+.menuItem{
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    align-items:center !important;
+
+    justify-content:flex-start !important;
+
+    flex-wrap:nowrap !important;
+
+}
+
+.menuItem .iconoMenu{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    width:24px !important;
+
+    min-width:24px !important;
+
+    height:24px !important;
+
+    margin-right:14px !important;
+
+    flex-shrink:0 !important;
+
+}
+
+.menuItem .iconoMenu svg{
+
+    width:20px;
+
+    height:20px;
+
+    display:block;
+
+}
+
+.menuItem > span:not(.iconoMenu){
+
+    display:inline-block !important;
+
+    white-space:nowrap !important;
+
+    line-height:1 !important;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1900,7 +1955,7 @@ margin:0;
 
         </div>
 
-        <button id="cerrarSesion" class="menuItem menuSalir">
+        <button id="cerrarSesion" class="menuSalir">
 
     <span class="iconoMenu">
 
