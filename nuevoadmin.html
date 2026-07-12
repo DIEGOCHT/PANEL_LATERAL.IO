@@ -266,7 +266,7 @@ font-size:13px;
 
 #sidebar{
 
-    width:220px;
+    width:240px;
 
     background:#FFFFFF;
 
@@ -402,18 +402,15 @@ overflow:hidden;
     stroke:#DC2626;
 
 }
-.menuItem span{
-
-    display:flex;
-
-    align-items:center;
-
-    text-align:left;
+.menuItem > span:last-child{
 
     flex:1;
 
+    text-align:left;
+
+    white-space:nowrap;
+
     line-height:1;
-white-space:nowrap;
 
 }
 #contadorSolicitudes{
@@ -531,8 +528,9 @@ white-space:nowrap;
 
     align-items:center;
 
-    justify-content:space-between;
+    justify-content:flex-start;
 
+gap:12px;
     overflow:hidden;
 
     transition:.25s;
@@ -566,13 +564,15 @@ border-bottom:4px solid transparent;
 }
 .cardInfo{
 
+    flex:1;
+
     display:flex;
 
     flex-direction:column;
 
     justify-content:center;
 
-    flex:1;
+    padding-left:4px;
 
 }
 
@@ -590,7 +590,7 @@ border-bottom:4px solid transparent;
 
     margin:0;
 
-    font-size:26px;
+    font-size:22px;
 
     font-weight:700;
 
@@ -617,9 +617,9 @@ border-bottom:4px solid transparent;
 }
 .cardIcono{
 
-    width:42px;
+    width:48px;
 
-    height:42px;
+    height:48px;
 
     border-radius:12px;
 
