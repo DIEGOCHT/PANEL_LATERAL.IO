@@ -367,15 +367,28 @@ font-size:13px;
 
 }
 
+#panelSuperior{
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+
+}
 #dashboard{
 
     display:grid;
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:10px;
+    gap:12px;
 
-    margin-bottom:6px;
+    margin-bottom:16px;
 
 }
 
@@ -405,19 +418,19 @@ font-size:13px;
 
     border:1px solid #E2E8F0;
 
-    border-radius:14px;
+    border-radius:16px;
 
-    padding:8px 12px;
+    padding:12px 16px;
 
-    height:66px;
+    height:76px;
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    gap:12px;
 
-    box-shadow:0 4px 12px rgba(15,23,42,.05);
+    box-shadow:0 6px 18px rgba(15,23,42,.06);
 
     transition:.25s;
 
@@ -444,7 +457,7 @@ font-size:13px;
 
     margin:0;
 
-    font-size:17px;
+    font-size:22px;
 
     font-weight:700;
 
@@ -456,7 +469,7 @@ font-size:13px;
 
     margin:1px 0 0;
 
-    font-size:11px;
+    font-size:12px;
 
     color:#64748B;
 
@@ -469,11 +482,11 @@ font-size:13px;
 }
 .cardIcono{
 
-    width:26px;
+    width:40px;
 
-    height:26px;
+    height:40px;
 
-    border-radius:13px;
+    border-radius:20px;
 
     display:flex;
 
@@ -481,7 +494,7 @@ font-size:13px;
 
     justify-content:center;
 
-    font-size:12px;
+    font-size:18px;
 
     background:#EFF6FF;
 
@@ -504,7 +517,246 @@ font-size:13px;
     background:#FEE2E2;
 
 }
+.btnCambiarEstado{
 
+    width:82px;
+
+    height:30px;
+
+    display:flex;
+
+    margin:auto;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    box-shadow:0 4px 12px rgba(37,99,235,.20);
+
+    transition:.20s;
+
+}
+
+.btnCambiarEstado:hover:not(:disabled){
+
+    background:#1D4ED8;
+
+}
+
+.btnCambiarEstado:disabled{
+
+    background:#94A3B8;
+
+}
+
+.btnAzul{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btnAzul:hover{
+
+    background:#1D4ED8;
+
+}
+.btn-verde{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#16A34A;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btn-verde:hover{
+
+    background:#15803D;
+
+}
+
+.btn-rojo{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin-left:8px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#DC2626;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btn-rojo:hover{
+
+    background:#B91C1C;
+
+}
+.modalCard{
+
+    background:#FFFFFF;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    width:450px;
+
+    max-width:90%;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(15,23,42,.20);
+
+}
+
+.modalMensaje{
+
+    margin:20px 0;
+
+    line-height:1.6;
+
+}
+
+.modalAcciones{
+
+    display:flex;
+
+    gap:10px;
+
+    justify-content:center;
+
+}
+
+.btnGris{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#6B7280;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btnGris:hover{
+
+    background:#4B5563;
+
+}
+.inputBusqueda{
+
+    width:350px;
+
+    height:44px;
+
+    padding:0 16px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:12px;
+
+    background:#FFFFFF;
+
+    font-size:14px;
+
+    transition:.25s;
+
+}
+
+.inputBusqueda:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
 /* HERRAMIENTAS */
 
 #herramientas{
@@ -513,29 +765,31 @@ font-size:13px;
 
     align-items:center;
 
-    gap:8px;
+    gap:10px;
 
     flex-wrap:wrap;
 
-    margin:0;
+    padding-top:14px;
 
-    background:#F8FAFC;
-
-    padding:0;
+    border-top:1px solid #E2E8F0;
 
 }
 
 #buscarLote{
 
-    width:360px;
+    flex:1;
 
-    height:44px;
+    min-width:280px;
+
+    max-width:420px;
+
+    height:42px;
 
     border:1px solid #CBD5E1;
 
-    border-radius:14px;
+    border-radius:12px;
 
-    padding:0 18px;
+    padding:0 16px;
 
     background:#FFFFFF;
 
@@ -561,31 +815,21 @@ font-size:13px;
 #filtroReservados,
 #filtroVendidos{
 
-    width:auto;
+    height:42px;
 
-    height:44px;
+    padding:0 18px;
 
-    padding:0 24px;
+    border-radius:12px;
 
-    margin:0;
+    font-size:13px;
 
-    border:none;
-
-    border-radius:14px;
-
-    background:#FFFFFF;
+    font-weight:700;
 
     border:1px solid #D6DCE5;
 
-    color:#475569;
+    background:#FFFFFF;
 
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.25s;
-
-    cursor:pointer;
+    transition:.20s;
 
 }
 
@@ -628,11 +872,11 @@ font-size:13px;
 
     position:sticky;
 
-    top:16px;
+    top:0;
 
     width:235px;
 
-    max-height:calc(100vh - 32px);
+    max-height:calc(100vh - 16px);
 
     overflow-y:auto;
 
@@ -650,6 +894,47 @@ font-size:13px;
     padding:14px;
 
     box-shadow:0 6px 18px rgba(15,23,42,.05);
+
+}
+.infoGrafico{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:8px;
+
+}
+
+.filaInfoGrafico{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.totalGrafico{
+
+    margin-top:14px;
+
+    padding-top:12px;
+
+    border-top:1px solid #E2E8F0;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:16px;
+
+    font-weight:700;
 
 }
 
@@ -1310,34 +1595,38 @@ margin:0;
 
         <div id="cabeceraFija">
 
-            <div id="dashboard"></div>
+    <div id="panelSuperior">
 
-            <div id="herramientas">
+        <div id="dashboard"></div>
 
-                <input
-                    type="text"
-                    id="buscarLote"
-                    placeholder="🔍 Buscar lote...">
+        <div id="herramientas">
 
-                <button id="filtroTodos">
-                    TODOS
-                </button>
+            <input
+                type="text"
+                id="buscarLote"
+                placeholder="🔍 Buscar lote...">
 
-                <button id="filtroLibres">
-                    LIBRES
-                </button>
+            <button id="filtroTodos">
+                TODOS
+            </button>
 
-                <button id="filtroReservados">
-                    RESERVADOS
-                </button>
+            <button id="filtroLibres">
+                LIBRES
+            </button>
 
-                <button id="filtroVendidos">
-                    VENDIDOS
-                </button>
+            <button id="filtroReservados">
+                RESERVADOS
+            </button>
 
-            </div>
+            <button id="filtroVendidos">
+                VENDIDOS
+            </button>
 
         </div>
+
+    </div>
+
+</div>
 
 <div id="contenedorLotesPrincipal">
 
@@ -1394,15 +1683,9 @@ type="text"
 
 id="buscarSolicitud"
 
-placeholder="Buscar usuario o lote..."
+class="inputBusqueda"
 
-style="
-width:350px;
-padding:12px;
-border-radius:10px;
-border:1px solid #ccc;
-font-size:16px;
-"
+placeholder="Buscar usuario o lote..."
 
 onkeyup="filtrarSolicitudes()"
 
@@ -1435,14 +1718,7 @@ align-items:center;
 z-index:9999;
 ">
 
-<div style="
-background:white;
-padding:30px;
-border-radius:15px;
-width:450px;
-max-width:90%;
-text-align:center;
-">
+<div class="modalCard">
 
 <h2 id="tituloNotificacion">
 Notificación
@@ -1450,14 +1726,14 @@ Notificación
 
 <div
 id="mensajeNotificacion"
-style="
-margin:20px 0;
-line-height:1.6;
-">
+class="modalMensaje">
 </div>
 <button
-id="btnCerrarNotificacion">
+id="btnCerrarNotificacion"
+class="btnAzul">
+
 Aceptar
+
 </button>
 
 </div>
@@ -1492,7 +1768,8 @@ Aceptar
 
             <button
 type="button"
-id="btnGuardarEstado">
+id="btnGuardarEstado"
+class="btnAzul">
 
 Guardar
 
@@ -1517,14 +1794,7 @@ align-items:center;
 z-index:9999;
 ">
 
-<div style="
-background:white;
-padding:30px;
-border-radius:15px;
-width:450px;
-max-width:90%;
-text-align:center;
-">
+<div class="modalCard">
 
 <h2 id="tituloConfirmacion">
 Confirmación
@@ -1532,28 +1802,23 @@ Confirmación
 
 <div
 id="mensajeConfirmacion"
-style="
-margin:20px 0;
-line-height:1.6;
-">
+class="modalMensaje">
 </div>
 
-<div style="
-display:flex;
-gap:10px;
-">
+<div class="modalAcciones">
 
 <button
 id="btnCancelarConfirmacion"
-style="
-background:#6b7280;
-">
+class="btnGris">
 Cancelar
 </button>
 
 <button
-id="btnAceptarConfirmacion">
+id="btnAceptarConfirmacion"
+class="btnAzul">
+
 Aceptar
+
 </button>
 
 </div>
@@ -1623,6 +1888,44 @@ function(){
     this.select();
 
 });
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec";
+
+async function apiPost(action, datos = {}){
+
+    const respuesta = await fetch(API_URL,{
+
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:action,
+
+            ...datos
+
+        })
+
+    });
+
+    return await respuesta.json();
+
+}
+
+async function apiGet(parametros = ""){
+
+    const respuesta = await fetch(
+
+        API_URL +
+
+        parametros
+
+    );
+
+    return await respuesta.json();
+
+}
+
 function aplicarPermisosRol(rol){
 
     if(rol === "ASESOR"){
@@ -1697,26 +2000,14 @@ async function login(){
 
     try{
 
-        const respuesta =
-        await fetch(
-        "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-        {
-            method:"POST",
-
-            body:JSON.stringify({
-
-    action:"login",
-
-    usuario:usuario,
-
-    password:password
-
-})
-
-});
-
         const resultado =
-        await respuesta.json();
+await apiPost(
+"login",
+{
+usuario:usuario,
+password:password
+}
+);
 
         if(resultado.ok){
 
@@ -1844,6 +2135,7 @@ localStorage.getItem("rol");
 const pendiente =
 solicitudesPendientes.find(
 s =>
+s.Etapa === lote.Etapa &&
 s.Lote === lote.Lote
 );
 
@@ -1905,23 +2197,11 @@ vertical-align:middle;
 
 ${bloqueado ? "disabled" : ""}
 
+class="btnCambiarEstado"
+
 style="
-width:82px;
-height:30px;
-display:flex;
-margin:auto;
-justify-content:center;
-align-items:center;
-border:none;
-border-radius:10px;
-background:#2563EB;
-color:#FFFFFF;
-font-size:12px;
-font-weight:600;
-box-shadow:0 4px 12px rgba(37,99,235,.20);
-opacity:${bloqueado ? "0.5" : "1"};
-cursor:${bloqueado ? "not-allowed" : "pointer"};
-transition:.20s;
+opacity:${bloqueado ? "0.5":"1"};
+cursor:${bloqueado ? "not-allowed":"pointer"};
 "
 
 onclick="cambiarEstado('${lote.Etapa}','${lote.Lote}')">
@@ -1948,6 +2228,7 @@ html;
 
 }
 
+/*
 function actualizarFila(lote){
 
 const id =
@@ -2040,6 +2321,7 @@ pendiente
 }
 
 }
+*/
 
 function actualizarDashboard(datos){
 
@@ -2236,19 +2518,19 @@ const pReservado = totalEtapa ? ((e.RESERVADO * 100) / totalEtapa).toFixed(1) : 
 const pVendido = totalEtapa ? ((e.VENDIDO * 100) / totalEtapa).toFixed(1) : 0;
 
 return `
-<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+<div class="infoGrafico">
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🟢 Libres</span>
 <b>${e.LIBRE} (${pLibre}%)</b>
 </div>
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🟡 Reservados</span>
 <b>${e.RESERVADO} (${pReservado}%)</b>
 </div>
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🔴 Vendidos</span>
 <b>${e.VENDIDO} (${pVendido}%)</b>
 </div>
@@ -2258,16 +2540,7 @@ return `
 
 })()}
 
-        <div style="
-margin-top:8px;
-padding-top:8px;
-border-top:1px solid #E2E8F0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:16px;
-font-weight:700;
-">
+        <div class="totalGrafico">
 
 <span>Total</span>
 
@@ -2446,25 +2719,17 @@ function filtrarPorEstadoDesdeGrafico(estado){
 }
 async function cargarLotes(){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-    );
-
     const datos =
-    await respuesta.json();
+await apiGet();
 
     todosLosLotes = datos;
 
 try{
 
-const respSolicitudes =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
-);
-
 solicitudesPendientes =
-await respSolicitudes.json();
+await apiGet(
+"?action=solicitudesPendientes"
+);
 
 }
 catch(error){
@@ -2521,7 +2786,7 @@ async function guardarEstado(){
 
 const verificacion =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+API_URL
 );
 
 const lotes =
@@ -2599,36 +2864,20 @@ localStorage.getItem(
 
 if(rol === "ASESOR"){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"crearSolicitud",
 {
-method:"POST",
-
-body:JSON.stringify({
-
-action:"crearSolicitud",
-
 usuario:usuario,
-
 etapa:etapaActual,
-
 lote:loteActual,
-
 estadoActual:estadoOriginal,
-
 estadoSolicitado:estado
-
-})
-
 }
 );
-
-const resultado =
-await respuesta.json();
 const respuestaSolicitudes =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+API_URL + "?action=solicitudesPendientes"
 );
 
 solicitudesPendientes =
@@ -2673,33 +2922,17 @@ resultado.mensaje ||
 return;
 
 } 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"actualizarEstado",
 {
-    method:"POST",
-
-    body:JSON.stringify({
-
-    action:"actualizarEstado",
-
-    etapa:etapaActual,
-
-    lote:loteActual,
-
-    estado:estado,
-
-    usuario:usuario,
-
-    estadoOriginal:estadoOriginal
-
-})
-
+etapa:etapaActual,
+lote:loteActual,
+estado:estado,
+usuario:usuario,
+estadoOriginal:estadoOriginal
 }
 );
-
-    const resultado =
-await respuesta.json();
 
 if(
 resultado.mensaje ===
@@ -2779,10 +3012,7 @@ async function cambiarEstado(etapa,lote){
 
     const respuesta =
     await fetch(
-
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-
-+
+API_URL +
 
 "?etapa=" +
 
@@ -3024,13 +3254,10 @@ document
 .style.display =
 "block";
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=auditoria"
-);
-
 const datos =
-await respuesta.json();
+await apiGet(
+"?action=auditoria"
+);
 datos.sort((a,b)=>{
 
     return new Date(b.Fecha)
@@ -3314,18 +3541,8 @@ document
 .style.display =
 "block";
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-        body:JSON.stringify({
-            action:"listarAsesores"
-        })
-    });
-
     const asesores =
-    await respuesta.json();
+await apiPost("listarAsesores");
 
     let html = `
 
@@ -3538,28 +3755,14 @@ async function crearAsesor(){
     )
     .value;
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:"crearAsesor",
-
-            usuario:usuario,
-
-            password:password,
-
-            nombre:nombre
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"crearAsesor",
+{
+usuario:usuario,
+password:password,
+nombre:nombre
+});
 
     if(resultado.ok){
 
@@ -3588,25 +3791,13 @@ else{
 }
 async function cambiarEstadoAsesor(usuario){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "cambiarEstadoAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"cambiarEstadoAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3627,27 +3818,14 @@ async function cambiarPasswordAsesor(usuario){
         return;
     }
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "cambiarPasswordAsesor",
-
-            usuario:usuario,
-
-            password:nuevaPassword
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"cambiarPasswordAsesor",
+{
+usuario:usuario,
+password:nuevaPassword
+}
+);
 
     if(resultado.ok){
 
@@ -3664,25 +3842,13 @@ async function cambiarPasswordAsesor(usuario){
 }
 async function verPasswordAsesor(usuario){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "obtenerPasswordAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"obtenerPasswordAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3716,25 +3882,13 @@ usuario +
 
 async ()=>{
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "eliminarAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"eliminarAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3838,13 +3992,10 @@ document
 .style.display =
 "block";
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=consultas"
-    );
-
     const datos =
-    await respuesta.json();
+await apiGet(
+"?action=consultas"
+);
 
     // Más recientes primero
     datos.sort((a,b)=>{
@@ -4021,13 +4172,10 @@ let solicitudesGlobal = [];
 
 async function actualizarContadorSolicitudes(){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
-);
-
 const solicitudes =
-await respuesta.json();
+await apiGet(
+"?action=solicitudes"
+);
 
 const total =
 solicitudes.length;
@@ -4051,13 +4199,10 @@ if(rol !== "ADMIN"){
 return;
 }
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
-);
-
 const solicitudes =
-await respuesta.json();
+await apiGet(
+"?action=solicitudes"
+);
 
 const totalActual =
 solicitudes.length;
@@ -4108,15 +4253,13 @@ localStorage.getItem("rol");
 try{
 
 const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-);
+await fetch(API_URL);
 
 const nuevos =
 await respuesta.json();
 const respuestaPendientes =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+API_URL + "?action=solicitudesPendientes"
 );
 
 solicitudesPendientes =
@@ -4180,7 +4323,7 @@ async function cargarSolicitudes(){
 
 const respuesta =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+API_URL + "?action=solicitudes"
 );
 
 const solicitudes =
@@ -4334,25 +4477,13 @@ filtradas
 }
 async function aprobarSolicitud(fila){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"aprobarSolicitud",
 {
-method:"POST",
-
-body:JSON.stringify({
-
-action:"aprobarSolicitud",
-
 fila:fila
-
-})
-
 }
 );
-
-const resultado =
-await respuesta.json();
 
 if(resultado.ok){
 
@@ -4384,26 +4515,13 @@ resultado.mensaje || "No se pudo aprobar la solicitud."
 }
 async function rechazarSolicitud(fila){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
+const resultado =
+await apiPost(
 "rechazarSolicitud",
-
+{
 fila:fila
-
-})
-
 }
 );
-
-const resultado =
-await respuesta.json();
 
 if(resultado.ok){
 
@@ -4461,17 +4579,11 @@ if(!usuario){
 return;
 }
 
-const respuesta =
-await fetch(
-
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=notificaciones&usuario="
-
-+ encodeURIComponent(usuario)
-
-);
-
 const notificaciones =
-await respuesta.json();
+await apiGet(
+"?action=notificaciones&usuario=" +
+encodeURIComponent(usuario)
+);
 
 colaNotificaciones =
 notificaciones;
@@ -4523,22 +4635,11 @@ n.lote +
 
 }
 
-fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
+apiPost(
 "marcarNotificacionLeida",
-
+{
 fila:n.fila
-
-})
-
-}
-);
+});
 
 }
 document
