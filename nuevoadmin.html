@@ -1833,6 +1833,55 @@ margin:0;
 
 }
 
+/* ===== CORRECCIÓN MENÚ LATERAL ===== */
+
+.menuItem{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:flex-start !important;
+
+    gap:14px !important;
+
+}
+
+.menuItem .iconoMenu{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    width:28px !important;
+
+    min-width:28px !important;
+
+    flex-shrink:0 !important;
+
+}
+
+.menuItem .iconoMenu svg{
+
+    width:20px;
+
+    height:20px;
+
+    display:block;
+
+}
+
+.menuItem > span:not(.iconoMenu){
+
+    display:block !important;
+
+    line-height:1 !important;
+
+    white-space:nowrap !important;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
