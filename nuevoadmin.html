@@ -143,7 +143,17 @@ button{
 
 }
 #contenedorLotes{
+
     margin-top:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:0;
+
+    height:100%;
+
 }
 
 .tabla td{
@@ -474,15 +484,11 @@ line-height:1;
 
     min-height:0;
 
-    overflow:auto;
-
     display:flex;
 
     flex-direction:column;
 
-    position:relative;
-
-    padding-bottom:18px;
+    overflow:hidden;
 
 }
 
@@ -517,6 +523,17 @@ line-height:1;
     padding:18px;
 
     box-shadow:0 8px 24px rgba(15,23,42,.06);
+
+}
+.panelSticky{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1200;
+
+    background:#F8FAFC;
 
 }
 #dashboard{
@@ -1278,9 +1295,13 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-    height:auto;
+    flex:1;
 
-    overflow:visible;
+    min-height:0;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
 
     border-radius:18px;
 
@@ -2245,7 +2266,7 @@ margin:0;
 
         <div id="cabeceraFija">
 
-    <div id="panelSuperior">
+    <div id="panelSuperior" class="panelSticky">
 
         <div id="dashboard"></div>
 
