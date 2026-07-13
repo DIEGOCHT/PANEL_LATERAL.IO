@@ -261,7 +261,9 @@ font-size:13px;
 
     align-items:start;
 
-    min-height:100vh;
+    height:calc(100vh - 110px);
+
+    overflow:hidden;
 
 }
 #workspace{
@@ -284,11 +286,15 @@ font-size:13px;
 
     position:sticky;
 
-    top:24px;
+    top:0;
 
     align-self:start;
 
     width:240px;
+
+    height:100%;
+
+    overflow-y:auto;
 
     background:#FFFFFF;
 
@@ -484,11 +490,9 @@ line-height:1;
 
     min-height:0;
 
-    display:flex;
+    overflow-y:auto;
 
-    flex-direction:column;
-
-    overflow:hidden;
+    overflow-x:hidden;
 
 }
 
