@@ -465,8 +465,10 @@ line-height:1;
 
     overflow:hidden;
 
+    position:relative;
+
 }
-#contenidoScrollable{
+#contenidoModulo{
 
     flex:1;
 
@@ -475,6 +477,12 @@ line-height:1;
     overflow-y:auto;
 
     overflow-x:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:relative;
 
 }
 
@@ -485,15 +493,16 @@ line-height:1;
     position:sticky;
 
     top:0;
-left:0;
 
-    z-index:1000;
+    left:0;
+
+    z-index:1200;
 
     background:#F8FAFC;
 
-    padding-top:4px;
+    padding:6px 0 12px;
 
-    padding-bottom:4px;
+    flex-shrink:0;
 
 }
 
@@ -1075,7 +1084,10 @@ border-bottom:4px solid transparent;
     flex:1;
 
     min-height:0;
-overflow-x:hidden;
+
+    overflow:hidden;
+
+    height:100%;
 
 }
 
@@ -1215,7 +1227,7 @@ position:sticky;
 
 top:0;
 
-z-index:100;
+z-index:20;
 
 background:#F8FAFC;
 
@@ -1251,15 +1263,17 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 235px);
+    height:calc(100vh - 235px);
 
-overflow-y:auto;
+    overflow-y:auto;
 
-overflow-x:hidden;
+    overflow-x:hidden;
 
-border-radius:18px;
+    border-radius:18px;
 
-position:relative;
+    position:relative;
+
+    scrollbar-gutter:stable;
 
 }
 #ultimaActualizacion{
@@ -2257,7 +2271,7 @@ margin:0;
 
 </div>
 
-<div id="contenidoScrollable">
+<div id="contenidoModulo">
 
 <div id="contenedorLotesPrincipal">
 
@@ -3919,7 +3933,6 @@ document
 async ()=>{
 
     activarMenu("btnLotes");
-moverSidebar(24);
 
     ocultarTodo();
 
@@ -3941,7 +3954,6 @@ document
 async ()=>{
 
     activarMenu("btnAuditoria");
-moverSidebar(230);
 
     ocultarTodo();
 
@@ -4188,7 +4200,6 @@ document
 async ()=>{
 
     activarMenu("btnAsesores");
-moverSidebar(230);
 
     ocultarTodo();
 
@@ -4211,7 +4222,6 @@ document
 async ()=>{
 
     activarMenu("btnConsultas");
-moverSidebar(245);
 
     ocultarTodo();
 
@@ -4236,7 +4246,6 @@ document
 async ()=>{
 
     activarMenu("btnSolicitudes");
-moverSidebar(175);
 
     ocultarTodo();
 
@@ -4687,11 +4696,7 @@ document.getElementById("contenedorConsultas").style.display="none";
 document.getElementById("contenedorSolicitudes").style.display="none";
 
 }
-function moverSidebar(top){
 
-    document.getElementById("sidebar").style.top = top + "px";
-
-}
 async function cargarConsultas(){
 
     const rol =
