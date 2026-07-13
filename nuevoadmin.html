@@ -146,6 +146,14 @@ button{
 
     margin-top:0;
 
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:0;
+
+    overflow:hidden;
+
 }
 
 .tabla td{
@@ -1299,7 +1307,11 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-    max-height:calc(100vh - 260px);
+    flex:1;
+
+    min-height:0;
+
+    height:100%;
 
     overflow-y:auto;
 
@@ -2853,7 +2865,9 @@ const UI = {
 function renderizarLotes(datos){
 
 let html = `
-<div class="contenedorTablaScroll"><table class="tabla">
+<div class="contenedorTablaScroll">
+
+<table class="tabla">
     <thead>
 
 <tr>
