@@ -144,15 +144,13 @@ button{
 }
 #contenedorLotes{
 
-    margin-top:0;
-
     display:flex;
 
     flex-direction:column;
 
     min-height:0;
 
-    overflow:hidden;
+    height:100%;
 
 }
 
@@ -469,9 +467,7 @@ line-height:1;
 
     height:100%;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
+    overflow:visible;
 
     position:relative;
 
@@ -482,7 +478,7 @@ line-height:1;
 
     min-height:0;
 
-    overflow:visible;
+    overflow:hidden;
 
 }
 
@@ -1106,13 +1102,7 @@ border-bottom:4px solid transparent;
 
     align-items:start;
 
-    flex:1;
-
-    min-height:0;
-
-    overflow:hidden;
-
-    height:100%;
+    height:calc(100vh - 290px);
 
 }
 
@@ -1303,17 +1293,11 @@ white-space:nowrap;
 
     flex:1;
 
-    min-height:0;
-
-    height:100%;
-
     overflow-y:auto;
 
     overflow-x:hidden;
 
     border-radius:18px;
-
-    position:relative;
 
 }
 #ultimaActualizacion{
