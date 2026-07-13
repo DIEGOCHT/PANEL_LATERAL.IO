@@ -3919,6 +3919,7 @@ document
 async ()=>{
 
     activarMenu("btnLotes");
+moverSidebar(24);
 
     ocultarTodo();
 
@@ -3940,6 +3941,7 @@ document
 async ()=>{
 
     activarMenu("btnAuditoria");
+moverSidebar(230);
 
     ocultarTodo();
 
@@ -4186,6 +4188,7 @@ document
 async ()=>{
 
     activarMenu("btnAsesores");
+moverSidebar(230);
 
     ocultarTodo();
 
@@ -4208,6 +4211,7 @@ document
 async ()=>{
 
     activarMenu("btnConsultas");
+moverSidebar(245);
 
     ocultarTodo();
 
@@ -4232,6 +4236,7 @@ document
 async ()=>{
 
     activarMenu("btnSolicitudes");
+moverSidebar(175);
 
     ocultarTodo();
 
@@ -4680,6 +4685,11 @@ document.getElementById("contenedorAsesores").style.display="none";
 document.getElementById("contenedorConsultas").style.display="none";
 
 document.getElementById("contenedorSolicitudes").style.display="none";
+
+}
+function moverSidebar(top){
+
+    document.getElementById("sidebar").style.top = top + "px";
 
 }
 async function cargarConsultas(){
