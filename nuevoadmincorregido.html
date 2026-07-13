@@ -73,16 +73,25 @@ input{
 }
 
 button{
-    width:100%;
+
     margin-top:20px;
+
     padding:14px;
+
     border:none;
+
     border-radius:30px;
+
     background:#3f4d5d;
+
     color:white;
+
     font-size:16px;
+
     font-weight:bold;
+
     cursor:pointer;
+
 }
 
 #error{
@@ -120,30 +129,32 @@ button{
 
     align-items:center;
 
-    padding:20px 28px;
+    padding:14px 24px;
 
-    border-radius:22px;
+    border-radius:18px;
 
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
-    box-shadow:0 8px 25px rgba(15,23,42,.05);
+    box-shadow:0 8px 20px rgba(15,23,42,.06);
 
-    margin-bottom:22px;
+    margin-bottom:6px;
 
 }
 #contenedorLotes{
-    margin-top:20px;
+    margin-top:0;
 }
 
 .tabla td{
 
-padding:12px 14px;
+padding:8px 12px;
 
-height:56px;
+height:44px;
 
 vertical-align:middle;
+
+font-size:13px;
 
 }
 
@@ -234,13 +245,26 @@ vertical-align:middle;
 
     display:grid;
 
-    grid-template-columns:270px 1fr;
+    grid-template-columns:240px minmax(0,1fr);
 
-    gap:30px;
+    gap:22px;
 
     align-items:start;
 
-    margin-top:18px;
+    min-height:100vh;
+
+}
+#workspace{
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-width:0;
+
+    height:calc(100vh - 48px);
+
+    overflow:hidden;
 
 }
 
@@ -248,47 +272,46 @@ vertical-align:middle;
 
 #sidebar{
 
-    background:#FFFFFF;
-
-    border:1px solid #E5E7EB;
-
-    border-radius:18px;
-
-    padding:18px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:space-between;
-
-    min-height:calc(100vh - 45px);
-
-    box-shadow:0 10px 35px rgba(15,23,42,.06);
-
     position:sticky;
 
-    top:20px;
+    top:24px;
 
     align-self:start;
 
+    width:240px;
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:20px;
+
+    padding:18px;
+
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
+
 }
-
 .menuItem{
-
-    display:flex;
-
-    align-items:center;
-justify-content:flex-start;
-
-    gap:14px;
-padding-left:22px;
 
     width:100%;
 
-    height:58px;
+    height:52px;
 
-    padding:0 14px;
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:14px;
+
+    padding:0 18px;
+
+    margin-bottom:8px;
+
+    border:none;
 
     border-radius:14px;
 
@@ -296,46 +319,133 @@ padding-left:22px;
 
     color:#334155;
 
-    font-size:16px;
+    font-size:15px;
 
     font-weight:600;
 
+    text-align:left;
+
+    cursor:pointer;
+
     transition:.25s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+line-height:1;
+
+}
+.iconoMenu{
+
+    width:24px;
+
+    min-width:24px;
+
+    height:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+}
+
+.iconoMenu svg{
+
+    width:18px;
+
+    height:18px;
+
+    stroke-width:2;
 
 }
 
 .menuItem:hover{
 
-    background:#EFF6FF;
+    background:#EEF4FF;
 
     color:#2563EB;
 
-}
+    }
 
 .menuItem.activo{
 
-    background:#2563EB;
+    background:#EEF4FF;
 
-    color:#FFFFFF;
+    color:#2563EB;
 
-    box-shadow:0 10px 25px rgba(37,99,235,.20);
+    box-shadow:none;
 
 }
-.menuItem span{
+.menuItem.activo::before{
 
-    display:block;
+    content:"";
 
-    line-height:58px;
+    position:absolute;
 
-    text-align:left;
+    left:0;
+
+    top:8px;
+
+    bottom:8px;
+
+    width:4px;
+
+    border-radius:4px;
+
+    background:#2563EB;
+
+}
+.menuSalir{
+
+    margin-top:18px;
+
+    border-top:1px solid #E2E8F0;
+
+    padding-top:18px;
+
+}
+
+.menuSalir:hover{
+
+    background:#FEF2F2;
+
+    color:#DC2626;
+
+}
+
+.menuSalir:hover svg{
+
+    stroke:#DC2626;
+
+}
+.menuItem > span:last-child{
 
     flex:1;
 
-}
+    text-align:left;
 
-.menuItem{
+    white-space:nowrap;
 
     line-height:1;
+
+}
+#contadorSolicitudes{
+
+    flex:0;
+
+    margin-left:auto;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    color:#EF4444;
 
 }
 
@@ -343,7 +453,28 @@ padding-left:22px;
 
 #contenido{
 
-    width:100%;
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    min-width:0;
+
+    height:100%;
+
+    overflow:hidden;
+
+}
+#contenidoScrollable{
+
+    flex:1;
+
+    min-height:0;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
 
 }
 
@@ -353,23 +484,39 @@ padding-left:22px;
 
     position:sticky;
 
-    top:20px;
+    top:0;
+left:0;
 
-    z-index:200;
+    z-index:1000;
 
     background:#F8FAFC;
 
-    padding-bottom:12px;
+    padding-top:4px;
+
+    padding-bottom:4px;
 
 }
 
+#panelSuperior{
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+
+}
 #dashboard{
 
     display:grid;
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:14px;
+    gap:12px;
 
     margin-bottom:16px;
 
@@ -397,25 +544,54 @@ padding-left:22px;
 
 .cardDashboard{
 
+    position:relative;
+
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
     border-radius:16px;
 
-    padding:14px 16px;
+    padding:12px 14px;
 
-    height:86px;
+    height:68px;
 
     display:flex;
 
     align-items:center;
 
-    gap:14px;
+    justify-content:flex-start;
 
-    box-shadow:0 6px 18px rgba(15,23,42,.05);
+gap:16px;
+    overflow:hidden;
 
     transition:.25s;
+cursor:default;
+
+border-bottom:4px solid transparent;
+
+}
+.cardDashboard:nth-child(1){
+
+    border-bottom-color:#2563EB;
+
+}
+
+.cardDashboard:nth-child(2){
+
+    border-bottom-color:#22C55E;
+
+}
+
+.cardDashboard:nth-child(3){
+
+    border-bottom-color:#F59E0B;
+
+}
+
+.cardDashboard:nth-child(4){
+
+    border-bottom-color:#EF4444;
 
 }
 .cardInfo{
@@ -426,13 +602,19 @@ padding-left:22px;
 
     justify-content:center;
 
+    align-items:flex-start;
+
+    gap:2px;
+
 }
 
 .cardDashboard:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-2px);
 
-    box-shadow:0 18px 40px rgba(15,23,42,.10);
+    box-shadow:0 10px 24px rgba(15,23,42,.08);
+
+    border-color:#CBD5E1;
 
 }
 
@@ -440,46 +622,48 @@ padding-left:22px;
 
     margin:0;
 
-    font-size:18px;
+    font-size:22px;
 
     font-weight:700;
 
     color:#0F172A;
 
+    line-height:1.05;
+
 }
 
 .cardDashboard p{
 
-    margin:2px 0 0;
+    margin:0;
 
     font-size:11px;
 
     color:#64748B;
 
-    font-weight:600;
-
     text-transform:uppercase;
 
     letter-spacing:.8px;
 
+    font-weight:600;
+
 }
 .cardIcono{
 
-    width:34px;
+    width:48px;
 
-    height:34px;
+    height:48px;
 
-    border-radius:18px;
+    border-radius:14px;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    font-size:16px;
+    align-items:center;
 
-    background:#EFF6FF;
+    flex-shrink:0;
+
+    margin-left:8px;
 
 }
 
@@ -500,45 +684,346 @@ padding-left:22px;
     background:#FEE2E2;
 
 }
+.btnCambiarEstado{
 
-/* HERRAMIENTAS */
+    width:82px;
 
-#herramientas{
+    height:30px;
 
     display:flex;
 
-    gap:12px;
+    margin:auto;
 
-    align-items:stretch;
+    justify-content:center;
 
-    flex-wrap:wrap;
+    align-items:center;
 
-    margin:18px 0;
+    border:none;
 
-    background:#F8FAFC;
+    border-radius:10px;
 
-    padding:12px 0;
-box-shadow:0 8px 25px rgba(15,23,42,.05);
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    box-shadow:0 4px 12px rgba(37,99,235,.20);
+
+    transition:.20s;
 
 }
 
-#buscarLote{
+.btnCambiarEstado:hover:not(:disabled){
 
-    width:360px;
+    background:#1D4ED8;
 
-    height:48px;
+}
+
+.btnCambiarEstado:disabled{
+
+    background:#94A3B8;
+
+}
+
+.btnAzul{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btnAzul:hover{
+
+    background:#1D4ED8;
+
+}
+.btn-verde{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin:0;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#16A34A;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btn-verde:hover{
+
+    background:#15803D;
+
+}
+
+.btn-rojo{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    margin-left:8px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#DC2626;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btn-rojo:hover{
+
+    background:#B91C1C;
+
+}
+.modalCard{
+
+    background:#FFFFFF;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    width:450px;
+
+    max-width:90%;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(15,23,42,.20);
+
+}
+
+.modalMensaje{
+
+    margin:20px 0;
+
+    line-height:1.6;
+
+}
+
+.modalAcciones{
+
+    display:flex;
+
+    gap:10px;
+
+    justify-content:center;
+
+}
+
+.modalPasswordCard{
+
+    background:#FFFFFF;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    min-width:350px;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(15,23,42,.20);
+
+}
+
+.passwordValor{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin:20px 0;
+
+}
+.btnGris{
+
+    width:auto;
+
+    height:42px;
+
+    padding:0 18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#6B7280;
+
+    color:#FFFFFF;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btnGris:hover{
+
+    background:#4B5563;
+
+}
+.inputBusqueda{
+
+    width:350px;
+
+    height:44px;
+
+    padding:0 16px;
 
     border:1px solid #CBD5E1;
 
-    border-radius:14px;
-
-    padding:0 18px;
+    border-radius:12px;
 
     background:#FFFFFF;
 
     font-size:14px;
 
     transition:.25s;
+
+}
+
+.inputBusqueda:focus{
+
+    outline:none;
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+/* HERRAMIENTAS */
+
+#herramientas{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:nowrap;
+
+}
+#barraFiltrosActivos{
+
+    display:none;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+    margin-top:12px;
+
+}
+
+.filtroActivo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    background:#DBEAFE;
+
+    color:#2563EB;
+
+    border:1px solid #BFDBFE;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.filtroActivo button{
+
+    width:auto;
+
+    margin:0;
+
+    padding:0;
+
+    background:none;
+
+    border:none;
+
+    color:#2563EB;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+#buscarLote{
+
+    width:340px;
+
+    flex:0 0 340px;
 
 }
 
@@ -558,31 +1043,9 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 #filtroReservados,
 #filtroVendidos{
 
-    width:auto;
+    flex:0 0 auto;
 
-    height:48px;
-
-    padding:0 24px;
-
-    margin:0;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:#FFFFFF;
-
-    border:1px solid #D6DCE5;
-
-    color:#475569;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.25s;
-
-    cursor:pointer;
+    min-width:120px;
 
 }
 
@@ -603,11 +1066,17 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     display:grid;
 
-    grid-template-columns:minmax(0,1fr) 275px;
+    grid-template-columns:minmax(0,1fr) 260px;
 
-    gap:20px;
+    gap:16px;
 
     align-items:start;
+
+    flex:1;
+
+    min-height:0;
+overflow-x:hidden;
+
 }
 
 #panelGraficos{
@@ -616,46 +1085,105 @@ box-shadow:0 8px 25px rgba(15,23,42,.05);
 
     flex-direction:column;
 
-    gap:24px;
+    gap:12px;
 
-    position:sticky;
+    width:100%;
 
-    top:140px;
+    min-width:0;
 
-    align-self:start;
+    padding-right:4px;
 
 }
 .cardGrafico{
 
-    background:#FFF;
+    background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
-    border-radius:22px;
-max-width:275px;
+    border-radius:18px;
 
-margin:auto;
+    padding:14px;
 
-    padding:24px;
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
 
-    box-shadow:
-        0 10px 30px rgba(15,23,42,.06);
+}
+.graficoActivo{
+
+    border:2px solid #2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+    transform:scale(1.01);
+
+    transition:.25s;
+
+}
+.tituloGrafico{
+
+    padding-bottom:12px;
+
+    margin-bottom:12px;
+
+    border-bottom:1px solid #E2E8F0;
+
+}
+.infoGrafico{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:8px;
+
+}
+
+.filaInfoGrafico{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.totalGrafico{
+
+    margin-top:14px;
+
+    padding-top:12px;
+
+    border-top:1px solid #E2E8F0;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:16px;
+
+    font-weight:700;
 
 }
 
 .cardGrafico h3{
 
-    margin:0 0 12px;
+    margin:0;
 
     text-align:center;
 
-    font-size:24px;
+    font-size:13px;
 
-    font-weight:800;
+    font-weight:600;
+
+    color:#0F172A;
 
     letter-spacing:.5px;
 
-    color:#0F172A;
+    line-height:1.2;
 
 }
 /* TABLAS */
@@ -691,9 +1219,9 @@ z-index:100;
 
 background:#F8FAFC;
 
-padding:14px 16px;
+padding:10px 12px;
 
-font-size:13px;
+font-size:12px;
 
 font-weight:700;
 
@@ -702,6 +1230,7 @@ color:#475569;
 border-bottom:2px solid #E2E8F0;
 
 text-align:center;
+
 vertical-align:middle;
 
 white-space:nowrap;
@@ -722,26 +1251,26 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 255px);
+height:calc(100vh - 235px);
 
 overflow-y:auto;
 
 overflow-x:hidden;
 
-position:relative;
-
 border-radius:18px;
+
+position:relative;
 
 }
 #ultimaActualizacion{
 
-    height:46px;
+    height:44px;
 
     display:flex;
 
     align-items:center;
 
-    padding:0 18px;
+    padding:0 14px;
 
     border-radius:12px;
 
@@ -751,7 +1280,7 @@ border-radius:18px;
 
     color:#334155;
 
-    font-size:14px;
+    font-size:15px;
 
     font-weight:600;
 
@@ -778,7 +1307,7 @@ border-radius:18px;
 
 .saludo{
 
-    font-size:13px;
+    font-size:11px;
 
     color:#64748B;
 
@@ -794,7 +1323,7 @@ border-radius:18px;
 
     margin:0;
 
-    font-size:28px;
+    font-size:22px;
 
     font-weight:700;
 
@@ -804,21 +1333,21 @@ border-radius:18px;
 
 .subtitulo{
 
-    margin-top:6px;
+    margin-top:2px;
 
     color:#64748B;
 
-    font-size:15px;
+    font-size:13px;
 
 }
 
 #fechaActual{
 
-    margin-top:10px;
+    margin-top:2px;
 
     color:#94A3B8;
 
-    font-size:13px;
+    font-size:11px;
 
 }
 
@@ -934,15 +1463,15 @@ border-radius:18px;
 
     gap:14px;
 
-    margin-bottom:22px;
+    margin-bottom:16px;
 
 }
 
 .logoSidebar{
 
-    width:54px;
+    width:44px;
 
-    height:54px;
+    height:44px;
 
     border-radius:12px;
 
@@ -956,7 +1485,7 @@ border-radius:18px;
 
     align-items:center;
 
-    font-size:22px;
+    font-size:18px;
 
     font-weight:700;
 
@@ -992,7 +1521,112 @@ border-radius:18px;
 
     border-top:1px solid #E2E8F0;
 
-    margin:6px 0 18px;
+    margin:6px 0 12px;
+
+}
+.sidebarEstado{
+
+    margin-top:18px;
+
+    padding-top:18px;
+
+    border-top:1px solid #E2E8F0;
+
+}
+
+.estadoSistema{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    background:#F8FAFC;
+
+    border:1px solid #E2E8F0;
+
+    transition:.25s;
+
+}
+
+.estadoSistema:hover{
+
+    background:#EFF6FF;
+
+    border-color:#BFDBFE;
+
+}
+
+.punto{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 10px rgba(34,197,94,.45);
+
+    flex-shrink:0;
+
+}
+
+.texto{
+
+    display:flex;
+
+    flex-direction:column;
+
+    line-height:1.2;
+
+}
+
+.texto strong{
+
+    font-size:13px;
+
+    color:#0F172A;
+
+}
+
+.texto span{
+
+    font-size:11px;
+
+    color:#64748B;
+
+}
+
+.sidebarTitulo{
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:#94A3B8;
+
+    text-transform:uppercase;
+
+    margin-bottom:12px;
+
+}
+
+.estadoSistema .texto span{
+
+    font-size:11px;
+
+    color:#64748B;
 
 }
 
@@ -1056,6 +1690,113 @@ width:auto;
 padding:10px 18px;
 margin:0;
 }
+.barraModulo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+
+}
+
+.filaAcciones{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.btnEliminar{
+
+    background:#DC2626;
+
+}
+.btnCancelar{
+
+    background:#6B7280;
+
+}
+
+.btnCancelar:hover{
+
+    background:#4B5563;
+
+}
+
+.btnGuardar{
+
+    background:#2563EB;
+
+}
+
+.btnGuardar:hover{
+
+    background:#1D4ED8;
+
+}
+
+.btnEliminar:hover{
+
+    background:#B91C1C;
+
+}
+.filaBotones{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+}
+
+.inputModulo{
+
+    width:320px;
+
+    padding:12px 14px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    background:#FFFFFF;
+
+}
+
+.seccionBuscador{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+
+}
 
 /*======================================
         BADGES ESTADO
@@ -1117,6 +1858,56 @@ margin:0;
     background:#2563EB;
 
     font-size:14px;
+
+}
+
+/* ===== CORRECCIÓN MENÚ LATERAL ===== */
+
+.menuItem{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:flex-start !important;
+
+    gap:14px !important;
+
+}
+
+.menuItem .iconoMenu{
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    width:28px !important;
+
+    min-width:28px !important;
+
+    flex-shrink:0 !important;
+
+}
+
+.menuItem .iconoMenu svg{
+
+    width:20px;
+
+    height:20px;
+
+    display:block;
+
+}
+
+.menuItem > span:not(.iconoMenu){
+
+    display:block !important;
+
+    line-height:1 !important;
+
+    white-space:nowrap !important;
 
 }
 </style>
@@ -1195,11 +1986,28 @@ margin:0;
 
         </div>
 
-        <button id="cerrarSesion">
+        <button id="cerrarSesion" class="menuSalir">
 
-            Salir
+    <span class="iconoMenu">
 
-        </button>
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+
+            <path d="M16 17l5-5-5-5"/>
+
+            <path d="M21 12H9"/>
+
+        </svg>
+
+    </span>
+
+    <span>Cerrar sesión</span>
+
+</button>
 
     </div>
 
@@ -1236,111 +2044,220 @@ margin:0;
 
 <hr class="separadorSidebar">
 
-        <button id="btnLotes" class="menuItem activo">
-            🏡
-            <span>Lotes</span>
-        </button>
+        <button id="btnLotes" class="menuItem">
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M3 11L12 4L21 11"/>
+
+            <path d="M5 10V20H19V10"/>
+
+        </svg>
+
+    </span>
+
+    <span>Lotes</span>
+
+</button>
 
         <button id="btnSolicitudes" class="menuItem">
-            📋
-            <span>Solicitudes</span>
-            <span id="contadorSolicitudes"></span>
-        </button>
+
+    <span class="iconoMenu">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+<rect x="6" y="4" width="12" height="16" rx="2"/>
+
+<path d="M9 8H15"/>
+
+<path d="M9 12H15"/>
+
+<path d="M9 16H13"/>
+
+</svg>
+
+</span>
+
+    <span>Solicitudes</span>
+
+    <span id="contadorSolicitudes"></span>
+
+</button>
 
         <button id="btnConsultas" class="menuItem">
-            📞
-            <span>Consultas</span>
-        </button>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.4 2.6a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l2.6.4A2 2 0 0 1 22 16.9z"/>
+
+        </svg>
+
+    </span>
+
+    <span>Consultas</span>
+
+</button>
 
         <button id="btnAsesores" class="menuItem">
-            👥
-            <span>Asesores</span>
-        </button>
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+
+            <circle cx="9" cy="7" r="4"/>
+
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+        </svg>
+
+    </span>
+
+    <span>Asesores</span>
+
+</button>
 
         <button id="btnAuditoria" class="menuItem">
-            📑
-            <span>Auditoría</span>
-        </button>
-<hr style="border:none;border-top:1px solid #E2E8F0;margin:18px 0;">
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+
+            <path d="M14 2v6h6"/>
+
+            <path d="M8 13h8"/>
+
+            <path d="M8 17h5"/>
+
+        </svg>
+
+    </span>
+
+    <span>Auditoría</span>
+
+</button>
+<hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
 
 <div id="sidebarInfo">
 
-    <div style="font-size:13px;color:#64748B;font-weight:600;">
+    <div class="sidebarEstado">
+
+    <div class="sidebarTitulo">
+
         SISTEMA
+
     </div>
 
-    <div style="margin-top:12px;font-size:14px;">
-        🟢 En línea
+    <div class="estadoSistema">
+
+        <div class="punto"></div>
+
+        <div class="texto">
+
+            <strong>En línea</strong>
+
+            <span>Servidor operativo</span>
+
+        </div>
+
     </div>
 
-    <div style="margin-top:18px;font-size:13px;color:#94A3B8;">
-        Última sincronización
+    <div class="sidebarTitulo">
+
+        ÚLTIMA SINCRONIZACIÓN
+
     </div>
 
-    <div id="horaSidebar"
-         style="margin-top:6px;font-weight:600;">
-        --
+    <div class="estadoSistema">
+
+        <div class="punto"></div>
+
+        <div class="texto">
+
+            <strong id="horaSidebar">--</strong>
+
+            <span>Actualización automática</span>
+
+        </div>
+
     </div>
 
-    <hr style="border:none;border-top:1px solid #E2E8F0;margin:20px 0;">
+    <div class="sidebarTitulo">
 
-    <div style="font-size:13px;color:#94A3B8;">
-        ASSTURIAS
+        INFORMACIÓN
+
     </div>
 
-    <div style="font-size:13px;color:#64748B;">
-        Panel Administrativo v2.0
+    <div class="estadoSistema">
+
+        <div class="texto">
+
+            <strong>ASSTURIAS</strong>
+
+            <span>Panel Administrativo v2.0</span>
+
+        </div>
+
     </div>
 
 </div>
 
+</div>
+
     </aside>
+<main id="workspace">
 
     <div id="contenido">
 
         <div id="cabeceraFija">
 
-    <div id="dashboard"></div>
+    <div id="panelSuperior">
+
+    <div id="dashboard">
+    </div>
 
     <div id="herramientas">
 
         <input
-        type="text"
-        id="buscarLote"
-    placeholder="🔍 Buscar lote...">
+            type="text"
+            id="buscarLote"
+            placeholder="🔍 Buscar lote...">
 
-    <button
-    id="filtroTodos">
+        <button id="filtroTodos">
+            TODOS
+        </button>
 
-        TODOS
+        <button id="filtroLibres">
+            LIBRES
+        </button>
 
-    </button>
+        <button id="filtroReservados">
+            RESERVADOS
+        </button>
 
-    <button
-    id="filtroLibres">
+        <button id="filtroVendidos">
+            VENDIDOS
+        </button>
 
-        LIBRES
+    </div>
 
-    </button>
+    <div id="barraFiltrosActivos">
+    </div>
 
-    <button
-    id="filtroReservados">
-
-        RESERVADOS
-
-    </button>
-
-    <button
-    id="filtroVendidos">
-
-        VENDIDOS
-
-    </button>
-
-    
 </div>
 
 </div>
+
+<div id="contenidoScrollable">
 
 <div id="contenedorLotesPrincipal">
 
@@ -1397,15 +2314,9 @@ type="text"
 
 id="buscarSolicitud"
 
-placeholder="Buscar usuario o lote..."
+class="inputBusqueda"
 
-style="
-width:350px;
-padding:12px;
-border-radius:10px;
-border:1px solid #ccc;
-font-size:16px;
-"
+placeholder="Buscar usuario o lote..."
 
 onkeyup="filtrarSolicitudes()"
 
@@ -1417,8 +2328,14 @@ id="listaSolicitudes">
 </div>
 
 </div>
+</div> <!-- contenidoScrollable -->
 
 </div>
+
+</main>
+
+</div>
+
 <div id="modalNotificacion"
 style="
 display:none;
@@ -1433,14 +2350,7 @@ align-items:center;
 z-index:9999;
 ">
 
-<div style="
-background:white;
-padding:30px;
-border-radius:15px;
-width:450px;
-max-width:90%;
-text-align:center;
-">
+<div class="modalCard">
 
 <h2 id="tituloNotificacion">
 Notificación
@@ -1448,14 +2358,14 @@ Notificación
 
 <div
 id="mensajeNotificacion"
-style="
-margin:20px 0;
-line-height:1.6;
-">
+class="modalMensaje">
 </div>
 <button
-id="btnCerrarNotificacion">
+id="btnCerrarNotificacion"
+class="btnAzul">
+
 Aceptar
+
 </button>
 
 </div>
@@ -1481,22 +2391,24 @@ Aceptar
 
         <div class="accionesModal">
 
-            <button
-            id="btnCancelarEstado">
+    <button
+    id="btnCancelarEstado"
+    class="btnGris">
 
-                Cancelar
+        Cancelar
 
-            </button>
+    </button>
 
-            <button
-type="button"
-id="btnGuardarEstado">
+    <button
+    type="button"
+    id="btnGuardarEstado"
+    class="btnAzul">
 
-Guardar
+        Guardar
 
-</button>
+    </button>
 
-        </div>
+</div>
 
     </div>
 
@@ -1515,14 +2427,7 @@ align-items:center;
 z-index:9999;
 ">
 
-<div style="
-background:white;
-padding:30px;
-border-radius:15px;
-width:450px;
-max-width:90%;
-text-align:center;
-">
+<div class="modalCard">
 
 <h2 id="tituloConfirmacion">
 Confirmación
@@ -1530,28 +2435,23 @@ Confirmación
 
 <div
 id="mensajeConfirmacion"
-style="
-margin:20px 0;
-line-height:1.6;
-">
+class="modalMensaje">
 </div>
 
-<div style="
-display:flex;
-gap:10px;
-">
+<div class="modalAcciones">
 
 <button
 id="btnCancelarConfirmacion"
-style="
-background:#6b7280;
-">
+class="btnGris">
 Cancelar
 </button>
 
 <button
-id="btnAceptarConfirmacion">
+id="btnAceptarConfirmacion"
+class="btnAzul">
+
 Aceptar
+
 </button>
 
 </div>
@@ -1572,33 +2472,22 @@ align-items:center;
 z-index:9999;
 ">
 
-    <div style="
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    min-width:350px;
-    text-align:center;
-    ">
+    <div class="modalPasswordCard">
 
         <h3>
             Contraseña del asesor
         </h3>
 
         <div
-        id="passwordAsesor"
-        style="
-        font-size:22px;
-        font-weight:bold;
-        margin:20px 0;
-        ">
+id="passwordAsesor"
+class="passwordValor">
         ********
         </div>
 
        <button
+class="btnGris"
 onclick="
-document
-.getElementById('modalPassword')
-.style.display='none'
+document.getElementById('modalPassword').style.display='none'
 ">
 
 Cerrar
@@ -1621,6 +2510,44 @@ function(){
     this.select();
 
 });
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec";
+
+async function apiPost(action, datos = {}){
+
+    const respuesta = await fetch(API_URL,{
+
+        method:"POST",
+
+        body:JSON.stringify({
+
+            action:action,
+
+            ...datos
+
+        })
+
+    });
+
+    return await respuesta.json();
+
+}
+
+async function apiGet(parametros = ""){
+
+    const respuesta = await fetch(
+
+        API_URL +
+
+        parametros
+
+    );
+
+    return await respuesta.json();
+
+}
+
 function aplicarPermisosRol(rol){
 
     if(rol === "ASESOR"){
@@ -1695,26 +2622,14 @@ async function login(){
 
     try{
 
-        const respuesta =
-        await fetch(
-        "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-        {
-            method:"POST",
-
-            body:JSON.stringify({
-
-    action:"login",
-
-    usuario:usuario,
-
-    password:password
-
-})
-
-});
-
         const resultado =
-        await respuesta.json();
+await apiPost(
+"login",
+{
+usuario:usuario,
+password:password
+}
+);
 
         if(resultado.ok){
 
@@ -1756,9 +2671,9 @@ resultado.nombre +
 resultado.rol +
 "</p>";
 
-await cargarLotes();
+cargarLotes();
 
-await verificarNotificaciones();
+verificarNotificaciones();
 
         }
         else{
@@ -1797,15 +2712,96 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
+let etapaSeleccionada = "";
+
 let solicitudesPendientes = [];
+let lotesFiltrados = [];
+
+let cantidadVisible = 50;
+
+const CARGA_LOTES = 50;
 
 let auditoriaCache = [];
 
 let consultasCache = [];
 
+let asesoresCache = [];
+
+let solicitudesCache = [];
+
 let totalSolicitudesAnterior = 0;
 
 let colaNotificaciones = [];
+
+/*=========================================
+        CACHE DEL PANEL
+=========================================*/
+
+let cache = {
+
+    lotes:0,
+
+    consultas:0,
+
+    auditoria:0,
+
+    asesores:0,
+
+    solicitudes:0
+
+};
+/*=========================================
+      ESTADO DEL DASHBOARD
+=========================================*/
+
+let resumenDashboard = {
+
+    total:-1,
+
+    libres:-1,
+
+    reservados:-1,
+
+    vendidos:-1
+
+};
+/*=========================================
+        CACHE DE GRÁFICOS
+=========================================*/
+
+
+/*=========================================
+      ÚLTIMA SINCRONIZACIÓN
+=========================================*/
+
+let ultimoEstadoLotes = "";
+const TIEMPO_CACHE = 30000; // 30 segundos
+
+/*=========================================
+        REFERENCIAS DEL DOM
+=========================================*/
+
+const UI = {
+
+    dashboard: document.getElementById("dashboard"),
+
+    contenedorLotes: document.getElementById("contenedorLotes"),
+
+    panelGraficos: document.getElementById("panelGraficos"),
+
+    contadorSolicitudes: document.getElementById("contadorSolicitudes"),
+
+    ultimaActualizacion: document.getElementById("ultimaActualizacion"),
+
+    contenedorConsultas: document.getElementById("contenedorConsultas"),
+
+    contenedorAuditoria: document.getElementById("contenedorAuditoria"),
+
+    contenedorAsesores: document.getElementById("contenedorAsesores"),
+
+    listaSolicitudes: document.getElementById("listaSolicitudes")
+
+};
 
 
 function renderizarLotes(datos){
@@ -1842,6 +2838,7 @@ localStorage.getItem("rol");
 const pendiente =
 solicitudesPendientes.find(
 s =>
+s.Etapa === lote.Etapa &&
 s.Lote === lote.Lote
 );
 
@@ -1903,23 +2900,11 @@ vertical-align:middle;
 
 ${bloqueado ? "disabled" : ""}
 
+class="btnCambiarEstado"
+
 style="
-width:96px;
-height:36px;
-display:flex;
-margin:auto;
-justify-content:center;
-align-items:center;
-border:none;
-border-radius:10px;
-background:#2563EB;
-color:#FFFFFF;
-font-size:13px;
-font-weight:600;
-box-shadow:0 4px 12px rgba(37,99,235,.20);
-opacity:${bloqueado ? "0.5" : "1"};
-cursor:${bloqueado ? "not-allowed" : "pointer"};
-transition:.20s;
+opacity:${bloqueado ? "0.5":"1"};
+cursor:${bloqueado ? "not-allowed":"pointer"};
 "
 
 onclick="cambiarEstado('${lote.Etapa}','${lote.Lote}')">
@@ -1936,106 +2921,7 @@ ${pendiente ? "En Espera ⏳" : "Cambiar"}
 });
 
 html += "</tbody></table></div>";
-
-document
-.getElementById(
-"contenedorLotes"
-)
-.innerHTML =
-html;
-
-}
-
-function actualizarFila(lote){
-
-const id =
-
-"fila_" +
-
-(lote.Etapa+"_"+lote.Lote)
-
-.replace(/\s+/g,"_");
-
-const fila =
-document.getElementById(id);
-
-if(!fila){
-return;
-}
-
-let clase="";
-
-if(lote.Estado==="LIBRE"){
-
-clase="estado-libre";
-
-}
-else if(lote.Estado==="RESERVADO"){
-
-clase="estado-reservado";
-
-}
-else{
-
-clase="estado-vendido";
-
-}
-
-fila.children[2].innerHTML = `
-<span class="badge ${lote.Estado.toLowerCase()}">
-${lote.Estado}
-</span>
-`;
-
-const boton = fila.children[5].querySelector("button");
-
-if(boton){
-
-const rol =
-localStorage.getItem("rol");
-
-const pendiente =
-solicitudesPendientes.find(function(s){
-
-return(
-
-s.Etapa===lote.Etapa &&
-
-s.Lote===lote.Lote
-
-);
-
-});
-
-const bloqueado =
-
-(rol==="ASESOR" &&
-
-(
-
-lote.Estado==="VENDIDO" ||
-
-lote.Estado==="RESERVADO"
-
-))
-
-||
-
-pendiente;
-
-boton.disabled = bloqueado;
-
-boton.style.opacity =
-bloqueado ? "0.5":"1";
-
-boton.textContent =
-pendiente
-?
-"En Espera ⏳"
-:
-"Cambiar";
-
-}
+UI.contenedorLotes.innerHTML = html;
 
 }
 
@@ -2058,12 +2944,31 @@ const vendidos =
 datos.filter(
 x=>x.Estado==="VENDIDO"
 ).length;
+if(
 
-document
-.getElementById(
-"dashboard"
-)
-.innerHTML = `
+    resumenDashboard.total === total &&
+
+    resumenDashboard.libres === libres &&
+
+    resumenDashboard.reservados === reservados &&
+
+    resumenDashboard.vendidos === vendidos
+
+){
+
+    return;
+
+}
+
+resumenDashboard.total = total;
+
+resumenDashboard.libres = libres;
+
+resumenDashboard.reservados = reservados;
+
+resumenDashboard.vendidos = vendidos;
+
+UI.dashboard.innerHTML = `
 
 <div class="cardDashboard">
 
@@ -2127,8 +3032,7 @@ document
 
 function renderizarGraficosPorEtapa(datos){
 
-const panel =
-document.getElementById("panelGraficos");
+const panel = UI.panelGraficos;
 
 if(!panel){
     return;
@@ -2202,28 +3106,56 @@ Object.keys(etapas).forEach(etapa=>{
         e.LIBRE +
         e.RESERVADO +
         e.VENDIDO;
+const estadoActual =
+
+e.LIBRE + "|" +
+
+e.RESERVADO + "|" +
+
+e.VENDIDO;
 
     html += `
 
-<div class="cardGrafico">
+<div class="cardGrafico ${
+    etapaSeleccionada === etapa ? "graficoActivo" : ""
+}">
 
-    <h3>${etapa}</h3>
+<div class="tituloGrafico">
+
+    <h3
+style="
+cursor:pointer;
+user-select:none;
+transition:.2s;
+"
+onmouseover="this.style.color='#2563EB'"
+onmouseout="this.style.color='#0F172A'"
+onclick="filtrarPorEtapa('${etapa}')">
+
+${etapa}
+
+</h3>
+
+</div>
     <div style="
-width:185px;
-height:185px;
-margin:10px auto 12px;
+width:175px;
+height:175px;
+margin:12px auto;
+display:flex;
+justify-content:center;
+align-items:center;
 ">
 
-        <canvas
-        id="grafico_${etapa.replace(/\s+/g,'_')}">
-        </canvas>
+    <canvas
+    id="grafico_${etapa.replace(/\s+/g,'_')}">
+    </canvas>
 
-    </div>
+</div>
 
     <div style="
-        margin-top:14px;
-        font-size:14px;
-        line-height:1.9;
+        margin-top:8px;
+font-size:13px;
+line-height:1.6;
         text-align:left;
     ">
 
@@ -2234,19 +3166,19 @@ const pReservado = totalEtapa ? ((e.RESERVADO * 100) / totalEtapa).toFixed(1) : 
 const pVendido = totalEtapa ? ((e.VENDIDO * 100) / totalEtapa).toFixed(1) : 0;
 
 return `
-<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+<div class="infoGrafico">
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🟢 Libres</span>
 <b>${e.LIBRE} (${pLibre}%)</b>
 </div>
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🟡 Reservados</span>
 <b>${e.RESERVADO} (${pReservado}%)</b>
 </div>
 
-<div style="display:flex;justify-content:space-between;">
+<div class="filaInfoGrafico">
 <span>🔴 Vendidos</span>
 <b>${e.VENDIDO} (${pVendido}%)</b>
 </div>
@@ -2256,16 +3188,7 @@ return `
 
 })()}
 
-        <div style="
-margin-top:14px;
-padding-top:12px;
-border-top:1px solid #E2E8F0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:16px;
-font-weight:700;
-">
+        <div class="totalGrafico">
 
 <span>Total</span>
 
@@ -2282,6 +3205,7 @@ font-weight:700;
 });
 
 panel.innerHTML=html;
+
 Object.keys(etapas).forEach(etapa=>{
 
     const e=etapas[etapa];
@@ -2289,8 +3213,17 @@ Object.keys(etapas).forEach(etapa=>{
     const canvas=document.getElementById(
         "grafico_"+etapa.replace(/\s+/g,"_")
     );
+const idGrafico = "grafico_"+etapa.replace(/\s+/g,"_");
 
-    new Chart(canvas,{
+if(window.graficos === undefined){
+    window.graficos = {};
+}
+
+if(window.graficos[idGrafico]){
+    window.graficos[idGrafico].destroy();
+}
+
+    window.graficos[idGrafico] = new Chart(canvas,{
 
     plugins:[pluginTextoCentro],
 
@@ -2334,7 +3267,7 @@ Object.keys(etapas).forEach(etapa=>{
 
             borderWidth:3,
 
-            hoverOffset:20,
+            hoverOffset:4,
 
 offset(context){
 
@@ -2369,11 +3302,34 @@ offset(context){
 },
 onClick(event,elements){
 
+    const chart = event.chart;
+
+    const meta = chart.getDatasetMeta(0);
+
+    if(!meta.data.length) return;
+
+    const centroX = meta.data[0].x;
+    const centroY = meta.data[0].y;
+
+    const dx = event.x - centroX;
+    const dy = event.y - centroY;
+
+    const distancia = Math.sqrt(dx*dx + dy*dy);
+
+    // Radio aproximado del agujero central
+    if(distancia < 45){
+
+        filtrarPorEtapa(etapa);
+
+        return;
+
+    }
+
     if(!elements.length) return;
 
     const indice = elements[0].index;
 
-    const estados = [
+    const estados=[
 
         "LIBRE",
 
@@ -2383,9 +3339,7 @@ onClick(event,elements){
 
     ];
 
-    const estado = estados[indice];
-
-    filtrarPorEstadoDesdeGrafico(estado);
+    filtrarPorEstadoDesdeGrafico(estados[indice]);
 
 },
 
@@ -2396,25 +3350,7 @@ onClick(event,elements){
     },
 
     tooltip:{
-
-        callbacks:{
-
-            label(context){
-
-                const valor=context.raw;
-
-                const total=context.dataset.data
-                    .reduce((a,b)=>a+b,0);
-
-                const porcentaje=((valor*100)/total)
-                    .toFixed(1);
-
-                return `${valor} lotes (${porcentaje}%)`;
-
-            }
-
-        }
-
+        enabled:false
     }
 
 },
@@ -2433,32 +3369,87 @@ function filtrarPorEstadoDesdeGrafico(estado){
     filtrarLotes();
 
 }
+function filtrarPorEtapa(etapa){
+
+    if(etapaSeleccionada===etapa){
+
+        etapaSeleccionada="";
+
+    }
+    else{
+
+        etapaSeleccionada=etapa;
+
+    }
+
+    filtroActual="TODOS";
+
+    filtrarLotes();
+
+}
+function actualizarFiltrosActivos(){
+
+    const barra = document.getElementById("barraFiltrosActivos");
+
+    let html = "";
+
+    if(etapaSeleccionada){
+
+        html += `
+        <div class="filtroActivo">
+            📍 ${etapaSeleccionada}
+            <button onclick="
+    etapaSeleccionada='';
+
+    filtroActual='TODOS';
+
+    document.getElementById('buscarLote').value='';
+
+    filtrarLotes();
+
+    renderizarGraficosPorEtapa(todosLosLotes);
+
+    actualizarBotonesFiltro();
+">✕</button>
+        </div>`;
+    }
+
+    barra.innerHTML = html;
+
+    barra.style.display =
+        html === ""
+        ? "none"
+        : "flex";
+
+}
 async function cargarLotes(){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-    );
+    try{
 
-    const datos =
-    await respuesta.json();
+const [
 
-    todosLosLotes = datos;
+datos,
 
-try{
+pendientes
 
-const respSolicitudes =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
-);
+] = await Promise.all([
 
-solicitudesPendientes =
-await respSolicitudes.json();
+    apiGet(),
+
+    apiGet("?action=solicitudesPendientes")
+
+]);
+
+todosLosLotes = datos;
+
+solicitudesPendientes = pendientes;
 
 }
 catch(error){
 
-solicitudesPendientes = [];
+    todosLosLotes = [];
+
+    solicitudesPendientes = [];
 
 }
 
@@ -2510,7 +3501,7 @@ async function guardarEstado(){
 
 const verificacion =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
+API_URL
 );
 
 const lotes =
@@ -2567,7 +3558,7 @@ loteServidor.Estado +
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 return;
 
@@ -2588,36 +3579,20 @@ localStorage.getItem(
 
 if(rol === "ASESOR"){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"crearSolicitud",
 {
-method:"POST",
-
-body:JSON.stringify({
-
-action:"crearSolicitud",
-
 usuario:usuario,
-
 etapa:etapaActual,
-
 lote:loteActual,
-
 estadoActual:estadoOriginal,
-
 estadoSolicitado:estado
-
-})
-
 }
 );
-
-const resultado =
-await respuesta.json();
 const respuestaSolicitudes =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
+API_URL + "?action=solicitudesPendientes"
 );
 
 solicitudesPendientes =
@@ -2662,33 +3637,17 @@ resultado.mensaje ||
 return;
 
 } 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"actualizarEstado",
 {
-    method:"POST",
-
-    body:JSON.stringify({
-
-    action:"actualizarEstado",
-
-    etapa:etapaActual,
-
-    lote:loteActual,
-
-    estado:estado,
-
-    usuario:usuario,
-
-    estadoOriginal:estadoOriginal
-
-})
-
+etapa:etapaActual,
+lote:loteActual,
+estado:estado,
+usuario:usuario,
+estadoOriginal:estadoOriginal
 }
 );
-
-    const resultado =
-await respuesta.json();
 
 if(
 resultado.mensaje ===
@@ -2710,7 +3669,7 @@ mostrarNotificacion(
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 return;
 
@@ -2725,7 +3684,10 @@ document
 .style.display =
 "none";
 
-await sincronizarPanel();
+/* esperar que Google Sheets termine de guardar */
+await new Promise(resolve=>setTimeout(resolve,600));
+
+await refrescarSistema();
 
 mostrarNotificacion(
 
@@ -2756,7 +3718,7 @@ resultado.mensaje ||
 
 );
 
-await sincronizarPanel();
+await refrescarSistema();
 
 }
 
@@ -2765,10 +3727,7 @@ async function cambiarEstado(etapa,lote){
 
     const respuesta =
     await fetch(
-
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-
-+
+API_URL +
 
 "?etapa=" +
 
@@ -2959,31 +3918,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnLotes");
+    activarMenu("btnLotes");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-ocultarTodo();
+    document
+    .getElementById("cabeceraFija")
+    .style.display="block";
 
-document.getElementById(
-"cabeceraFija"
-).style.display="block";
+    document
+    .getElementById("contenedorLotesPrincipal")
+    .style.display="grid";
 
-document.getElementById(
-"dashboard"
-).style.display="grid";
-
-document.getElementById(
-"herramientas"
-).style.display="flex";
-
-document.getElementById(
-"contenedorLotes"
-).style.display =
-"block";
-document.getElementById(
-"panelGraficos"
-).style.display="flex";
+    sincronizarPanel();
 
 });
 document
@@ -2992,14 +3939,21 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnAuditoria");
+    activarMenu("btnAuditoria");
 
-await sincronizarPanel();
+    ocultarTodo();
 
-await cargarAuditoria();
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
 
-}
-);
+    document
+    .getElementById("contenedorAuditoria")
+    .style.display="block";
+
+    cargarAuditoria();
+
+});
 async function cargarAuditoria(){
 
 const rol =
@@ -3018,13 +3972,10 @@ document
 .style.display =
 "block";
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=auditoria"
-);
-
 const datos =
-await respuesta.json();
+await apiGet(
+"?action=auditoria"
+);
 datos.sort((a,b)=>{
 
     return new Date(b.Fecha)
@@ -3046,92 +3997,71 @@ x => x.Despues === "VENDIDO"
 
 <div class="tituloModulo">
 
-<h2>
-📑 Auditoría
-</h2>
+    <h2>📑 Auditoría</h2>
 
-<p>
-Registro histórico de todos los cambios realizados en el sistema.
-</p>
+    <p>Registro histórico de todos los cambios realizados en el sistema.</p>
 
 </div>
 
 <div class="moduloContenido">
 
-<input
+    <input
+        id="buscarAuditoria"
+        placeholder="🔍 Buscar usuario..."
+        style="
+        width:350px;
+        padding:12px;
+        border-radius:12px;
+        border:1px solid #CBD5E1;
+        font-size:15px;
+        margin-bottom:20px;
+    ">
 
-id="buscarAuditoria"
+    <div id="resumenAuditoria"
+    style="
+    display:flex;
+    gap:20px;
+    margin-bottom:20px;
+    ">
 
-placeholder="🔍 Buscar usuario..."
+        <div class="cardDashboard">
+            <h3 id="totalCambios">${datos.length}</h3>
+            <p>Total Cambios</p>
+        </div>
 
-style="
-width:350px;
-padding:12px;
-border-radius:12px;
-border:1px solid #CBD5E1;
-font-size:15px;
-margin-bottom:20px;
-">
-<div id="resumenAuditoria"
-style="
-display:flex;
-gap:20px;
-margin-bottom:20px;
-">
+        <div class="cardDashboard">
+            <h3 id="totalReservados">${reservados}</h3>
+            <p>🟡 Reservados</p>
+        </div>
 
-<div class="cardDashboard">
+        <div class="cardDashboard">
+            <h3 id="totalVendidos">${vendidos}</h3>
+            <p>🔴 Vendidos</p>
+        </div>
 
-<h3 id="totalCambios">
-${datos.length}
-</h3>
+    </div>
 
-<p>
-Total Cambios
-</p>
-
-</div>
-
-<div class="cardDashboard">
-
-<h3 id="totalReservados">
-${reservados}
-</h3>
-
-<p>
-🟡 Reservados
-</p>
-
-</div>
-
-<div class="cardDashboard">
-
-<h3 id="totalVendidos">
-${vendidos}
-</h3>
-
-<p>
-🔴 Vendidos
-</p>
-
-</div>
-
-</div>
+<div class="contenedorTablaScroll">
 
 <table class="tabla">
 
 <thead>
+
 <tr>
 
-        <th>Fecha</th>
+<th>Fecha</th>
 <th>Usuario</th>
 <th>Etapa</th>
 <th>Lote</th>
 <th>Antes</th>
 <th>Después</th>
 
-      </tr>
+</tr>
 
-    `;
+</thead>
+
+<tbody>
+`;
 
     datos.forEach(item=>{
 
@@ -3157,7 +4087,15 @@ ${vendidos}
 
     });
 
-    html += "</table></div>";
+    html += `
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+`;
 
     document
     .getElementById(
@@ -3247,9 +4185,19 @@ document
 "click",
 async ()=>{
 
-activarMenu("btnAsesores");
+    activarMenu("btnAsesores");
 
-await cargarAsesores();
+    ocultarTodo();
+
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
+
+    document
+    .getElementById("contenedorAsesores")
+    .style.display="block";
+
+    cargarAsesores();
 
 }
 );
@@ -3258,11 +4206,20 @@ document
 .addEventListener(
 "click",
 async ()=>{
-activarMenu("btnConsultas");
 
-await sincronizarPanel();
+    activarMenu("btnConsultas");
 
-await cargarConsultas();
+    ocultarTodo();
+
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
+
+    document
+    .getElementById("contenedorConsultas")
+    .style.display="block";
+
+    cargarConsultas();
 
 }
 );
@@ -3273,23 +4230,24 @@ document
 .addEventListener(
 "click",
 async ()=>{
-activarMenu("btnSolicitudes");
 
-await sincronizarPanel();
+    activarMenu("btnSolicitudes");
 
-ocultarTodo();
+    ocultarTodo();
 
-document
-.getElementById(
-"contenedorSolicitudes"
-)
-.style.display =
-"block";
+    document
+    .getElementById("cabeceraFija")
+    .style.display="none";
 
-await cargarSolicitudes();
+    document
+    .getElementById(
+    "contenedorSolicitudes"
+    )
+    .style.display="block";
 
-}
-);
+    await cargarSolicitudes();
+
+});
 
 async function cargarAsesores(){
 
@@ -3308,89 +4266,65 @@ document
 .style.display =
 "block";
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-        body:JSON.stringify({
-            action:"listarAsesores"
-        })
-    });
-
     const asesores =
-    await respuesta.json();
+await apiPost("listarAsesores");
 
     let html = `
 
 <div class="tituloModulo">
 
-<h2>
-👥 Asesores
-</h2>
+    <h2>👥 Asesores</h2>
 
-<p>
-Administre los usuarios asesores del sistema.
-</p>
+    <p>
+        Administración de usuarios asesores registrados.
+    </p>
 
 </div>
 
 <div class="moduloContenido">
 
-<h3 style="
-margin-top:0;
-margin-bottom:18px;
-font-size:20px;
-color:#0F172A;
-">
-Nuevo Asesor
-</h3>
+<div class="seccionBuscador">
 
-        <input
-        id="nuevoUsuario"
-        placeholder="Usuario">
-
-        <input
-        id="nuevoPassword"
-        placeholder="Contraseña">
-
-        <input
-        id="nuevoNombre"
-        placeholder="Nombre">
-
-        <button
-        onclick="crearAsesor()">
-
-            Guardar Asesor
-
-        </button>
 <input
-    id="buscarAsesor"
-    placeholder="🔍 Buscar asesor por nombre"
-    style="
-    margin-top:20px;
-    ">
 
-    </div>
+id="buscarAsesor"
 
-    <table class="tabla">
+class="inputModulo"
 
-        <tr>
+placeholder="🔍 Buscar asesor...">
 
-            <th>Usuario</th>
+<button
+class="btnAzul"
+onclick="abrirModalAsesor()">
+➕ Nuevo Asesor
+</button>
 
-            <th>Nombre</th>
+</div>
 
-            <th>Estado</th>
+<div class="contenedorTablaScroll">
 
-            <th style="text-align:center;">
-    Acciones
-</th>
+<table class="tabla">
 
-        </tr>
+<thead>
 
-    `;
+<tr>
 
+<th>Usuario</th>
+
+<th>Nombre</th>
+
+<th>Correo</th>
+
+<th>Estado</th>
+
+<th>Acción</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+`;
     asesores.forEach(a=>{
 
         html += `
@@ -3405,12 +4339,7 @@ Nuevo Asesor
 
             <td style="text-align:center;">
 
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-gap:10px;
-">
+<div class="filaBotones">
 
     <button
     class="btnAccionAdmin"
@@ -3448,7 +4377,7 @@ gap:10px;
     </button>
 
 <button
-class="btnAccionAdmin" style="background:#dc2626;"
+class="btnAccionAdmin btnEliminar"
 onclick="
 eliminarAsesor(
 '${a.usuario}'
@@ -3468,8 +4397,9 @@ Eliminar
     });
 
     html += `
+</tbody>
 </table>
-
+</div>
 </div>
 `;
 
@@ -3535,28 +4465,14 @@ async function crearAsesor(){
     )
     .value;
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:"crearAsesor",
-
-            usuario:usuario,
-
-            password:password,
-
-            nombre:nombre
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"crearAsesor",
+{
+usuario:usuario,
+password:password,
+nombre:nombre
+});
 
     if(resultado.ok){
 
@@ -3585,25 +4501,13 @@ else{
 }
 async function cambiarEstadoAsesor(usuario){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "cambiarEstadoAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"cambiarEstadoAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3624,27 +4528,14 @@ async function cambiarPasswordAsesor(usuario){
         return;
     }
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "cambiarPasswordAsesor",
-
-            usuario:usuario,
-
-            password:nuevaPassword
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"cambiarPasswordAsesor",
+{
+usuario:usuario,
+password:nuevaPassword
+}
+);
 
     if(resultado.ok){
 
@@ -3661,25 +4552,13 @@ async function cambiarPasswordAsesor(usuario){
 }
 async function verPasswordAsesor(usuario){
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "obtenerPasswordAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"obtenerPasswordAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3713,25 +4592,13 @@ usuario +
 
 async ()=>{
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-    {
-        method:"POST",
-
-        body:JSON.stringify({
-
-            action:
-            "eliminarAsesor",
-
-            usuario:usuario
-
-        })
-
-    });
-
     const resultado =
-    await respuesta.json();
+await apiPost(
+"eliminarAsesor",
+{
+usuario:usuario
+}
+);
 
     if(resultado.ok){
 
@@ -3803,38 +4670,16 @@ function activarMenu(id){
 
 }
 function ocultarTodo(){
-document.getElementById("cabeceraFija").style.display="none";
-document.getElementById(
-"panelGraficos"
-).style.display="none";
 
-document.getElementById(
-"dashboard"
-).style.display="none";
+document.getElementById("contenedorLotesPrincipal").style.display="none";
 
-document.getElementById(
-"herramientas"
-).style.display="none";
+document.getElementById("contenedorAuditoria").style.display="none";
 
-document.getElementById(
-"contenedorLotes"
-).style.display="none";
+document.getElementById("contenedorAsesores").style.display="none";
 
-document.getElementById(
-"contenedorAuditoria"
-).style.display="none";
+document.getElementById("contenedorConsultas").style.display="none";
 
-document.getElementById(
-"contenedorAsesores"
-).style.display="none";
-
-document.getElementById(
-"contenedorConsultas"
-).style.display="none";
-
-document.getElementById(
-"contenedorSolicitudes"
-).style.display="none";
+document.getElementById("contenedorSolicitudes").style.display="none";
 
 }
 async function cargarConsultas(){
@@ -3857,13 +4702,32 @@ document
 .style.display =
 "block";
 
-    const respuesta =
-    await fetch(
-    "https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=consultas"
+    let datos;
+
+const ahora = Date.now();
+
+if(
+
+consultasCache.length > 0 &&
+
+(ahora - cache.consultas) < TIEMPO_CACHE
+
+){
+
+    datos = consultasCache;
+
+}
+else{
+
+    datos = await apiGet(
+    "?action=consultas"
     );
 
-    const datos =
-    await respuesta.json();
+    consultasCache = datos;
+
+    cache.consultas = ahora;
+
+}
 
     // Más recientes primero
     datos.sort((a,b)=>{
@@ -3878,13 +4742,11 @@ document
 
 <div class="tituloModulo">
 
-<h2>
-📞 Consultas
-</h2>
+    <h2>📞 Consultas</h2>
 
-<p>
-Historial de consultas realizadas por los clientes interesados.
-</p>
+    <p>
+        Historial de consultas realizadas por los clientes interesados.
+    </p>
 
 </div>
 
@@ -3901,7 +4763,7 @@ color:#0F172A;
 
 </h3>
 
-    `;
+`;
 
     datos
 .slice(0,5)
@@ -3956,9 +4818,11 @@ border-bottom:1px solid #eee;
 
     html += `
 
-    </div>
+</div>
 
-    <table class="tabla">
+<div class="contenedorTablaScroll">
+
+<table class="tabla">
 
 <thead>
 
@@ -4012,11 +4876,15 @@ border-bottom:1px solid #eee;
     });
 
     html += `
+
 </tbody>
 
 </table>
 
 </div>
+
+</div>
+
 `;
 
     document
@@ -4036,13 +4904,10 @@ let solicitudesGlobal = [];
 
 async function actualizarContadorSolicitudes(){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
-);
-
 const solicitudes =
-await respuesta.json();
+await apiGet(
+"?action=solicitudes"
+);
 
 const total =
 solicitudes.length;
@@ -4066,13 +4931,10 @@ if(rol !== "ADMIN"){
 return;
 }
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
-);
-
 const solicitudes =
-await respuesta.json();
+await apiGet(
+"?action=solicitudes"
+);
 
 const totalActual =
 solicitudes.length;
@@ -4122,74 +4984,44 @@ localStorage.getItem("rol");
 
 try{
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec"
-);
+const [respuestaLotes, respuestaPendientes] =
+await Promise.all([
+
+    fetch(API_URL),
+
+    fetch(API_URL + "?action=solicitudesPendientes")
+
+]);
 
 const nuevos =
-await respuesta.json();
-const respuestaPendientes =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudesPendientes"
-);
+await respuestaLotes.json();
 
 solicitudesPendientes =
 await respuestaPendientes.json();
 
-let huboCambios = false;
+// Reemplazar completamente la información local
+todosLosLotes = nuevos;
 
-const cambios = [];
+/*
+const estadoActualLotes = JSON.stringify(datos);
 
-nuevos.forEach(function(nuevo){
+if(estadoActualLotes === ultimoEstadoLotes){
 
-const actual =
-todosLosLotes.find(function(x){
+    actualizarContadorSolicitudes();
 
-return(
-
-x.Etapa===nuevo.Etapa &&
-
-x.Lote===nuevo.Lote
-
-);
-
-});
-
-if(!actual){
-return;
-}
-
-if(actual.Estado!==nuevo.Estado){
-
-actual.Estado = nuevo.Estado;
-
-cambios.push(actual);
-
-huboCambios = true;
+    return;
 
 }
 
-});
+ultimoEstadoLotes = estadoActualLotes;
+*/
 
-if(huboCambios){
-
-    cambios.forEach(function(lote){
-
-        actualizarFila(lote);
-
-    });
-
-}
-
-// ACTUALIZAR TODOS LOS BOTONES
-todosLosLotes.forEach(function(lote){
-
-    actualizarFila(lote);
-
-});
-
+// Volver a pintar toda la interfaz
 actualizarDashboard(todosLosLotes);
+
+renderizarGraficosPorEtapa(todosLosLotes);
+
+filtrarLotes();
 
 if(rol === "ADMIN"){
 
@@ -4218,11 +5050,16 @@ error
 }
 
 }
+async function refrescarSistema(){
+
+    await sincronizarPanel();
+
+}
 async function cargarSolicitudes(){
 
 const respuesta =
 await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=solicitudes"
+API_URL + "?action=solicitudes"
 );
 
 const solicitudes =
@@ -4244,7 +5081,11 @@ solicitudes
 
 let html = `
 
+<div class="contenedorTablaScroll">
+
 <table class="tabla">
+
+<thead>
 
 <tr>
 
@@ -4255,8 +5096,11 @@ let html = `
 <th>Etapa</th>
 
 <th>Lote</th>
+
 <th>Actual</th>
+
 <th>Solicita</th>
+
 <th>Acción</th>
 
 </tr>
@@ -4264,7 +5108,6 @@ let html = `
 </thead>
 
 <tbody>
-
 `;
 
 solicitudes.forEach(s=>{
@@ -4323,7 +5166,11 @@ Rechazar
 
 });
 
-html += "</tbody></table>";
+html += `
+</tbody>
+</table>
+</div>
+`;
 
 document
 .getElementById(
@@ -4366,33 +5213,19 @@ filtradas
 }
 async function aprobarSolicitud(fila){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
+const resultado =
+await apiPost(
+"aprobarSolicitud",
 {
-method:"POST",
-
-body:JSON.stringify({
-
-action:"aprobarSolicitud",
-
 fila:fila
-
-})
-
 }
 );
 
-const resultado =
-await respuesta.json();
-
 if(resultado.ok){
 
-actualizarContadorSolicitudes();
+await refrescarSistema();
 
 await cargarSolicitudes();
-
-await sincronizarPanel();
 
 mostrarNotificacion(
 
@@ -4418,33 +5251,20 @@ resultado.mensaje || "No se pudo aprobar la solicitud."
 }
 async function rechazarSolicitud(fila){
 
-const respuesta =
-await fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
+const resultado =
+await apiPost(
 "rechazarSolicitud",
-
+{
 fila:fila
-
-})
-
 }
 );
 
-const resultado =
-await respuesta.json();
-
 if(resultado.ok){
-actualizarContadorSolicitudes();
+
+await refrescarSistema();
 
 await cargarSolicitudes();
 
-await sincronizarPanel();
 mostrarNotificacion(
 
 "Solicitud rechazada",
@@ -4495,17 +5315,11 @@ if(!usuario){
 return;
 }
 
-const respuesta =
-await fetch(
-
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec?action=notificaciones&usuario="
-
-+ encodeURIComponent(usuario)
-
-);
-
 const notificaciones =
-await respuesta.json();
+await apiGet(
+"?action=notificaciones&usuario=" +
+encodeURIComponent(usuario)
+);
 
 colaNotificaciones =
 notificaciones;
@@ -4557,22 +5371,11 @@ n.lote +
 
 }
 
-fetch(
-"https://script.google.com/macros/s/AKfycbzju385U93y9LzS-yStDOsO9i2vo97oAS-VaKRkMsV3giDUud34jAB5pbwvDior0tbN/exec",
-{
-method:"POST",
-
-body:JSON.stringify({
-
-action:
+apiPost(
 "marcarNotificacionLeida",
-
+{
 fila:n.fila
-
-})
-
-}
-);
+});
 
 }
 document
@@ -4602,7 +5405,7 @@ if(window.actualizarPendiente){
 
 window.actualizarPendiente = false;
 
-await sincronizarPanel();
+await refrescarSistema();
 
 }
 
@@ -4862,8 +5665,12 @@ localStorage.getItem("usuario");
 
 await cargarLotes();
 
+await refrescarSistema();
+
 await verificarNotificaciones();
+
 await actualizarContadorSolicitudes();
+
 await verificarNuevasSolicitudes();
 
 setInterval(
@@ -4871,7 +5678,7 @@ verificarNuevasSolicitudes,
 15000
 );
 setInterval(
-sincronizarPanel,
+refrescarSistema,
 30000
 );
 
@@ -4927,48 +5734,51 @@ function filtrarLotes(){
 
     const texto =
     document
-    .getElementById(
-    "buscarLote"
-    )
+    .getElementById("buscarLote")
     .value
     .toUpperCase();
 
-    let datos =
-    todosLosLotes.filter(
-    lote=>
+    let datos = todosLosLotes.filter(lote=>
 
-    lote.Lote
-    .toUpperCase()
-    .includes(texto)
+        lote.Lote.toUpperCase().includes(texto)
+
     );
 
-    if(
-    filtroActual !==
-    "TODOS"
-    ){
+    if(etapaSeleccionada){
 
-        datos =
-        datos.filter(
-        lote=>
+        datos = datos.filter(lote=>
 
-        lote.Estado ===
-        filtroActual
+            lote.Etapa === etapaSeleccionada
+
+        );
+
+    }
+if(filtroActual !== "TODOS"){
+
+        datos = datos.filter(lote=>
+
+            lote.Estado === filtroActual
+
         );
 
     }
 
     renderizarLotes(datos);
 
+actualizarFiltrosActivos();
+
+actualizarBotonesFiltro();
+
 }
 document
 .getElementById(
 "filtroTodos"
 )
-.onclick = async ()=>{
-
-await sincronizarPanel();
+.onclick = ()=>{
 
 filtroActual = "TODOS";
+
+etapaSeleccionada = "";
 
 filtrarLotes();
 
@@ -4978,11 +5788,9 @@ document
 .getElementById(
 "filtroLibres"
 )
-.onclick = async ()=>{
+.onclick = ()=>{
 
-await sincronizarPanel();
-
-filtroActual = "LIBRE";
+filtroActual="LIBRE";
 
 filtrarLotes();
 
@@ -4992,9 +5800,7 @@ document
 .getElementById(
 "filtroReservados"
 )
-.onclick = async ()=>{
-
-await sincronizarPanel();
+.onclick = ()=>{
 
 filtroActual = "RESERVADO";
 
@@ -5006,9 +5812,7 @@ document
 .getElementById(
 "filtroVendidos"
 )
-.onclick = async ()=>{
-
-await sincronizarPanel();
+.onclick = ()=>{
 
 filtroActual = "VENDIDO";
 
