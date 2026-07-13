@@ -257,7 +257,7 @@ font-size:13px;
 
     gap:22px;
 
-    align-items:start;
+    align-items:stretch;
 
 }
 #workspace{
@@ -295,7 +295,9 @@ font-size:13px;
     box-shadow:0 10px 30px rgba(15,23,42,.06);
 
     z-index:1300;
-
+display:flex;
+flex-direction:column;
+height:fit-content;
 }
 .menuItem{
 
@@ -490,7 +492,7 @@ line-height:1;
 
     position:sticky;
 
-    top:0;
+    top:24;
 
     z-index:1200;
 
@@ -1483,15 +1485,19 @@ white-space:nowrap;
 
 #sidebarHeader{
 
-    display:flex;
+    position:sticky;
 
-    align-items:center;
+    top:0;
 
-    justify-content:flex-start;
+    z-index:1300;
 
-    gap:14px;
+    background:#FFFFFF;
 
-    margin-bottom:16px;
+    margin:-18px -18px 18px;
+
+    padding:18px;
+
+    border-bottom:1px solid #E2E8F0;
 
 }
 
@@ -2072,7 +2078,7 @@ margin:0;
 
 <hr class="separadorSidebar">
 
-        <button id="btnLotes" class="menuItem">
+<button id="btnLotes"
 
     <span class="iconoMenu">
 
@@ -2173,6 +2179,7 @@ margin:0;
     <span>Auditoría</span>
 
 </button>
+
 <hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
 
 <div id="sidebarInfo">
