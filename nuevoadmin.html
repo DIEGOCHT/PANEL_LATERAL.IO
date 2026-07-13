@@ -278,7 +278,7 @@ font-size:13px;
 
     position:sticky;
 
-    top:24px;
+    top:0;
 
     align-self:start;
 
@@ -293,6 +293,8 @@ font-size:13px;
     padding:18px;
 
     box-shadow:0 10px 30px rgba(15,23,42,.06);
+
+    z-index:1300;
 
 }
 .menuItem{
@@ -490,15 +492,11 @@ line-height:1;
 
     top:0;
 
-    left:0;
-
     z-index:1200;
 
     background:#F8FAFC;
 
-    padding:6px 0 12px;
-
-    flex-shrink:0;
+    padding-bottom:12px;
 
 }
 
@@ -513,19 +511,11 @@ line-height:1;
     padding:18px;
 
     box-shadow:0 8px 24px rgba(15,23,42,.06);
+position:relative;
+z-index:1200;
 
 }
-.panelSticky{
 
-    position:sticky;
-
-    top:0;
-
-    z-index:1200;
-
-    background:#F8FAFC;
-
-}
 #dashboard{
 
     display:grid;
