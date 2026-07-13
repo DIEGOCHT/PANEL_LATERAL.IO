@@ -1070,6 +1070,20 @@ border-bottom:4px solid transparent;
     border-color:#2563EB;
 
 }
+#filtroTodos.activo,
+#filtroLibres.activo,
+#filtroReservados.activo,
+#filtroVendidos.activo{
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    border-color:#2563EB;
+
+    box-shadow:0 4px 12px rgba(37,99,235,.20);
+
+}
 
 #contenedorLotesPrincipal{
 
@@ -3434,6 +3448,61 @@ function actualizarFiltrosActivos(){
         : "flex";
 
 }
+function actualizarBotonesFiltro(){
+
+    const botones = [
+
+        "filtroTodos",
+
+        "filtroLibres",
+
+        "filtroReservados",
+
+        "filtroVendidos"
+
+    ];
+
+    botones.forEach(id=>{
+
+        document
+        .getElementById(id)
+        .classList.remove("activo");
+
+    });
+
+    if(filtroActual==="TODOS"){
+
+        document
+        .getElementById("filtroTodos")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual==="LIBRE"){
+
+        document
+        .getElementById("filtroLibres")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual==="RESERVADO"){
+
+        document
+        .getElementById("filtroReservados")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual==="VENDIDO"){
+
+        document
+        .getElementById("filtroVendidos")
+        .classList.add("activo");
+
+    }
+
+}
 async function cargarLotes(){
 
     try{
@@ -5740,7 +5809,18 @@ document
 .getElementById("buscarLote")
 .addEventListener(
 "input",
-filtrarLotes
+()=>{
+
+    /* si el usuario empieza a escribir,
+       se eliminan los filtros */
+
+    filtroActual = "TODOS";
+
+    etapaSeleccionada = "";
+
+    filtrarLotes();
+
+}
 );
 
 function filtrarLotes(){
@@ -5789,9 +5869,11 @@ document
 )
 .onclick = ()=>{
 
-filtroActual = "TODOS";
+document.getElementById("buscarLote").value = "";
 
 etapaSeleccionada = "";
+
+filtroActual = "TODOS";
 
 filtrarLotes();
 
@@ -5803,7 +5885,11 @@ document
 )
 .onclick = ()=>{
 
-filtroActual="LIBRE";
+document.getElementById("buscarLote").value = "";
+
+etapaSeleccionada = "";
+
+filtroActual = "LIBRE";
 
 filtrarLotes();
 
@@ -5814,6 +5900,10 @@ document
 "filtroReservados"
 )
 .onclick = ()=>{
+
+document.getElementById("buscarLote").value = "";
+
+etapaSeleccionada = "";
 
 filtroActual = "RESERVADO";
 
@@ -5826,6 +5916,10 @@ document
 "filtroVendidos"
 )
 .onclick = ()=>{
+
+document.getElementById("buscarLote").value = "";
+
+etapaSeleccionada = "";
 
 filtroActual = "VENDIDO";
 
