@@ -474,15 +474,15 @@ line-height:1;
 
     min-height:0;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
+    overflow:auto;
 
     display:flex;
 
     flex-direction:column;
 
     position:relative;
+
+    padding-bottom:18px;
 
 }
 
@@ -1217,6 +1217,7 @@ border-bottom:4px solid transparent;
 .tabla{
 
     width:100%;
+min-height:100%;
 table-layout:fixed;
 
     border-collapse:separate;
@@ -1277,17 +1278,13 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-    height:calc(100vh - 235px);
+    height:auto;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
+    overflow:visible;
 
     border-radius:18px;
 
     position:relative;
-
-    scrollbar-gutter:stable;
 
 }
 #ultimaActualizacion{
