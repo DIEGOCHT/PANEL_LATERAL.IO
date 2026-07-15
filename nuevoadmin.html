@@ -1015,6 +1015,15 @@ border-bottom:4px solid transparent;
     transition:.2s;
 
 }
+.chipActivo{
+
+    background:#2563EB !important;
+
+    color:#FFFFFF !important;
+
+    border:1px solid #2563EB;
+
+}
 .chipEtapa:hover{
 
     background:#D6E8FF;
@@ -1022,11 +1031,13 @@ border-bottom:4px solid transparent;
 }
 .chipCerrar{
 
-    font-size:18px;
+    margin-left:8px;
 
-    line-height:1;
+    font-weight:700;
 
     cursor:pointer;
+
+    color:#FFFFFF;
 
 }
 
@@ -3458,9 +3469,7 @@ function filtrarPorEtapa(etapa){
 
     construirPanelEtapas();
 
-    actualizarFiltrosActivos();
-
-    filtrarLotes();
+filtrarLotes();
 
 }
 function actualizarFiltrosActivos(){
@@ -3506,9 +3515,7 @@ function quitarEtapa(etapa){
 
     construirPanelEtapas();
 
-    actualizarFiltrosActivos();
-
-    filtrarLotes();
+filtrarLotes();
 
 }
 function actualizarBotonesFiltro(){
@@ -3609,8 +3616,6 @@ chip.onclick = ()=>{
 
     construirPanelEtapas();
 
-    actualizarFiltrosActivos();
-
     filtrarLotes();
 
 };
@@ -3619,15 +3624,20 @@ function actualizarChip(){
 
     if(etapasSeleccionadas.includes(etapa)){
 
-        chip.classList.add("activo");
+        chip.className = "chipEtapa chipActivo";
 
-        chip.innerHTML = "📍 " + etapa + " <span class='chipCerrar'>✕</span>";
+        chip.innerHTML = `
+            📍 ${etapa}
+            <span class="chipCerrar">✕</span>
+        `;
 
     }else{
 
-        chip.classList.remove("activo");
+        chip.className = "chipEtapa";
 
-        chip.innerHTML = "📍 " + etapa;
+        chip.innerHTML = `
+            📍 ${etapa}
+        `;
 
     }
 
