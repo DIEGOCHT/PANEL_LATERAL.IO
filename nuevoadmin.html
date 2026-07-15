@@ -2784,7 +2784,7 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
-let etapaSeleccionada = "";
+let etapasSeleccionadas = [];
 let mostrarPanelEtapas = false;
 
 let solicitudesPendientes = [];
@@ -3557,33 +3557,64 @@ function construirPanelEtapas(){
 
     panel.innerHTML = "";
 
+
     const etapas = [...new Set(
 
-        todosLosLotes.map(lote=>lote.Etapa)
+    todosLosLotes.map(lote=>lote.Etapa)
 
-    )].sort();
+))].sort((a,b)=>{
+
+    return parseInt(a.replace(/\D/g,"")) - parseInt(b.replace(/\D/g,""));
+
+});
 
     etapas.forEach(etapa=>{
 
         const chip = document.createElement("div");
 
-        chip.className = "chipEtapa";
+chip.className = "chipEtapa";
+
+actualizarChip();
+
+chip.onclick = ()=>{
+
+    const indice = etapasSeleccionadas.indexOf(etapa);
+
+    if(indice >= 0){
+
+        etapasSeleccionadas.splice(indice,1);
+
+    }else{
+
+        etapasSeleccionadas.push(etapa);
+
+    }
+
+    construirPanelEtapas();
+
+    filtrarLotes();
+
+};
+
+function actualizarChip(){
+
+    if(etapasSeleccionadas.includes(etapa)){
+
+        chip.classList.add("activo");
+
+        chip.innerHTML = "📍 " + etapa + " <span class='chipCerrar'>✕</span>";
+
+    }else{
+
+        chip.classList.remove("activo");
 
         chip.innerHTML = "📍 " + etapa;
 
-        chip.onclick = ()=>{
+    }
 
-            etapaSeleccionada = etapa;
+}
 
-            mostrarPanelEtapas = false;
-
-            panel.style.display = "none";
-
-            filtrarLotes();
-
-        };
-
-        panel.appendChild(chip);
+panel.appendChild(chip);
 
     });
 
@@ -5921,15 +5952,15 @@ function filtrarLotes(){
 
     );
 
-    if(etapaSeleccionada){
+    if(etapasSeleccionadas.length > 0){
 
-        datos = datos.filter(lote=>
+    datos = datos.filter(lote=>
 
-            lote.Etapa === etapaSeleccionada
+        etapasSeleccionadas.includes(lote.Etapa)
 
-        );
+    );
 
-    }
+}
 if(filtroActual !== "TODOS"){
 
         datos = datos.filter(lote=>
