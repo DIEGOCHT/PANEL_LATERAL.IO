@@ -143,15 +143,7 @@ button{
 
 }
 #contenedorLotes{
-
-    display:flex;
-
-    flex-direction:column;
-
-    min-height:0;
-
-    height:100%;
-
+    margin-top:0;
 }
 
 .tabla td{
@@ -259,6 +251,8 @@ font-size:13px;
 
     align-items:start;
 
+    min-height:100vh;
+
 }
 #workspace{
 
@@ -268,7 +262,9 @@ font-size:13px;
 
     min-width:0;
 
-    overflow:visible;
+    height:calc(100vh - 48px);
+
+    overflow:hidden;
 
 }
 
@@ -278,7 +274,7 @@ font-size:13px;
 
     position:sticky;
 
-    top:0;
+    top:24px;
 
     align-self:start;
 
@@ -294,44 +290,60 @@ font-size:13px;
 
     box-shadow:0 10px 30px rgba(15,23,42,.06);
 
-    z-index:1300;
 }
 .menuItem{
 
     width:100%;
 
+    height:52px;
+
     display:flex;
+
+    flex-direction:row;
 
     align-items:center;
 
-    gap:16px;
+    justify-content:flex-start;
 
-    padding:16px 18px;
+    gap:14px;
 
-    margin:8px 0;
+    padding:0 18px;
+
+    margin-bottom:8px;
 
     border:none;
 
+    border-radius:14px;
+
     background:transparent;
-
-    border-radius:18px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    font-weight:600;
 
     color:#334155;
 
+    font-size:15px;
+
+    font-weight:600;
+
+    text-align:left;
+
+    cursor:pointer;
+
     transition:.25s;
+
+    position:relative;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+line-height:1;
 
 }
 .iconoMenu{
 
-    width:28px;
+    width:24px;
 
-    height:28px;
+    min-width:24px;
+
+    height:24px;
 
     display:flex;
 
@@ -345,26 +357,29 @@ font-size:13px;
 
 .iconoMenu svg{
 
-    width:22px;
+    width:18px;
 
-    height:22px;
+    height:18px;
+
+    stroke-width:2;
 
 }
 
 .menuItem:hover{
 
-    background:#F1F5F9;
-
-}
-.menuItem.activo{
-
-    background:#EAF1FF;
+    background:#EEF4FF;
 
     color:#2563EB;
 
-    border:2px solid #111827;
+    }
 
-    position:relative;
+.menuItem.activo{
+
+    background:#EEF4FF;
+
+    color:#2563EB;
+
+    box-shadow:none;
 
 }
 .menuItem.activo::before{
@@ -375,13 +390,13 @@ font-size:13px;
 
     left:0;
 
-    top:10px;
+    top:8px;
 
-    bottom:10px;
+    bottom:8px;
 
-    width:5px;
+    width:4px;
 
-    border-radius:10px;
+    border-radius:4px;
 
     background:#2563EB;
 
@@ -446,18 +461,20 @@ font-size:13px;
 
     min-width:0;
 
-    position:relative;
+    height:100%;
 
-    overflow:visible;
+    overflow:hidden;
 
 }
-#contenidoModulo{
+#contenidoScrollable{
 
     flex:1;
 
     min-height:0;
 
-    overflow:visible;
+    overflow-y:auto;
+
+    overflow-x:hidden;
 
 }
 
@@ -468,12 +485,15 @@ font-size:13px;
     position:sticky;
 
     top:0;
+left:0;
 
-    z-index:1200;
+    z-index:1000;
 
     background:#F8FAFC;
 
-    padding-bottom:12px;
+    padding-top:4px;
+
+    padding-bottom:4px;
 
 }
 
@@ -488,11 +508,8 @@ font-size:13px;
     padding:18px;
 
     box-shadow:0 8px 24px rgba(15,23,42,.06);
-position:relative;
-z-index:1200;
 
 }
-
 #dashboard{
 
     display:grid;
@@ -1063,11 +1080,16 @@ border-bottom:4px solid transparent;
 
     display:grid;
 
-    grid-template-columns:1fr 320px;
+    grid-template-columns:minmax(0,1fr) 260px;
 
-    gap:24px;
+    gap:16px;
 
     align-items:start;
+
+    flex:1;
+
+    min-height:0;
+overflow-x:hidden;
 
 }
 
@@ -1077,7 +1099,13 @@ border-bottom:4px solid transparent;
 
     flex-direction:column;
 
-    gap:22px;
+    gap:12px;
+
+    width:100%;
+
+    min-width:0;
+
+    padding-right:4px;
 
 }
 .cardGrafico{
@@ -1088,9 +1116,9 @@ border-bottom:4px solid transparent;
 
     border-radius:18px;
 
-    padding:18px;
+    padding:14px;
 
-    box-shadow:0 8px 20px rgba(15,23,42,.05);
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
 
 }
 .graficoActivo{
@@ -1157,13 +1185,19 @@ border-bottom:4px solid transparent;
 
 .cardGrafico h3{
 
-    margin:0 0 15px;
+    margin:0;
 
     text-align:center;
 
-    font-size:16px;
+    font-size:13px;
+
+    font-weight:600;
 
     color:#0F172A;
+
+    letter-spacing:.5px;
+
+    line-height:1.2;
 
 }
 /* TABLAS */
@@ -1171,7 +1205,6 @@ border-bottom:4px solid transparent;
 .tabla{
 
     width:100%;
-min-height:100%;
 table-layout:fixed;
 
     border-collapse:separate;
@@ -1196,7 +1229,7 @@ position:sticky;
 
 top:0;
 
-z-index:20;
+z-index:100;
 
 background:#F8FAFC;
 
@@ -1232,13 +1265,15 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-    flex:1;
+height:calc(100vh - 235px);
 
-    overflow-y:auto;
+overflow-y:auto;
 
-    overflow-x:hidden;
+overflow-x:hidden;
 
-    border-radius:18px;
+border-radius:18px;
+
+position:relative;
 
 }
 #ultimaActualizacion{
@@ -1434,19 +1469,15 @@ white-space:nowrap;
 
 #sidebarHeader{
 
-    position:sticky;
+    display:flex;
 
-    top:0;
+    align-items:center;
 
-    z-index:1300;
+    justify-content:flex-start;
 
-    background:#FFFFFF;
+    gap:14px;
 
-    margin:-18px -18px 18px;
-
-    padding:18px;
-
-    border-bottom:1px solid #E2E8F0;
+    margin-bottom:16px;
 
 }
 
@@ -2027,7 +2058,7 @@ margin:0;
 
 <hr class="separadorSidebar">
 
-<button id="btnLotes" class="menuItem">
+        <button id="btnLotes" class="menuItem">
 
     <span class="iconoMenu">
 
@@ -2128,7 +2159,6 @@ margin:0;
     <span>Auditoría</span>
 
 </button>
-
 <hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
 
 <div id="sidebarInfo">
@@ -2204,42 +2234,44 @@ margin:0;
 
         <div id="cabeceraFija">
 
-    <div id="panelSuperior" class="panelSticky">
+    <div id="panelSuperior">
 
-        <div id="dashboard"></div>
+    <div id="dashboard">
+    </div>
 
-        <div id="herramientas">
+    <div id="herramientas">
 
-            <input
-                type="text"
-                id="buscarLote"
-                placeholder="🔍 Buscar lote...">
+        <input
+            type="text"
+            id="buscarLote"
+            placeholder="🔍 Buscar lote...">
 
-            <button id="filtroTodos">
-                TODOS
-            </button>
+        <button id="filtroTodos">
+            TODOS
+        </button>
 
-            <button id="filtroLibres">
-                LIBRES
-            </button>
+        <button id="filtroLibres">
+            LIBRES
+        </button>
 
-            <button id="filtroReservados">
-                RESERVADOS
-            </button>
+        <button id="filtroReservados">
+            RESERVADOS
+        </button>
 
-            <button id="filtroVendidos">
-                VENDIDOS
-            </button>
+        <button id="filtroVendidos">
+            VENDIDOS
+        </button>
 
-        </div>
+    </div>
 
-        <div id="barraFiltrosActivos"></div>
-
+    <div id="barraFiltrosActivos">
     </div>
 
 </div>
 
-<div id="contenidoModulo">
+</div>
+
+<div id="contenidoScrollable">
 
 <div id="contenedorLotesPrincipal">
 
@@ -2789,9 +2821,7 @@ const UI = {
 function renderizarLotes(datos){
 
 let html = `
-<div class="contenedorTablaScroll">
-
-<table class="tabla">
+<div class="contenedorTablaScroll"><table class="tabla">
     <thead>
 
 <tr>
@@ -4721,7 +4751,6 @@ document.getElementById("contenedorConsultas").style.display="none";
 document.getElementById("contenedorSolicitudes").style.display="none";
 
 }
-
 async function cargarConsultas(){
 
     const rol =
