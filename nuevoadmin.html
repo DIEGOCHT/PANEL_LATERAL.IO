@@ -3558,13 +3558,14 @@ function construirPanelEtapas(){
     panel.innerHTML = "";
 
 
-    const etapas = [...new Set(
+    const etapas = Array.from(
+    new Set(
+        todosLosLotes.map(lote => lote.Etapa)
+    )
+).sort((a, b) => {
 
-    todosLosLotes.map(lote=>lote.Etapa)
-
-))].sort((a,b)=>{
-
-    return parseInt(a.replace(/\D/g,"")) - parseInt(b.replace(/\D/g,""));
+    return parseInt(a.replace(/\D/g, "")) -
+           parseInt(b.replace(/\D/g, ""));
 
 });
 
