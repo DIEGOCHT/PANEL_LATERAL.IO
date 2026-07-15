@@ -3190,7 +3190,7 @@ e.VENDIDO;
     html += `
 
 <div class="cardGrafico ${
-    etapaSeleccionada === etapa ? "graficoActivo" : ""
+    etapasSeleccionadas.includes(etapa) ? "graficoActivo" : ""
 }">
 
 <div class="tituloGrafico">
@@ -3444,18 +3444,21 @@ function filtrarPorEstadoDesdeGrafico(estado){
 }
 function filtrarPorEtapa(etapa){
 
-    if(etapaSeleccionada===etapa){
+    const indice = etapasSeleccionadas.indexOf(etapa);
 
-        etapaSeleccionada="";
+    if(indice >= 0){
+
+        etapasSeleccionadas.splice(indice,1);
+
+    }else{
+
+        etapasSeleccionadas.push(etapa);
 
     }
-    else{
 
-        etapaSeleccionada=etapa;
+    construirPanelEtapas();
 
-    }
-
-    filtroActual="TODOS";
+    actualizarFiltrosActivos();
 
     filtrarLotes();
 
@@ -3466,26 +3469,22 @@ function actualizarFiltrosActivos(){
 
     let html = "";
 
-    if(etapaSeleccionada){
+    etapasSeleccionadas.forEach(etapa=>{
 
-        html += `
-        <div class="filtroActivo">
-            📍 ${etapaSeleccionada}
-            <button onclick="
-    etapaSeleccionada='';
+    html += `
+    <div class="filtroActivo">
 
-    filtroActual='TODOS';
+        📍 ${etapa}
 
-    document.getElementById('buscarLote').value='';
+        <button onclick="quitarEtapa('${etapa}')">
 
-    filtrarLotes();
+            ✕
 
-    renderizarGraficosPorEtapa(todosLosLotes);
+        </button>
 
-    actualizarBotonesFiltro();
-">✕</button>
-        </div>`;
-    }
+    </div>`;
+
+});
 
     barra.innerHTML = html;
 
@@ -3493,6 +3492,23 @@ function actualizarFiltrosActivos(){
         html === ""
         ? "none"
         : "flex";
+
+}
+function quitarEtapa(etapa){
+
+    const indice = etapasSeleccionadas.indexOf(etapa);
+
+    if(indice >= 0){
+
+        etapasSeleccionadas.splice(indice,1);
+
+    }
+
+    construirPanelEtapas();
+
+    actualizarFiltrosActivos();
+
+    filtrarLotes();
 
 }
 function actualizarBotonesFiltro(){
@@ -3592,6 +3608,8 @@ chip.onclick = ()=>{
     }
 
     construirPanelEtapas();
+
+    actualizarFiltrosActivos();
 
     filtrarLotes();
 
