@@ -2333,7 +2333,7 @@ margin:0;
     </div>
 
 <div id="panelEtapas"></div>
-    <div id="barraFiltrosActivos">
+    <div id="barraFiltrosActivos" style="display:none;"></div>
     </div>
 
 </div>
@@ -3470,37 +3470,6 @@ function filtrarPorEtapa(etapa){
     construirPanelEtapas();
 
 filtrarLotes();
-
-}
-function actualizarFiltrosActivos(){
-
-    const barra = document.getElementById("barraFiltrosActivos");
-
-    let html = "";
-
-    etapasSeleccionadas.forEach(etapa=>{
-
-    html += `
-    <div class="filtroActivo">
-
-        📍 ${etapa}
-
-        <button onclick="quitarEtapa('${etapa}')">
-
-            ✕
-
-        </button>
-
-    </div>`;
-
-});
-
-    barra.innerHTML = html;
-
-    barra.style.display =
-        html === ""
-        ? "none"
-        : "flex";
 
 }
 function quitarEtapa(etapa){
@@ -6001,8 +5970,6 @@ if(filtroActual !== "TODOS"){
     }
 
     renderizarLotes(datos);
-
-actualizarFiltrosActivos();
 
 actualizarBotonesFiltro();
 
