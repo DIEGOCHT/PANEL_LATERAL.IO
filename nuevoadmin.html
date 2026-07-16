@@ -3559,9 +3559,13 @@ function construirPanelEtapas(){
 
     const etapas = [...new Set(
 
-        todosLosLotes.map(lote=>lote.Etapa)
+    todosLosLotes.map(lote=>lote.Etapa)
 
-    )].sort();
+))].sort((a,b)=>{
+
+    return parseInt(a.replace(/\D/g,"")) - parseInt(b.replace(/\D/g,""));
+
+});
 
     etapas.forEach(etapa=>{
 
