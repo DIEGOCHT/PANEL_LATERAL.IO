@@ -3191,7 +3191,9 @@ e.VENDIDO;
     html += `
 
 <div class="cardGrafico ${
-    etapaSeleccionada === etapa ? "graficoActivo" : ""
+    etapasSeleccionadas.includes(etapa)
+? "graficoActivo"
+: ""
 }">
 
 <div class="tituloGrafico">
