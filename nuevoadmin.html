@@ -3463,41 +3463,7 @@ function filtrarPorEtapa(etapa){
     filtrarLotes();
 
 }
-function actualizarFiltrosActivos(){
 
-    const barra = document.getElementById("barraFiltrosActivos");
-
-    let html = "";
-
-    if(etapaSeleccionada){
-
-        html += `
-        <div class="filtroActivo">
-            📍 ${etapaSeleccionada}
-            <button onclick="
-    etapaSeleccionada='';
-
-    filtroActual='TODOS';
-
-    document.getElementById('buscarLote').value='';
-
-    filtrarLotes();
-
-    renderizarGraficosPorEtapa(todosLosLotes);
-
-    actualizarBotonesFiltro();
-">✕</button>
-        </div>`;
-    }
-
-    barra.innerHTML = html;
-
-    barra.style.display =
-        html === ""
-        ? "none"
-        : "flex";
-
-}
 function actualizarBotonesFiltro(){
 
     const botones = [
@@ -5975,8 +5941,6 @@ if(filtroActual !== "TODOS"){
     }
 
     renderizarLotes(datos);
-
-actualizarFiltrosActivos();
 
 actualizarBotonesFiltro();
 
