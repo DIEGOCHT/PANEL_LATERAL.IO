@@ -3469,7 +3469,7 @@ function filtrarPorEtapa(etapa){
 
     construirPanelEtapas();
 
-filtrarLotes();
+    filtrarLotes();
 
 }
 function quitarEtapa(etapa){
@@ -3583,7 +3583,7 @@ chip.onclick = ()=>{
 
     }
 
-    construirPanelEtapas();
+    actualizarChip();
 
     filtrarLotes();
 
@@ -5980,13 +5980,15 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document.getElementById("buscarLote").value = "";
 
-etapaSeleccionada = "";
+    etapasSeleccionadas = [];
 
-filtroActual = "TODOS";
+    construirPanelEtapas();
 
-filtrarLotes();
+    filtroActual = "TODOS";
+
+    filtrarLotes();
 
 };
 
@@ -5996,13 +5998,15 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document.getElementById("buscarLote").value = "";
 
-etapaSeleccionada = "";
+    etapasSeleccionadas = [];
 
-filtroActual = "LIBRE";
+    construirPanelEtapas();
 
-filtrarLotes();
+    filtroActual = "LIBRE";
+
+    filtrarLotes();
 
 };
 
@@ -6012,13 +6016,15 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document.getElementById("buscarLote").value = "";
 
-etapaSeleccionada = "";
+    etapasSeleccionadas = [];
 
-filtroActual = "RESERVADO";
+    construirPanelEtapas();
 
-filtrarLotes();
+    filtroActual = "RESERVADO";
+
+    filtrarLotes();
 
 };
 
@@ -6028,13 +6034,15 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document.getElementById("buscarLote").value = "";
 
-etapaSeleccionada = "";
+    etapasSeleccionadas = [];
 
-filtroActual = "VENDIDO";
+    construirPanelEtapas();
 
-filtrarLotes();
+    filtroActual = "VENDIDO";
+
+    filtrarLotes();
 
 };
 document
