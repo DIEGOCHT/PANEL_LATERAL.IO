@@ -975,71 +975,6 @@ border-bottom:4px solid transparent;
     margin-top:12px;
 
 }
-#panelEtapas{
-
-    display:none;
-
-    flex-wrap:wrap;
-
-    gap:8px;
-
-    margin-top:12px;
-
-    margin-bottom:8px;
-
-}
-.chipEtapa{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:8px 14px;
-
-    background:#E8F1FF;
-
-    color:#2563EB;
-
-    border-radius:999px;
-
-    font-size:13px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    user-select:none;
-
-    transition:.2s;
-
-}
-.chipActivo{
-
-    background:#2563EB !important;
-
-    color:#FFFFFF !important;
-
-    border:1px solid #2563EB;
-
-}
-.chipEtapa:hover{
-
-    background:#D6E8FF;
-
-}
-.chipCerrar{
-
-    margin-left:8px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    color:#FFFFFF;
-
-}
 
 .filtroActivo{
 
@@ -2310,9 +2245,6 @@ margin:0;
             type="text"
             id="buscarLote"
             placeholder="🔍 Buscar lote...">
-<button id="btnEtapas">
-    ETAPAS
-</button>
 
         <button id="filtroTodos">
             TODOS
@@ -2332,8 +2264,7 @@ margin:0;
 
     </div>
 
-<div id="panelEtapas"></div>
-    <div id="barraFiltrosActivos" style="display:none;"></div>
+    <div id="barraFiltrosActivos">
     </div>
 
 </div>
@@ -2795,8 +2726,7 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
-let etapasSeleccionadas = [];
-let mostrarPanelEtapas = false;
+let etapaSeleccionada = "";
 
 let solicitudesPendientes = [];
 let lotesFiltrados = [];
@@ -3201,7 +3131,7 @@ e.VENDIDO;
     html += `
 
 <div class="cardGrafico ${
-    etapasSeleccionadas.includes(etapa) ? "graficoActivo" : ""
+    etapaSeleccionada === etapa ? "graficoActivo" : ""
 }">
 
 <div class="tituloGrafico">
@@ -3455,36 +3385,55 @@ function filtrarPorEstadoDesdeGrafico(estado){
 }
 function filtrarPorEtapa(etapa){
 
-    const indice = etapasSeleccionadas.indexOf(etapa);
+    if(etapaSeleccionada===etapa){
 
-    if(indice >= 0){
+        etapaSeleccionada="";
 
-        etapasSeleccionadas.splice(indice,1);
+    }
+    else{
 
-    }else{
-
-        etapasSeleccionadas.push(etapa);
+        etapaSeleccionada=etapa;
 
     }
 
-    construirPanelEtapas();
+    filtroActual="TODOS";
 
-filtrarLotes();
+    filtrarLotes();
 
 }
-function quitarEtapa(etapa){
+function actualizarFiltrosActivos(){
 
-    const indice = etapasSeleccionadas.indexOf(etapa);
+    const barra = document.getElementById("barraFiltrosActivos");
 
-    if(indice >= 0){
+    let html = "";
 
-        etapasSeleccionadas.splice(indice,1);
+    if(etapaSeleccionada){
 
+        html += `
+        <div class="filtroActivo">
+            📍 ${etapaSeleccionada}
+            <button onclick="
+    etapaSeleccionada='';
+
+    filtroActual='TODOS';
+
+    document.getElementById('buscarLote').value='';
+
+    filtrarLotes();
+
+    renderizarGraficosPorEtapa(todosLosLotes);
+
+    actualizarBotonesFiltro();
+">✕</button>
+        </div>`;
     }
 
-    construirPanelEtapas();
+    barra.innerHTML = html;
 
-filtrarLotes();
+    barra.style.display =
+        html === ""
+        ? "none"
+        : "flex";
 
 }
 function actualizarBotonesFiltro(){
@@ -3540,81 +3489,6 @@ function actualizarBotonesFiltro(){
         .classList.add("activo");
 
     }
-
-}
-
-function construirPanelEtapas(){
-
-    const panel = document.getElementById("panelEtapas");
-
-    panel.innerHTML = "";
-
-
-    const etapas = Array.from(
-    new Set(
-        todosLosLotes.map(lote => lote.Etapa)
-    )
-).sort((a, b) => {
-
-    return parseInt(a.replace(/\D/g, "")) -
-           parseInt(b.replace(/\D/g, ""));
-
-});
-
-    etapas.forEach(etapa=>{
-
-        const chip = document.createElement("div");
-
-chip.className = "chipEtapa";
-
-actualizarChip();
-
-chip.onclick = ()=>{
-
-    const indice = etapasSeleccionadas.indexOf(etapa);
-
-    if(indice >= 0){
-
-        etapasSeleccionadas.splice(indice,1);
-
-    }else{
-
-        etapasSeleccionadas.push(etapa);
-
-    }
-
-    construirPanelEtapas();
-
-    filtrarLotes();
-
-};
-
-function actualizarChip(){
-
-    if(etapasSeleccionadas.includes(etapa)){
-
-        chip.className = "chipEtapa chipActivo";
-
-        chip.innerHTML = `
-            📍 ${etapa}
-            <span class="chipCerrar">✕</span>
-        `;
-
-    }else{
-
-        chip.className = "chipEtapa";
-
-        chip.innerHTML = `
-            📍 ${etapa}
-        `;
-
-    }
-
-}
-
-panel.appendChild(chip);
-
-    });
 
 }
 async function cargarLotes(){
@@ -5950,15 +5824,15 @@ function filtrarLotes(){
 
     );
 
-    if(etapasSeleccionadas.length > 0){
+    if(etapaSeleccionada){
 
-    datos = datos.filter(lote=>
+        datos = datos.filter(lote=>
 
-        etapasSeleccionadas.includes(lote.Etapa)
+            lote.Etapa === etapaSeleccionada
 
-    );
+        );
 
-}
+    }
 if(filtroActual !== "TODOS"){
 
         datos = datos.filter(lote=>
@@ -5970,6 +5844,8 @@ if(filtroActual !== "TODOS"){
     }
 
     renderizarLotes(datos);
+
+actualizarFiltrosActivos();
 
 actualizarBotonesFiltro();
 
@@ -6035,29 +5911,6 @@ etapaSeleccionada = "";
 filtroActual = "VENDIDO";
 
 filtrarLotes();
-
-};
-document
-.getElementById(
-"btnEtapas"
-)
-.onclick = ()=>{
-
-    mostrarPanelEtapas = !mostrarPanelEtapas;
-
-    const panel = document.getElementById("panelEtapas");
-
-    if(mostrarPanelEtapas){
-
-        construirPanelEtapas();
-
-        panel.style.display = "flex";
-
-    }else{
-
-        panel.style.display = "none";
-
-    }
 
 };
 
