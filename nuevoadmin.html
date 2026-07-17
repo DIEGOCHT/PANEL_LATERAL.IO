@@ -992,30 +992,31 @@ border-bottom:4px solid transparent;
 .chipEtapa{
 
     display:flex;
-
     align-items:center;
-
-    gap:8px;
-
+    gap:6px;
     padding:8px 14px;
-
-    background:#E8F1FF;
-
-    color:#2563EB;
-
     border-radius:999px;
-
-    font-size:13px;
-
-    font-weight:600;
-
+    background:#F1F5F9;
+    color:#475569;
     cursor:pointer;
-
-    user-select:none;
-
-    transition:.2s;
+    transition:.25s;
 
 }
+
+.chipActivo{
+
+    background:#2563EB !important;
+    color:#FFFFFF !important;
+    border:1px solid #2563EB;
+
+}
+
+.chipActivo .chipCerrar{
+
+    color:#FFFFFF;
+
+}
+
 .chipEtapa:hover{
 
     background:#D6E8FF;
@@ -3558,9 +3559,9 @@ chip.onclick = ()=>{
 
     }
 
-    construirPanelEtapas();
+    actualizarChip();
 
-    filtrarLotes();
+filtrarLotes();
 
 };
 
@@ -3568,19 +3569,26 @@ function actualizarChip(){
 
     if(etapasSeleccionadas.includes(etapa)){
 
-        chip.classList.add("activo");
+        chip.className = "chipEtapa chipActivo";
 
-        chip.innerHTML = "📍 " + etapa + " <span class='chipCerrar'>✕</span>";
+        chip.innerHTML = `
+            📍 ${etapa}
+            <span class="chipCerrar">✕</span>
+        `;
 
     }else{
 
-        chip.classList.remove("activo");
+        chip.className = "chipEtapa";
 
-        chip.innerHTML = "📍 " + etapa;
+        chip.innerHTML = `
+            📍 ${etapa}
+        `;
 
     }
 
 }
+
+actualizarChip();
 
 panel.appendChild(chip);
 
@@ -6026,11 +6034,15 @@ document
 
     }else{
 
-        panel.style.display = "none";
+    panel.style.display = "none";
 
-    }
+    etapasSeleccionadas = [];
 
-};
+    filtroActual = "TODOS";
+
+    filtrarLotes();
+
+}
 
 </script>
 
