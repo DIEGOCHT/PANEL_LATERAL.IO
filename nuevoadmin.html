@@ -262,9 +262,11 @@ font-size:13px;
 
     min-width:0;
 
-    height:calc(100vh - 48px);
+    height:auto;
 
-    overflow:hidden;
+    min-height:100vh;
+
+    overflow:visible;
 
 }
 
@@ -461,34 +463,20 @@ line-height:1;
 
     min-width:0;
 
-    height:100%;
+    height:auto;
 
-    overflow:hidden;
+    overflow:visible;
 
 }
 #contenidoScrollable{
 
-    flex:1;
+    width:100%;
+
+    flex:none;
 
     min-height:0;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
-
-    scrollbar-width:none;
-
-    -ms-overflow-style:none;
-
-}
-
-#contenidoScrollable::-webkit-scrollbar{
-
-    width:0;
-
-    height:0;
-
-    display:none;
+    overflow:visible;
 
 }
 
@@ -971,9 +959,13 @@ border-bottom:4px solid transparent;
 
     align-items:center;
 
+    justify-content:flex-start;
+
     gap:12px;
 
     flex-wrap:nowrap;
+
+    min-height:38px;
 
 }
 #barraFiltrosActivos{
@@ -1108,6 +1100,8 @@ border-bottom:4px solid transparent;
 
     height:38px;
 
+    min-height:38px;
+
     margin:0;
 
     padding:0 14px;
@@ -1119,6 +1113,10 @@ border-bottom:4px solid transparent;
     background:#FFFFFF;
 
     font-size:13px;
+
+    line-height:38px;
+
+    vertical-align:middle;
 
 }
 
@@ -1141,15 +1139,27 @@ border-bottom:4px solid transparent;
 
     flex:0 0 auto;
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
     height:38px;
 
+    min-height:38px;
+
     min-width:105px;
+
+    margin:0;
 
     padding:0 16px;
 
     border-radius:10px;
 
     font-size:13px;
+
+    line-height:1;
 
 }
 
@@ -1371,31 +1381,20 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-    height:calc(100vh - 235px);
+    width:100%;
 
-    overflow-y:auto;
+    height:auto;
 
-    overflow-x:hidden;
+    max-height:none;
+
+    overflow:visible;
 
     border-radius:18px;
 
     position:relative;
 
-    scrollbar-width:none;
-
-    -ms-overflow-style:none;
-
 }
 
-.contenedorTablaScroll::-webkit-scrollbar{
-
-    width:0;
-
-    height:0;
-
-    display:none;
-
-}
 #ultimaActualizacion{
 
     height:44px;
