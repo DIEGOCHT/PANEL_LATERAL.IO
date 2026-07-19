@@ -3532,7 +3532,8 @@ actualizarChip();
 
 chip.onclick = ()=>{
 
-    const indice = etapasSeleccionadas.indexOf(etapa);
+    const indice =
+        etapasSeleccionadas.indexOf(etapa);
 
     if(indice >= 0){
 
@@ -5932,12 +5933,22 @@ function irInicioTabla(){
 function filtrarLotes(){
 
     const texto =
-    document
-    .getElementById("buscarLote")
-    .value
-    .toUpperCase();
+        document
+        .getElementById("buscarLote")
+        .value
+        .toUpperCase();
 
-    let datos = todosLosLotes.filter(lote=>
+    /*
+    =========================================
+    DATOS PARA LA TABLA
+    Se filtran por:
+    - texto
+    - etapas seleccionadas
+    - estado
+    =========================================
+    */
+
+    let datosTabla = todosLosLotes.filter(lote=>
 
         lote.Lote.toUpperCase().includes(texto)
 
@@ -5945,7 +5956,7 @@ function filtrarLotes(){
 
     if(etapasSeleccionadas.length > 0){
 
-        datos = datos.filter(lote=>
+        datosTabla = datosTabla.filter(lote=>
 
             etapasSeleccionadas.includes(lote.Etapa)
 
@@ -5955,7 +5966,7 @@ function filtrarLotes(){
 
     if(filtroActual !== "TODOS"){
 
-        datos = datos.filter(lote=>
+        datosTabla = datosTabla.filter(lote=>
 
             lote.Estado === filtroActual
 
@@ -5963,7 +5974,18 @@ function filtrarLotes(){
 
     }
 
-    renderizarLotes(datos);
+    renderizarLotes(datosTabla);
+
+
+    /*
+    =========================================
+    DATOS PARA LAS TORTAS
+    Solo se filtran por las etapas elegidas.
+
+    El filtro LIBRE, RESERVADO o VENDIDO
+    no debe eliminar ni cambiar las tortas.
+    =========================================
+    */
 
     let datosGraficos = todosLosLotes;
 
@@ -5990,15 +6012,16 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-etapasSeleccionadas = [];
+    filtroActual = "TODOS";
 
-filtroActual = "TODOS";
-
-filtrarLotes();
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -6006,15 +6029,16 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-etapasSeleccionadas = [];
+    filtroActual = "LIBRE";
 
-filtroActual = "LIBRE";
-
-filtrarLotes();
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -6022,15 +6046,16 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-etapasSeleccionadas = [];
+    filtroActual = "RESERVADO";
 
-filtroActual = "RESERVADO";
-
-filtrarLotes();
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -6038,13 +6063,13 @@ document
 )
 .onclick = ()=>{
 
-document.getElementById("buscarLote").value = "";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-etapasSeleccionadas = [];
+    filtroActual = "VENDIDO";
 
-filtroActual = "VENDIDO";
-
-filtrarLotes();
+    filtrarLotes();
 
 };
 document
