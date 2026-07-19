@@ -476,6 +476,20 @@ line-height:1;
 
     overflow-x:hidden;
 
+    scrollbar-width:none;
+
+    -ms-overflow-style:none;
+
+}
+
+#contenidoScrollable::-webkit-scrollbar{
+
+    width:0;
+
+    height:0;
+
+    display:none;
+
 }
 
 /* DASHBOARD */
@@ -505,7 +519,7 @@ left:0;
 
     border-radius:18px;
 
-    padding:18px;
+    padding:12px 16px 10px;
 
     box-shadow:0 8px 24px rgba(15,23,42,.06);
 
@@ -518,7 +532,7 @@ left:0;
 
     gap:12px;
 
-    margin-bottom:16px;
+    margin-bottom:10px;
 
 }
 
@@ -1092,6 +1106,20 @@ border-bottom:4px solid transparent;
 
     flex:0 0 340px;
 
+    height:38px;
+
+    margin:0;
+
+    padding:0 14px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    background:#FFFFFF;
+
+    font-size:13px;
+
 }
 
 #buscarLote:focus{
@@ -1125,6 +1153,7 @@ border-bottom:4px solid transparent;
 
 }
 
+#btnEtapas:hover,
 #filtroTodos:hover,
 #filtroLibres:hover,
 #filtroReservados:hover,
@@ -1137,6 +1166,7 @@ border-bottom:4px solid transparent;
     border-color:#2563EB;
 
 }
+#btnEtapas.activo,
 #filtroTodos.activo,
 #filtroLibres.activo,
 #filtroReservados.activo,
@@ -1341,15 +1371,29 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 235px);
+    height:calc(100vh - 235px);
 
-overflow-y:auto;
+    overflow-y:auto;
 
-overflow-x:hidden;
+    overflow-x:hidden;
 
-border-radius:18px;
+    border-radius:18px;
 
-position:relative;
+    position:relative;
+
+    scrollbar-width:none;
+
+    -ms-overflow-style:none;
+
+}
+
+.contenedorTablaScroll::-webkit-scrollbar{
+
+    width:0;
+
+    height:0;
+
+    display:none;
 
 }
 #ultimaActualizacion{
@@ -3472,7 +3516,7 @@ function actualizarBotonesFiltro(){
 
     });
 
-    if(filtroActual==="TODOS"){
+    if(filtroActual === "TODOS"){
 
         document
         .getElementById("filtroTodos")
@@ -3480,7 +3524,7 @@ function actualizarBotonesFiltro(){
 
     }
 
-    if(filtroActual==="LIBRE"){
+    if(filtroActual === "LIBRE"){
 
         document
         .getElementById("filtroLibres")
@@ -3488,7 +3532,7 @@ function actualizarBotonesFiltro(){
 
     }
 
-    if(filtroActual==="RESERVADO"){
+    if(filtroActual === "RESERVADO"){
 
         document
         .getElementById("filtroReservados")
@@ -3496,11 +3540,24 @@ function actualizarBotonesFiltro(){
 
     }
 
-    if(filtroActual==="VENDIDO"){
+    if(filtroActual === "VENDIDO"){
 
         document
         .getElementById("filtroVendidos")
         .classList.add("activo");
+
+    }
+
+    const botonEtapas =
+        document.getElementById("btnEtapas");
+
+    if(mostrarPanelEtapas){
+
+        botonEtapas.classList.add("activo");
+
+    }else{
+
+        botonEtapas.classList.remove("activo");
 
     }
 
@@ -6088,6 +6145,8 @@ document
         construirPanelEtapas();
 
         panel.style.display = "flex";
+
+        actualizarBotonesFiltro();
 
     }else{
 
