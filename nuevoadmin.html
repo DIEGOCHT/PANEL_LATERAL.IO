@@ -924,17 +924,17 @@ border-bottom:4px solid transparent;
 
     width:350px;
 
-    height:44px;
+    height:38px;
 
-    padding:0 16px;
+    padding:0 14px;
 
     border:1px solid #CBD5E1;
 
-    border-radius:12px;
+    border-radius:8px;
 
     background:#FFFFFF;
 
-    font-size:14px;
+    font-size:13px;
 
     transition:.25s;
 
@@ -982,24 +982,36 @@ border-bottom:4px solid transparent;
 
     flex-wrap:wrap;
 
-    gap:8px;
+    gap:6px;
 
-    margin-top:12px;
+    margin-top:8px;
 
-    margin-bottom:8px;
+    margin-bottom:0;
 
 }
 .chipEtapa{
 
     display:flex;
+
     align-items:center;
+
     gap:6px;
-    padding:8px 14px;
-    border-radius:999px;
+
+    padding:5px 12px;
+
+    min-height:34px;
+
+    border-radius:10px;
+
     background:#F1F5F9;
+
     color:#475569;
+
     cursor:pointer;
+
     transition:.25s;
+
+    font-size:13px;
 
 }
 
@@ -1093,6 +1105,7 @@ border-bottom:4px solid transparent;
 }
 /* BOTONES DE FILTRO */
 
+#btnEtapas,
 #filtroTodos,
 #filtroLibres,
 #filtroReservados,
@@ -1100,7 +1113,15 @@ border-bottom:4px solid transparent;
 
     flex:0 0 auto;
 
-    min-width:120px;
+    height:38px;
+
+    min-width:105px;
+
+    padding:0 16px;
+
+    border-radius:10px;
+
+    font-size:13px;
 
 }
 
@@ -3523,9 +3544,21 @@ chip.onclick = ()=>{
 
     }
 
-    actualizarChip();
+    etapasSeleccionadas.sort((a,b)=>{
 
-filtrarLotes();
+        const numeroA =
+            parseInt(a.replace(/\D/g,"")) || 0;
+
+        const numeroB =
+            parseInt(b.replace(/\D/g,"")) || 0;
+
+        return numeroA - numeroB;
+
+    });
+
+    construirPanelEtapas();
+
+    filtrarLotes();
 
 };
 
@@ -5912,14 +5945,15 @@ function filtrarLotes(){
 
     if(etapasSeleccionadas.length > 0){
 
-    datos = datos.filter(lote=>
+        datos = datos.filter(lote=>
 
-        etapasSeleccionadas.includes(lote.Etapa)
+            etapasSeleccionadas.includes(lote.Etapa)
 
-    );
+        );
 
-}
-if(filtroActual !== "TODOS"){
+    }
+
+    if(filtroActual !== "TODOS"){
 
         datos = datos.filter(lote=>
 
@@ -5929,11 +5963,25 @@ if(filtroActual !== "TODOS"){
 
     }
 
-renderizarLotes(datos);
+    renderizarLotes(datos);
 
-irInicioTabla();
+    let datosGraficos = todosLosLotes;
 
-actualizarBotonesFiltro();
+    if(etapasSeleccionadas.length > 0){
+
+        datosGraficos = todosLosLotes.filter(lote=>
+
+            etapasSeleccionadas.includes(lote.Etapa)
+
+        );
+
+    }
+
+    renderizarGraficosPorEtapa(datosGraficos);
+
+    irInicioTabla();
+
+    actualizarBotonesFiltro();
 
 }
 document
@@ -6007,7 +6055,8 @@ document
 
     mostrarPanelEtapas = !mostrarPanelEtapas;
 
-    const panel = document.getElementById("panelEtapas");
+    const panel =
+        document.getElementById("panelEtapas");
 
     if(mostrarPanelEtapas){
 
@@ -6022,6 +6071,10 @@ document
         etapasSeleccionadas = [];
 
         filtroActual = "TODOS";
+
+        document
+        .getElementById("buscarLote")
+        .value = "";
 
         filtrarLotes();
 
