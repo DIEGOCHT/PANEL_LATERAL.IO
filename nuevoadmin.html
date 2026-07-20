@@ -122,8 +122,11 @@ button{
 
 }
 #usuarioHeader{
+position:relative;
 
-    display:flex;
+z-index:3000;
+    
+display:flex;
 
     justify-content:space-between;
 
@@ -140,6 +143,7 @@ button{
     box-shadow:0 8px 20px rgba(15,23,42,.06);
 
     margin-bottom:6px;
+
 
 }
 #contenedorLotes{
@@ -1340,31 +1344,31 @@ table-layout:fixed;
 
 }
 
+.tabla thead{
+
+    position:sticky;
+
+    top:calc(
+        24px + var(--altura-cabecera-fija)
+    );
+
+    z-index:1200;
+
+}
+
 .tabla th{
 
-position:sticky;
+    position:sticky;
 
-top:0;
+    top:calc(
+        24px + var(--altura-cabecera-fija)
+    );
 
-z-index:100;
+    z-index:1201;
 
-background:#F8FAFC;
+    background:#F8FAFC;
 
-padding:10px 12px;
-
-font-size:12px;
-
-font-weight:700;
-
-color:#475569;
-
-border-bottom:2px solid #E2E8F0;
-
-text-align:center;
-
-vertical-align:middle;
-
-white-space:nowrap;
+    border-bottom:2px solid #E2E8F0;
 
 }
 
