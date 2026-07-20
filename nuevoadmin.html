@@ -2044,6 +2044,58 @@ margin:0;
     white-space:nowrap !important;
 
 }
+/* CUBRE EL ESPACIO SUPERIOR DEL CONTENEDOR FIJO */
+
+#cabeceraFija::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:-24px;
+
+    height:24px;
+
+    background:#F8FAFC;
+
+    pointer-events:none;
+
+}
+/* ENCABEZADOS FIJOS DE LA TABLA */
+
+:root{
+
+    --altura-cabecera-fija:174px;
+
+}
+
+.tabla{
+
+    overflow:visible;
+
+}
+
+.tabla th{
+
+    position:sticky;
+
+    top:calc(
+        24px + var(--altura-cabecera-fija)
+    );
+
+    z-index:900;
+
+    background:#F8FAFC;
+
+    box-shadow:
+        0 1px 0 #E2E8F0,
+        0 -1px 0 #E2E8F0;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6165,7 +6217,51 @@ document
     }
 
 };
+function actualizarAlturaCabeceraFija(){
 
+    const cabecera =
+        document.getElementById("cabeceraFija");
+
+    if(!cabecera){
+        return;
+    }
+
+    const altura =
+        Math.ceil(
+            cabecera.getBoundingClientRect().height
+        );
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+        "--altura-cabecera-fija",
+        altura + "px"
+    );
+
+}
+const observadorCabecera =
+    new ResizeObserver(()=>{
+
+        actualizarAlturaCabeceraFija();
+
+    });
+
+const cabeceraObservada =
+    document.getElementById("cabeceraFija");
+
+if(cabeceraObservada){
+
+    observadorCabecera.observe(
+        cabeceraObservada
+    );
+
+}
+
+window.addEventListener(
+    "load",
+    actualizarAlturaCabeceraFija
+);
 </script>
 
 </script>
