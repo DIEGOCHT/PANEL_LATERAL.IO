@@ -2019,13 +2019,21 @@ margin:0;
 
 .menuItem{
 
-    display:flex !important;
+    display:flex;
 
     align-items:center !important;
 
     justify-content:flex-start !important;
 
     gap:14px !important;
+
+}
+
+/* Ocultamiento obligatorio según el rol */
+
+.ocultoPorRol{
+
+    display:none !important;
 
 }
 
@@ -3190,10 +3198,10 @@ function aplicarPermisosRol(rol){
             return;
         }
 
-        elemento.style.display =
+        elemento.classList.toggle(
+            "ocultoPorRol",
             esAsesor
-            ? "none"
-            : "flex";
+        );
 
     });
 
@@ -3203,63 +3211,72 @@ function aplicarPermisosRol(rol){
 
     if(botonLotes){
 
-        botonLotes.style.display = "flex";
+        botonLotes.classList.remove(
+            "ocultoPorRol"
+        );
 
     }
 
 
+    const contenedoresAdministrativos = [
+
+        "contenedorSolicitudes",
+
+        "contenedorConsultas",
+
+        "contenedorAsesores",
+
+        "contenedorAuditoria"
+
+    ];
+
     if(esAsesor){
 
-        const contenedoresAdministrativos = [
-
-            "contenedorSolicitudes",
-
-            "contenedorConsultas",
-
-            "contenedorAsesores",
-
-            "contenedorAuditoria"
-
-        ];
-
-        contenedoresAdministrativos.forEach(id=>{
+        contenedoresAdministrativos
+        .forEach(id=>{
 
             const contenedor =
                 document.getElementById(id);
 
             if(contenedor){
 
-                contenedor.style.display = "none";
+                contenedor.style.display =
+                    "none";
 
             }
 
         });
 
 
-        const contenedorLotes =
+        const contenedorLotesPrincipal =
             document.getElementById(
                 "contenedorLotesPrincipal"
             );
 
-        if(contenedorLotes){
+        if(contenedorLotesPrincipal){
 
-            contenedorLotes.style.display = "grid";
+            contenedorLotesPrincipal
+            .style.display = "grid";
 
         }
 
 
         document
         .querySelectorAll(".menuItem")
-        .forEach(boton=>{
+        .forEach(elemento=>{
 
-            boton.classList.remove("activo");
+            elemento.classList.remove(
+                "activo"
+            );
 
         });
 
 
         if(botonLotes){
 
-            botonLotes.classList.add("activo");
+            botonLotes.classList.add(
+                "activo"
+            );
 
         }
 
@@ -5670,22 +5687,70 @@ let solicitudesGlobal = [];
 
 async function actualizarContadorSolicitudes(){
 
-const solicitudes =
-await apiGet(
-"?action=solicitudes"
-);
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
 
-const total =
-solicitudes.length;
+    const contador =
+        document.getElementById(
+            "contadorSolicitudes"
+        );
 
-document
-.getElementById(
-"contadorSolicitudes"
-)
-.innerHTML =
-total > 0
-? ` (${total})`
-: "";
+    /*
+    El contador de solicitudes es exclusivo
+    del administrador.
+    */
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+
+        if(contador){
+
+            contador.innerHTML = "";
+
+        }
+
+        return;
+
+    }
+
+    try{
+
+        const respuesta =
+            await apiGet(
+                "?action=solicitudes"
+            );
+
+        const solicitudes =
+            Array.isArray(respuesta)
+            ? respuesta
+            : [];
+
+        const total =
+            solicitudes.length;
+
+        if(contador){
+
+            contador.innerHTML =
+                total > 0
+                ? ` (${total})`
+                : "";
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "No se pudo actualizar el contador:",
+            error
+        );
+
+    }
 
 }
 async function verificarNuevasSolicitudes(){
