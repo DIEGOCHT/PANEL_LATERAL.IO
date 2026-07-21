@@ -2872,6 +2872,225 @@ margin-top:18px;
     padding-right:4px;
 
 }
+/* ==========================================
+   RESUMEN POR COLABORADOR
+========================================== */
+
+.resumenColaborador{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #E2E8F0;
+
+}
+
+.resumenColaborador:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.cabeceraColaborador{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:8px;
+
+    margin-bottom:10px;
+
+}
+
+
+.nombreColaborador{
+
+    color:#0F172A;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+}
+
+
+.totalColaborador{
+
+    color:#64748B;
+
+    font-size:10px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+}
+
+
+.filaBarraColaborador{
+
+    display:grid;
+
+    grid-template-columns:20px minmax(0,1fr) 20px;
+
+    align-items:center;
+
+    gap:7px;
+
+    margin-top:7px;
+
+}
+
+
+.iconoEstadoBarra{
+
+    font-size:13px;
+
+    line-height:1;
+
+}
+
+
+.fondoBarra{
+
+    width:100%;
+
+    height:9px;
+
+    overflow:hidden;
+
+    background:#F1F5F9;
+
+    border-radius:999px;
+
+}
+
+
+.barraReservado{
+
+    height:100%;
+
+    background:#FACC15;
+
+    border-radius:999px;
+
+}
+
+
+.barraVendido{
+
+    height:100%;
+
+    background:#EF4444;
+
+    border-radius:999px;
+
+}
+
+
+.valorBarra{
+
+    color:#334155;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    text-align:right;
+
+}
+/* ==========================================
+   TORTA INDIVIDUAL AUDITORÍA
+   MISMO ESTILO QUE LOTES
+========================================== */
+
+#graficoAuditoriaPersona .cardGrafico{
+
+    padding:14px;
+
+}
+
+
+#graficoAuditoriaPersona .tituloGrafico{
+
+    padding-bottom:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+#graficoAuditoriaPersona .tituloGrafico h3{
+
+    margin:0;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#0F172A;
+
+    letter-spacing:.5px;
+
+    line-height:1.2;
+
+    text-align:center;
+
+}
+
+
+#graficoAuditoriaPersona .infoGrafico{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:8px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico{
+
+    font-size:13px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico span{
+
+    font-size:13px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico b{
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+#graficoAuditoriaPersona .totalGrafico{
+
+    margin-top:14px;
+
+    padding-top:12px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -5670,19 +5889,16 @@ function renderizarGraficoGeneralAuditoria(
         window.chartAuditoria
     ){
 
-        window
-        .chartAuditoria
-        .destroy();
+        window.chartAuditoria.destroy();
 
-        window.chartAuditoria =
-            null;
+        window.chartAuditoria = null;
 
     }
 
 
     /*
-    TOMAR SOLO EL ÚLTIMO
-    REGISTRO DE CADA LOTE
+    TOMAR SOLO EL ÚLTIMO REGISTRO
+    DE CADA LOTE
     */
 
     const registrosActuales =
@@ -5709,9 +5925,7 @@ function renderizarGraficoGeneralAuditoria(
             .trim();
 
 
-        if(
-            !colaboradores[nombre]
-        ){
+        if(!colaboradores[nombre]){
 
             colaboradores[nombre] = {
 
@@ -5765,19 +5979,13 @@ function renderizarGraficoGeneralAuditoria(
         .sort((a,b)=>{
 
             const totalA =
-                colaboradores[a]
-                .reservados
-                +
-                colaboradores[a]
-                .vendidos;
+                colaboradores[a].reservados +
+                colaboradores[a].vendidos;
 
 
             const totalB =
-                colaboradores[b]
-                .reservados
-                +
-                colaboradores[b]
-                .vendidos;
+                colaboradores[b].reservados +
+                colaboradores[b].vendidos;
 
 
             return totalB - totalA;
@@ -5803,15 +6011,13 @@ function renderizarGraficoGeneralAuditoria(
     nombres.forEach(nombre=>{
 
         const reservados =
-            colaboradores[
-                nombre
-            ].reservados;
+            colaboradores[nombre]
+            .reservados;
 
 
         const vendidos =
-            colaboradores[
-                nombre
-            ].vendidos;
+            colaboradores[nombre]
+            .vendidos;
 
 
         const total =
@@ -5843,122 +6049,86 @@ function renderizarGraficoGeneralAuditoria(
 
         html += `
 
-        <div style="
-            padding:12px 0;
-            border-bottom:1px solid #E2E8F0;
-        ">
-
-            <div style="
-                font-size:13px;
-                font-weight:700;
-                color:#0F172A;
-                margin-bottom:6px;
-            ">
-
-                ${nombre}
-
-            </div>
+        <div class="resumenColaborador">
 
 
-            <div style="
-                font-size:12px;
-                font-weight:700;
-                color:#475569;
-                margin-bottom:8px;
-            ">
+            <div class="cabeceraColaborador">
 
-                Total ${total}
+                <strong class="nombreColaborador">
+
+                    ${nombre}
+
+                </strong>
+
+
+                <span class="totalColaborador">
+
+                    Total ${total}
+
+                </span>
 
             </div>
 
 
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:8px;
-                margin-bottom:7px;
-            ">
+            <div class="filaBarraColaborador">
 
-                <span style="
-                    width:18px;
-                ">
+                <span class="iconoEstadoBarra">
+
                     🟡
+
                 </span>
 
 
-                <div style="
-                    flex:1;
-                    height:12px;
-                    background:#F1F5F9;
-                    border-radius:6px;
-                    overflow:hidden;
-                ">
+                <div class="fondoBarra">
 
-                    <div style="
+                    <div
+                    class="barraReservado"
+                    style="
                         width:${anchoReservado}%;
-                        height:100%;
-                        background:#FACC15;
-                        border-radius:6px;
                     ">
                     </div>
 
                 </div>
 
 
-                <strong style="
-                    width:22px;
-                    text-align:right;
-                ">
+                <span class="valorBarra">
 
                     ${reservados}
 
-                </strong>
+                </span>
 
             </div>
 
 
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:8px;
-            ">
+            <div class="filaBarraColaborador">
 
-                <span style="
-                    width:18px;
-                ">
+                <span class="iconoEstadoBarra">
+
                     🔴
+
                 </span>
 
 
-                <div style="
-                    flex:1;
-                    height:12px;
-                    background:#F1F5F9;
-                    border-radius:6px;
-                    overflow:hidden;
-                ">
+                <div class="fondoBarra">
 
-                    <div style="
+                    <div
+                    class="barraVendido"
+                    style="
                         width:${anchoVendido}%;
-                        height:100%;
-                        background:#EF4444;
-                        border-radius:6px;
                     ">
                     </div>
 
                 </div>
 
 
-                <strong style="
-                    width:22px;
-                    text-align:right;
-                ">
+                <span class="valorBarra">
 
                     ${vendidos}
 
-                </strong>
+                </span>
 
             </div>
+
 
         </div>
 
@@ -8621,7 +8791,23 @@ async function cerrarSesionPorInactividad(){
 
     }
 
-    cierrePorInactividadEnProceso = true;
+
+    cierrePorInactividadEnProceso =
+        true;
+
+
+    /*
+    GUARDAR EL USUARIO
+    ANTES DE LIMPIAR LA SESIÓN
+    */
+
+    const usuarioActual =
+        document
+        .getElementById(
+            "usuario"
+        )
+        .value;
+
 
     try{
 
@@ -8629,20 +8815,69 @@ async function cerrarSesionPorInactividad(){
             "logout"
         );
 
-    }catch(error){
+    }
+    catch(error){
 
         console.log(
             "No se pudo invalidar la sesión por inactividad:",
             error
         );
 
-    }finally{
+    }
+    finally{
+
 
         limpiarSesionLocal(
+
             "La sesión se cerró por inactividad. Ingrese nuevamente."
+
         );
 
-        cierrePorInactividadEnProceso = false;
+
+        /*
+        MANTENER EL USUARIO
+        */
+
+        const campoUsuario =
+            document
+            .getElementById(
+                "usuario"
+            );
+
+
+        campoUsuario.value =
+            usuarioActual;
+
+
+        /*
+        BORRAR CONTRASEÑA
+        */
+
+        const campoPassword =
+            document
+            .getElementById(
+                "password"
+            );
+
+
+        campoPassword.value =
+            "";
+
+
+        /*
+        COLOCAR EL CURSOR
+        EN CONTRASEÑA
+        */
+
+        setTimeout(()=>{
+
+            campoPassword.focus();
+
+        },0);
+
+
+        cierrePorInactividadEnProceso =
+            false;
 
     }
 
