@@ -290,13 +290,9 @@ display:flex;
 
     height:auto;
 
-    max-height:calc(100vh - 48px);
+    max-height:none;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
-
-    overscroll-behavior:contain;
+    overflow:visible;
 
     background:#FFFFFF;
 
@@ -310,20 +306,6 @@ display:flex;
 
     z-index:1100;
 
-    scrollbar-width:none;
-
-    -ms-overflow-style:none;
-
-}
-
-#sidebar::-webkit-scrollbar{
-
-    width:0;
-
-    height:0;
-
-    display:none;
-
 }
 
 #sidebarInfo{
@@ -332,15 +314,6 @@ display:flex;
 
 }
 
-#sidebar::-webkit-scrollbar{
-
-    width:0;
-
-    height:0;
-
-    display:none;
-
-}
 .menuItem{
 
     width:100%;
