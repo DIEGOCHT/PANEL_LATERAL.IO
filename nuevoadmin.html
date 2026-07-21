@@ -3166,7 +3166,10 @@ function aplicarPermisosRol(rol){
         .trim()
         .toUpperCase();
 
-    const botonesAdministrativos = [
+    const esAsesor =
+        rolNormalizado === "ASESOR";
+
+    const idsAdministrativos = [
 
         "btnSolicitudes",
 
@@ -3178,24 +3181,22 @@ function aplicarPermisosRol(rol){
 
     ];
 
-    const esAsesor =
-        rolNormalizado === "ASESOR";
+    idsAdministrativos.forEach(id=>{
 
-    botonesAdministrativos.forEach(id=>{
-
-        const boton =
+        const elemento =
             document.getElementById(id);
 
-        if(!boton){
+        if(!elemento){
             return;
         }
 
-        boton.style.display =
+        elemento.style.display =
             esAsesor
             ? "none"
             : "flex";
 
     });
+
 
     const botonLotes =
         document.getElementById("btnLotes");
@@ -3206,23 +3207,61 @@ function aplicarPermisosRol(rol){
 
     }
 
+
     if(esAsesor){
 
-        document
-        .getElementById("contenedorSolicitudes")
-        .style.display = "none";
+        const contenedoresAdministrativos = [
+
+            "contenedorSolicitudes",
+
+            "contenedorConsultas",
+
+            "contenedorAsesores",
+
+            "contenedorAuditoria"
+
+        ];
+
+        contenedoresAdministrativos.forEach(id=>{
+
+            const contenedor =
+                document.getElementById(id);
+
+            if(contenedor){
+
+                contenedor.style.display = "none";
+
+            }
+
+        });
+
+
+        const contenedorLotes =
+            document.getElementById(
+                "contenedorLotesPrincipal"
+            );
+
+        if(contenedorLotes){
+
+            contenedorLotes.style.display = "grid";
+
+        }
+
 
         document
-        .getElementById("contenedorConsultas")
-        .style.display = "none";
+        .querySelectorAll(".menuItem")
+        .forEach(boton=>{
 
-        document
-        .getElementById("contenedorAsesores")
-        .style.display = "none";
+            boton.classList.remove("activo");
 
-        document
-        .getElementById("contenedorAuditoria")
-        .style.display = "none";
+        });
+
+
+        if(botonLotes){
+
+            botonLotes.classList.add("activo");
+
+        }
 
     }
 
@@ -5767,21 +5806,40 @@ async function refrescarSistema(){
 }
 async function cargarSolicitudes(){
 
-const respuesta =
-await fetch(
-API_URL + "?action=solicitudes"
-);
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
 
-const solicitudes =
-await respuesta.json();
-actualizarContadorSolicitudes();
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
 
-solicitudesGlobal =
-solicitudes;
+        return;
 
-renderizarSolicitudes(
-solicitudes
-);
+    }
+
+    const respuesta =
+        await apiGet(
+            "?action=solicitudes"
+        );
+
+    const solicitudes =
+        Array.isArray(respuesta)
+        ? respuesta
+        : [];
+
+    solicitudesGlobal =
+        solicitudes;
+
+    renderizarSolicitudes(
+        solicitudes
+    );
+
+    actualizarContadorSolicitudes();
 
 }
 
