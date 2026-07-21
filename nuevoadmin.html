@@ -2831,6 +2831,47 @@ margin-top:18px;
     overflow:visible !important;
 
 }
+/* ==========================================
+   AUDITORÍA - TABLA + GRÁFICO LATERAL
+========================================== */
+
+#auditoriaContenidoPrincipal{
+
+    display:grid;
+
+    grid-template-columns:minmax(0,1fr) 260px;
+
+    gap:16px;
+
+    align-items:start;
+
+    width:100%;
+
+    min-width:0;
+
+}
+
+#auditoriaTablaPrincipal{
+
+    width:100%;
+
+    min-width:0;
+
+}
+
+#graficoAuditoriaPersona{
+
+    display:none;
+
+    width:100%;
+
+    min-width:0;
+
+    margin:0;
+
+    padding-right:4px;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -5271,6 +5312,8 @@ function renderizarGraficoAuditoria(
 
     contenedor.style.display =
         "block";
+contenedor.style.width =
+    "100%";
 
 
     contenedor.innerHTML = `
@@ -5697,14 +5740,10 @@ x => x.Despues === "VENDIDO"
 
     </div>
 
-<div
-id="graficoAuditoriaPersona"
-style="
-display:none;
-width:300px;
-margin:0 0 20px 0;
-">
-</div>
+<div id="auditoriaContenidoPrincipal">
+
+<div id="auditoriaTablaPrincipal">
+
 <div class="contenedorTablaScroll">
 
 <table class="tabla">
@@ -5759,6 +5798,13 @@ margin:0 0 20px 0;
 </div>
 
 </div>
+
+<div id="graficoAuditoriaPersona">
+</div>
+
+</div>
+
+</div>
 `;
 
     document
@@ -5769,141 +5815,240 @@ margin:0 0 20px 0;
     html;
 document
 .getElementById(
-"buscarAuditoria"
+    "buscarAuditoria"
 )
 .addEventListener(
 "input",
 function(){
-let total = 0;
 
-let reservados = 0;
+    const texto =
+        this.value
+        .trim()
+        .toUpperCase();
 
-let vendidos = 0;
-const texto =
-this.value.toUpperCase();
-
-const filas =
-document.querySelectorAll(
-"#contenedorAuditoria table tr"
-);
-
-filas.forEach((fila,i)=>{
-
-if(i===0)return;
-
-const nombre =
-    fila.children[1]
-    .textContent
-    .trim()
-    .toUpperCase();
-
-if(
-    nombre.includes(texto)
-){
-
-    fila.style.display = "";
-
-    total++;
-
-    const despues =
-        fila.children[5]
-        .textContent
-        .trim();
-
-    if(
-        despues === "RESERVADO"
-    ){
-
-        reservados++;
-
-    }
-
-    if(
-        despues === "VENDIDO"
-    ){
-
-        vendidos++;
-
-    }
-
-}
-else{
-
-    fila.style.display = "none";
-
-}
-
-});
-
-document.getElementById(
-"totalCambios"
-).textContent = total;
-
-document.getElementById(
-"totalReservados"
-).textContent = reservados;
-
-document.getElementById(
-    "totalVendidos"
-).textContent =
-    vendidos;
-
-
-/*
-=========================================
-GRÁFICO DEL COLABORADOR BUSCADO
-=========================================
-*/
-
-const nombreBuscado =
-    this.value
-    .trim();
-
-
-if(
-    nombreBuscado === ""
-){
-
-    renderizarGraficoAuditoria(
-        "",
-        0,
-        0
-    );
-
-}
-else{
 
     /*
-    Obtener el nombre exacto
-    de la primera fila coincidente
+    =========================================
+    FILTRAR HISTORIAL POR NOMBRE
+    =========================================
     */
 
-    let nombreEncontrado =
-        nombreBuscado;
-
-
-    const filaVisible =
-        Array
-        .from(filas)
-        .find((fila,i)=>
-
-            i !== 0 &&
-
-            fila.style.display !==
-            "none"
-
+    const filas =
+        document.querySelectorAll(
+            "#contenedorAuditoria table tbody tr"
         );
 
 
-    if(filaVisible){
+    filas.forEach(fila=>{
 
-        nombreEncontrado =
-            filaVisible
-            .children[1]
+        const nombre =
+            fila.children[1]
             .textContent
-            .trim();
+            .trim()
+            .toUpperCase();
+
+
+        fila.style.display =
+            nombre.includes(texto)
+            ? ""
+            : "none";
+
+    });
+
+
+    /*
+    =========================================
+    OBTENER REGISTROS DEL COLABORADOR
+    =========================================
+    */
+
+    const registrosPersona =
+        datos.filter(item=>{
+
+            const nombre =
+                String(
+                    item.Nombre ||
+                    item.Usuario ||
+                    ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            return nombre.includes(texto);
+
+        });
+
+
+    /*
+    =========================================
+    ORDENAR MÁS RECIENTES PRIMERO
+    =========================================
+    */
+
+    registrosPersona.sort((a,b)=>{
+
+        return (
+            new Date(b.Fecha) -
+            new Date(a.Fecha)
+        );
+
+    });
+
+
+    /*
+    =========================================
+    CONSERVAR SOLO EL ÚLTIMO REGISTRO
+    DE CADA LOTE
+    =========================================
+    */
+
+    const lotesUnicos =
+        new Map();
+
+
+    registrosPersona.forEach(item=>{
+
+        const clave =
+            String(item.Etapa || "")
+            .trim()
+            .toUpperCase()
+            +
+            "|" +
+            String(item.Lote || "")
+            .trim()
+            .toUpperCase();
+
+
+        /*
+        Como están ordenados desde el más
+        reciente al más antiguo, guardamos
+        solamente la primera aparición.
+        */
+
+        if(
+            !lotesUnicos.has(clave)
+        ){
+
+            lotesUnicos.set(
+                clave,
+                item
+            );
+
+        }
+
+    });
+
+
+    const registrosActuales =
+        Array.from(
+            lotesUnicos.values()
+        );
+
+
+    /*
+    =========================================
+    CALCULAR ESTADÍSTICAS REALES
+    =========================================
+    */
+
+    const total =
+        registrosActuales.length;
+
+
+    const reservados =
+        registrosActuales.filter(item=>
+
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase()
+            === "RESERVADO"
+
+        ).length;
+
+
+    const vendidos =
+        registrosActuales.filter(item=>
+
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase()
+            === "VENDIDO"
+
+        ).length;
+
+
+    /*
+    =========================================
+    ACTUALIZAR TARJETAS
+    =========================================
+    */
+
+    document
+    .getElementById(
+        "totalCambios"
+    )
+    .textContent =
+        total;
+
+
+    document
+    .getElementById(
+        "totalReservados"
+    )
+    .textContent =
+        reservados;
+
+
+    document
+    .getElementById(
+        "totalVendidos"
+    )
+    .textContent =
+        vendidos;
+
+
+    /*
+    =========================================
+    MOSTRAR / OCULTAR TORTA
+    =========================================
+    */
+
+    if(
+        texto === ""
+    ){
+
+        renderizarGraficoAuditoria(
+            "",
+            0,
+            0
+        );
+
+        return;
 
     }
+
+
+    /*
+    Obtener el nombre exacto.
+    */
+
+    const primerRegistro =
+        registrosPersona[0];
+
+
+    const nombreEncontrado =
+        primerRegistro
+        ? String(
+            primerRegistro.Nombre ||
+            primerRegistro.Usuario ||
+            this.value
+        ).trim()
+        : this.value.trim();
 
 
     renderizarGraficoAuditoria(
@@ -5915,8 +6060,6 @@ else{
         vendidos
 
     );
-
-}
 
 });
 localStorage.setItem(
