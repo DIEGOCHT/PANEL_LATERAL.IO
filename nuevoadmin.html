@@ -3099,6 +3099,196 @@ margin-top:18px;
     text-transform:uppercase;
 
 }
+/* ==========================================
+   CONSULTAS - ESTILO BANDEJA
+========================================== */
+
+.bandejaConsultas{
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+
+.encabezadoConsultas{
+
+    display:grid;
+
+    grid-template-columns:240px minmax(0,1fr) 170px;
+
+    align-items:center;
+
+    min-height:44px;
+
+    padding:0 18px;
+
+    background:#F8FAFC;
+
+    border-bottom:1px solid #E2E8F0;
+
+    color:#475569;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
+
+.filaConsulta{
+
+    display:grid;
+
+    grid-template-columns:240px minmax(0,1fr) 170px;
+
+    align-items:center;
+
+    min-height:54px;
+
+    padding:0 18px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    cursor:pointer;
+
+    transition:.18s;
+
+}
+
+
+.filaConsulta:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.filaConsulta:hover{
+
+    background:#F8FAFC;
+
+}
+
+
+.consultaNombre{
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#0F172A;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.consultaAsunto{
+
+    font-size:13px;
+
+    color:#0F172A;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.consultaFecha{
+
+    font-size:12px;
+
+    color:#64748B;
+
+    text-align:right;
+
+    white-space:nowrap;
+
+}
+
+
+/* CONSULTA ABIERTA */
+
+.detalleConsulta{
+
+    display:none;
+
+    padding:22px 26px;
+
+    background:#FFFFFF;
+
+    border-top:1px solid #E2E8F0;
+
+}
+
+
+.detalleConsulta.activo{
+
+    display:block;
+
+}
+
+
+.detalleConsultaTitulo{
+
+    margin:0 0 18px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.detalleConsultaRemitente{
+
+    margin-bottom:18px;
+
+    padding-bottom:14px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    font-size:13px;
+
+    color:#475569;
+
+}
+
+
+.detalleConsultaCuerpo{
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    color:#0F172A;
+
+}
+
+
+.detalleConsultaCuerpo strong{
+
+    font-weight:700;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7347,219 +7537,373 @@ function mostrarModulo(
 async function cargarConsultas(){
 
     const rol =
-    localStorage.getItem(
-    "rol"
-    );
+        localStorage.getItem(
+            "rol"
+        );
 
-    if(rol !== "ADMIN"){
+
+    if(
+        rol !== "ADMIN"
+    ){
+
         return;
+
     }
+
 
     ocultarTodo();
 
-document
-.getElementById(
-"contenedorConsultas"
-)
-.style.display =
-"block";
+
+    document
+    .getElementById(
+        "contenedorConsultas"
+    )
+    .style.display =
+        "block";
+
 
     let datos;
 
-const ahora = Date.now();
 
-if(
+    const ahora =
+        Date.now();
 
-consultasCache.length > 0 &&
 
-(ahora - cache.consultas) < TIEMPO_CACHE
+    if(
 
-){
+        consultasCache.length > 0 &&
 
-    datos = consultasCache;
+        (
+            ahora -
+            cache.consultas
+        ) < TIEMPO_CACHE
 
-}
-else{
+    ){
 
-    datos = await apiGet(
-    "?action=consultas"
-    );
+        datos =
+            consultasCache;
 
-    consultasCache = datos;
+    }
+    else{
 
-    cache.consultas = ahora;
+        datos =
+            await apiGet(
+                "?action=consultas"
+            );
 
-}
 
-    // Más recientes primero
+        consultasCache =
+            Array.isArray(datos)
+            ? datos
+            : [];
+
+
+        datos =
+            consultasCache;
+
+
+        cache.consultas =
+            ahora;
+
+    }
+
+
+    /*
+    MÁS RECIENTES PRIMERO
+    */
+
     datos.sort((a,b)=>{
 
-        return new Date(b.Fecha)
-        -
-        new Date(a.Fecha);
+        return (
+            new Date(b.Fecha) -
+            new Date(a.Fecha)
+        );
 
     });
 
+
     let html = `
 
-<div class="tituloModulo">
+    <div class="tituloModulo">
 
-    <h2>📞 Consultas</h2>
+        <h2>
+            📞 Consultas
+        </h2>
 
-    <p>
-        Historial de consultas realizadas por los clientes interesados.
-    </p>
+        <p>
+            Historial de consultas realizadas por los clientes interesados.
+        </p>
 
-</div>
-
-<div class="moduloContenido">
-
-<h3 style="
-margin-top:0;
-margin-bottom:18px;
-font-size:20px;
-color:#0F172A;
-">
-
-🔔 Últimas Consultas
-
-</h3>
-
-`;
-
-    datos
-.slice(0,5)
-.forEach(c=>{
-
-html += `
-
-<div style="
-padding:15px 0;
-border-bottom:1px solid #eee;
-">
-
-    <div>
-    <b>Nombre:</b>
-    ${c.Nombre || ""}
-</div>
-
-<div>
-    <b>Etapa:</b>
-    ${c.Etapa || ""}
-</div>
-
-<div>
-    <b>Lote:</b>
-    ${c.Lote || ""}
-</div>
-
-<div>
-    <b>Teléfono:</b>
-    ${c.Telefono || ""}
-</div>
-
-    <div>
-        <b>Mensaje:</b>
-        ${c.Mensaje || ""}
     </div>
 
-    <div style="
-    color:#666;
-    margin-top:5px;
-    ">
-        ${formatearFecha(c.Fecha)}
-    </div>
 
-</div>
+    <div class="moduloContenido">
 
-`;
 
-});
+        <div class="bandejaConsultas">
 
-        
 
-    html += `
+            <div class="encabezadoConsultas">
 
-</div>
+                <div>
+                    De
+                </div>
 
-<div class="contenedorTablaScroll">
+                <div>
+                    Asunto
+                </div>
 
-<table class="tabla">
+                <div style="text-align:right;">
+                    Recibido
+                </div>
 
-<thead>
-
-<tr>
-
-<th>Fecha</th>
-
-<th>Etapa</th>
-
-<th>Lote</th>
-
-<th>Estado</th>
-
-<th>Nombre</th>
-
-<th>Email</th>
-
-<th>Teléfono</th>
-
-<th>Mensaje</th>
-
-</tr>
-
-</thead>
-
-<tbody>
+            </div>
 
     `;
 
-    datos.forEach(c=>{
+
+    datos.forEach((c,index)=>{
+
+
+        const nombre =
+            String(
+                c.Nombre || ""
+            )
+            .trim();
+
+
+        const etapa =
+            String(
+                c.Etapa || ""
+            )
+            .trim();
+
+
+        const lote =
+            String(
+                c.Lote || ""
+            )
+            .trim();
+
+
+        const asunto =
+            "Solicito cotización de Etapa: " +
+            etapa +
+            ", Lote: " +
+            lote;
+
 
         html += `
 
-        <tr>
+        <div
+        class="filaConsulta"
+        onclick="abrirDetalleConsulta(${index})"
+        >
 
-            <td>${formatearFecha(c.Fecha)}</td>
+            <div class="consultaNombre">
 
-<td>${c.Etapa || ""}</td>
+                ${nombre}
 
-<td>${c.Lote || ""}</td>
-            <td>${c.Estado || ""}</td>
-            <td>${c.Nombre || ""}</td>
-            <td>${c.Email || ""}</td>
-            <td>${c.Telefono || ""}</td>
-            <td>${c.Mensaje || ""}</td>
+            </div>
 
-        </tr>
+
+            <div class="consultaAsunto">
+
+                ${asunto}
+
+            </div>
+
+
+            <div class="consultaFecha">
+
+                ${formatearFecha(c.Fecha)}
+
+            </div>
+
+        </div>
+
+
+        <div
+        id="detalleConsulta_${index}"
+        class="detalleConsulta"
+        >
+
+
+            <div class="detalleConsultaTitulo">
+
+                ${asunto}
+
+            </div>
+
+
+            <div class="detalleConsultaRemitente">
+
+                <strong>De:</strong>
+                ${nombre}
+
+                &nbsp;&nbsp;
+
+                <strong>Recibido:</strong>
+                ${formatearFecha(c.Fecha)}
+
+            </div>
+
+
+            <div class="detalleConsultaCuerpo">
+
+                Hola, deseo consultar el precio del siguiente lote:
+
+                <br><br>
+
+
+                <strong>
+                    Lote:
+                </strong>
+
+                ${lote}
+
+                <br>
+
+
+                <strong>
+                    Ubicación:
+                </strong>
+
+                ${c.Ubicacion || "ASSTURIAS"}
+                ${etapa ? " - " + etapa : ""}
+
+                <br>
+
+
+                <strong>
+                    Área:
+                </strong>
+
+                ${c.Area || ""}
+
+                <br>
+
+
+                <strong>
+                    Nombre:
+                </strong>
+
+                ${nombre}
+
+                <br>
+
+
+                <strong>
+                    Email:
+                </strong>
+
+                ${c.Email || ""}
+
+                <br>
+
+
+                <strong>
+                    Teléfono:
+                </strong>
+
+                ${c.Telefono || ""}
+
+                <br>
+
+
+                <strong>
+                    Mensaje:
+                </strong>
+
+                <br>
+
+                ${c.Mensaje || ""}
+
+            </div>
+
+
+        </div>
 
         `;
 
     });
 
+
     html += `
 
-</tbody>
+        </div>
 
-</table>
+    </div>
 
-</div>
+    `;
 
-</div>
-
-`;
 
     document
-.getElementById(
-"contenedorConsultas"
-)
-.innerHTML =
-html;
+    .getElementById(
+        "contenedorConsultas"
+    )
+    .innerHTML =
+        html;
 
-localStorage.setItem(
-"consultasVistas",
-Date.now()
-);
+
+    localStorage.setItem(
+        "consultasVistas",
+        Date.now()
+    );
+
+}
+function abrirDetalleConsulta(
+    indice
+){
+
+    const detalle =
+        document.getElementById(
+            "detalleConsulta_" +
+            indice
+        );
+
+
+    if(!detalle){
+
+        return;
+
+    }
+
+
+    /*
+    CERRAR LOS DEMÁS
+    */
+
+    document
+    .querySelectorAll(
+        ".detalleConsulta"
+    )
+    .forEach(elemento=>{
+
+        if(
+            elemento !== detalle
+        ){
+
+            elemento
+            .classList
+            .remove(
+                "activo"
+            );
+
+        }
+
+    });
+
+
+    /*
+    ABRIR / CERRAR EL SELECCIONADO
+    */
+
+    detalle
+    .classList
+    .toggle(
+        "activo"
+    );
 
 }
 let solicitudesGlobal = [];
