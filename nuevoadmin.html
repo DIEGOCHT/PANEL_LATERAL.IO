@@ -288,11 +288,15 @@ display:flex;
 
     width:240px;
 
+    height:auto;
+
     max-height:calc(100vh - 48px);
 
     overflow-y:auto;
 
     overflow-x:hidden;
+
+    overscroll-behavior:contain;
 
     background:#FFFFFF;
 
@@ -300,7 +304,7 @@ display:flex;
 
     border-radius:20px;
 
-    padding:18px;
+    padding:18px 18px 30px;
 
     box-shadow:0 10px 30px rgba(15,23,42,.06);
 
@@ -309,6 +313,22 @@ display:flex;
     scrollbar-width:none;
 
     -ms-overflow-style:none;
+
+}
+
+#sidebar::-webkit-scrollbar{
+
+    width:0;
+
+    height:0;
+
+    display:none;
+
+}
+
+#sidebarInfo{
+
+    padding-bottom:18px;
 
 }
 
@@ -2553,14 +2573,6 @@ margin-top:18px;
 
 }
 
-.tablaAsesores th:last-child,
-.tablaAsesores td:last-child{
-
-    width:460px;
-
-    min-width:460px;
-
-}
 .badge.administrador{
 
     background:#DBEAFE;
@@ -2574,6 +2586,226 @@ margin-top:18px;
     background:#F1F5F9;
 
     color:#475569;
+
+}
+/* TABLA DE SOLICITUDES */
+
+.tablaSolicitudes{
+
+    table-layout:auto;
+
+}
+
+.tablaSolicitudes th:last-child,
+.tablaSolicitudes td:last-child{
+
+    width:230px;
+
+    min-width:230px;
+
+}
+
+.tablaSolicitudes td:last-child{
+
+    padding-left:10px;
+
+    padding-right:10px;
+
+}
+
+.tablaSolicitudes .filaBotones{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:row;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:nowrap;
+
+}
+
+.tablaSolicitudes .btn-verde,
+.tablaSolicitudes .btn-rojo{
+
+    width:100px;
+
+    min-width:100px;
+
+    height:38px;
+
+    margin:0;
+
+    padding:0 12px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    line-height:1;
+
+    white-space:nowrap;
+
+}
+/* CONTRASEÑA DEL COLABORADOR */
+
+.campoPasswordColaborador{
+
+    width:100%;
+
+    position:relative;
+
+}
+
+.campoPasswordColaborador #nuevoPassword{
+
+    width:100%;
+
+    height:48px;
+
+    margin:0;
+
+    padding:0 52px 0 14px;
+
+}
+
+.btnVerPassword{
+
+    position:absolute;
+
+    top:50%;
+
+    right:8px;
+
+    transform:translateY(-50%);
+
+    width:38px;
+
+    height:38px;
+
+    margin:0;
+
+    padding:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#475569;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+}
+
+.btnVerPassword:hover{
+
+    background:#F1F5F9;
+
+}
+/* DISTRIBUCIÓN DE COLUMNAS DE COLABORADORES */
+
+.tablaColaboradores{
+
+    width:100%;
+
+    table-layout:fixed;
+
+}
+
+.tablaColaboradores th:nth-child(1),
+.tablaColaboradores td:nth-child(1){
+
+    width:15%;
+
+}
+
+.tablaColaboradores th:nth-child(2),
+.tablaColaboradores td:nth-child(2){
+
+    width:29%;
+
+}
+
+.tablaColaboradores th:nth-child(3),
+.tablaColaboradores td:nth-child(3){
+
+    width:15%;
+
+}
+
+.tablaColaboradores th:nth-child(4),
+.tablaColaboradores td:nth-child(4){
+
+    width:12%;
+
+}
+
+.tablaColaboradores th:nth-child(5),
+.tablaColaboradores td:nth-child(5){
+
+    width:29%;
+
+}
+
+.tablaColaboradores td:nth-child(2){
+
+    white-space:normal;
+
+    overflow-wrap:anywhere;
+
+}
+
+.tablaColaboradores .filaBotones{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:6px;
+
+    flex-wrap:nowrap;
+
+}
+
+.tablaColaboradores .btnAccionAdmin{
+
+    height:36px;
+
+    min-width:0;
+
+    padding:0 10px;
+
+    margin:0;
+
+    font-size:11px;
+
+    white-space:nowrap;
 
 }
 </style>
@@ -4340,6 +4572,9 @@ panel.appendChild(chip);
 }
 
 async function cargarLotes(){
+activarMenu(
+    "btnLotes"
+);
 
     try{
 
@@ -5187,6 +5422,44 @@ document
 
     const asesores =
 await apiPost("listarAsesores");
+asesores.sort((a,b)=>{
+
+    const rolA =
+        String(a.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const rolB =
+        String(b.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const adminA =
+        rolA === "ADMIN" ||
+        rolA === "ADMINISTRADOR";
+
+    const adminB =
+        rolB === "ADMIN" ||
+        rolB === "ADMINISTRADOR";
+
+    if(adminA && !adminB){
+        return -1;
+    }
+
+    if(!adminA && adminB){
+        return 1;
+    }
+
+    return String(a.nombre || "")
+        .localeCompare(
+            String(b.nombre || ""),
+            "es",
+            {
+                sensitivity:"base"
+            }
+        );
+
+});
 
     let html = `
 
@@ -5222,7 +5495,7 @@ onclick="abrirModalColaborador()">
 
 <div class="contenedorTablaScroll">
 
-<table class="tabla tablaAsesores">
+<table class="tabla tablaColaboradores">
 
 <thead>
 
@@ -6075,7 +6348,7 @@ let html = `
 
 <div class="contenedorTablaScroll">
 
-<table class="tabla">
+<table class="tabla tablaSolicitudes">
 
 <thead>
 
@@ -7100,12 +7373,27 @@ function abrirModalColaborador(){
                 class="inputModulo"
                 style="width:100%;margin:0;">
 
-                <input
-                id="nuevoPassword"
-                type="password"
-                placeholder="Contraseña"
-                class="inputModulo"
-                style="width:100%;margin:0;">
+                <div class="campoPasswordColaborador">
+
+    <input
+    id="nuevoPassword"
+    type="password"
+    placeholder="Contraseña"
+    class="inputModulo">
+
+    <button
+    type="button"
+    class="btnVerPassword"
+    onclick="alternarPasswordColaborador()"
+    aria-label="Mostrar u ocultar contraseña">
+
+        <span id="iconoPasswordColaborador">
+            👁
+        </span>
+
+    </button>
+
+</div>
 
                 <select
                 id="nuevoRol"
@@ -7263,6 +7551,40 @@ async function crearColaborador(){
             resultado.mensaje ||
             "Ocurrió un error."
         );
+
+    }
+
+}
+function alternarPasswordColaborador(){
+
+    const campo =
+        document.getElementById(
+            "nuevoPassword"
+        );
+
+    const icono =
+        document.getElementById(
+            "iconoPasswordColaborador"
+        );
+
+    if(!campo){
+        return;
+    }
+
+    const estaOculta =
+        campo.type === "password";
+
+    campo.type =
+        estaOculta
+        ? "text"
+        : "password";
+
+    if(icono){
+
+        icono.textContent =
+            estaOculta
+            ? "🙈"
+            : "👁";
 
     }
 
