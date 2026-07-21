@@ -3142,7 +3142,7 @@ async function apiGet(parametros = ""){
 }
 
 
-function cerrarSesionPorSeguridad(){
+function limpiarSesionLocal(mensaje = ""){
 
     localStorage.removeItem("token");
 
@@ -3162,8 +3162,16 @@ function cerrarSesionPorSeguridad(){
 
     document
     .getElementById("error")
-    .textContent =
-        "La sesión venció. Ingrese nuevamente.";
+    .textContent = mensaje;
+
+}
+
+
+function cerrarSesionPorSeguridad(){
+
+    limpiarSesionLocal(
+        "La sesión venció. Ingrese nuevamente."
+    );
 
 }
 
@@ -3365,6 +3373,8 @@ resultado.rol +
 cargarLotes();
 
 verificarNotificaciones();
+
+reiniciarTemporizadorInactividad();
 
         }
         else{
@@ -6526,35 +6536,31 @@ localStorage.getItem("rol")
 };
 document
 .getElementById(
-"cerrarSesion"
+    "cerrarSesion"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-localStorage.removeItem(
-"logeado"
-);
+    try{
 
-localStorage.removeItem(
-"usuario"
-);
+        await apiPost(
+            "logout"
+        );
 
-localStorage.removeItem(
-"rol"
-);
+    }catch(error){
 
-document.getElementById(
-"btnAuditoria"
-).style.display = "none";
+        console.log(
+            "No se pudo confirmar el cierre en el servidor:",
+            error
+        );
 
-document.getElementById(
-"btnAsesores"
-).style.display = "none";
+    }finally{
 
-document.getElementById(
-"btnConsultas"
-).style.display = "none";
+        limpiarSesionLocal("");
 
-location.reload();
+        location.reload();
+
+    }
+
 };
 document
 .getElementById("buscarLote")
@@ -6770,6 +6776,124 @@ document
 
 };
 
+/* =========================================
+   CIERRE AUTOMÁTICO POR INACTIVIDAD
+========================================= */
+
+const TIEMPO_INACTIVIDAD_MS =
+    30 * 1000; // 30 segundos para prueba
+
+let temporizadorInactividad = null;
+
+let cierrePorInactividadEnProceso = false;
+
+
+function reiniciarTemporizadorInactividad(){
+
+    const logeado =
+        localStorage.getItem("logeado");
+
+    const token =
+        localStorage.getItem("token");
+
+    if(
+        logeado !== "SI" ||
+        !token
+    ){
+
+        return;
+
+    }
+
+    clearTimeout(
+        temporizadorInactividad
+    );
+
+    temporizadorInactividad =
+        setTimeout(
+
+            cerrarSesionPorInactividad,
+
+            TIEMPO_INACTIVIDAD_MS
+
+        );
+
+}
+
+
+async function cerrarSesionPorInactividad(){
+
+    if(cierrePorInactividadEnProceso){
+
+        return;
+
+    }
+
+    cierrePorInactividadEnProceso = true;
+
+    try{
+
+        await apiPost(
+            "logout"
+        );
+
+    }catch(error){
+
+        console.log(
+            "No se pudo invalidar la sesión por inactividad:",
+            error
+        );
+
+    }finally{
+
+        limpiarSesionLocal(
+            "La sesión se cerró por inactividad. Ingrese nuevamente."
+        );
+
+        cierrePorInactividadEnProceso = false;
+
+    }
+
+}
+
+
+const eventosDeActividad = [
+
+    "mousedown",
+
+    "keydown",
+
+    "touchstart",
+
+    "scroll"
+
+];
+
+
+eventosDeActividad.forEach(evento=>{
+
+    window.addEventListener(
+
+        evento,
+
+        reiniciarTemporizadorInactividad,
+
+        {
+            passive:true
+        }
+
+    );
+
+});
+
+
+window.addEventListener(
+
+    "load",
+
+    reiniciarTemporizadorInactividad
+
+);
 </script>
 
 </script>
