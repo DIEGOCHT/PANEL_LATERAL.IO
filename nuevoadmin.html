@@ -3761,9 +3761,33 @@ reiniciarTemporizadorInactividad();
             "error"
         );
 
+    const campoUsuario =
+        document.getElementById(
+            "usuario"
+        );
+
+    const campoPassword =
+        document.getElementById(
+            "password"
+        );
+
+
+    /*
+    MOSTRAR MENSAJE DEVUELTO
+    POR EL SERVIDOR
+    */
+
     error.textContent =
         resultado.mensaje ||
         "No fue posible iniciar sesión.";
+
+
+    /*
+    SIEMPRE BORRAR LA CONTRASEÑA
+    CUANDO EL LOGIN SEA INCORRECTO
+    */
+
+    campoPassword.value = "";
 
 
     /*
@@ -3775,13 +3799,6 @@ reiniciarTemporizadorInactividad();
         "PASSWORD_INCORRECTA"
     ){
 
-        const campoPassword =
-            document.getElementById(
-                "password"
-            );
-
-        campoPassword.value = "";
-
         campoPassword.focus();
 
     }
@@ -3791,17 +3808,25 @@ reiniciarTemporizadorInactividad();
     USUARIO NO EXISTE
     */
 
-    if(
+    else if(
         resultado.codigo ===
         "USUARIO_NO_EXISTE"
     ){
 
-        const campoUsuario =
-            document.getElementById(
-                "usuario"
-            );
-
         campoUsuario.focus();
+
+        /*
+        COLOCAR EL CURSOR AL FINAL
+        DEL USUARIO ESCRITO
+        */
+
+        const posicionFinal =
+            campoUsuario.value.length;
+
+        campoUsuario.setSelectionRange(
+            posicionFinal,
+            posicionFinal
+        );
 
     }
 
@@ -3810,14 +3835,25 @@ reiniciarTemporizadorInactividad();
     USUARIO DESACTIVADO
     */
 
-    if(
+    else if(
         resultado.codigo ===
         "USUARIO_INACTIVO"
     ){
 
-        document
-        .getElementById("password")
-        .value = "";
+        campoUsuario.focus();
+
+        /*
+        COLOCAR EL CURSOR AL FINAL
+        DEL USUARIO
+        */
+
+        const posicionFinal =
+            campoUsuario.value.length;
+
+        campoUsuario.setSelectionRange(
+            posicionFinal,
+            posicionFinal
+        );
 
     }
 
@@ -5190,10 +5226,84 @@ document
 .style.display =
 "block";
 
-const datos =
-await apiGet(
-"?action=auditoria"
-);
+const [
+    datos,
+    colaboradores
+] =
+await Promise.all([
+
+    apiGet(
+        "?action=auditoria"
+    ),
+
+    apiPost(
+        "listarAsesores"
+    )
+
+]);
+
+
+/*
+=========================================
+RELACIONAR USUARIO CON NOMBRE
+=========================================
+*/
+
+const mapaNombres = {};
+
+if(
+    Array.isArray(colaboradores)
+){
+
+    colaboradores.forEach(persona=>{
+
+        const usuario =
+            String(
+                persona.usuario || ""
+            )
+            .trim()
+            .toUpperCase();
+
+        if(usuario !== ""){
+
+            mapaNombres[usuario] =
+                String(
+                    persona.nombre ||
+                    persona.usuario ||
+                    ""
+                )
+                .trim();
+
+        }
+
+    });
+
+}
+
+
+/*
+Agregar Nombre a cada registro
+de auditoría.
+*/
+
+datos.forEach(item=>{
+
+    const usuario =
+        String(
+            item.Usuario || ""
+        )
+        .trim();
+
+    item.Nombre =
+        mapaNombres[
+            usuario.toUpperCase()
+        ]
+        ||
+        usuario;
+
+});
+
+
 datos.sort((a,b)=>{
 
     return new Date(b.Fecha)
@@ -5225,7 +5335,7 @@ x => x.Despues === "VENDIDO"
 
     <input
         id="buscarAuditoria"
-        placeholder="🔍 Buscar usuario..."
+        placeholder="🔍 Buscar nombre..."
         style="
         width:350px;
         padding:12px;
@@ -5268,7 +5378,7 @@ x => x.Despues === "VENDIDO"
 <tr>
 
 <th>Fecha</th>
-<th>Usuario</th>
+<th>Nombre</th>
 <th>Etapa</th>
 <th>Lote</th>
 <th>Antes</th>
@@ -5289,7 +5399,7 @@ x => x.Despues === "VENDIDO"
 
         <td>${formatearFecha(item.Fecha)}</td>
 
-        <td>${item.Usuario || ""}</td>
+<td>${item.Nombre || item.Usuario || ""}</td>
 
 <td>${item.Etapa || ""}</td>
 
@@ -5345,28 +5455,39 @@ filas.forEach((fila,i)=>{
 
 if(i===0)return;
 
-const usuario =
-fila.children[1]
-.textContent
-.toUpperCase();
+const nombre =
+    fila.children[1]
+    .textContent
+    .trim()
+    .toUpperCase();
 
-if(usuario.includes(texto)){
+if(
+    nombre.includes(texto)
+){
 
     fila.style.display = "";
 
     total++;
 
     const despues =
-    fila.children[5]
-    .textContent
-    .trim();
+        fila.children[5]
+        .textContent
+        .trim();
 
-    if(despues === "RESERVADO"){
+    if(
+        despues === "RESERVADO"
+    ){
+
         reservados++;
+
     }
 
-    if(despues === "VENDIDO"){
+    if(
+        despues === "VENDIDO"
+    ){
+
         vendidos++;
+
     }
 
 }
@@ -5529,7 +5650,7 @@ id="buscarAsesor"
 
 class="inputModulo"
 
-placeholder="🔍 Buscar colaborador...">
+placeholder="🔍 Buscar usuario o nombre...">
 
 <button
 class="btnAzul"
@@ -5671,35 +5792,46 @@ onclick="abrirModalColaborador()">
     .innerHTML = html;
 document
 .getElementById(
-"buscarAsesor"
+    "buscarAsesor"
 )
 .addEventListener(
 "input",
 function(){
 
-const texto =
-this.value.toUpperCase();
+    const texto =
+        this.value
+        .trim()
+        .toUpperCase();
 
-const filas =
-document.querySelectorAll(
-"#contenedorAsesores table tr"
-);
+    const filas =
+        document.querySelectorAll(
+            "#contenedorAsesores table tbody tr"
+        );
 
-filas.forEach((fila,i)=>{
+    filas.forEach(fila=>{
 
-if(i===0)return;
+        const usuario =
+            fila.children[0]
+            .textContent
+            .trim()
+            .toUpperCase();
 
-const nombre =
-fila.children[1]
-.textContent
-.toUpperCase();
+        const nombre =
+            fila.children[1]
+            .textContent
+            .trim()
+            .toUpperCase();
 
-fila.style.display =
-nombre.includes(texto)
-? ""
-: "none";
+        const coincide =
+            usuario.includes(texto) ||
+            nombre.includes(texto);
 
-});
+        fila.style.display =
+            coincide
+            ? ""
+            : "none";
+
+    });
 
 });
 }
