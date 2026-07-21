@@ -3246,7 +3246,7 @@ id="buscarSolicitud"
 
 class="inputBusqueda"
 
-placeholder="Buscar usuario o lote..."
+placeholder="🔍 Buscar nombre o lote..."
 
 onkeyup="filtrarSolicitudes()"
 
@@ -5208,6 +5208,334 @@ async ()=>{
     await cargarAuditoria();
 
 });
+function renderizarGraficoAuditoria(
+    nombre,
+    reservados,
+    vendidos
+){
+
+    const contenedor =
+        document.getElementById(
+            "graficoAuditoriaPersona"
+        );
+
+
+    if(!contenedor){
+
+        return;
+
+    }
+
+
+    /*
+    SI EL BUSCADOR ESTÁ VACÍO,
+    NO MOSTRAR NINGUNA GRÁFICA
+    */
+
+    if(
+        String(nombre || "")
+        .trim() === ""
+    ){
+
+        contenedor.style.display =
+            "none";
+
+        contenedor.innerHTML =
+            "";
+
+
+        if(
+            window.graficoAuditoriaPersona
+        ){
+
+            window
+            .graficoAuditoriaPersona
+            .destroy();
+
+            window
+            .graficoAuditoriaPersona =
+                null;
+
+        }
+
+
+        return;
+
+    }
+
+
+    const total =
+        reservados +
+        vendidos;
+
+
+    contenedor.style.display =
+        "block";
+
+
+    contenedor.innerHTML = `
+
+        <div class="cardGrafico">
+
+            <div class="tituloGrafico">
+
+                <h3>
+                    ${nombre}
+                </h3>
+
+            </div>
+
+
+            <div style="
+                width:175px;
+                height:175px;
+                margin:12px auto;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+            ">
+
+                <canvas
+                id="canvasAuditoriaPersona">
+                </canvas>
+
+            </div>
+
+
+            <div class="infoGrafico">
+
+                <div class="filaInfoGrafico">
+
+                    <span>
+                        🟡 Reservados
+                    </span>
+
+                    <b>
+                        ${reservados}
+                    </b>
+
+                </div>
+
+
+                <div class="filaInfoGrafico">
+
+                    <span>
+                        🔴 Vendidos
+                    </span>
+
+                    <b>
+                        ${vendidos}
+                    </b>
+
+                </div>
+
+            </div>
+
+
+            <div class="totalGrafico">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ${total} lotes
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const canvas =
+        document.getElementById(
+            "canvasAuditoriaPersona"
+        );
+
+
+    if(
+        window.graficoAuditoriaPersona
+    ){
+
+        window
+        .graficoAuditoriaPersona
+        .destroy();
+
+    }
+
+
+    /*
+    TEXTO CENTRAL
+    */
+
+    const pluginCentroAuditoria = {
+
+        id:
+            "textoCentroAuditoria",
+
+        afterDraw(chart){
+
+            const meta =
+                chart
+                .getDatasetMeta(0);
+
+            if(
+                !meta.data.length
+            ){
+
+                return;
+
+            }
+
+
+            const ctx =
+                chart.ctx;
+
+            const x =
+                meta.data[0].x;
+
+            const y =
+                meta.data[0].y;
+
+
+            ctx.save();
+
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillStyle =
+                "#0F172A";
+
+            ctx.font =
+                "bold 28px Segoe UI";
+
+
+            ctx.fillText(
+                total,
+                x,
+                y - 8
+            );
+
+
+            ctx.fillStyle =
+                "#64748B";
+
+            ctx.font =
+                "12px Segoe UI";
+
+
+            ctx.fillText(
+                "LOTES",
+                x,
+                y + 16
+            );
+
+
+            ctx.restore();
+
+        }
+
+    };
+
+
+    window.graficoAuditoriaPersona =
+        new Chart(
+            canvas,
+            {
+
+                type:
+                    "doughnut",
+
+                plugins:[
+                    pluginCentroAuditoria
+                ],
+
+                data:{
+
+                    labels:[
+
+                        "Reservados",
+
+                        "Vendidos"
+
+                    ],
+
+                    datasets:[{
+
+                        data:[
+
+                            reservados,
+
+                            vendidos
+
+                        ],
+
+                        backgroundColor:[
+
+                            "#FACC15",
+
+                            "#EF4444"
+
+                        ],
+
+                        borderColor:
+                            "#FFFFFF",
+
+                        borderWidth:
+                            3
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    cutout:"58%",
+
+                    animation:{
+
+                        animateRotate:true,
+
+                        animateScale:true,
+
+                        duration:800
+
+                    },
+
+                    plugins:{
+
+                        legend:{
+
+                            display:false
+
+                        },
+
+                        tooltip:{
+
+                            enabled:false
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
 async function cargarAuditoria(){
 
 const rol =
@@ -5369,6 +5697,14 @@ x => x.Despues === "VENDIDO"
 
     </div>
 
+<div
+id="graficoAuditoriaPersona"
+style="
+display:none;
+width:300px;
+margin:0 0 20px 0;
+">
+</div>
 <div class="contenedorTablaScroll">
 
 <table class="tabla">
@@ -5508,8 +5844,79 @@ document.getElementById(
 ).textContent = reservados;
 
 document.getElementById(
-"totalVendidos"
-).textContent = vendidos;
+    "totalVendidos"
+).textContent =
+    vendidos;
+
+
+/*
+=========================================
+GRÁFICO DEL COLABORADOR BUSCADO
+=========================================
+*/
+
+const nombreBuscado =
+    this.value
+    .trim();
+
+
+if(
+    nombreBuscado === ""
+){
+
+    renderizarGraficoAuditoria(
+        "",
+        0,
+        0
+    );
+
+}
+else{
+
+    /*
+    Obtener el nombre exacto
+    de la primera fila coincidente
+    */
+
+    let nombreEncontrado =
+        nombreBuscado;
+
+
+    const filaVisible =
+        Array
+        .from(filas)
+        .find((fila,i)=>
+
+            i !== 0 &&
+
+            fila.style.display !==
+            "none"
+
+        );
+
+
+    if(filaVisible){
+
+        nombreEncontrado =
+            filaVisible
+            .children[1]
+            .textContent
+            .trim();
+
+    }
+
+
+    renderizarGraficoAuditoria(
+
+        nombreEncontrado,
+
+        reservados,
+
+        vendidos
+
+    );
+
+}
 
 });
 localStorage.setItem(
@@ -6552,6 +6959,7 @@ async function cargarSolicitudes(){
         .trim()
         .toUpperCase();
 
+
     if(
         rol !== "ADMIN" &&
         rol !== "ADMINISTRADOR"
@@ -6561,22 +6969,101 @@ async function cargarSolicitudes(){
 
     }
 
-    const respuesta =
-        await apiGet(
+
+    const [
+        respuesta,
+        colaboradores
+    ] =
+    await Promise.all([
+
+        apiGet(
             "?action=solicitudes"
-        );
+        ),
+
+        apiPost(
+            "listarAsesores"
+        )
+
+    ]);
+
 
     const solicitudes =
         Array.isArray(respuesta)
         ? respuesta
         : [];
 
+
+    /*
+    =========================================
+    RELACIONAR USUARIO CON NOMBRE
+    =========================================
+    */
+
+    const mapaNombres = {};
+
+
+    if(
+        Array.isArray(colaboradores)
+    ){
+
+        colaboradores.forEach(persona=>{
+
+            const usuario =
+                String(
+                    persona.usuario || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            if(usuario !== ""){
+
+                mapaNombres[usuario] =
+                    String(
+                        persona.nombre ||
+                        persona.usuario ||
+                        ""
+                    )
+                    .trim();
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    AGREGAR NOMBRE A CADA SOLICITUD
+    */
+
+    solicitudes.forEach(s=>{
+
+        const usuario =
+            String(
+                s.usuario || ""
+            )
+            .trim();
+
+
+        s.nombre =
+            mapaNombres[
+                usuario.toUpperCase()
+            ]
+            ||
+            usuario;
+
+    });
+
+
     solicitudesGlobal =
         solicitudes;
+
 
     renderizarSolicitudes(
         solicitudes
     );
+
 
     actualizarContadorSolicitudes();
 
@@ -6598,7 +7085,7 @@ let html = `
 
 <th>Fecha</th>
 
-<th>Usuario</th>
+<th>Nombre</th>
 
 <th>Etapa</th>
 
@@ -6641,7 +7128,7 @@ html += `
 
 <td>${fechaFormateada}</td>
 
-<td>${s.usuario}</td>
+<td>${s.nombre || s.usuario || ""}</td>
 
 <td>${s.etapa}</td>
 
@@ -6694,32 +7181,49 @@ html;
 
 function filtrarSolicitudes(){
 
-const texto =
-document
-.getElementById(
-"buscarSolicitud"
-)
-.value
-.toUpperCase();
+    const texto =
+        document
+        .getElementById(
+            "buscarSolicitud"
+        )
+        .value
+        .trim()
+        .toUpperCase();
 
-const filtradas =
-solicitudesGlobal.filter(s=>
 
-s.usuario
-.toUpperCase()
-.includes(texto)
+    const filtradas =
+        solicitudesGlobal.filter(s=>{
 
-||
+            const nombre =
+                String(
+                    s.nombre ||
+                    s.usuario ||
+                    ""
+                )
+                .toUpperCase();
 
-s.lote
-.toUpperCase()
-.includes(texto)
 
-);
+            const lote =
+                String(
+                    s.lote || ""
+                )
+                .toUpperCase();
 
-renderizarSolicitudes(
-filtradas
-);
+
+            return (
+
+                nombre.includes(texto) ||
+
+                lote.includes(texto)
+
+            );
+
+        });
+
+
+    renderizarSolicitudes(
+        filtradas
+    );
 
 }
 async function aprobarSolicitud(fila){
