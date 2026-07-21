@@ -5249,6 +5249,68 @@ async ()=>{
     await cargarAuditoria();
 
 });
+function obtenerUltimosRegistrosPorLote(
+    registros
+){
+
+    const ordenados =
+        [...registros]
+        .sort((a,b)=>{
+
+            return (
+                new Date(b.Fecha) -
+                new Date(a.Fecha)
+            );
+
+        });
+
+
+    const mapaLotes =
+        new Map();
+
+
+    ordenados.forEach(item=>{
+
+        const etapa =
+            String(
+                item.Etapa || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        const lote =
+            String(
+                item.Lote || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        const clave =
+            etapa + "|" + lote;
+
+
+        if(
+            lote !== "" &&
+            !mapaLotes.has(clave)
+        ){
+
+            mapaLotes.set(
+                clave,
+                item
+            );
+
+        }
+
+    });
+
+
+    return Array.from(
+        mapaLotes.values()
+    );
+
+}
 function renderizarGraficoAuditoria(
     nombre,
     reservados,
@@ -5269,38 +5331,19 @@ function renderizarGraficoAuditoria(
 
 
     /*
-    SI EL BUSCADOR ESTÁ VACÍO,
-    NO MOSTRAR NINGUNA GRÁFICA
+    DESTRUIR EL GRÁFICO ANTERIOR
     */
 
     if(
-        String(nombre || "")
-        .trim() === ""
+        window.chartAuditoria
     ){
 
-        contenedor.style.display =
-            "none";
+        window
+        .chartAuditoria
+        .destroy();
 
-        contenedor.innerHTML =
-            "";
-
-
-        if(
-            window.graficoAuditoriaPersona
-        ){
-
-            window
-            .graficoAuditoriaPersona
-            .destroy();
-
-            window
-            .graficoAuditoriaPersona =
-                null;
-
-        }
-
-
-        return;
+        window.chartAuditoria =
+            null;
 
     }
 
@@ -5310,10 +5353,28 @@ function renderizarGraficoAuditoria(
         vendidos;
 
 
+    const porcentajeReservados =
+        total
+        ? (
+            reservados *
+            100 /
+            total
+        ).toFixed(1)
+        : "0.0";
+
+
+    const porcentajeVendidos =
+        total
+        ? (
+            vendidos *
+            100 /
+            total
+        ).toFixed(1)
+        : "0.0";
+
+
     contenedor.style.display =
         "block";
-contenedor.style.width =
-    "100%";
 
 
     contenedor.innerHTML = `
@@ -5339,7 +5400,7 @@ contenedor.style.width =
             ">
 
                 <canvas
-                id="canvasAuditoriaPersona">
+                    id="canvasAuditoriaPersona">
                 </canvas>
 
             </div>
@@ -5355,6 +5416,7 @@ contenedor.style.width =
 
                     <b>
                         ${reservados}
+                        (${porcentajeReservados}%)
                     </b>
 
                 </div>
@@ -5368,6 +5430,7 @@ contenedor.style.width =
 
                     <b>
                         ${vendidos}
+                        (${porcentajeVendidos}%)
                     </b>
 
                 </div>
@@ -5398,21 +5461,6 @@ contenedor.style.width =
         );
 
 
-    if(
-        window.graficoAuditoriaPersona
-    ){
-
-        window
-        .graficoAuditoriaPersona
-        .destroy();
-
-    }
-
-
-    /*
-    TEXTO CENTRAL
-    */
-
     const pluginCentroAuditoria = {
 
         id:
@@ -5423,6 +5471,7 @@ contenedor.style.width =
             const meta =
                 chart
                 .getDatasetMeta(0);
+
 
             if(
                 !meta.data.length
@@ -5436,8 +5485,10 @@ contenedor.style.width =
             const ctx =
                 chart.ctx;
 
+
             const x =
                 meta.data[0].x;
+
 
             const y =
                 meta.data[0].y;
@@ -5449,12 +5500,14 @@ contenedor.style.width =
             ctx.textAlign =
                 "center";
 
+
             ctx.textBaseline =
                 "middle";
 
 
             ctx.fillStyle =
                 "#0F172A";
+
 
             ctx.font =
                 "bold 28px Segoe UI";
@@ -5469,6 +5522,7 @@ contenedor.style.width =
 
             ctx.fillStyle =
                 "#64748B";
+
 
             ctx.font =
                 "12px Segoe UI";
@@ -5488,7 +5542,7 @@ contenedor.style.width =
     };
 
 
-    window.graficoAuditoriaPersona =
+    window.chartAuditoria =
         new Chart(
             canvas,
             {
@@ -5496,9 +5550,11 @@ contenedor.style.width =
                 type:
                     "doughnut",
 
+
                 plugins:[
                     pluginCentroAuditoria
                 ],
+
 
                 data:{
 
@@ -5510,6 +5566,7 @@ contenedor.style.width =
 
                     ],
 
+
                     datasets:[{
 
                         data:[
@@ -5520,6 +5577,7 @@ contenedor.style.width =
 
                         ],
 
+
                         backgroundColor:[
 
                             "#FACC15",
@@ -5528,8 +5586,10 @@ contenedor.style.width =
 
                         ],
 
+
                         borderColor:
                             "#FFFFFF",
+
 
                         borderWidth:
                             3
@@ -5537,6 +5597,7 @@ contenedor.style.width =
                     }]
 
                 },
+
 
                 options:{
 
@@ -5546,15 +5607,19 @@ contenedor.style.width =
 
                     cutout:"58%",
 
+
                     animation:{
 
                         animateRotate:true,
 
                         animateScale:true,
 
-                        duration:800
+                        duration:800,
+
+                        easing:"easeOutQuart"
 
                     },
+
 
                     plugins:{
 
@@ -5563,6 +5628,7 @@ contenedor.style.width =
                             display:false
 
                         },
+
 
                         tooltip:{
 
@@ -5577,6 +5643,343 @@ contenedor.style.width =
             }
 
         );
+
+}
+function renderizarGraficoGeneralAuditoria(
+    registros
+){
+
+    const contenedor =
+        document.getElementById(
+            "graficoAuditoriaPersona"
+        );
+
+
+    if(!contenedor){
+
+        return;
+
+    }
+
+
+    /*
+    DESTRUIR GRÁFICO ANTERIOR
+    */
+
+    if(
+        window.chartAuditoria
+    ){
+
+        window
+        .chartAuditoria
+        .destroy();
+
+        window.chartAuditoria =
+            null;
+
+    }
+
+
+    /*
+    TOMAR SOLO EL ÚLTIMO
+    REGISTRO DE CADA LOTE
+    */
+
+    const registrosActuales =
+        obtenerUltimosRegistrosPorLote(
+            registros
+        );
+
+
+    /*
+    AGRUPAR POR COLABORADOR
+    */
+
+    const colaboradores = {};
+
+
+    registrosActuales.forEach(item=>{
+
+        const nombre =
+            String(
+                item.Nombre ||
+                item.Usuario ||
+                "Sin nombre"
+            )
+            .trim();
+
+
+        if(
+            !colaboradores[nombre]
+        ){
+
+            colaboradores[nombre] = {
+
+                reservados:0,
+
+                vendidos:0
+
+            };
+
+        }
+
+
+        const estado =
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        if(
+            estado === "RESERVADO"
+        ){
+
+            colaboradores[nombre]
+            .reservados++;
+
+        }
+
+
+        if(
+            estado === "VENDIDO"
+        ){
+
+            colaboradores[nombre]
+            .vendidos++;
+
+        }
+
+    });
+
+
+    /*
+    ORDENAR POR MAYOR TOTAL
+    */
+
+    const nombres =
+        Object.keys(
+            colaboradores
+        )
+        .sort((a,b)=>{
+
+            const totalA =
+                colaboradores[a]
+                .reservados
+                +
+                colaboradores[a]
+                .vendidos;
+
+
+            const totalB =
+                colaboradores[b]
+                .reservados
+                +
+                colaboradores[b]
+                .vendidos;
+
+
+            return totalB - totalA;
+
+        });
+
+
+    let html = `
+
+        <div class="cardGrafico">
+
+            <div class="tituloGrafico">
+
+                <h3>
+                    RESUMEN POR COLABORADOR
+                </h3>
+
+            </div>
+
+    `;
+
+
+    nombres.forEach(nombre=>{
+
+        const reservados =
+            colaboradores[
+                nombre
+            ].reservados;
+
+
+        const vendidos =
+            colaboradores[
+                nombre
+            ].vendidos;
+
+
+        const total =
+            reservados +
+            vendidos;
+
+
+        const maximo =
+            Math.max(
+                reservados,
+                vendidos,
+                1
+            );
+
+
+        const anchoReservado =
+            (
+                reservados /
+                maximo
+            ) * 100;
+
+
+        const anchoVendido =
+            (
+                vendidos /
+                maximo
+            ) * 100;
+
+
+        html += `
+
+        <div style="
+            padding:12px 0;
+            border-bottom:1px solid #E2E8F0;
+        ">
+
+            <div style="
+                font-size:13px;
+                font-weight:700;
+                color:#0F172A;
+                margin-bottom:6px;
+            ">
+
+                ${nombre}
+
+            </div>
+
+
+            <div style="
+                font-size:12px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:8px;
+            ">
+
+                Total ${total}
+
+            </div>
+
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:8px;
+                margin-bottom:7px;
+            ">
+
+                <span style="
+                    width:18px;
+                ">
+                    🟡
+                </span>
+
+
+                <div style="
+                    flex:1;
+                    height:12px;
+                    background:#F1F5F9;
+                    border-radius:6px;
+                    overflow:hidden;
+                ">
+
+                    <div style="
+                        width:${anchoReservado}%;
+                        height:100%;
+                        background:#FACC15;
+                        border-radius:6px;
+                    ">
+                    </div>
+
+                </div>
+
+
+                <strong style="
+                    width:22px;
+                    text-align:right;
+                ">
+
+                    ${reservados}
+
+                </strong>
+
+            </div>
+
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:8px;
+            ">
+
+                <span style="
+                    width:18px;
+                ">
+                    🔴
+                </span>
+
+
+                <div style="
+                    flex:1;
+                    height:12px;
+                    background:#F1F5F9;
+                    border-radius:6px;
+                    overflow:hidden;
+                ">
+
+                    <div style="
+                        width:${anchoVendido}%;
+                        height:100%;
+                        background:#EF4444;
+                        border-radius:6px;
+                    ">
+                    </div>
+
+                </div>
+
+
+                <strong style="
+                    width:22px;
+                    text-align:right;
+                ">
+
+                    ${vendidos}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    html += `
+
+        </div>
+
+    `;
+
+
+    contenedor.style.display =
+        "block";
+
+
+    contenedor.innerHTML =
+        html;
 
 }
 async function cargarAuditoria(){
@@ -5683,15 +6086,42 @@ datos.sort((a,b)=>{
 
 });
 
+const registrosProyectoActual =
+    obtenerUltimosRegistrosPorLote(
+        datos
+    );
+
+
+const totalProyecto =
+    registrosProyectoActual.length;
+
+
 const reservados =
-datos.filter(
-x => x.Despues === "RESERVADO"
-).length;
+    registrosProyectoActual.filter(
+        item =>
+
+        String(
+            item.Despues || ""
+        )
+        .trim()
+        .toUpperCase()
+        === "RESERVADO"
+
+    ).length;
+
 
 const vendidos =
-datos.filter(
-x => x.Despues === "VENDIDO"
-).length;
+    registrosProyectoActual.filter(
+        item =>
+
+        String(
+            item.Despues || ""
+        )
+        .trim()
+        .toUpperCase()
+        === "VENDIDO"
+
+    ).length;
     let html = `
 
 <div class="tituloModulo">
@@ -5724,7 +6154,7 @@ x => x.Despues === "VENDIDO"
     ">
 
         <div class="cardDashboard">
-            <h3 id="totalCambios">${datos.length}</h3>
+            <h3 id="totalCambios">${totalProyecto}</h3>
             <p>Total Cambios</p>
         </div>
 
@@ -5813,6 +6243,9 @@ x => x.Despues === "VENDIDO"
     )
     .innerHTML =
     html;
+renderizarGraficoGeneralAuditoria(
+    datos
+);
 document
 .getElementById(
     "buscarAuditoria"
@@ -5956,7 +6389,7 @@ function(){
         registrosActuales.length;
 
 
-    const reservados =
+    const reservadosPersona =
         registrosActuales.filter(item=>
 
             String(
@@ -5969,7 +6402,7 @@ function(){
         ).length;
 
 
-    const vendidos =
+    const vendidosPersona =
         registrosActuales.filter(item=>
 
             String(
@@ -6001,6 +6434,57 @@ function(){
         "totalReservados"
     )
     .textContent =
+    reservadosPersona;
+
+
+    document
+    .getElementById(
+        "totalVendidos"
+    )
+    .textContent =
+    vendidosPersona;
+
+
+    /*
+    =========================================
+    MOSTRAR / OCULTAR TORTA
+    =========================================
+    */
+
+    if(
+    texto === ""
+){
+
+    /*
+    RESTAURAR TODA LA TABLA
+    */
+
+    filas.forEach(fila=>{
+
+        fila.style.display =
+            "";
+
+    });
+
+
+    /*
+    RESTAURAR ESTADÍSTICAS
+    DEL PROYECTO COMPLETO
+    */
+
+    document
+    .getElementById(
+        "totalCambios"
+    )
+    .textContent =
+        totalProyecto;
+
+
+    document
+    .getElementById(
+        "totalReservados"
+    )
+    .textContent =
         reservados;
 
 
@@ -6013,24 +6497,17 @@ function(){
 
 
     /*
-    =========================================
-    MOSTRAR / OCULTAR TORTA
-    =========================================
+    VOLVER AL GRÁFICO GENERAL
     */
 
-    if(
-        texto === ""
-    ){
+    renderizarGraficoGeneralAuditoria(
+        datos
+    );
 
-        renderizarGraficoAuditoria(
-            "",
-            0,
-            0
-        );
 
-        return;
+    return;
 
-    }
+}
 
 
     /*
@@ -6053,13 +6530,13 @@ function(){
 
     renderizarGraficoAuditoria(
 
-        nombreEncontrado,
+    nombreEncontrado,
 
-        reservados,
+    reservadosPersona,
 
-        vendidos
+    vendidosPersona
 
-    );
+);
 
 });
 localStorage.setItem(
