@@ -1387,15 +1387,19 @@ table-layout:fixed;
 
     background:#F8FAFC;
 
-    padding:10px 12px;
+    padding:14px 12px;
 
-    font-size:12px;
+    font-size:15px;
 
-    font-weight:700;
+    font-weight:800;
 
-    color:#475569;
+    text-transform:uppercase;
 
-    border-bottom:2px solid #E2E8F0;
+    letter-spacing:.7px;
+
+    color:#334155;
+
+    border-bottom:2px solid #CBD5E1;
 
     text-align:center;
 
@@ -2785,6 +2789,36 @@ margin-top:18px;
     white-space:nowrap;
 
 }
+/* ==========================================
+   VISTA UNIFICADA DE TODOS LOS MÓDULOS
+========================================== */
+
+.vistaModulo{
+
+    width:100%;
+
+    min-width:0;
+
+    min-height:100vh;
+
+    overflow:visible;
+
+}
+
+#contenedorAuditoria,
+#contenedorAsesores,
+#contenedorConsultas,
+#contenedorSolicitudes{
+
+    width:100%;
+
+    min-width:0;
+
+    min-height:100vh;
+
+    overflow:visible !important;
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3153,18 +3187,22 @@ id="contenedorLotes">
 
     <div
 id="contenedorAuditoria"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
 <div
 id="contenedorAsesores"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
 <div
 id="contenedorConsultas"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
 <div
 id="contenedorSolicitudes"
+class="vistaModulo"
 style="display:none;">
 
 <div class="tituloModulo">
@@ -5047,19 +5085,17 @@ document
 .getElementById("btnLotes")
 .addEventListener(
 "click",
-async ()=>{
+()=>{
 
-    activarMenu("btnLotes");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnLotes",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="block";
+        "contenedorLotesPrincipal",
 
-    document
-    .getElementById("contenedorLotesPrincipal")
-    .style.display="grid";
+        "grid"
+
+    );
 
     sincronizarPanel();
 
@@ -5070,19 +5106,15 @@ document
 "click",
 async ()=>{
 
-    activarMenu("btnAuditoria");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnAuditoria",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorAuditoria"
 
-    document
-    .getElementById("contenedorAuditoria")
-    .style.display="block";
+    );
 
-    cargarAuditoria();
+    await cargarAuditoria();
 
 });
 async function cargarAuditoria(){
@@ -5316,65 +5348,47 @@ document
 "click",
 async ()=>{
 
-    activarMenu("btnAsesores");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnAsesores",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorAsesores"
 
-    document
-    .getElementById("contenedorAsesores")
-    .style.display="block";
+    );
 
-    cargarAsesores();
+    await cargarAsesores();
 
-}
-);
+});
 document
 .getElementById("btnConsultas")
 .addEventListener(
 "click",
 async ()=>{
 
-    activarMenu("btnConsultas");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnConsultas",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorConsultas"
 
-    document
-    .getElementById("contenedorConsultas")
-    .style.display="block";
+    );
 
-    cargarConsultas();
+    await cargarConsultas();
 
-}
-);
+});
 document
-.getElementById(
-"btnSolicitudes"
-)
+.getElementById("btnSolicitudes")
 .addEventListener(
 "click",
 async ()=>{
 
-    activarMenu("btnSolicitudes");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnSolicitudes",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorSolicitudes"
 
-    document
-    .getElementById(
-    "contenedorSolicitudes"
-    )
-    .style.display="block";
+    );
 
     await cargarSolicitudes();
 
@@ -5863,15 +5877,79 @@ function activarMenu(id){
 }
 function ocultarTodo(){
 
-document.getElementById("contenedorLotesPrincipal").style.display="none";
+    const modulos = [
 
-document.getElementById("contenedorAuditoria").style.display="none";
+        "contenedorLotesPrincipal",
 
-document.getElementById("contenedorAsesores").style.display="none";
+        "contenedorAuditoria",
 
-document.getElementById("contenedorConsultas").style.display="none";
+        "contenedorAsesores",
 
-document.getElementById("contenedorSolicitudes").style.display="none";
+        "contenedorConsultas",
+
+        "contenedorSolicitudes"
+
+    ];
+
+    modulos.forEach(id=>{
+
+        const modulo =
+            document.getElementById(id);
+
+        if(modulo){
+
+            modulo.style.display = "none";
+
+        }
+
+    });
+
+}
+function mostrarModulo(
+    botonId,
+    contenedorId,
+    tipoDisplay = "block"
+){
+
+    activarMenu(
+        botonId
+    );
+
+    ocultarTodo();
+
+    const cabecera =
+        document.getElementById(
+            "cabeceraFija"
+        );
+
+    if(cabecera){
+
+        cabecera.style.display =
+            botonId === "btnLotes"
+            ? "block"
+            : "none";
+
+    }
+
+    const contenedor =
+        document.getElementById(
+            contenedorId
+        );
+
+    if(contenedor){
+
+        contenedor.style.display =
+            tipoDisplay;
+
+    }
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"auto"
+
+    });
 
 }
 async function cargarConsultas(){
