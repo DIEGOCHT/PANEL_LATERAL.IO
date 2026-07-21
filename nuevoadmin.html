@@ -95,9 +95,21 @@ button{
 }
 
 #error{
-    margin-top:15px;
-    color:red;
+
+    min-height:22px;
+
+    margin-top:16px;
+
+    color:#DC2626;
+
     text-align:center;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
 }
 
 #panel{
@@ -3735,14 +3747,6 @@ localStorage.setItem(
 .textContent =
 resultado.nombre;
 
-"<h2>Bienvenido " +
-resultado.nombre +
-"</h2>" +
-
-"<p><b>Rol:</b> " +
-resultado.rol +
-"</p>";
-
 cargarLotes();
 
 verificarNotificaciones();
@@ -3752,19 +3756,70 @@ reiniciarTemporizadorInactividad();
         }
         else{
 
-    document
-    .getElementById("error")
-    .textContent =
-    "Usuario o contraseña incorrectos";
+    const error =
+        document.getElementById(
+            "error"
+        );
 
-    const campoPassword =
-    document.getElementById(
-    "password"
-    );
+    error.textContent =
+        resultado.mensaje ||
+        "No fue posible iniciar sesión.";
 
-    campoPassword.value = "";
 
-    campoPassword.focus();
+    /*
+    CONTRASEÑA INCORRECTA
+    */
+
+    if(
+        resultado.codigo ===
+        "PASSWORD_INCORRECTA"
+    ){
+
+        const campoPassword =
+            document.getElementById(
+                "password"
+            );
+
+        campoPassword.value = "";
+
+        campoPassword.focus();
+
+    }
+
+
+    /*
+    USUARIO NO EXISTE
+    */
+
+    if(
+        resultado.codigo ===
+        "USUARIO_NO_EXISTE"
+    ){
+
+        const campoUsuario =
+            document.getElementById(
+                "usuario"
+            );
+
+        campoUsuario.focus();
+
+    }
+
+
+    /*
+    USUARIO DESACTIVADO
+    */
+
+    if(
+        resultado.codigo ===
+        "USUARIO_INACTIVO"
+    ){
+
+        document
+        .getElementById("password")
+        .value = "";
+
+    }
 
 }
 
