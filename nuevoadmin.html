@@ -3053,6 +3053,9 @@ const API_URL =
 
 async function apiPost(action, datos = {}){
 
+    const token =
+        localStorage.getItem("token") || "";
+
     const respuesta = await fetch(API_URL,{
 
         method:"POST",
@@ -3061,27 +3064,98 @@ async function apiPost(action, datos = {}){
 
             action:action,
 
+            token:token,
+
             ...datos
 
         })
 
     });
 
-    return await respuesta.json();
+    const resultado =
+        await respuesta.json();
+
+    if(
+        resultado &&
+        resultado.mensaje === "ACCESO_NO_AUTORIZADO"
+    ){
+
+        cerrarSesionPorSeguridad();
+
+        throw new Error(
+            "Sesión vencida o acceso no autorizado"
+        );
+
+    }
+
+    return resultado;
 
 }
 
+
 async function apiGet(parametros = ""){
 
-    const respuesta = await fetch(
+    const token =
+        localStorage.getItem("token") || "";
 
+    const separador =
+        parametros.includes("?")
+        ? "&"
+        : "?";
+
+    const url =
         API_URL +
+        parametros +
+        separador +
+        "token=" +
+        encodeURIComponent(token);
 
-        parametros
+    const respuesta =
+        await fetch(url);
 
-    );
+    const resultado =
+        await respuesta.json();
 
-    return await respuesta.json();
+    if(
+        resultado &&
+        resultado.mensaje === "ACCESO_NO_AUTORIZADO"
+    ){
+
+        cerrarSesionPorSeguridad();
+
+        throw new Error(
+            "Sesión vencida o acceso no autorizado"
+        );
+
+    }
+
+    return resultado;
+
+}
+
+
+function cerrarSesionPorSeguridad(){
+
+    localStorage.removeItem("token");
+
+    localStorage.removeItem("rol");
+
+    localStorage.removeItem("usuario");
+
+    localStorage.removeItem("logeado");
+
+    document
+    .getElementById("panel")
+    .style.display = "none";
+
+    document
+    .getElementById("loginBox")
+    .style.display = "block";
+
+    document
+    .getElementById("error")
+    .textContent =
+        "La sesión venció. Ingrese nuevamente.";
 
 }
 
@@ -3190,6 +3264,10 @@ password:password
 
         if(resultado.ok){
 
+localStorage.setItem(
+    "token",
+    resultado.token
+);
     localStorage.setItem(
 "rol",
 resultado.rol
@@ -4237,13 +4315,15 @@ estadoActual:estadoOriginal,
 estadoSolicitado:estado
 }
 );
-const respuestaSolicitudes =
-await fetch(
-API_URL + "?action=solicitudesPendientes"
-);
+const pendientes =
+    await apiGet(
+        "?action=solicitudesPendientes"
+    );
 
 solicitudesPendientes =
-await respuestaSolicitudes.json();
+    Array.isArray(pendientes)
+    ? pendientes
+    : [];
 
 if(resultado.ok){
 
@@ -5626,75 +5706,58 @@ totalActual;
 }
 async function sincronizarPanel(){
 
-const rol =
-localStorage.getItem("rol");
+    const rol =
+        localStorage.getItem("rol");
 
-try{
+    try{
 
-const [respuestaLotes, respuestaPendientes] =
-await Promise.all([
+        const [nuevos, pendientes] =
+        await Promise.all([
 
-    fetch(API_URL),
+            apiGet(),
 
-    fetch(API_URL + "?action=solicitudesPendientes")
+            apiGet(
+                "?action=solicitudesPendientes"
+            )
 
-]);
+        ]);
 
-const nuevos =
-await respuestaLotes.json();
+        todosLosLotes =
+            Array.isArray(nuevos)
+            ? nuevos
+            : [];
 
-solicitudesPendientes =
-await respuestaPendientes.json();
+        solicitudesPendientes =
+            Array.isArray(pendientes)
+            ? pendientes
+            : [];
 
-// Reemplazar completamente la información local
-todosLosLotes = nuevos;
+        actualizarDashboard(todosLosLotes);
 
-/*
-const estadoActualLotes = JSON.stringify(datos);
+        renderizarGraficosPorEtapa(todosLosLotes);
 
-if(estadoActualLotes === ultimoEstadoLotes){
+        filtrarLotes();
 
-    actualizarContadorSolicitudes();
+        if(rol === "ADMIN"){
 
-    return;
+            actualizarContadorSolicitudes();
 
-}
+        }
 
-ultimoEstadoLotes = estadoActualLotes;
-*/
+        document
+        .getElementById("ultimaActualizacion")
+        .innerHTML =
+            "🟢 Última actualización: " +
+            new Date().toLocaleString("es-PE");
 
-// Volver a pintar toda la interfaz
-actualizarDashboard(todosLosLotes);
+    }catch(error){
 
-renderizarGraficosPorEtapa(todosLosLotes);
+        console.log(
+            "Error sincronizando:",
+            error
+        );
 
-filtrarLotes();
-
-if(rol === "ADMIN"){
-
-    actualizarContadorSolicitudes();
-
-}
-document
-.getElementById(
-"ultimaActualizacion"
-)
-.innerHTML =
-
-"🟢 Última actualización: " +
-
-new Date()
-.toLocaleString(
-"es-PE"
-);
-}catch(error){
-
-console.log(
-"Error sincronizando:",
-error
-);
-
-}
+    }
 
 }
 async function refrescarSistema(){
