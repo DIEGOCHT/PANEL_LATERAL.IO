@@ -4206,6 +4206,375 @@ margin-top:18px;
     }
 
 }
+/* =====================================================
+   CORRECCIÓN FINAL PARA CELULAR
+   - Estadísticas en una sola fila
+   - Filtros en una sola fila
+   - Desplazamiento vertical desde cualquier zona
+   - Botón de menú siempre visible
+===================================================== */
+
+@media(max-width:700px){
+
+    /*
+    =========================================
+    1. BOTÓN DEL MENÚ SIEMPRE VISIBLE
+    =========================================
+    */
+
+    #btnMenuMovil{
+
+        position:fixed;
+
+        top:12px;
+        left:12px;
+
+        z-index:5000;
+
+        display:flex;
+
+        width:44px;
+        min-width:44px;
+        height:44px;
+
+        margin:0;
+
+        box-shadow:
+            0 6px 18px rgba(37,99,235,.30);
+
+    }
+
+
+    /*
+    Evita que el botón tape
+    el nombre del usuario.
+    */
+
+    #usuarioHeader{
+
+        padding-left:66px;
+
+    }
+
+
+    /*
+    =========================================
+    2. ESTADÍSTICAS EN UNA SOLA FILA
+    =========================================
+    */
+
+    #dashboard{
+
+        display:flex;
+
+        flex-direction:row;
+
+        flex-wrap:nowrap;
+
+        gap:8px;
+
+        width:100%;
+
+        margin-bottom:8px;
+
+        overflow-x:auto;
+        overflow-y:hidden;
+
+        scroll-snap-type:x proximity;
+
+        -webkit-overflow-scrolling:touch;
+
+        scrollbar-width:none;
+
+    }
+
+
+    #dashboard::-webkit-scrollbar{
+
+        display:none;
+
+    }
+
+
+    .cardDashboard{
+
+        flex:0 0 122px;
+
+        width:122px;
+        min-width:122px;
+
+        height:64px;
+
+        padding:8px;
+
+        gap:7px;
+
+        scroll-snap-align:start;
+
+    }
+
+
+    .cardIcono{
+
+        width:34px;
+        min-width:34px;
+        height:34px;
+
+        margin-left:0;
+
+        border-radius:9px;
+
+    }
+
+
+    .cardDashboard h3{
+
+        font-size:17px;
+
+    }
+
+
+    .cardDashboard p{
+
+        font-size:8px;
+
+        letter-spacing:.25px;
+
+        line-height:1.15;
+
+    }
+
+
+    /*
+    =========================================
+    3. BUSCADOR
+    =========================================
+    */
+
+    #herramientas{
+
+        display:flex;
+
+        flex-direction:column;
+
+        flex-wrap:nowrap;
+
+        gap:8px;
+
+        width:100%;
+
+    }
+
+
+    #buscarLote{
+
+        flex:none;
+
+        width:100%;
+        min-width:100%;
+
+    }
+
+
+    /*
+    Los botones se guardan en una sola fila
+    horizontal debajo del buscador.
+    */
+
+    #herramientas{
+
+        overflow:visible;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        flex:0 0 auto;
+
+        width:auto;
+        min-width:92px;
+
+        height:38px;
+
+        padding:0 12px;
+
+        font-size:10px;
+
+    }
+
+
+    /*
+    Convertimos los botones en una fila horizontal.
+    Como todos son hijos directos de herramientas,
+    usamos display:contents en el buscador mediante
+    una fila visual con desplazamiento.
+    */
+
+    #panelSuperior{
+
+        overflow:hidden;
+
+    }
+
+
+    /*
+    Fila horizontal independiente de filtros.
+    */
+
+    #herramientas{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(5,minmax(92px,1fr));
+
+        overflow-x:auto;
+
+        overflow-y:hidden;
+
+        padding-bottom:3px;
+
+        scroll-snap-type:x proximity;
+
+        scrollbar-width:none;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    #herramientas::-webkit-scrollbar{
+
+        display:none;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1;
+
+        position:sticky;
+
+        left:0;
+
+        z-index:2;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        scroll-snap-align:start;
+
+    }
+
+
+    /*
+    Anula la regla anterior que hacía que
+    VENDIDOS ocupara toda la fila.
+    */
+
+    #filtroVendidos{
+
+        grid-column:auto;
+
+    }
+
+
+    /*
+    =========================================
+    4. DESPLAZAMIENTO VERTICAL DE LA PÁGINA
+    =========================================
+    */
+
+    html,
+    body{
+
+        width:100%;
+
+        min-height:100%;
+
+        overflow-x:hidden;
+
+        overflow-y:auto;
+
+        touch-action:pan-y;
+
+        overscroll-behavior-y:auto;
+
+    }
+
+
+    #panel,
+    #panelPrincipal,
+    #workspace,
+    #contenido,
+    #contenidoScrollable,
+    #contenedorLotesPrincipal,
+    #contenedorLotes{
+
+        height:auto;
+
+        max-height:none;
+
+        overflow-y:visible;
+
+        touch-action:pan-y;
+
+    }
+
+
+    /*
+    Las tablas conservan desplazamiento horizontal,
+    pero no bloquean el deslizamiento vertical.
+    */
+
+    .contenedorTablaScroll{
+
+        overflow-x:auto;
+        overflow-y:visible;
+
+        touch-action:pan-x pan-y;
+
+        overscroll-behavior-x:contain;
+        overscroll-behavior-y:auto;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    .tabla{
+
+        touch-action:pan-x pan-y;
+
+    }
+
+
+    /*
+    También permite deslizar verticalmente
+    sobre las gráficas.
+    */
+
+    #panelGraficos,
+    .cardGrafico,
+    canvas{
+
+        touch-action:pan-y;
+
+    }
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -10912,7 +11281,7 @@ async function crearColaborador(){
 function alternarPasswordColaborador(){
 
     const campo =
-        document.getElementById(
+        doc08:49 p. m. 21/07/2026ument.getElementById(
             "nuevoPassword"
         );
 
