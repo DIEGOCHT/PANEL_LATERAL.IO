@@ -4206,19 +4206,17 @@ margin-top:18px;
     }
 
 }
+
 /* =====================================================
-   CORRECCIÓN FINAL PARA CELULAR
-   - Estadísticas en una sola fila
-   - Filtros en una sola fila
-   - Desplazamiento vertical desde cualquier zona
-   - Botón de menú siempre visible
+   CORRECCIÓN FINAL PARA TABLET Y CELULAR
+   Solo se aplica desde 1180 px hacia abajo
 ===================================================== */
 
-@media(max-width:700px){
+@media(max-width:1180px){
 
     /*
     =========================================
-    1. BOTÓN DEL MENÚ SIEMPRE VISIBLE
+    1. BOTÓN DE MENÚ SIEMPRE VISIBLE
     =========================================
     */
 
@@ -4245,14 +4243,9 @@ margin-top:18px;
     }
 
 
-    /*
-    Evita que el botón tape
-    el nombre del usuario.
-    */
-
     #usuarioHeader{
 
-        padding-left:66px;
+        padding-left:68px;
 
     }
 
@@ -4260,162 +4253,40 @@ margin-top:18px;
     /*
     =========================================
     2. ESTADÍSTICAS EN UNA SOLA FILA
+    SIN DESPLAZAMIENTO HORIZONTAL
     =========================================
     */
 
     #dashboard{
 
-        display:flex;
+        display:grid !important;
 
-        flex-direction:row;
+        grid-template-columns:
+            repeat(4,minmax(0,1fr)) !important;
 
-        flex-wrap:nowrap;
-
-        gap:8px;
+        gap:7px;
 
         width:100%;
 
         margin-bottom:8px;
 
-        overflow-x:auto;
-        overflow-y:hidden;
-
-        scroll-snap-type:x proximity;
-
-        -webkit-overflow-scrolling:touch;
-
-        scrollbar-width:none;
+        overflow:visible !important;
 
     }
 
 
-    #dashboard::-webkit-scrollbar{
+    #dashboard .cardDashboard{
 
-        display:none;
+        width:auto !important;
+        min-width:0 !important;
 
-    }
+        height:62px;
 
+        padding:7px 6px;
 
-    .cardDashboard{
+        gap:0;
 
-        flex:0 0 122px;
-
-        width:122px;
-        min-width:122px;
-
-        height:64px;
-
-        padding:8px;
-
-        gap:7px;
-
-        scroll-snap-align:start;
-
-    }
-
-
-    .cardIcono{
-
-        width:34px;
-        min-width:34px;
-        height:34px;
-
-        margin-left:0;
-
-        border-radius:9px;
-
-    }
-
-
-    .cardDashboard h3{
-
-        font-size:17px;
-
-    }
-
-
-    .cardDashboard p{
-
-        font-size:8px;
-
-        letter-spacing:.25px;
-
-        line-height:1.15;
-
-    }
-
-
-    /*
-    =========================================
-    3. BUSCADOR
-    =========================================
-    */
-
-    #herramientas{
-
-        display:flex;
-
-        flex-direction:column;
-
-        flex-wrap:nowrap;
-
-        gap:8px;
-
-        width:100%;
-
-    }
-
-
-    #buscarLote{
-
-        flex:none;
-
-        width:100%;
-        min-width:100%;
-
-    }
-
-
-    /*
-    Los botones se guardan en una sola fila
-    horizontal debajo del buscador.
-    */
-
-    #herramientas{
-
-        overflow:visible;
-
-    }
-
-
-    #btnEtapas,
-    #filtroTodos,
-    #filtroLibres,
-    #filtroReservados,
-    #filtroVendidos{
-
-        flex:0 0 auto;
-
-        width:auto;
-        min-width:92px;
-
-        height:38px;
-
-        padding:0 12px;
-
-        font-size:10px;
-
-    }
-
-
-    /*
-    Convertimos los botones en una fila horizontal.
-    Como todos son hijos directos de herramientas,
-    usamos display:contents en el buscador mediante
-    una fila visual con desplazamiento.
-    */
-
-    #panelSuperior{
+        justify-content:center;
 
         overflow:hidden;
 
@@ -4423,34 +4294,74 @@ margin-top:18px;
 
 
     /*
-    Fila horizontal independiente de filtros.
+    Oculta la casa y los círculos de colores
+    únicamente en tablet y celular.
     */
 
-    #herramientas{
+    #dashboard .cardIcono{
 
-        display:grid;
-
-        grid-template-columns:
-            repeat(5,minmax(92px,1fr));
-
-        overflow-x:auto;
-
-        overflow-y:hidden;
-
-        padding-bottom:3px;
-
-        scroll-snap-type:x proximity;
-
-        scrollbar-width:none;
-
-        -webkit-overflow-scrolling:touch;
+        display:none !important;
 
     }
 
 
-    #herramientas::-webkit-scrollbar{
+    #dashboard .cardInfo{
 
-        display:none;
+        width:100%;
+
+        align-items:center;
+
+        text-align:center;
+
+    }
+
+
+    #dashboard .cardDashboard h3{
+
+        font-size:18px;
+
+        line-height:1;
+
+    }
+
+
+    #dashboard .cardDashboard p{
+
+        width:100%;
+
+        margin-top:4px;
+
+        font-size:8px;
+
+        line-height:1.05;
+
+        letter-spacing:.25px;
+
+        text-align:center;
+
+        white-space:normal;
+
+    }
+
+
+    /*
+    =========================================
+    3. BUSCADOR Y FILTROS
+    =========================================
+    */
+
+    #herramientas{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(5,minmax(0,1fr)) !important;
+
+        gap:6px;
+
+        width:100%;
+
+        overflow:visible !important;
 
     }
 
@@ -4459,11 +4370,12 @@ margin-top:18px;
 
         grid-column:1 / -1;
 
-        position:sticky;
+        width:100% !important;
+        min-width:0 !important;
 
-        left:0;
+        position:relative;
 
-        z-index:2;
+        left:auto;
 
     }
 
@@ -4474,26 +4386,245 @@ margin-top:18px;
     #filtroReservados,
     #filtroVendidos{
 
-        scroll-snap-align:start;
+        width:100% !important;
+        min-width:0 !important;
+
+        height:36px;
+
+        margin:0;
+
+        padding:0 4px;
+
+        font-size:9px;
+
+        letter-spacing:0;
+
+        white-space:nowrap;
 
     }
 
 
-    /*
-    Anula la regla anterior que hacía que
-    VENDIDOS ocupara toda la fila.
-    */
-
     #filtroVendidos{
 
-        grid-column:auto;
+        grid-column:auto !important;
 
     }
 
 
     /*
     =========================================
-    4. DESPLAZAMIENTO VERTICAL DE LA PÁGINA
+    4. BUSCADORES FIJOS DE LOS MÓDULOS
+    =========================================
+    */
+
+    #buscarSolicitud,
+    #buscarAuditoria,
+    #buscarAsesor{
+
+        position:sticky !important;
+
+        top:8px;
+
+        z-index:950;
+
+        width:100% !important;
+        max-width:none !important;
+
+        margin-top:0 !important;
+        margin-bottom:12px !important;
+
+        background:#FFFFFF;
+
+        box-shadow:
+            0 5px 14px rgba(15,23,42,.08);
+
+    }
+
+
+    .seccionBuscador,
+    .barraModulo{
+
+        position:sticky;
+
+        top:8px;
+
+        z-index:940;
+
+        padding:8px;
+
+        margin-bottom:12px;
+
+        border-radius:12px;
+
+        background:#FFFFFF;
+
+    }
+
+
+    /*
+    El buscador de LOTES ya está dentro
+    de cabeceraFija, que actualmente es sticky.
+    */
+
+    #cabeceraFija{
+
+        top:8px;
+
+    }
+
+
+    /*
+    =========================================
+    5. CONTENEDORES DE TABLAS MÁS ALTOS
+    =========================================
+    */
+
+    .moduloContenido{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 190px);
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 320px);
+
+        overflow-x:auto !important;
+        overflow-y:visible !important;
+
+        border-radius:16px;
+
+        touch-action:pan-x pan-y;
+
+        overscroll-behavior-x:contain;
+        overscroll-behavior-y:auto;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    /*
+    La tabla continúa siendo ancha.
+    El contenedor completo recibe el gesto,
+    incluso en el espacio blanco inferior.
+    */
+
+    .tabla{
+
+        min-width:760px;
+
+        touch-action:pan-x pan-y;
+
+    }
+
+
+    .tablaSolicitudes{
+
+        min-width:950px;
+
+    }
+
+
+    .tablaColaboradores{
+
+        min-width:900px;
+
+    }
+
+
+    #listaSolicitudes{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 350px);
+
+        overflow-x:auto;
+
+        touch-action:pan-x pan-y;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    /*
+    =========================================
+    6. AUDITORÍA EN UNA SOLA FILA
+    =========================================
+    */
+
+    #resumenAuditoria{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr)) !important;
+
+        gap:7px !important;
+
+        width:100%;
+
+        margin-bottom:12px !important;
+
+        overflow:visible !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard{
+
+        width:auto !important;
+        min-width:0 !important;
+
+        height:62px;
+
+        padding:7px 4px;
+
+        gap:0;
+
+        justify-content:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:18px;
+
+        text-align:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        margin-top:4px;
+
+        font-size:8px;
+
+        line-height:1.05;
+
+        letter-spacing:.15px;
+
+        text-align:center;
+
+        white-space:normal;
+
+    }
+
+
+    /*
+    =========================================
+    7. ESTRUCTURA GENERAL Y DESPLAZAMIENTO
     =========================================
     */
 
@@ -4505,7 +4636,6 @@ margin-top:18px;
         min-height:100%;
 
         overflow-x:hidden;
-
         overflow-y:auto;
 
         touch-action:pan-y;
@@ -4521,7 +4651,11 @@ margin-top:18px;
     #contenido,
     #contenidoScrollable,
     #contenedorLotesPrincipal,
-    #contenedorLotes{
+    #contenedorLotes,
+    #contenedorSolicitudes,
+    #contenedorConsultas,
+    #contenedorAsesores,
+    #contenedorAuditoria{
 
         height:auto;
 
@@ -4534,43 +4668,193 @@ margin-top:18px;
     }
 
 
-    /*
-    Las tablas conservan desplazamiento horizontal,
-    pero no bloquean el deslizamiento vertical.
-    */
+    #contenedorLotesPrincipal,
+    #auditoriaContenidoPrincipal{
 
-    .contenedorTablaScroll{
+        grid-template-columns:
+            minmax(0,1fr);
 
-        overflow-x:auto;
-        overflow-y:visible;
-
-        touch-action:pan-x pan-y;
-
-        overscroll-behavior-x:contain;
-        overscroll-behavior-y:auto;
-
-        -webkit-overflow-scrolling:touch;
+        gap:14px;
 
     }
 
 
-    .tabla{
+    #panelGraficos{
 
-        touch-action:pan-x pan-y;
+        grid-template-columns:
+            repeat(auto-fit,minmax(230px,1fr));
+
+        padding-right:0;
 
     }
 
-
-    /*
-    También permite deslizar verticalmente
-    sobre las gráficas.
-    */
 
     #panelGraficos,
     .cardGrafico,
     canvas{
 
         touch-action:pan-y;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES ADICIONALES PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    #panel{
+
+        padding:8px;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:64px;
+
+    }
+
+
+    #dashboard{
+
+        gap:5px;
+
+    }
+
+
+    #dashboard .cardDashboard{
+
+        height:58px;
+
+        padding:6px 2px;
+
+        border-radius:11px;
+
+    }
+
+
+    #dashboard .cardDashboard h3{
+
+        font-size:16px;
+
+    }
+
+
+    #dashboard .cardDashboard p{
+
+        font-size:7px;
+
+        letter-spacing:0;
+
+    }
+
+
+    #herramientas{
+
+        gap:4px;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:34px;
+
+        padding:0 2px;
+
+        font-size:7.5px;
+
+    }
+
+
+    #resumenAuditoria{
+
+        gap:5px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard{
+
+        height:58px;
+
+        padding:6px 2px;
+
+        border-radius:11px;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:16px;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        font-size:7px;
+
+        letter-spacing:0;
+
+    }
+
+
+    .tituloModulo{
+
+        padding:14px;
+
+        margin-bottom:10px;
+
+    }
+
+
+    .tituloModulo h2{
+
+        font-size:20px;
+
+    }
+
+
+    .tituloModulo p{
+
+        font-size:11px;
+
+    }
+
+
+    .moduloContenido{
+
+        padding:10px;
+
+        min-height:
+            calc(100svh - 170px);
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 300px);
+
+    }
+
+
+    #panelGraficos{
+
+        grid-template-columns:
+            minmax(0,1fr);
 
     }
 
