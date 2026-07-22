@@ -6168,7 +6168,7 @@ and
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 </head>
 <body>
 
@@ -10021,17 +10021,31 @@ function renderizarModuloReportes(){
     `;
 }
 
-function normalizarDatosExcel(datos){
+function prepararDatosReporte(tipo, datos){
 
     if(!Array.isArray(datos)){
         return [];
     }
+
+    const excluir = {
+        LOTES: ["imagen"],
+        SOLICITUDES: ["fila"]
+    };
+
+    const columnasExcluir = excluir[tipo] || [];
 
     return datos.map(fila=>{
 
         const salida = {};
 
         Object.keys(fila || {}).forEach(clave=>{
+
+            const claveNormalizada =
+                String(clave).trim().toLowerCase();
+
+            if(columnasExcluir.includes(claveNormalizada)){
+                return;
+            }
 
             const valor = fila[clave];
 
@@ -10052,19 +10066,323 @@ function normalizarDatosExcel(datos){
     });
 }
 
-function agregarHojaExcel(libro,nombre,datos){
+function tituloReporteExcel(tipo){
 
-    const filas = normalizarDatosExcel(datos);
+    const titulos = {
+        LOTES: "REPORTE DE LOTES",
+        AUDITORIA: "REPORTE DE AUDITORÍA",
+        COLABORADORES: "REPORTE DE COLABORADORES",
+        CONSULTAS: "REPORTE DE CONSULTAS",
+        SOLICITUDES: "REPORTE DE SOLICITUDES"
+    };
 
-    const hoja = filas.length
-        ? XLSX.utils.json_to_sheet(filas)
-        : XLSX.utils.aoa_to_sheet([["Sin registros"]]);
+    return titulos[tipo] || "REPORTE ASSTURIAS";
+}
 
-    XLSX.utils.book_append_sheet(
-        libro,
-        hoja,
-        nombre.substring(0,31)
-    );
+function nombreHojaReporte(tipo){
+
+    const nombres = {
+        LOTES: "Lotes",
+        AUDITORIA: "Auditoria",
+        COLABORADORES: "Colaboradores",
+        CONSULTAS: "Consultas",
+        SOLICITUDES: "Solicitudes"
+    };
+
+    return nombres[tipo] || "Reporte";
+}
+
+function colorEstadoExcel(valor){
+
+    const estado = String(valor || "")
+        .trim()
+        .toUpperCase();
+
+    if(estado === "LIBRE"){
+        return {
+            fondo:"DCFCE7",
+            texto:"15803D"
+        };
+    }
+
+    if(estado === "RESERVADO"){
+        return {
+            fondo:"FEF3C7",
+            texto:"B45309"
+        };
+    }
+
+    if(estado === "VENDIDO"){
+        return {
+            fondo:"FEE2E2",
+            texto:"B91C1C"
+        };
+    }
+
+    return null;
+}
+
+function formatearFechaReporte(valor){
+
+    if(typeof valor !== "string"){
+        return valor;
+    }
+
+    const texto = valor.trim();
+
+    if(!/^\d{4}-\d{2}-\d{2}T/.test(texto)){
+        return valor;
+    }
+
+    const fecha = new Date(texto);
+
+    if(Number.isNaN(fecha.getTime())){
+        return valor;
+    }
+
+    return fecha.toLocaleString("es-PE",{
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit"
+    });
+}
+
+function calcularAnchoColumna(encabezado, filas){
+
+    const clave = String(encabezado || "");
+    const claveMin = clave.trim().toLowerCase();
+
+    const anchosFijos = {
+        fecha:20,
+        usuario:18,
+        nombre:24,
+        etapa:14,
+        lote:20,
+        estado:14,
+        antes:14,
+        despues:14,
+        medidas:18,
+        area:15,
+        ubicacion:18,
+        rol:16,
+        email:30,
+        telefono:17,
+        mensaje:42,
+        actual:14,
+        solicita:14
+    };
+
+    if(anchosFijos[claveMin]){
+        return anchosFijos[claveMin];
+    }
+
+    let maximo = clave.length + 3;
+
+    filas.slice(0,150).forEach(fila=>{
+        const valor = fila[encabezado];
+        const largo = String(valor ?? "").length + 2;
+        maximo = Math.max(maximo,largo);
+    });
+
+    return Math.min(Math.max(maximo,12),32);
+}
+
+function agregarHojaExcel(libro,tipo,datos){
+
+    const filas = prepararDatosReporte(tipo,datos);
+    const nombre = nombreHojaReporte(tipo);
+    const hoja = libro.addWorksheet(nombre,{
+        views:[{
+            state:"frozen",
+            ySplit:4
+        }]
+    });
+
+    const encabezados = filas.length
+        ? Object.keys(filas[0])
+        : ["Sin registros"];
+
+    const totalColumnas = Math.max(encabezados.length,1);
+
+    hoja.mergeCells(1,1,1,totalColumnas);
+    const celdaTitulo = hoja.getCell(1,1);
+    celdaTitulo.value = `ASSTURIAS - ${tituloReporteExcel(tipo)}`;
+    celdaTitulo.font = {
+        bold:true,
+        size:16,
+        color:{argb:"FFFFFFFF"}
+    };
+    celdaTitulo.fill = {
+        type:"pattern",
+        pattern:"solid",
+        fgColor:{argb:"FF1E3A5F"}
+    };
+    celdaTitulo.alignment = {
+        vertical:"middle",
+        horizontal:"center"
+    };
+    hoja.getRow(1).height = 30;
+
+    hoja.mergeCells(2,1,2,totalColumnas);
+    const celdaSubtitulo = hoja.getCell(2,1);
+    celdaSubtitulo.value =
+        `Generado: ${new Date().toLocaleString("es-PE")}`;
+    celdaSubtitulo.font = {
+        italic:true,
+        size:10,
+        color:{argb:"FF475569"}
+    };
+    celdaSubtitulo.fill = {
+        type:"pattern",
+        pattern:"solid",
+        fgColor:{argb:"FFF1F5F9"}
+    };
+    celdaSubtitulo.alignment = {
+        horizontal:"right",
+        vertical:"middle"
+    };
+    hoja.getRow(2).height = 21;
+
+    hoja.addRow([]);
+
+    const filaEncabezado = hoja.addRow(encabezados);
+    filaEncabezado.height = 24;
+
+    filaEncabezado.eachCell(celda=>{
+        celda.font = {
+            bold:true,
+            color:{argb:"FFFFFFFF"},
+            size:11
+        };
+        celda.fill = {
+            type:"pattern",
+            pattern:"solid",
+            fgColor:{argb:"FF2563EB"}
+        };
+        celda.alignment = {
+            horizontal:"center",
+            vertical:"middle",
+            wrapText:true
+        };
+        celda.border = {
+            top:{style:"thin",color:{argb:"FFCBD5E1"}},
+            left:{style:"thin",color:{argb:"FFCBD5E1"}},
+            bottom:{style:"thin",color:{argb:"FFCBD5E1"}},
+            right:{style:"thin",color:{argb:"FFCBD5E1"}}
+        };
+    });
+
+    if(filas.length){
+
+        filas.forEach((fila,indice)=>{
+
+            const valores = encabezados.map(clave=>{
+                const valor = fila[clave];
+                return formatearFechaReporte(valor);
+            });
+
+            const filaExcel = hoja.addRow(valores);
+            filaExcel.height = 21;
+
+            filaExcel.eachCell((celda,columna)=>{
+
+                const encabezado =
+                    String(encabezados[columna-1] || "")
+                    .trim()
+                    .toLowerCase();
+
+                celda.font = {
+                    size:10,
+                    color:{argb:"FF0F172A"}
+                };
+
+                celda.alignment = {
+                    vertical:"middle",
+                    horizontal:(
+                        encabezado === "mensaje" ||
+                        encabezado === "email" ||
+                        encabezado === "nombre" ||
+                        encabezado === "usuario"
+                    ) ? "left" : "center",
+                    wrapText:true
+                };
+
+                celda.border = {
+                    top:{style:"thin",color:{argb:"FFE2E8F0"}},
+                    left:{style:"thin",color:{argb:"FFE2E8F0"}},
+                    bottom:{style:"thin",color:{argb:"FFE2E8F0"}},
+                    right:{style:"thin",color:{argb:"FFE2E8F0"}}
+                };
+
+                if(indice % 2 === 1){
+                    celda.fill = {
+                        type:"pattern",
+                        pattern:"solid",
+                        fgColor:{argb:"FFF8FAFC"}
+                    };
+                }
+
+                if(
+                    encabezado === "estado" ||
+                    encabezado === "antes" ||
+                    encabezado === "despues" ||
+                    encabezado === "actual" ||
+                    encabezado === "solicita"
+                ){
+                    const estilo =
+                        colorEstadoExcel(celda.value);
+
+                    if(estilo){
+                        celda.fill = {
+                            type:"pattern",
+                            pattern:"solid",
+                            fgColor:{argb:"FF" + estilo.fondo}
+                        };
+                        celda.font = {
+                            bold:true,
+                            size:10,
+                            color:{argb:"FF" + estilo.texto}
+                        };
+                    }
+                }
+            });
+        });
+
+        hoja.autoFilter = {
+            from:{row:4,column:1},
+            to:{row:4,column:totalColumnas}
+        };
+
+    }
+    else{
+        const filaVacia = hoja.addRow(["Sin registros"]);
+        filaVacia.getCell(1).font = {
+            italic:true,
+            color:{argb:"FF64748B"}
+        };
+    }
+
+    encabezados.forEach((encabezado,indice)=>{
+        hoja.getColumn(indice+1).width =
+            calcularAnchoColumna(encabezado,filas);
+    });
+
+    hoja.pageSetup = {
+        orientation: totalColumnas > 7 ? "landscape" : "portrait",
+        fitToPage:true,
+        fitToWidth:1,
+        fitToHeight:0,
+        margins:{
+            left:0.3,
+            right:0.3,
+            top:0.5,
+            bottom:0.5,
+            header:0.2,
+            footer:0.2
+        }
+    };
 }
 
 async function obtenerDatosReporte(tipo){
@@ -10121,7 +10439,7 @@ async function exportarReporteExcel(tipo){
         return;
     }
 
-    if(typeof XLSX === "undefined"){
+    if(typeof ExcelJS === "undefined"){
         mostrarNotificacion(
             "No se pudo generar el Excel",
             "La librería de Excel no está disponible. Verifique la conexión a Internet y vuelva a intentar."
@@ -10131,29 +10449,33 @@ async function exportarReporteExcel(tipo){
 
     try{
 
-        const libro = XLSX.utils.book_new();
+        const libro = new ExcelJS.Workbook();
+        libro.creator = "ASSTURIAS";
+        libro.company = "ASSTURIAS";
+        libro.created = new Date();
+        libro.modified = new Date();
 
         if(tipo === "COMPLETO"){
 
-            const [
-                lotes,
-                auditoria,
-                colaboradores,
-                consultas,
-                solicitudes
-            ] = await Promise.all([
-                obtenerDatosReporte("LOTES"),
-                obtenerDatosReporte("AUDITORIA"),
-                obtenerDatosReporte("COLABORADORES"),
-                obtenerDatosReporte("CONSULTAS"),
-                obtenerDatosReporte("SOLICITUDES")
-            ]);
+            const tipos = [
+                "LOTES",
+                "AUDITORIA",
+                "COLABORADORES",
+                "CONSULTAS",
+                "SOLICITUDES"
+            ];
 
-            agregarHojaExcel(libro,"Lotes",lotes);
-            agregarHojaExcel(libro,"Auditoria",auditoria);
-            agregarHojaExcel(libro,"Colaboradores",colaboradores);
-            agregarHojaExcel(libro,"Consultas",consultas);
-            agregarHojaExcel(libro,"Solicitudes",solicitudes);
+            const resultados = await Promise.all(
+                tipos.map(t=>obtenerDatosReporte(t))
+            );
+
+            tipos.forEach((t,indice)=>{
+                agregarHojaExcel(
+                    libro,
+                    t,
+                    resultados[indice]
+                );
+            });
 
         }
         else{
@@ -10163,16 +10485,35 @@ async function exportarReporteExcel(tipo){
 
             agregarHojaExcel(
                 libro,
-                tipo.charAt(0) + tipo.slice(1).toLowerCase(),
+                tipo,
                 datos
             );
 
         }
 
-        XLSX.writeFile(
-            libro,
-            nombreArchivoReporte(tipo)
+        const buffer =
+            await libro.xlsx.writeBuffer();
+
+        const blob = new Blob(
+            [buffer],
+            {
+                type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
         );
+
+        const enlace = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+
+        enlace.href = url;
+        enlace.download = nombreArchivoReporte(tipo);
+
+        document.body.appendChild(enlace);
+        enlace.click();
+        enlace.remove();
+
+        setTimeout(()=>{
+            URL.revokeObjectURL(url);
+        },1000);
 
     }
     catch(error){
