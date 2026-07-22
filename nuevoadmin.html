@@ -6438,6 +6438,39 @@ and
     }
 }
 
+
+/* =====================================================
+   LOTES - ALTURA REAL DEL CONTENIDO (VERSIÓN FINAL)
+===================================================== */
+#contenedorLotesPrincipal,
+#contenedorLotes,
+#contenedorLotes .contenedorTablaScroll,
+#panelGraficos{
+    min-height:0 !important;
+    height:auto !important;
+    max-height:none !important;
+    align-self:start !important;
+}
+
+#contenedorLotesPrincipal{
+    grid-auto-rows:max-content !important;
+}
+
+#contenedorLotes .contenedorTablaScroll{
+    overflow-y:visible !important;
+}
+
+@media(max-width:1180px){
+    #contenedorLotesPrincipal,
+    #contenedorLotes,
+    #contenedorLotes .contenedorTablaScroll,
+    #panelGraficos{
+        min-height:0 !important;
+        height:auto !important;
+        max-height:none !important;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7916,10 +7949,7 @@ const pluginTextoCentro = {
     }
 
 };
-const etapasAMostrar =
-    etapasSeleccionadas.length > 0
-        ? etapasSeleccionadas
-        : Object.keys(etapas);
+const etapasAMostrar = Object.keys(etapas);
 
 etapasAMostrar.forEach(etapa=>{
 
@@ -10119,12 +10149,112 @@ async function cargarAuditoria(){
         document.getElementById("totalVendidos").textContent = vendidos;
 
         /*
-        Ambos gráficos reciben exactamente el mismo conjunto filtrado.
-        Así el buscador y la fecha siempre trabajan relacionados.
+        Cuando se escribe un nombre en el buscador y las coincidencias
+        corresponden a un solo colaborador, recuperamos el comportamiento
+        anterior: UNA SOLA TORTA con Reservados + Vendidos + Total.
         */
-        renderizarTortaVentasColaboradores(registrosFiltrados,tipo,valorFecha,valorFechaHasta);
-        renderizarTortaReservasColaboradores(registrosFiltrados,tipo,valorFecha,valorFechaHasta);
-        renderizarGraficoGeneralAuditoria(registrosFiltrados);
+        const nombresCoincidentes = [
+            ...new Set(
+                registrosFiltrados.map(item=>
+                    String(
+                        item.Nombre ||
+                        item.Usuario ||
+                        ""
+                    ).trim()
+                ).filter(Boolean)
+            )
+        ];
+
+        const contVentas =
+            document.getElementById("graficoVentasColaboradores");
+
+        const contReservas =
+            document.getElementById("graficoReservasColaboradores");
+
+        const contResumen =
+            document.getElementById("graficoAuditoriaPersona");
+
+        if(
+            texto !== "" &&
+            nombresCoincidentes.length === 1
+        ){
+
+            if(window.chartVentasColaboradores){
+                window.chartVentasColaboradores.destroy();
+                window.chartVentasColaboradores = null;
+            }
+
+            if(window.chartReservasColaboradores){
+                window.chartReservasColaboradores.destroy();
+                window.chartReservasColaboradores = null;
+            }
+
+            if(contVentas){
+                contVentas.innerHTML = "";
+                contVentas.style.display = "none";
+            }
+
+            if(contReservas){
+                contReservas.innerHTML = "";
+                contReservas.style.display = "none";
+            }
+
+            const actualesPersona =
+                obtenerUltimosRegistrosPorLote(
+                    registrosFiltrados
+                );
+
+            const reservadosPersona =
+                actualesPersona.filter(item=>
+                    String(item.Despues || "")
+                    .trim()
+                    .toUpperCase() === "RESERVADO"
+                ).length;
+
+            const vendidosPersona =
+                actualesPersona.filter(item=>
+                    String(item.Despues || "")
+                    .trim()
+                    .toUpperCase() === "VENDIDO"
+                ).length;
+
+            if(
+                reservadosPersona +
+                vendidosPersona > 0
+            ){
+                renderizarGraficoAuditoria(
+                    nombresCoincidentes[0],
+                    reservadosPersona,
+                    vendidosPersona
+                );
+            }
+            else if(contResumen){
+                contResumen.innerHTML = "";
+                contResumen.style.display = "none";
+            }
+
+        }
+        else{
+
+            renderizarTortaVentasColaboradores(
+                registrosFiltrados,
+                tipo,
+                valorFecha,
+                valorFechaHasta
+            );
+
+            renderizarTortaReservasColaboradores(
+                registrosFiltrados,
+                tipo,
+                valorFecha,
+                valorFechaHasta
+            );
+
+            renderizarGraficoGeneralAuditoria(
+                registrosFiltrados
+            );
+
+        }
     }
 
     buscador.addEventListener("input",aplicarFiltrosAuditoria);
@@ -10297,7 +10427,8 @@ function prepararDatosReporte(tipo, datos){
 
     const excluir = {
         LOTES: ["imagen"],
-        SOLICITUDES: ["fila"]
+        SOLICITUDES: ["fila"],
+        CONSULTAS: ["Fila","fila","Leido","LEIDO","Notificado","NOTIFICADO"]
     };
 
     const columnasExcluir = excluir[tipo] || [];
@@ -11557,127 +11688,89 @@ let consultasActuales = [];
 
 /*
 =========================================
-CONSULTAS LEÍDAS
+CONSULTAS LEÍDAS - ESTADO EN GOOGLE SHEETS
 =========================================
 */
 
-const CLAVE_CONSULTAS_LEIDAS =
-    "consultasLeidas";
+function consultaEstaLeida(consulta){
 
-
-function obtenerClaveConsulta(
-    consulta
-){
-
-    return [
-
-        consulta.Fecha || "",
-
-        consulta.Email || "",
-
-        consulta.Telefono || "",
-
-        consulta.Etapa || "",
-
-        consulta.Lote || ""
-
-    ]
-    .map(valor=>
-
-        String(valor)
-        .trim()
-        .toUpperCase()
-
+    return String(
+        consulta.Leido ||
+        consulta.LEIDO ||
+        "NO"
     )
-    .join("|");
+    .trim()
+    .toUpperCase() === "SI";
 
 }
 
 
-function obtenerConsultasLeidas(){
+function consultaEstaNotificada(consulta){
 
-    try{
-
-        const guardadas =
-            JSON.parse(
-                localStorage.getItem(
-                    CLAVE_CONSULTAS_LEIDAS
-                )
-                ||
-                "[]"
-            );
-
-
-        return Array.isArray(guardadas)
-            ? guardadas
-            : [];
-
-    }
-    catch(error){
-
-        return [];
-
-    }
+    return String(
+        consulta.Notificado ||
+        consulta.NOTIFICADO ||
+        "NO"
+    )
+    .trim()
+    .toUpperCase() === "SI";
 
 }
 
 
-function consultaEstaLeida(
-    consulta
-){
+async function marcarConsultaLeidaServidor(consulta){
 
-    const clave =
-        obtenerClaveConsulta(
-            consulta
-        );
+    const fila = Number(
+        consulta.Fila ||
+        consulta.fila ||
+        0
+    );
 
-
-    return obtenerConsultasLeidas()
-        .includes(
-            clave
-        );
-
-}
-
-
-function marcarConsultaLeida(
-    consulta
-){
-
-    const clave =
-        obtenerClaveConsulta(
-            consulta
-        );
-
-
-    const consultasLeidas =
-        obtenerConsultasLeidas();
-
-
-    if(
-        !consultasLeidas.includes(
-            clave
-        )
-    ){
-
-        consultasLeidas.push(
-            clave
-        );
-
-
-        localStorage.setItem(
-
-            CLAVE_CONSULTAS_LEIDAS,
-
-            JSON.stringify(
-                consultasLeidas
-            )
-
-        );
-
+    if(!fila){
+        return false;
     }
 
+    const resultado = await apiPost(
+        "marcarConsultaLeida",
+        {fila:fila}
+    );
+
+    if(resultado && resultado.ok){
+        consulta.Leido = "SI";
+        return true;
+    }
+
+    return false;
+
 }
+
+
+async function marcarConsultaNotificadaServidor(consulta){
+
+    const fila = Number(
+        consulta.Fila ||
+        consulta.fila ||
+        0
+    );
+
+    if(!fila){
+        return false;
+    }
+
+    const resultado = await apiPost(
+        "marcarConsultaNotificada",
+        {fila:fila}
+    );
+
+    if(resultado && resultado.ok){
+        consulta.Notificado = "SI";
+        return true;
+    }
+
+    return false;
+
+}
+
 
 async function actualizarContadorConsultas(){
 
@@ -11787,50 +11880,18 @@ async function cargarConsultas(){
         "block";
 
 
-    let datos;
+    let datos =
+        await apiGet(
+            "?action=consultas"
+        );
 
+    datos =
+        Array.isArray(datos)
+        ? datos
+        : [];
 
-    const ahora =
-        Date.now();
-
-
-    if(
-
-        consultasCache.length > 0 &&
-
-        (
-            ahora -
-            cache.consultas
-        ) < TIEMPO_CACHE
-
-    ){
-
-        datos =
-            consultasCache;
-
-    }
-    else{
-
-        datos =
-            await apiGet(
-                "?action=consultas"
-            );
-
-
-        consultasCache =
-            Array.isArray(datos)
-            ? datos
-            : [];
-
-
-        datos =
-            consultasCache;
-
-
-        cache.consultas =
-            ahora;
-
-    }
+    consultasCache = datos;
+    cache.consultas = Date.now();
 
 
     /*
@@ -12025,10 +12086,11 @@ function abrirDetalleConsulta(
 MARCAR COMO LEÍDA
 */
 
-marcarConsultaLeida(
+marcarConsultaLeidaServidor(
     consulta
-);
-actualizarContadorConsultas();
+).then(()=>{
+    actualizarContadorConsultas();
+});
 
 const filaConsulta =
     document.getElementById(
@@ -12234,6 +12296,94 @@ function cerrarDetalleConsulta(){
         "block";
 
 }
+async function verificarNuevasConsultas(){
+
+    const rol = String(
+        localStorage.getItem("rol") || ""
+    )
+    .trim()
+    .toUpperCase();
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+        return;
+    }
+
+    try{
+
+        const respuesta = await apiGet(
+            "?action=consultas"
+        );
+
+        const consultas = Array.isArray(respuesta)
+            ? respuesta
+            : [];
+
+        const nuevas = consultas.filter(consulta=>
+            !consultaEstaLeida(consulta) &&
+            !consultaEstaNotificada(consulta)
+        );
+
+        if(!nuevas.length){
+            return;
+        }
+
+        nuevas.sort((a,b)=>
+            new Date(b.Fecha) - new Date(a.Fecha)
+        );
+
+        const ultima = nuevas[0];
+        const nombre = String(
+            ultima.Nombre || "Cliente"
+        ).trim();
+
+        const lote = String(
+            ultima.Lote || ""
+        ).trim();
+
+        const etapa = String(
+            ultima.Etapa || ""
+        ).trim();
+
+        const cantidad = nuevas.length;
+
+        mostrarNotificacion(
+            cantidad === 1
+                ? "🔔 Nueva consulta"
+                : `🔔 ${cantidad} nuevas consultas`,
+            cantidad === 1
+                ? `<b>${nombre}</b> envió una consulta${lote ? " por <b>" + etapa + " - " + lote + "</b>" : ""}.`
+                : `Tiene <b>${cantidad}</b> consultas nuevas sin abrir.`
+        );
+
+        /*
+        Marcamos solo el aviso como mostrado. La consulta
+        continúa NUEVA/no leída hasta que se abra en Consultas.
+        */
+        await Promise.all(
+            nuevas.map(consulta=>
+                marcarConsultaNotificadaServidor(consulta)
+            )
+        );
+
+        consultasCache = consultas;
+        cache.consultas = Date.now();
+
+        actualizarContadorConsultas();
+
+    }
+    catch(error){
+        console.log(
+            "No se pudieron verificar nuevas consultas:",
+            error
+        );
+    }
+
+}
+
+
 async function actualizarContadorSolicitudes(){
 
     const rol =
@@ -13156,6 +13306,8 @@ await actualizarContadorSolicitudes();
 
 await actualizarContadorConsultas();
 
+await verificarNuevasConsultas();
+
 await verificarNuevasSolicitudes();
 
 setInterval(
@@ -13166,6 +13318,11 @@ setInterval(
 
 setInterval(
     actualizarContadorConsultas,
+    15000
+);
+
+setInterval(
+    verificarNuevasConsultas,
     15000
 );
 
@@ -13453,12 +13610,30 @@ function filtrarLotes(){
 
     let datosGraficos = todosLosLotes;
 
-    if(etapasSeleccionadas.length > 0){
+    /*
+    Si existe una búsqueda de lote, mostramos únicamente
+    las tortas de las etapas donde existen coincidencias,
+    pero usando TODOS los lotes de esas etapas. Así una
+    búsqueda de un lote de ETAPA 1 deja una sola torta
+    ETAPA 1 con sus totales completos.
+    */
+    if(texto.trim() !== ""){
+
+        const etapasDeLaBusqueda = [
+            ...new Set(
+                datosTabla.map(lote=>lote.Etapa)
+            )
+        ];
 
         datosGraficos = todosLosLotes.filter(lote=>
+            etapasDeLaBusqueda.includes(lote.Etapa)
+        );
 
+    }
+    else if(etapasSeleccionadas.length > 0){
+
+        datosGraficos = todosLosLotes.filter(lote=>
             etapasSeleccionadas.includes(lote.Etapa)
-
         );
 
     }
