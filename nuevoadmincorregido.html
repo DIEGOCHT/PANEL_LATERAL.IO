@@ -95,9 +95,21 @@ button{
 }
 
 #error{
-    margin-top:15px;
-    color:red;
+
+    min-height:22px;
+
+    margin-top:16px;
+
+    color:#DC2626;
+
     text-align:center;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
 }
 
 #panel{
@@ -122,8 +134,11 @@ button{
 
 }
 #usuarioHeader{
+position:relative;
 
-    display:flex;
+z-index:3000;
+    
+display:flex;
 
     justify-content:space-between;
 
@@ -141,6 +156,7 @@ button{
 
     margin-bottom:6px;
 
+
 }
 #contenedorLotes{
     margin-top:0;
@@ -148,13 +164,15 @@ button{
 
 .tabla td{
 
-padding:8px 12px;
+    padding:8px 12px;
 
-height:44px;
+    height:44px;
 
-vertical-align:middle;
+    vertical-align:middle;
 
-font-size:13px;
+    text-align:center;
+
+    font-size:13px;
 
 }
 
@@ -262,9 +280,11 @@ font-size:13px;
 
     min-width:0;
 
-    height:calc(100vh - 48px);
+    height:auto;
 
-    overflow:hidden;
+    min-height:100vh;
+
+    overflow:visible;
 
 }
 
@@ -280,17 +300,32 @@ font-size:13px;
 
     width:240px;
 
+    height:auto;
+
+    max-height:none;
+
+    overflow:visible;
+
     background:#FFFFFF;
 
     border:1px solid #E2E8F0;
 
     border-radius:20px;
 
-    padding:18px;
+    padding:18px 18px 12px;
 
     box-shadow:0 10px 30px rgba(15,23,42,.06);
 
+    z-index:1100;
+
 }
+
+#sidebarInfo{
+
+    padding-bottom:0;
+
+}
+
 .menuItem{
 
     width:100%;
@@ -435,7 +470,8 @@ line-height:1;
     line-height:1;
 
 }
-#contadorSolicitudes{
+#contadorSolicitudes,
+#contadorConsultas{
 
     flex:0;
 
@@ -461,20 +497,20 @@ line-height:1;
 
     min-width:0;
 
-    height:100%;
+    height:auto;
 
-    overflow:hidden;
+    overflow:visible;
 
 }
 #contenidoScrollable{
 
-    flex:1;
+    width:100%;
+
+    flex:none;
 
     min-height:0;
 
-    overflow-y:auto;
-
-    overflow-x:hidden;
+    overflow:visible;
 
 }
 
@@ -484,14 +520,15 @@ line-height:1;
 
     position:sticky;
 
-    top:0;
-left:0;
+    top:24px;
+
+    left:0;
 
     z-index:1000;
 
     background:#F8FAFC;
 
-    padding-top:4px;
+    padding-top:0;
 
     padding-bottom:4px;
 
@@ -505,7 +542,7 @@ left:0;
 
     border-radius:18px;
 
-    padding:18px;
+    padding:12px 16px 10px;
 
     box-shadow:0 8px 24px rgba(15,23,42,.06);
 
@@ -518,7 +555,7 @@ left:0;
 
     gap:12px;
 
-    margin-bottom:16px;
+    margin-bottom:10px;
 
 }
 
@@ -686,13 +723,17 @@ border-bottom:4px solid transparent;
 }
 .btnCambiarEstado{
 
-    width:82px;
+    width:100px;
 
-    height:30px;
+    min-width:100px;
+
+    height:32px;
 
     display:flex;
 
     margin:auto;
+
+    padding:0 10px;
 
     justify-content:center;
 
@@ -710,6 +751,10 @@ border-bottom:4px solid transparent;
 
     font-weight:600;
 
+    line-height:1;
+
+    white-space:nowrap;
+
     box-shadow:0 4px 12px rgba(37,99,235,.20);
 
     transition:.20s;
@@ -724,7 +769,13 @@ border-bottom:4px solid transparent;
 
 .btnCambiarEstado:disabled{
 
-    background:#94A3B8;
+    background:#CBD5E1;
+
+    color:#FFFFFF;
+
+    opacity:1 !important;
+
+    cursor:not-allowed !important;
 
 }
 
@@ -924,17 +975,17 @@ border-bottom:4px solid transparent;
 
     width:350px;
 
-    height:44px;
+    height:38px;
 
-    padding:0 16px;
+    padding:0 14px;
 
     border:1px solid #CBD5E1;
 
-    border-radius:12px;
+    border-radius:8px;
 
     background:#FFFFFF;
 
-    font-size:14px;
+    font-size:13px;
 
     transition:.25s;
 
@@ -957,9 +1008,13 @@ border-bottom:4px solid transparent;
 
     align-items:center;
 
+    justify-content:flex-start;
+
     gap:12px;
 
     flex-wrap:nowrap;
+
+    min-height:38px;
 
 }
 #barraFiltrosActivos{
@@ -976,6 +1031,73 @@ border-bottom:4px solid transparent;
 
 }
 
+#panelEtapas{
+
+    display:none;
+
+    flex-wrap:wrap;
+
+    gap:6px;
+
+    margin-top:8px;
+
+    margin-bottom:0;
+
+}
+.chipEtapa{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:5px 12px;
+
+    min-height:34px;
+
+    border-radius:10px;
+
+    background:#F1F5F9;
+
+    color:#475569;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:13px;
+
+}
+
+.chipActivo{
+
+    background:#2563EB !important;
+    color:#FFFFFF !important;
+    border:1px solid #2563EB;
+
+}
+
+.chipActivo .chipCerrar{
+
+    color:#FFFFFF;
+
+}
+
+.chipEtapa:hover{
+
+    background:#D6E8FF;
+
+}
+.chipCerrar{
+
+    font-size:18px;
+
+    line-height:1;
+
+    cursor:pointer;
+
+}
 .filtroActivo{
 
     display:flex;
@@ -1025,6 +1147,26 @@ border-bottom:4px solid transparent;
 
     flex:0 0 340px;
 
+    height:38px;
+
+    min-height:38px;
+
+    margin:0;
+
+    padding:0 14px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    background:#FFFFFF;
+
+    font-size:13px;
+
+    line-height:38px;
+
+    vertical-align:middle;
+
 }
 
 #buscarLote:focus{
@@ -1038,6 +1180,7 @@ border-bottom:4px solid transparent;
 }
 /* BOTONES DE FILTRO */
 
+#btnEtapas,
 #filtroTodos,
 #filtroLibres,
 #filtroReservados,
@@ -1045,10 +1188,31 @@ border-bottom:4px solid transparent;
 
     flex:0 0 auto;
 
-    min-width:120px;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    height:38px;
+
+    min-height:38px;
+
+    min-width:105px;
+
+    margin:0;
+
+    padding:0 16px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    line-height:1;
 
 }
 
+#btnEtapas:hover,
 #filtroTodos:hover,
 #filtroLibres:hover,
 #filtroReservados:hover,
@@ -1059,6 +1223,21 @@ border-bottom:4px solid transparent;
     color:white;
 
     border-color:#2563EB;
+
+}
+#btnEtapas.activo,
+#filtroTodos.activo,
+#filtroLibres.activo,
+#filtroReservados.activo,
+#filtroVendidos.activo{
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+    border-color:#2563EB;
+
+    box-shadow:0 4px 12px rgba(37,99,235,.20);
 
 }
 
@@ -1209,31 +1388,37 @@ table-layout:fixed;
 
 }
 
+.tabla thead{
+
+    position:static;
+
+}
+
 .tabla th{
 
-position:sticky;
+    position:static;
 
-top:0;
+    background:#F8FAFC;
 
-z-index:100;
+    padding:10px 12px;
 
-background:#F8FAFC;
+    font-size:13px;
 
-padding:10px 12px;
+    font-weight:750;
 
-font-size:12px;
+    text-transform:uppercase;
 
-font-weight:700;
+    letter-spacing:.35px;
 
-color:#475569;
+    color:#334155;
 
-border-bottom:2px solid #E2E8F0;
+    border-bottom:2px solid #CBD5E1;
 
-text-align:center;
+    text-align:center;
 
-vertical-align:middle;
+    vertical-align:middle;
 
-white-space:nowrap;
+    white-space:nowrap;
 
 }
 
@@ -1251,17 +1436,20 @@ white-space:nowrap;
 
 .contenedorTablaScroll{
 
-height:calc(100vh - 235px);
+    width:100%;
 
-overflow-y:auto;
+    height:auto;
 
-overflow-x:hidden;
+    max-height:none;
 
-border-radius:18px;
+    overflow:visible;
 
-position:relative;
+    border-radius:18px;
+
+    position:relative;
 
 }
+
 #ultimaActualizacion{
 
     height:44px;
@@ -1526,14 +1714,18 @@ position:relative;
 }
 .sidebarEstado{
 
-    margin-top:18px;
+    margin-top:0;
 
-    padding-top:18px;
+    padding-top:6px;
 
-    border-top:1px solid #E2E8F0;
+    border-top:none;
 
 }
+#sidebarInfo .estadoSistema:last-child{
 
+    margin-bottom:0;
+
+}
 .estadoSistema{
 
     display:flex;
@@ -1686,9 +1878,29 @@ margin-top:18px;
 }
 
 .btnAccionAdmin{
-width:auto;
-padding:10px 18px;
-margin:0;
+
+    width:auto;
+
+    min-width:auto;
+
+    height:38px;
+
+    padding:0 12px;
+
+    margin:0;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    font-size:12px;
+
+    white-space:nowrap;
+
 }
 .barraModulo{
 
@@ -1754,15 +1966,21 @@ margin:0;
 }
 .filaBotones{
 
+    width:100%;
+
     display:flex;
+
+    flex-direction:row;
 
     justify-content:center;
 
     align-items:center;
 
-    gap:10px;
+    gap:8px;
 
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+
+    white-space:nowrap;
 
 }
 
@@ -1847,17 +2065,64 @@ margin:0;
 }
 #cerrarSesion{
 
-    width:110px;
+    width:150px;
+
+    min-width:150px;
 
     height:46px;
 
     margin:0;
 
+    padding:0 16px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    border:none;
+
+    border-top:none;
+
     border-radius:12px;
 
     background:#2563EB;
 
+    color:#FFFFFF;
+
     font-size:14px;
+
+    line-height:1;
+
+    white-space:nowrap;
+
+}
+#cerrarSesion .iconoMenu{
+
+    width:20px !important;
+
+    min-width:20px !important;
+
+    height:20px;
+
+    color:#FFFFFF;
+
+}
+
+#cerrarSesion > span:last-child{
+
+    display:inline-block !important;
+
+    flex:none;
+
+    color:#FFFFFF;
+
+    line-height:1;
+
+    white-space:nowrap;
 
 }
 
@@ -1865,13 +2130,21 @@ margin:0;
 
 .menuItem{
 
-    display:flex !important;
+    display:flex;
 
     align-items:center !important;
 
     justify-content:flex-start !important;
 
     gap:14px !important;
+
+}
+
+/* Ocultamiento obligatorio según el rol */
+
+.ocultoPorRol{
+
+    display:none !important;
 
 }
 
@@ -1910,9 +2183,3992 @@ margin:0;
     white-space:nowrap !important;
 
 }
+/* CUBRE EL ESPACIO SUPERIOR DEL CONTENEDOR FIJO */
+
+#cabeceraFija::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:-24px;
+
+    height:24px;
+
+    background:#F8FAFC;
+
+    pointer-events:none;
+
+}
+
+/* ==========================================
+   DISEÑO UNIFICADO DE VENTANAS Y MODALES
+========================================== */
+
+#modalEstado,
+#modalNotificacion,
+#modalConfirmacion,
+#modalPassword{
+
+    position:fixed !important;
+
+    inset:0 !important;
+
+    width:100% !important;
+
+    height:100% !important;
+
+    padding:20px;
+
+    background:rgba(15,23,42,.58) !important;
+
+    backdrop-filter:blur(3px);
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    z-index:9999 !important;
+
+}
+
+
+/* TARJETAS PRINCIPALES */
+
+#ventanaEstado,
+.modalCard,
+.modalPasswordCard{
+
+    width:460px;
+
+    max-width:calc(100vw - 32px);
+
+    min-width:0;
+
+    margin:0;
+
+    padding:28px 30px 30px;
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:20px;
+
+    text-align:left;
+
+    box-shadow:
+        0 24px 70px rgba(15,23,42,.25);
+
+    animation:entradaModal .22s ease-out;
+
+}
+
+
+@keyframes entradaModal{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px) scale(.98);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+
+/* TÍTULOS */
+
+#ventanaEstado h2,
+.modalCard h2,
+.modalPasswordCard h3{
+
+    margin:0 0 20px;
+
+    color:#0F172A;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    text-align:center;
+
+}
+
+
+/* INFORMACIÓN DEL LOTE */
+
+#loteSeleccionado{
+
+    margin:0;
+
+    padding:16px 0 4px;
+
+    color:#64748B;
+
+    font-size:15px;
+
+    line-height:1.65;
+
+}
+
+
+/* SELECT DEL ESTADO */
+
+#ventanaEstado select{
+
+    width:100%;
+
+    height:48px;
+
+    margin:18px 0 0;
+
+    padding:0 14px;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:10px;
+
+    background:#FFFFFF;
+
+    color:#0F172A;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.2s;
+
+}
+
+
+#ventanaEstado select:focus{
+
+    border-color:#2563EB;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+
+/* MENSAJES */
+
+.modalMensaje{
+
+    margin:0 0 24px;
+
+    color:#334155;
+
+    font-size:15px;
+
+    line-height:1.6;
+
+    text-align:center;
+
+}
+
+
+/* FILAS DE BOTONES */
+
+.accionesModal,
+.modalAcciones{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:24px;
+
+}
+
+
+/* BOTONES DENTRO DE MODALES */
+
+.accionesModal button,
+.modalAcciones button,
+.modalCard > button,
+.modalPasswordCard button{
+
+    flex:1;
+
+    min-width:120px;
+
+    height:44px;
+
+    margin:0;
+
+    padding:0 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+
+/* BOTÓN AZUL */
+
+#btnGuardarEstado,
+#btnAceptarConfirmacion,
+#btnCerrarNotificacion{
+
+    background:#2563EB;
+
+    color:#FFFFFF;
+
+}
+
+
+#btnGuardarEstado:hover,
+#btnAceptarConfirmacion:hover,
+#btnCerrarNotificacion:hover{
+
+    background:#1D4ED8;
+
+}
+
+
+/* BOTÓN GRIS */
+
+#btnCancelarEstado,
+#btnCancelarConfirmacion{
+
+    background:#64748B;
+
+    color:#FFFFFF;
+
+}
+
+
+#btnCancelarEstado:hover,
+#btnCancelarConfirmacion:hover{
+
+    background:#475569;
+
+}
+
+
+/* VENTANA DE NOTIFICACIÓN MÁS COMPACTA */
+
+#modalNotificacion .modalCard{
+
+    width:440px;
+
+    text-align:center;
+
+}
+
+
+#modalNotificacion .modalCard > button{
+
+    display:flex;
+
+    width:130px;
+
+    min-width:130px;
+
+    flex:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:0 auto;
+
+}
+
+
+/* CONTRASEÑA */
+
+.passwordValor{
+
+    margin:20px 0 24px;
+
+    padding:14px;
+
+    border:1px solid #DBEAFE;
+
+    border-radius:10px;
+
+    background:#EFF6FF;
+
+    color:#1D4ED8;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    text-align:center;
+
+    letter-spacing:2px;
+
+}
+
+
+/* ADAPTACIÓN PARA CELULAR */
+
+@media(max-width:600px){
+
+    #ventanaEstado,
+    .modalCard,
+    .modalPasswordCard{
+
+        padding:24px 20px;
+
+        border-radius:16px;
+
+    }
+
+    .accionesModal,
+    .modalAcciones{
+
+        flex-direction:column-reverse;
+
+    }
+
+    .accionesModal button,
+    .modalAcciones button{
+
+        width:100%;
+
+        flex:none;
+
+    }
+
+}
+.tablaAsesores{
+
+    table-layout:auto;
+
+}
+
+.badge.administrador{
+
+    background:#DBEAFE;
+
+    color:#1D4ED8;
+
+}
+
+.badge.asesor{
+
+    background:#F1F5F9;
+
+    color:#475569;
+
+}
+/* TABLA DE SOLICITUDES */
+
+.tablaSolicitudes{
+
+    table-layout:auto;
+
+}
+
+.tablaSolicitudes th:last-child,
+.tablaSolicitudes td:last-child{
+
+    width:230px;
+
+    min-width:230px;
+
+}
+
+.tablaSolicitudes td:last-child{
+
+    padding-left:10px;
+
+    padding-right:10px;
+
+}
+
+.tablaSolicitudes .filaBotones{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:row;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:nowrap;
+
+}
+
+.tablaSolicitudes .btn-verde,
+.tablaSolicitudes .btn-rojo{
+
+    width:100px;
+
+    min-width:100px;
+
+    height:38px;
+
+    margin:0;
+
+    padding:0 12px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+    line-height:1;
+
+    white-space:nowrap;
+
+}
+/* CONTRASEÑA DEL COLABORADOR */
+
+.campoPasswordColaborador{
+
+    width:100%;
+
+    position:relative;
+
+}
+
+.campoPasswordColaborador #nuevoPassword{
+
+    width:100%;
+
+    height:48px;
+
+    margin:0;
+
+    padding:0 52px 0 14px;
+
+}
+
+.btnVerPassword{
+
+    position:absolute;
+
+    top:50%;
+
+    right:8px;
+
+    transform:translateY(-50%);
+
+    width:38px;
+
+    height:38px;
+
+    margin:0;
+
+    padding:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#475569;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+}
+
+.btnVerPassword:hover{
+
+    background:#F1F5F9;
+
+}
+/* DISTRIBUCIÓN DE COLUMNAS DE COLABORADORES */
+
+.tablaColaboradores{
+
+    width:100%;
+
+    table-layout:fixed;
+
+}
+
+.tablaColaboradores th:nth-child(1),
+.tablaColaboradores td:nth-child(1){
+
+    width:15%;
+
+}
+
+.tablaColaboradores th:nth-child(2),
+.tablaColaboradores td:nth-child(2){
+
+    width:29%;
+
+}
+
+.tablaColaboradores th:nth-child(3),
+.tablaColaboradores td:nth-child(3){
+
+    width:15%;
+
+}
+
+.tablaColaboradores th:nth-child(4),
+.tablaColaboradores td:nth-child(4){
+
+    width:12%;
+
+}
+
+.tablaColaboradores th:nth-child(5),
+.tablaColaboradores td:nth-child(5){
+
+    width:29%;
+
+}
+
+.tablaColaboradores td:nth-child(2){
+
+    white-space:normal;
+
+    overflow-wrap:anywhere;
+
+}
+
+.tablaColaboradores .filaBotones{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:6px;
+
+    flex-wrap:nowrap;
+
+}
+
+.tablaColaboradores .btnAccionAdmin{
+
+    height:36px;
+
+    min-width:0;
+
+    padding:0 10px;
+
+    margin:0;
+
+    font-size:11px;
+
+    white-space:nowrap;
+
+}
+/* ==========================================
+   VISTA UNIFICADA DE TODOS LOS MÓDULOS
+========================================== */
+
+.vistaModulo{
+
+    width:100%;
+
+    min-width:0;
+
+    min-height:100vh;
+
+    overflow:visible;
+
+}
+
+#contenedorAuditoria,
+#contenedorAsesores,
+#contenedorConsultas,
+#contenedorSolicitudes{
+
+    width:100%;
+
+    min-width:0;
+
+    min-height:100vh;
+
+    overflow:visible !important;
+
+}
+/* ==========================================
+   AUDITORÍA - TABLA + GRÁFICO LATERAL
+========================================== */
+
+#auditoriaContenidoPrincipal{
+
+    display:grid;
+
+    grid-template-columns:minmax(0,1fr) 260px;
+
+    gap:16px;
+
+    align-items:start;
+
+    width:100%;
+
+    min-width:0;
+
+}
+
+#auditoriaTablaPrincipal{
+
+    width:100%;
+
+    min-width:0;
+
+}
+
+#graficoAuditoriaPersona{
+
+    display:none;
+
+    width:100%;
+
+    min-width:0;
+
+    margin:0;
+
+    padding-right:4px;
+
+}
+/* ==========================================
+   RESUMEN POR COLABORADOR
+========================================== */
+
+.resumenColaborador{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #E2E8F0;
+
+}
+
+.resumenColaborador:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.cabeceraColaborador{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:8px;
+
+    margin-bottom:10px;
+
+}
+
+
+.nombreColaborador{
+
+    color:#0F172A;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    text-transform:uppercase;
+
+}
+
+
+.totalColaborador{
+
+    color:#475569;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    text-transform:uppercase;
+
+}
+
+
+.filaBarraColaborador{
+
+    display:grid;
+
+    grid-template-columns:20px minmax(0,1fr) 20px;
+
+    align-items:center;
+
+    gap:7px;
+
+    margin-top:7px;
+
+}
+
+
+.iconoEstadoBarra{
+
+    font-size:13px;
+
+    line-height:1;
+
+}
+
+
+.fondoBarra{
+
+    width:100%;
+
+    height:9px;
+
+    overflow:hidden;
+
+    background:#F1F5F9;
+
+    border-radius:999px;
+
+}
+
+
+.barraReservado{
+
+    height:100%;
+
+    background:#FACC15;
+
+    border-radius:999px;
+
+}
+
+
+.barraVendido{
+
+    height:100%;
+
+    background:#EF4444;
+
+    border-radius:999px;
+
+}
+
+
+.valorBarra{
+
+    color:#0F172A;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-align:right;
+
+}
+/* ==========================================
+   TORTA INDIVIDUAL AUDITORÍA
+   MISMO ESTILO QUE LOTES
+========================================== */
+
+#graficoAuditoriaPersona .cardGrafico{
+
+    padding:14px;
+
+}
+
+
+#graficoAuditoriaPersona .tituloGrafico{
+
+    padding-bottom:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+#graficoAuditoriaPersona .tituloGrafico h3{
+
+    margin:0;
+
+    color:#0F172A;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    letter-spacing:.5px;
+
+    line-height:1.2;
+
+    text-align:center;
+
+    text-transform:uppercase;
+
+}
+
+
+#graficoAuditoriaPersona .infoGrafico{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:8px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico{
+
+    font-size:13px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico span{
+
+    font-size:13px;
+
+}
+
+
+#graficoAuditoriaPersona .filaInfoGrafico b{
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+#graficoAuditoriaPersona .totalGrafico{
+
+    margin-top:14px;
+
+    padding-top:12px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+/* ==========================================
+   CONSULTAS - ESTILO BANDEJA
+========================================== */
+
+.bandejaConsultas{
+
+    background:#FFFFFF;
+
+    border:1px solid #E2E8F0;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+
+.encabezadoConsultas{
+
+    display:grid;
+
+    grid-template-columns:290px minmax(0,1fr) 180px;
+
+    align-items:center;
+
+    min-height:44px;
+
+    padding:0 18px;
+
+    background:#F8FAFC;
+
+    border-bottom:1px solid #E2E8F0;
+
+    color:#475569;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+}
+
+
+.filaConsulta{
+
+    display:grid;
+
+    grid-template-columns:290px minmax(0,1fr) 180px;
+
+    align-items:center;
+
+    min-height:54px;
+
+    padding:0 18px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    cursor:pointer;
+
+    transition:.18s;
+
+}
+
+
+.filaConsulta:last-child{
+
+    border-bottom:none;
+
+}
+
+
+.filaConsulta:hover{
+
+    background:#F8FAFC;
+
+}
+
+/* ==========================================
+   CONSULTAS LEÍDAS Y NO LEÍDAS
+========================================== */
+
+.filaConsulta.noLeida{
+
+    background:#F8FBFF;
+
+    box-shadow:
+        inset 4px 0 0 #2563EB;
+
+}
+
+
+.filaConsulta.noLeida .consultaNombre,
+.filaConsulta.noLeida .consultaAsunto{
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.filaConsulta.leida{
+
+    background:#FFFFFF;
+
+    box-shadow:none;
+
+}
+
+
+.filaConsulta.leida .consultaNombre{
+
+    font-weight:500;
+
+    color:#334155;
+
+}
+
+
+.filaConsulta.leida .consultaAsunto{
+
+    font-weight:400;
+
+    color:#475569;
+
+}
+
+
+.filaConsulta.noLeida:hover,
+.filaConsulta.leida:hover{
+
+    background:#F1F5F9;
+
+}
+.consultaNombre{
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#0F172A;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.consultaAsunto{
+
+    font-size:13px;
+
+    color:#0F172A;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+.consultaFecha{
+
+    font-size:12px;
+
+    color:#64748B;
+
+    text-align:center;
+
+    white-space:nowrap;
+
+}
+
+
+/* CONSULTA ABIERTA */
+
+.detalleConsulta{
+
+    display:none;
+
+    padding:22px 26px;
+
+    background:#FFFFFF;
+
+    border-top:1px solid #E2E8F0;
+
+}
+
+
+.detalleConsulta.activo{
+
+    display:block;
+
+}
+
+
+.detalleConsultaTitulo{
+
+    margin:0 0 18px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.detalleConsultaRemitente{
+
+    margin-bottom:18px;
+
+    padding-bottom:14px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    font-size:13px;
+
+    color:#475569;
+
+}
+
+
+.detalleConsultaCuerpo{
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    color:#0F172A;
+
+}
+
+
+.detalleConsultaCuerpo strong{
+
+    font-weight:700;
+
+}
+/* ==========================================
+   CONSULTA ABIERTA - ESTILO OUTLOOK
+========================================== */
+
+.detalleOutlook{
+
+    width:100%;
+
+    background:#FFFFFF;
+
+}
+
+
+.barraDetalleConsulta{
+
+    min-height:62px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:0 18px;
+
+    border-bottom:1px solid #E2E8F0;
+
+}
+
+
+.btnVolverConsulta{
+
+    width:38px;
+
+    height:38px;
+
+    min-width:38px;
+
+    margin:0;
+
+    padding:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:8px;
+
+    background:#FFFFFF;
+
+    color:#334155;
+
+    font-size:20px;
+
+}
+
+
+.btnVolverConsulta:hover{
+
+    background:#F1F5F9;
+
+}
+
+
+.asuntoDetalleConsulta{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.cabeceraDetalleConsulta{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 20px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    color:#334155;
+
+    font-size:13px;
+
+}
+
+
+.fechaDetalleConsulta{
+
+    color:#64748B;
+
+    font-size:12px;
+
+}
+
+
+.cuerpoDetalleConsulta{
+
+    padding:26px 32px;
+
+    color:#0F172A;
+
+    font-size:14px;
+
+    line-height:1.65;
+
+}
+/* =====================================================
+   MENÚ RESPONSIVO
+===================================================== */
+
+#btnMenuMovil{
+
+    display:none;
+
+    width:42px;
+    min-width:42px;
+    height:42px;
+
+    margin:0;
+    padding:0 10px;
+
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#2563EB;
+    box-shadow:0 5px 14px rgba(37,99,235,.22);
+
+}
+
+#btnMenuMovil span{
+
+    display:block;
+
+    width:20px;
+    height:2px;
+
+    border-radius:2px;
+    background:#FFFFFF;
+
+}
+
+
+#overlaySidebar{
+
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    z-index:3990;
+
+    background:rgba(15,23,42,.42);
+    backdrop-filter:blur(2px);
+
+}
+
+
+/* =====================================================
+   VENTANA DIVIDIDA Y TABLET
+===================================================== */
+
+@media(max-width:1180px){
+
+    body{
+
+        overflow-x:hidden;
+
+    }
+
+
+    #panel{
+
+        padding:14px;
+
+    }
+
+
+    #usuarioHeader{
+
+        min-width:0;
+
+        display:grid;
+
+        grid-template-columns:auto minmax(0,1fr) auto;
+
+        align-items:center;
+
+        gap:14px;
+
+        padding:14px 16px;
+
+    }
+
+
+    #btnMenuMovil{
+
+        display:flex;
+
+    }
+
+
+    .headerInfo{
+
+        min-width:0;
+
+    }
+
+
+    #usuarioLogeado{
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+    }
+
+
+    .headerAcciones{
+
+        min-width:0;
+
+        gap:10px;
+
+    }
+
+
+    #ultimaActualizacion{
+
+        max-width:310px;
+
+        height:auto;
+        min-height:44px;
+
+        line-height:1.25;
+
+        white-space:normal;
+
+    }
+
+
+    #cerrarSesion{
+
+        width:145px;
+        min-width:145px;
+
+    }
+
+
+    #panelPrincipal{
+
+        display:block;
+
+        min-height:0;
+
+    }
+
+
+    #sidebar{
+
+        position:fixed;
+
+        top:12px;
+        left:12px;
+        bottom:12px;
+
+        width:270px;
+        height:auto;
+        max-height:calc(100vh - 24px);
+
+        overflow-y:auto;
+        overflow-x:hidden;
+
+        z-index:4000;
+
+        transform:translateX(calc(-100% - 28px));
+
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease;
+
+    }
+
+
+    #sidebar.abierto{
+
+        transform:translateX(0);
+
+        box-shadow:
+            0 24px 70px rgba(15,23,42,.28);
+
+    }
+
+
+    #overlaySidebar.activo{
+
+        display:block;
+
+    }
+
+
+    #workspace{
+
+        width:100%;
+        min-width:0;
+        min-height:0;
+
+    }
+
+
+    #contenido{
+
+        width:100%;
+        min-width:0;
+
+    }
+
+
+    #cabeceraFija{
+
+        top:12px;
+
+    }
+
+
+    #cabeceraFija::before{
+
+        top:-12px;
+        height:12px;
+
+    }
+
+
+    #dashboard{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+    }
+
+
+    #herramientas{
+
+        flex-wrap:wrap;
+
+    }
+
+
+    #buscarLote{
+
+        width:100%;
+        flex:1 1 100%;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        flex:1 1 120px;
+
+        min-width:0;
+
+    }
+
+
+    #contenedorLotesPrincipal{
+
+        grid-template-columns:minmax(0,1fr);
+
+        gap:14px;
+
+        overflow:visible;
+
+    }
+
+
+    #panelGraficos{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(auto-fit,minmax(240px,1fr));
+
+        gap:14px;
+
+        padding-right:0;
+
+    }
+
+
+    #auditoriaContenidoPrincipal{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #graficoAuditoriaPersona{
+
+        max-width:320px;
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        width:100%;
+
+        overflow-x:auto;
+        overflow-y:visible;
+
+        border-radius:16px;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    .tabla{
+
+        width:100%;
+
+        min-width:760px;
+
+        table-layout:auto;
+
+    }
+
+
+    .tablaSolicitudes{
+
+        min-width:950px;
+
+    }
+
+
+    .tablaColaboradores{
+
+        min-width:900px;
+
+    }
+
+
+    .bandejaConsultas{
+
+        overflow-x:auto;
+
+    }
+
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        min-width:850px;
+
+    }
+
+}
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    #panel{
+
+        padding:8px;
+
+    }
+
+
+    #usuarioHeader{
+
+        grid-template-columns:auto minmax(0,1fr);
+
+        gap:10px;
+
+        padding:12px;
+
+        border-radius:14px;
+
+    }
+
+
+    .headerAcciones{
+
+        grid-column:1 / -1;
+
+        width:100%;
+
+        display:grid;
+
+        grid-template-columns:minmax(0,1fr) auto;
+
+        gap:8px;
+
+    }
+
+
+    #ultimaActualizacion{
+
+        width:100%;
+        max-width:none;
+
+        min-height:40px;
+
+        padding:8px 10px;
+
+        font-size:12px;
+
+    }
+
+
+    #cerrarSesion{
+
+        width:46px;
+        min-width:46px;
+        height:42px;
+
+        padding:0;
+
+    }
+
+
+    #cerrarSesion > span:last-child{
+
+        display:none !important;
+
+    }
+
+
+    #cerrarSesion .iconoMenu{
+
+        margin:0;
+
+    }
+
+
+    .saludo{
+
+        margin-bottom:3px;
+
+        font-size:9px;
+
+    }
+
+
+    #usuarioLogeado{
+
+        font-size:18px;
+
+    }
+
+
+    .subtitulo{
+
+        font-size:11px;
+
+    }
+
+
+    #fechaActual{
+
+        font-size:9px;
+
+    }
+
+
+    #panelSuperior{
+
+        padding:10px;
+
+        border-radius:14px;
+
+    }
+
+
+    #dashboard{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:8px;
+
+        margin-bottom:8px;
+
+    }
+
+
+    .cardDashboard{
+
+        height:64px;
+
+        padding:8px;
+
+        gap:8px;
+
+        border-radius:12px;
+
+    }
+
+
+    .cardIcono{
+
+        width:38px;
+        height:38px;
+
+        margin-left:0;
+
+        border-radius:10px;
+
+    }
+
+
+    .cardDashboard h3{
+
+        font-size:18px;
+
+    }
+
+
+    .cardDashboard p{
+
+        font-size:9px;
+
+        letter-spacing:.4px;
+
+    }
+
+
+    #herramientas{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:8px;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1;
+
+        width:100%;
+        min-width:0;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        width:100%;
+        min-width:0;
+
+        padding:0 8px;
+
+        font-size:11px;
+
+    }
+
+
+    #filtroVendidos{
+
+        grid-column:1 / -1;
+
+    }
+
+
+    #panelEtapas{
+
+        gap:5px;
+
+    }
+
+
+    .chipEtapa{
+
+        padding:5px 9px;
+
+        font-size:11px;
+
+    }
+
+
+    #panelGraficos{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    .tituloModulo{
+
+        padding:16px;
+
+        margin-bottom:12px;
+
+        border-radius:14px;
+
+    }
+
+
+    .tituloModulo h2{
+
+        font-size:21px;
+
+    }
+
+
+    .tituloModulo p{
+
+        font-size:12px;
+
+    }
+
+
+    .moduloContenido{
+
+        padding:12px;
+
+        margin-top:10px;
+
+        border-radius:14px;
+
+    }
+
+
+    .inputBusqueda,
+    .inputModulo{
+
+        width:100%;
+        max-width:none;
+
+    }
+
+
+    .seccionBuscador,
+    .barraModulo{
+
+        align-items:stretch;
+
+        flex-direction:column;
+
+    }
+
+
+    .seccionBuscador .btnAzul,
+    .barraModulo .btnAzul{
+
+        width:100%;
+
+    }
+
+
+    .barraDetalleConsulta{
+
+        align-items:flex-start;
+
+        padding:12px;
+
+    }
+
+
+    .asuntoDetalleConsulta{
+
+        font-size:15px;
+
+        line-height:1.35;
+
+    }
+
+
+    .cabeceraDetalleConsulta{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+
+        gap:6px;
+
+        padding:14px;
+
+    }
+
+
+    .cuerpoDetalleConsulta{
+
+        padding:18px 14px;
+
+        font-size:13px;
+
+    }
+
+}
+@media(max-width:420px){
+
+    #dashboard{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #herramientas{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #buscarLote,
+    #filtroVendidos{
+
+        grid-column:auto;
+
+    }
+
+
+    #sidebar{
+
+        left:8px;
+        top:8px;
+        bottom:8px;
+
+        width:min(280px,calc(100vw - 16px));
+
+        max-height:calc(100vh - 16px);
+
+    }
+
+}
+
+/* =====================================================
+   CORRECCIÓN FINAL PARA TABLET Y CELULAR
+   Solo se aplica desde 1180 px hacia abajo
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    =========================================
+    1. BOTÓN DE MENÚ SIEMPRE VISIBLE
+    =========================================
+    */
+
+    #btnMenuMovil{
+
+        position:fixed;
+
+        top:12px;
+        left:12px;
+
+        z-index:5000;
+
+        display:flex;
+
+        width:44px;
+        min-width:44px;
+        height:44px;
+
+        margin:0;
+
+        box-shadow:
+            0 6px 18px rgba(37,99,235,.30);
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:68px;
+
+    }
+
+
+    /*
+    =========================================
+    2. ESTADÍSTICAS EN UNA SOLA FILA
+    SIN DESPLAZAMIENTO HORIZONTAL
+    =========================================
+    */
+
+    #dashboard{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(4,minmax(0,1fr)) !important;
+
+        gap:7px;
+
+        width:100%;
+
+        margin-bottom:8px;
+
+        overflow:visible !important;
+
+    }
+
+
+    #dashboard .cardDashboard{
+
+        width:auto !important;
+        min-width:0 !important;
+
+        height:62px;
+
+        padding:7px 6px;
+
+        gap:0;
+
+        justify-content:center;
+
+        overflow:hidden;
+
+    }
+
+
+    /*
+    Oculta la casa y los círculos de colores
+    únicamente en tablet y celular.
+    */
+
+    #dashboard .cardIcono{
+
+        display:none !important;
+
+    }
+
+
+    #dashboard .cardInfo{
+
+        width:100%;
+
+        align-items:center;
+
+        text-align:center;
+
+    }
+
+
+    #dashboard .cardDashboard h3{
+
+        font-size:18px;
+
+        line-height:1;
+
+    }
+
+
+    #dashboard .cardDashboard p{
+
+        width:100%;
+
+        margin-top:4px;
+
+        font-size:8px;
+
+        line-height:1.05;
+
+        letter-spacing:.25px;
+
+        text-align:center;
+
+        white-space:normal;
+
+    }
+
+
+    /*
+    =========================================
+    3. BUSCADOR Y FILTROS
+    =========================================
+    */
+
+    #herramientas{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(5,minmax(0,1fr)) !important;
+
+        gap:6px;
+
+        width:100%;
+
+        overflow:visible !important;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1;
+
+        width:100% !important;
+        min-width:0 !important;
+
+        position:relative;
+
+        left:auto;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        width:100% !important;
+        min-width:0 !important;
+
+        height:36px;
+
+        margin:0;
+
+        padding:0 4px;
+
+        font-size:9px;
+
+        letter-spacing:0;
+
+        white-space:nowrap;
+
+    }
+
+
+    #filtroVendidos{
+
+        grid-column:auto !important;
+
+    }
+
+
+    /*
+    =========================================
+    4. BUSCADORES FIJOS DE LOS MÓDULOS
+    =========================================
+    */
+
+    #buscarSolicitud,
+    #buscarAuditoria,
+    #buscarAsesor{
+
+        position:sticky !important;
+
+        top:8px;
+
+        z-index:950;
+
+        width:100% !important;
+        max-width:none !important;
+
+        margin-top:0 !important;
+        margin-bottom:12px !important;
+
+        background:#FFFFFF;
+
+        box-shadow:
+            0 5px 14px rgba(15,23,42,.08);
+
+    }
+
+
+    .seccionBuscador,
+    .barraModulo{
+
+        position:sticky;
+
+        top:8px;
+
+        z-index:940;
+
+        padding:8px;
+
+        margin-bottom:12px;
+
+        border-radius:12px;
+
+        background:#FFFFFF;
+
+    }
+
+
+    /*
+    El buscador de LOTES ya está dentro
+    de cabeceraFija, que actualmente es sticky.
+    */
+
+    #cabeceraFija{
+
+        top:8px;
+
+    }
+
+
+    /*
+    =========================================
+    5. CONTENEDORES DE TABLAS MÁS ALTOS
+    =========================================
+    */
+
+    .moduloContenido{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 190px);
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 320px);
+
+        overflow-x:auto !important;
+        overflow-y:visible !important;
+
+        border-radius:16px;
+
+        touch-action:pan-x pan-y;
+
+        overscroll-behavior-x:contain;
+        overscroll-behavior-y:auto;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    /*
+    La tabla continúa siendo ancha.
+    El contenedor completo recibe el gesto,
+    incluso en el espacio blanco inferior.
+    */
+
+    .tabla{
+
+        min-width:760px;
+
+        touch-action:pan-x pan-y;
+
+    }
+
+
+    .tablaSolicitudes{
+
+        min-width:950px;
+
+    }
+
+
+    .tablaColaboradores{
+
+        min-width:900px;
+
+    }
+
+
+    #listaSolicitudes{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 350px);
+
+        overflow-x:auto;
+
+        touch-action:pan-x pan-y;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    /*
+    =========================================
+    6. AUDITORÍA EN UNA SOLA FILA
+    =========================================
+    */
+
+    #resumenAuditoria{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(3,minmax(0,1fr)) !important;
+
+        gap:7px !important;
+
+        width:100%;
+
+        margin-bottom:12px !important;
+
+        overflow:visible !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard{
+
+        width:auto !important;
+        min-width:0 !important;
+
+        height:62px;
+
+        padding:7px 4px;
+
+        gap:0;
+
+        justify-content:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:18px;
+
+        text-align:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        margin-top:4px;
+
+        font-size:8px;
+
+        line-height:1.05;
+
+        letter-spacing:.15px;
+
+        text-align:center;
+
+        white-space:normal;
+
+    }
+
+
+    /*
+    =========================================
+    7. ESTRUCTURA GENERAL Y DESPLAZAMIENTO
+    =========================================
+    */
+
+    html,
+    body{
+
+        width:100%;
+
+        min-height:100%;
+
+        overflow-x:hidden;
+        overflow-y:auto;
+
+        touch-action:pan-y;
+
+        overscroll-behavior-y:auto;
+
+    }
+
+
+    #panel,
+    #panelPrincipal,
+    #workspace,
+    #contenido,
+    #contenidoScrollable,
+    #contenedorLotesPrincipal,
+    #contenedorLotes,
+    #contenedorSolicitudes,
+    #contenedorConsultas,
+    #contenedorAsesores,
+    #contenedorAuditoria,
+    #contenedorReportes{
+
+        height:auto;
+
+        max-height:none;
+
+        overflow-y:visible;
+
+        touch-action:pan-y;
+
+    }
+
+
+    #contenedorLotesPrincipal,
+    #auditoriaContenidoPrincipal{
+
+        grid-template-columns:
+            minmax(0,1fr);
+
+        gap:14px;
+
+    }
+
+
+    #panelGraficos{
+
+        grid-template-columns:
+            repeat(auto-fit,minmax(230px,1fr));
+
+        padding-right:0;
+
+    }
+
+
+    #panelGraficos,
+    .cardGrafico,
+    canvas{
+
+        touch-action:pan-y;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES ADICIONALES PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    #panel{
+
+        padding:8px;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:64px;
+
+    }
+
+
+    #dashboard{
+
+        gap:5px;
+
+    }
+
+
+    #dashboard .cardDashboard{
+
+        height:58px;
+
+        padding:6px 2px;
+
+        border-radius:11px;
+
+    }
+
+
+    #dashboard .cardDashboard h3{
+
+        font-size:16px;
+
+    }
+
+
+    #dashboard .cardDashboard p{
+
+        font-size:7px;
+
+        letter-spacing:0;
+
+    }
+
+
+    #herramientas{
+
+        gap:4px;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:34px;
+
+        padding:0 2px;
+
+        font-size:7.5px;
+
+    }
+
+
+    #resumenAuditoria{
+
+        gap:5px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard{
+
+        height:58px;
+
+        padding:6px 2px;
+
+        border-radius:11px;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:16px;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        font-size:7px;
+
+        letter-spacing:0;
+
+    }
+
+
+    .tituloModulo{
+
+        padding:14px;
+
+        margin-bottom:10px;
+
+    }
+
+
+    .tituloModulo h2{
+
+        font-size:20px;
+
+    }
+
+
+    .tituloModulo p{
+
+        font-size:11px;
+
+    }
+
+
+    .moduloContenido{
+
+        padding:10px;
+
+        min-height:
+            calc(100svh - 170px);
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 300px);
+
+    }
+
+
+    #panelGraficos{
+
+        grid-template-columns:
+            minmax(0,1fr);
+
+    }
+
+}
+
+/* =====================================================
+   AJUSTES FINALES PARA TABLET Y CELULAR
+   NUEVOADMIN 117
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    =========================================
+    1. BOTÓN DEL MENÚ DENTRO DEL ENCABEZADO
+    =========================================
+    */
+
+    #btnMenuMovil{
+
+        position:static !important;
+
+        top:auto !important;
+        left:auto !important;
+
+        align-self:center;
+
+        width:48px;
+        min-width:48px;
+        height:48px;
+
+        margin:0;
+
+        z-index:auto;
+
+        flex-shrink:0;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:16px !important;
+
+        grid-template-columns:
+            auto minmax(0,1fr) auto;
+
+        align-items:center;
+
+    }
+
+
+    /*
+    =========================================
+    2. TEXTO DE LOS FILTROS MÁS GRANDE
+    =========================================
+    */
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        font-size:11px !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:0 !important;
+
+        padding-left:3px !important;
+        padding-right:3px !important;
+
+    }
+
+
+    /*
+    =========================================
+    3. ESTADÍSTICAS DE AUDITORÍA
+    SIN CONTENIDO COMPRIMIDO
+    =========================================
+    */
+
+    #resumenAuditoria .cardDashboard{
+
+        display:flex !important;
+
+        flex-direction:column !important;
+
+        align-items:center !important;
+
+        justify-content:center !important;
+
+        gap:5px !important;
+
+        padding:7px 3px !important;
+
+        overflow:hidden;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        display:block;
+
+        width:100%;
+
+        margin:0;
+
+        font-size:18px !important;
+
+        line-height:1 !important;
+
+        text-align:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        display:block;
+
+        width:100%;
+
+        margin:0 !important;
+
+        font-size:9px !important;
+
+        line-height:1.1 !important;
+
+        text-align:center;
+
+        white-space:normal !important;
+
+    }
+
+
+    /*
+    =========================================
+    4. CONTENEDORES HORIZONTALES DE TABLAS
+    OCUPAN TODA LA ALTURA RESTANTE
+    =========================================
+    */
+
+    .contenedorTablaScroll{
+
+        width:100% !important;
+
+        min-height:
+            calc(100svh - 235px) !important;
+
+        overflow-x:auto !important;
+
+        overflow-y:hidden !important;
+
+        touch-action:pan-x pan-y !important;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+        padding-bottom:10px;
+
+    }
+
+
+    /*
+    La tabla queda arriba, pero todo el espacio
+    blanco inferior pertenece al contenedor
+    desplazable horizontalmente.
+    */
+
+    .contenedorTablaScroll .tabla{
+
+        margin-bottom:0;
+
+    }
+
+
+    /*
+    SOLICITUDES
+    */
+
+    #listaSolicitudes{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 260px) !important;
+
+        overflow:visible !important;
+
+    }
+
+
+    #listaSolicitudes .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 265px) !important;
+
+    }
+
+
+    /*
+    =========================================
+    5. CONSULTAS CON EL MISMO COMPORTAMIENTO
+    =========================================
+    */
+
+    #vistaListaConsultas{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 235px);
+
+    }
+
+
+    .bandejaConsultas{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 250px);
+
+        overflow-x:auto !important;
+        overflow-y:hidden !important;
+
+        touch-action:pan-x pan-y;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+        padding-bottom:10px;
+
+    }
+
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        min-width:850px;
+
+    }
+
+
+    /*
+    =========================================
+    6. MÓDULOS OCUPAN LA PANTALLA RESTANTE
+    =========================================
+    */
+
+    #contenedorSolicitudes,
+    #contenedorConsultas,
+    #contenedorAsesores,
+    #contenedorAuditoria{
+
+        min-height:
+            calc(100svh - 20px) !important;
+
+    }
+
+
+    .moduloContenido{
+
+        min-height:
+            calc(100svh - 180px) !important;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES EXCLUSIVOS PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    /*
+    El encabezado queda:
+    menú + nombre
+    y debajo actualización + cerrar sesión.
+    */
+
+    #usuarioHeader{
+
+        display:grid;
+
+        grid-template-columns:
+            auto minmax(0,1fr);
+
+        column-gap:12px;
+
+        row-gap:10px;
+
+        padding:12px !important;
+
+    }
+
+
+    #btnMenuMovil{
+
+        grid-column:1;
+
+        grid-row:1;
+
+        width:52px;
+        min-width:52px;
+        height:52px;
+
+        border-radius:12px;
+
+    }
+
+
+    .headerInfo{
+
+        grid-column:2;
+
+        grid-row:1;
+
+        align-self:center;
+
+    }
+
+
+    .headerAcciones{
+
+        grid-column:1 / -1;
+
+        grid-row:2;
+
+    }
+
+
+    /*
+    Filtros legibles sin romper la fila.
+    */
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:38px !important;
+
+        font-size:9.5px !important;
+
+        padding:0 2px !important;
+
+    }
+
+
+    /*
+    Auditoría: número y título separados.
+    */
+
+    #resumenAuditoria .cardDashboard{
+
+        height:64px !important;
+
+        gap:6px !important;
+
+        padding:8px 2px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:18px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        font-size:8px !important;
+
+    }
+
+
+    /*
+    Mayor altura útil para desplazar
+    las tablas desde el espacio blanco.
+    */
+
+    .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 205px) !important;
+
+    }
+
+
+    #listaSolicitudes .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 215px) !important;
+
+    }
+
+
+    #vistaListaConsultas,
+    .bandejaConsultas{
+
+        min-height:
+            calc(100svh - 210px) !important;
+
+    }
+
+}
+/* =====================================================
+   GRÁFICOS RESPONSIVOS FINALES
+   TABLET Y CELULAR
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    En posición vertical:
+    tabla y gráficos uno debajo del otro.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        gap:14px !important;
+
+        width:100% !important;
+
+        align-items:start;
+
+    }
+
+
+    /*
+    El contenedor del gráfico de Auditoría
+    ya no queda limitado a 320 px.
+    */
+
+    #graficoAuditoriaPersona{
+
+        display:block;
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:0 !important;
+
+    }
+
+
+    /*
+    Todas las tarjetas de gráficos
+    ocupan el ancho disponible.
+    */
+
+    #graficoAuditoriaPersona .cardGrafico,
+    #panelGraficos .cardGrafico{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:14px !important;
+
+    }
+
+
+    /*
+Mantiene 175 x 175 solamente para
+el contenedor de una torta.
+
+No afecta los bloques
+.resumenColaborador.
+*/
+
+#graficoAuditoriaPersona
+.cardGrafico > div:nth-child(2):not(.resumenColaborador),
+
+#panelGraficos
+.cardGrafico > div:nth-child(2){
+
+    width:175px !important;
+
+    min-width:175px !important;
+
+    max-width:175px !important;
+
+    height:175px !important;
+
+    min-height:175px !important;
+
+    max-height:175px !important;
+
+    margin:12px auto !important;
+
+}
+
+
+    /*
+    Centrar la información ubicada
+    debajo de las tortas.
+    */
+
+    #graficoAuditoriaPersona .infoGrafico,
+    #graficoAuditoriaPersona .totalGrafico,
+    #panelGraficos .infoGrafico,
+    #panelGraficos .totalGrafico{
+
+        width:100% !important;
+
+        max-width:420px !important;
+
+        margin-left:auto !important;
+
+        margin-right:auto !important;
+
+    }
+
+
+    #graficoAuditoriaPersona .totalGrafico,
+    #panelGraficos .totalGrafico{
+
+        margin-top:14px !important;
+
+    }
+
+
+    /*
+    RESUMEN POR COLABORADOR:
+    la tarjeta ocupa todo el ancho,
+    pero su contenido permanece centrado.
+    */
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        width:100% !important;
+
+        max-width:520px !important;
+
+        margin-left:auto !important;
+
+        margin-right:auto !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .tituloGrafico{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+
+    /*
+    En vertical, los gráficos de LOTES
+    aparecen uno debajo de otro.
+    */
+
+    #panelGraficos{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        gap:14px !important;
+
+        width:100% !important;
+
+    }
+
+}
+
+
+/* =====================================================
+   TABLET O CELULAR EN POSICIÓN HORIZONTAL
+===================================================== */
+
+@media(
+    max-width:1180px
+)
+and
+(
+    orientation:landscape
+){
+
+    /*
+    Tabla y gráfico de Auditoría pueden
+    colocarse lado a lado cuando entren.
+
+    Si no entran, el siguiente elemento
+    baja automáticamente.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(
+                    min(360px,100%),
+                    1fr
+                )
+            ) !important;
+
+        gap:14px !important;
+
+        align-items:start;
+
+    }
+
+
+    /*
+    Gráficos de LOTES:
+    se colocan tantos como entren
+    en cada fila.
+
+    Los restantes bajan automáticamente.
+    */
+
+    #panelGraficos{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(
+                    min(280px,100%),
+                    1fr
+                )
+            ) !important;
+
+        gap:14px !important;
+
+        align-items:start;
+
+    }
+
+
+    #graficoAuditoriaPersona,
+    #panelGraficos .cardGrafico{
+
+        width:100% !important;
+
+    }
+
+}
+/* =====================================================
+   CORRECCIÓN FINAL PARA CELULAR Y TABLET
+   - Filtros dentro de su contenedor
+   - ASUNTO más cerca de DE
+   - Resúmenes de colaboradores uniformes
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    =========================================
+    1. FILTROS DE LOTES EN TABLET Y CELULAR
+    =========================================
+    */
+
+    #herramientas{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(180px,1.6fr)
+            repeat(5,minmax(0,1fr))
+            !important;
+
+        gap:7px !important;
+
+        width:100% !important;
+        max-width:100% !important;
+
+        overflow:hidden !important;
+
+        align-items:center;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:auto !important;
+
+        width:100% !important;
+        min-width:0 !important;
+        max-width:none !important;
+
+        position:relative !important;
+
+        left:auto !important;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        grid-column:auto !important;
+
+        width:100% !important;
+        min-width:0 !important;
+        max-width:none !important;
+
+        height:36px !important;
+
+        margin:0 !important;
+
+        padding:0 3px !important;
+
+        font-size:clamp(
+            8px,
+            1vw,
+            11px
+        ) !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:0 !important;
+
+        white-space:nowrap !important;
+
+        overflow:hidden;
+
+        text-overflow:clip;
+
+    }
+
+
+    /*
+    =========================================
+    2. CONSULTAS:
+    REDUCIR COLUMNA DE Y ACERCAR ASUNTO
+    =========================================
+    */
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        grid-template-columns:
+            170px
+            minmax(350px,1fr)
+            145px
+            !important;
+
+        min-width:665px !important;
+
+        padding-left:12px !important;
+        padding-right:12px !important;
+
+        column-gap:8px;
+
+    }
+
+
+    .consultaNombre{
+
+        padding-right:4px;
+
+    }
+
+
+    .consultaAsunto{
+
+        padding-left:0;
+
+    }
+
+
+    /*
+    El título RECIBIDO y sus fechas
+    permanecen centrados.
+    */
+
+    .encabezadoConsultas > div:last-child,
+    .consultaFecha{
+
+        text-align:center !important;
+
+    }
+
+
+    /*
+    =========================================
+    3. RESUMEN POR COLABORADOR
+    MISMO ANCHO PARA TODOS
+    =========================================
+    */
+
+    #graficoAuditoriaPersona .cardGrafico{
+
+        width:100% !important;
+        max-width:none !important;
+
+        display:block !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        display:block !important;
+
+        width:100% !important;
+        max-width:none !important;
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:14px 0 !important;
+
+        box-sizing:border-box;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .cabeceraColaborador{
+
+        width:100% !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        justify-content:space-between !important;
+
+        gap:12px !important;
+
+        margin-bottom:10px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .nombreColaborador{
+
+        flex:1 1 auto;
+
+        min-width:0;
+
+        text-align:left;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .totalColaborador{
+
+        flex:0 0 auto;
+
+        text-align:right;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .filaBarraColaborador{
+
+        width:100% !important;
+
+        display:grid !important;
+
+        grid-template-columns:
+            20px
+            minmax(0,1fr)
+            28px
+            !important;
+
+        align-items:center;
+
+        gap:8px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .fondoBarra{
+
+        width:100% !important;
+        min-width:0 !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .valorBarra{
+
+        width:28px;
+
+        text-align:right;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES EXCLUSIVOS PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    /*
+    En celular el buscador queda arriba
+    y los cinco filtros quedan en una sola fila.
+    */
+
+    #herramientas{
+
+        grid-template-columns:
+            repeat(5,minmax(0,1fr))
+            !important;
+
+        gap:4px !important;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1 !important;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:36px !important;
+
+        padding:0 1px !important;
+
+        font-size:7.5px !important;
+
+    }
+
+
+    /*
+    CONSULTAS EN CELULAR:
+    DE aún más angosto.
+    */
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        grid-template-columns:
+            145px
+            minmax(330px,1fr)
+            140px
+            !important;
+
+        min-width:615px !important;
+
+        padding-left:10px !important;
+        padding-right:10px !important;
+
+        column-gap:5px;
+
+    }
+
+
+    /*
+    Resumen de colaboradores:
+    aprovechar todo el ancho del celular.
+    */
+
+    #graficoAuditoriaPersona
+    .cardGrafico{
+
+        padding-left:12px !important;
+        padding-right:12px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        padding-top:14px !important;
+        padding-bottom:14px !important;
+
+    }
+
+}
+/* =====================================================
+   BOTÓN DE MENÚ SIEMPRE VISIBLE
+   CELULAR Y TABLET
+===================================================== */
+
+@media(max-width:1180px){
+
+    #btnMenuMovil{
+
+        position:fixed !important;
+
+        top:18px !important;
+        left:18px !important;
+
+        z-index:5000 !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+        margin:0 !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+        justify-content:center !important;
+
+        box-shadow:
+            0 8px 22px rgba(37,99,235,.32) !important;
+
+    }
+
+
+    /*
+    Reserva el espacio del botón
+    para que no tape el nombre.
+    */
+
+    #usuarioHeader{
+
+        padding-left:82px !important;
+
+    }
+
+}
+@media(max-width:700px){
+
+    #btnMenuMovil{
+
+        top:16px !important;
+        left:16px !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:76px !important;
+
+    }
+
+}
+/* =====================================================
+   RESUMEN POR COLABORADOR
+   TABLET Y CELULAR EN POSICIÓN VERTICAL
+===================================================== */
+
+@media
+(max-width:1180px)
+and
+(orientation:portrait){
+
+    /*
+    El gráfico/resumen baja debajo
+    de la tabla y ocupa todo el ancho.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        width:100% !important;
+
+    }
+
+
+    #graficoAuditoriaPersona{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:0 !important;
+
+    }
+
+
+    /*
+    La tarjeta exterior ocupa
+    todo el ancho de la pantalla.
+    */
+
+    #graficoAuditoriaPersona
+    .cardGrafico{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        height:auto !important;
+
+        min-height:0 !important;
+
+        margin:0 !important;
+
+        padding:14px 18px !important;
+
+    }
+
+
+    /*
+    Cada colaborador usa el mismo modelo
+    de escritorio, centrado dentro
+    de la tarjeta exterior.
+    */
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        display:block !important;
+
+        width:100% !important;
+
+        max-width:420px !important;
+
+        min-width:0 !important;
+
+        height:auto !important;
+
+        min-height:0 !important;
+
+        max-height:none !important;
+
+        margin:0 auto !important;
+
+        padding:12px 0 !important;
+
+        box-sizing:border-box;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .cabeceraColaborador{
+
+        width:100% !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        justify-content:space-between !important;
+
+        gap:10px !important;
+
+        margin-bottom:10px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .filaBarraColaborador{
+
+        width:100% !important;
+
+        grid-template-columns:
+            20px
+            minmax(0,1fr)
+            28px
+            !important;
+
+        gap:7px !important;
+
+        margin-top:7px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .fondoBarra{
+
+        width:100% !important;
+
+        min-width:0 !important;
+
+    }
+
+}
+
+
+/* =====================================================
+   CORRECCIÓN TÁCTIL: EVITA HOVER PEGADO EN ETAPAS/FILTROS
+===================================================== */
+@media (hover:none) and (pointer:coarse){
+
+    #btnEtapas:not(.activo):hover,
+    #filtroTodos:not(.activo):hover,
+    #filtroLibres:not(.activo):hover,
+    #filtroReservados:not(.activo):hover,
+    #filtroVendidos:not(.activo):hover{
+        background:#3f4d5d !important;
+        color:#FFFFFF !important;
+        border-color:transparent !important;
+        box-shadow:none !important;
+    }
+}
+
+/* =====================================================
+   REPORTES
+===================================================== */
+#contenedorReportes{
+    width:100%;
+    min-width:0;
+    min-height:100vh;
+    overflow:visible !important;
+}
+
+.gridReportes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+}
+
+.cardReporte{
+    background:#FFFFFF;
+    border:1px solid #E2E8F0;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
+}
+
+.cardReporte h3{
+    margin:0 0 8px;
+    font-size:16px;
+    color:#0F172A;
+}
+
+.cardReporte p{
+    margin:0 0 16px;
+    color:#64748B;
+    font-size:13px;
+    line-height:1.45;
+}
+
+.btnReporteExcel{
+    width:100%;
+    height:40px;
+    margin:0;
+    padding:0 14px;
+    border-radius:10px;
+    background:#16A34A;
+    color:#FFFFFF;
+    font-size:13px;
+    font-weight:700;
+}
+
+.btnReporteExcel:hover{
+    background:#15803D;
+}
+
+.cardReporteCompleto{
+    border-color:#BFDBFE;
+    background:#F8FBFF;
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -1953,6 +6209,18 @@ margin:0;
 <div id="panel">
 
     <div id="usuarioHeader">
+
+    <button
+        type="button"
+        id="btnMenuMovil"
+        aria-label="Abrir menú"
+        aria-expanded="false">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
 
     <div class="headerInfo">
 
@@ -2013,6 +6281,7 @@ margin:0;
 
 </div>
 
+<div id="overlaySidebar"></div>
 <div id="panelPrincipal">
 
     <aside id="sidebar">
@@ -2100,6 +6369,8 @@ margin:0;
 
     <span>Consultas</span>
 
+    <span id="contadorConsultas"></span>
+
 </button>
 
         <button id="btnAsesores" class="menuItem">
@@ -2120,7 +6391,7 @@ margin:0;
 
     </span>
 
-    <span>Asesores</span>
+    <span>Colaboradores</span>
 
 </button>
 
@@ -2143,6 +6414,23 @@ margin:0;
     </span>
 
     <span>Auditoría</span>
+
+</button>
+
+        <button id="btnReportes" class="menuItem">
+
+    <span class="iconoMenu">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V9"/>
+            <path d="M10 19V5"/>
+            <path d="M16 19v-7"/>
+            <path d="M22 19H2"/>
+        </svg>
+
+    </span>
+
+    <span>Reportes</span>
 
 </button>
 <hr style="border:none;border-top:1px solid #E2E8F0;margin:12px 0;">
@@ -2232,6 +6520,10 @@ margin:0;
             id="buscarLote"
             placeholder="🔍 Buscar lote...">
 
+<button id="btnEtapas">
+    ETAPAS
+</button>
+
         <button id="filtroTodos">
             TODOS
         </button>
@@ -2250,6 +6542,7 @@ margin:0;
 
     </div>
 
+<div id="panelEtapas"></div>
     <div id="barraFiltrosActivos">
     </div>
 
@@ -2273,18 +6566,28 @@ id="contenedorLotes">
 
     <div
 id="contenedorAuditoria"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
 <div
 id="contenedorAsesores"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
 <div
 id="contenedorConsultas"
-style="overflow-x:auto;">
+class="vistaModulo">
 </div>
+
+<div
+id="contenedorReportes"
+class="vistaModulo"
+style="display:none;">
+</div>
+
 <div
 id="contenedorSolicitudes"
+class="vistaModulo"
 style="display:none;">
 
 <div class="tituloModulo">
@@ -2316,7 +6619,7 @@ id="buscarSolicitud"
 
 class="inputBusqueda"
 
-placeholder="Buscar usuario o lote..."
+placeholder="🔍 Buscar nombre o lote..."
 
 onkeyup="filtrarSolicitudes()"
 
@@ -2497,7 +6800,7 @@ Cerrar
     </div>
 </div>
 <script>
-
+console.log("VERSION 90");
 document
 .getElementById("btnLogin")
 .addEventListener("click",login);
@@ -2516,6 +6819,9 @@ const API_URL =
 
 async function apiPost(action, datos = {}){
 
+    const token =
+        localStorage.getItem("token") || "";
+
     const respuesta = await fetch(API_URL,{
 
         method:"POST",
@@ -2524,74 +6830,225 @@ async function apiPost(action, datos = {}){
 
             action:action,
 
+            token:token,
+
             ...datos
 
         })
 
     });
 
-    return await respuesta.json();
+    const resultado =
+        await respuesta.json();
+
+    if(
+        resultado &&
+        resultado.mensaje === "ACCESO_NO_AUTORIZADO"
+    ){
+
+        cerrarSesionPorSeguridad();
+
+        throw new Error(
+            "Sesión vencida o acceso no autorizado"
+        );
+
+    }
+
+    return resultado;
 
 }
 
+
 async function apiGet(parametros = ""){
 
-    const respuesta = await fetch(
+    const token =
+        localStorage.getItem("token") || "";
 
+    const separador =
+        parametros.includes("?")
+        ? "&"
+        : "?";
+
+    const url =
         API_URL +
+        parametros +
+        separador +
+        "token=" +
+        encodeURIComponent(token);
 
-        parametros
+    const respuesta =
+        await fetch(url);
 
+    const resultado =
+        await respuesta.json();
+
+    if(
+        resultado &&
+        resultado.mensaje === "ACCESO_NO_AUTORIZADO"
+    ){
+
+        cerrarSesionPorSeguridad();
+
+        throw new Error(
+            "Sesión vencida o acceso no autorizado"
+        );
+
+    }
+
+    return resultado;
+
+}
+
+
+function limpiarSesionLocal(mensaje = ""){
+
+    localStorage.removeItem("token");
+
+    localStorage.removeItem("rol");
+
+    localStorage.removeItem("usuario");
+
+    localStorage.removeItem("logeado");
+
+    document
+    .getElementById("panel")
+    .style.display = "none";
+
+    document
+    .getElementById("loginBox")
+    .style.display = "block";
+
+    document
+    .getElementById("error")
+    .textContent = mensaje;
+
+}
+
+
+function cerrarSesionPorSeguridad(){
+
+    limpiarSesionLocal(
+        "La sesión venció. Ingrese nuevamente."
     );
-
-    return await respuesta.json();
 
 }
 
 function aplicarPermisosRol(rol){
 
-    if(rol === "ASESOR"){
+    const rolNormalizado =
+        String(rol || "")
+        .trim()
+        .toUpperCase();
+
+    const esAsesor =
+        rolNormalizado === "ASESOR";
+
+    const idsAdministrativos = [
+
+        "btnSolicitudes",
+
+        "btnConsultas",
+
+        "btnAsesores",
+
+        "btnAuditoria",
+
+        "btnReportes"
+
+    ];
+
+    idsAdministrativos.forEach(id=>{
+
+        const elemento =
+            document.getElementById(id);
+
+        if(!elemento){
+            return;
+        }
+
+        elemento.classList.toggle(
+            "ocultoPorRol",
+            esAsesor
+        );
+
+    });
+
+
+    const botonLotes =
+        document.getElementById("btnLotes");
+
+    if(botonLotes){
+
+        botonLotes.classList.remove(
+            "ocultoPorRol"
+        );
+
+    }
+
+
+    const contenedoresAdministrativos = [
+
+        "contenedorSolicitudes",
+
+        "contenedorConsultas",
+
+        "contenedorAsesores",
+
+        "contenedorAuditoria",
+
+        "contenedorReportes"
+
+    ];
+
+    if(esAsesor){
+
+        contenedoresAdministrativos
+        .forEach(id=>{
+
+            const contenedor =
+                document.getElementById(id);
+
+            if(contenedor){
+
+                contenedor.style.display =
+                    "none";
+
+            }
+
+        });
+
+
+        const contenedorLotesPrincipal =
+            document.getElementById(
+                "contenedorLotesPrincipal"
+            );
+
+        if(contenedorLotesPrincipal){
+
+            contenedorLotesPrincipal
+            .style.display = "grid";
+
+        }
+
 
         document
-        .getElementById("btnAuditoria")
-        .style.display = "none";
+        .querySelectorAll(".menuItem")
+        .forEach(elemento=>{
 
-        document
-        .getElementById("btnAsesores")
-        .style.display = "none";
+            elemento.classList.remove(
+                "activo"
+            );
 
-        document
-        .getElementById("btnConsultas")
-        .style.display = "none";
+        });
 
-document
-.getElementById(
-"btnSolicitudes"
-)
-.style.display =
-"none";
 
-}
-    else{
+        if(botonLotes){
 
-        document
-        .getElementById("btnAuditoria")
-        .style.display = "inline-block";
+            botonLotes.classList.add(
+                "activo"
+            );
 
-        document
-        .getElementById("btnAsesores")
-        .style.display = "inline-block";
-
-        document
-        .getElementById("btnConsultas")
-        .style.display = "inline-block";
-
-document
-.getElementById(
-"btnSolicitudes"
-)
-.style.display =
-"inline-block";
+        }
 
     }
 
@@ -2633,6 +7090,10 @@ password:password
 
         if(resultado.ok){
 
+localStorage.setItem(
+    "token",
+    resultado.token
+);
     localStorage.setItem(
 "rol",
 resultado.rol
@@ -2663,34 +7124,117 @@ localStorage.setItem(
 .textContent =
 resultado.nombre;
 
-"<h2>Bienvenido " +
-resultado.nombre +
-"</h2>" +
-
-"<p><b>Rol:</b> " +
-resultado.rol +
-"</p>";
-
 cargarLotes();
 
 verificarNotificaciones();
 
+actualizarContadorConsultas();
+
+reiniciarTemporizadorInactividad();
+
         }
         else{
 
-    document
-    .getElementById("error")
-    .textContent =
-    "Usuario o contraseña incorrectos";
+    const error =
+        document.getElementById(
+            "error"
+        );
+
+    const campoUsuario =
+        document.getElementById(
+            "usuario"
+        );
 
     const campoPassword =
-    document.getElementById(
-    "password"
-    );
+        document.getElementById(
+            "password"
+        );
+
+
+    /*
+    MOSTRAR MENSAJE DEVUELTO
+    POR EL SERVIDOR
+    */
+
+    error.textContent =
+        resultado.mensaje ||
+        "No fue posible iniciar sesión.";
+
+
+    /*
+    SIEMPRE BORRAR LA CONTRASEÑA
+    CUANDO EL LOGIN SEA INCORRECTO
+    */
 
     campoPassword.value = "";
 
-    campoPassword.focus();
+
+    /*
+    CONTRASEÑA INCORRECTA
+    */
+
+    if(
+        resultado.codigo ===
+        "PASSWORD_INCORRECTA"
+    ){
+
+        campoPassword.focus();
+
+    }
+
+
+    /*
+    USUARIO NO EXISTE
+    */
+
+    else if(
+        resultado.codigo ===
+        "USUARIO_NO_EXISTE"
+    ){
+
+        campoUsuario.focus();
+
+        /*
+        COLOCAR EL CURSOR AL FINAL
+        DEL USUARIO ESCRITO
+        */
+
+        const posicionFinal =
+            campoUsuario.value.length;
+
+        campoUsuario.setSelectionRange(
+            posicionFinal,
+            posicionFinal
+        );
+
+    }
+
+
+    /*
+    USUARIO DESACTIVADO
+    */
+
+    else if(
+        resultado.codigo ===
+        "USUARIO_INACTIVO"
+    ){
+
+        campoUsuario.focus();
+
+        /*
+        COLOCAR EL CURSOR AL FINAL
+        DEL USUARIO
+        */
+
+        const posicionFinal =
+            campoUsuario.value.length;
+
+        campoUsuario.setSelectionRange(
+            posicionFinal,
+            posicionFinal
+        );
+
+    }
 
 }
 
@@ -2712,7 +7256,8 @@ let todosLosLotes = [];
 
 let filtroActual = "TODOS";
 
-let etapaSeleccionada = "";
+let etapasSeleccionadas = [];
+let mostrarPanelEtapas = false;
 
 let solicitudesPendientes = [];
 let lotesFiltrados = [];
@@ -3098,7 +7643,12 @@ const pluginTextoCentro = {
     }
 
 };
-Object.keys(etapas).forEach(etapa=>{
+const etapasAMostrar =
+    etapasSeleccionadas.length > 0
+        ? etapasSeleccionadas
+        : Object.keys(etapas);
+
+etapasAMostrar.forEach(etapa=>{
 
     const e = etapas[etapa];
 
@@ -3117,7 +7667,9 @@ e.VENDIDO;
     html += `
 
 <div class="cardGrafico ${
-    etapaSeleccionada === etapa ? "graficoActivo" : ""
+    etapasSeleccionadas.includes(etapa)
+? "graficoActivo"
+: ""
 }">
 
 <div class="tituloGrafico">
@@ -3206,7 +7758,7 @@ return `
 
 panel.innerHTML=html;
 
-Object.keys(etapas).forEach(etapa=>{
+etapasAMostrar.forEach(etapa=>{
 
     const e=etapas[etapa];
 
@@ -3300,48 +7852,7 @@ offset(context){
     easing:"easeOutQuart"
 
 },
-onClick(event,elements){
-
-    const chart = event.chart;
-
-    const meta = chart.getDatasetMeta(0);
-
-    if(!meta.data.length) return;
-
-    const centroX = meta.data[0].x;
-    const centroY = meta.data[0].y;
-
-    const dx = event.x - centroX;
-    const dy = event.y - centroY;
-
-    const distancia = Math.sqrt(dx*dx + dy*dy);
-
-    // Radio aproximado del agujero central
-    if(distancia < 45){
-
-        filtrarPorEtapa(etapa);
-
-        return;
-
-    }
-
-    if(!elements.length) return;
-
-    const indice = elements[0].index;
-
-    const estados=[
-
-        "LIBRE",
-
-        "RESERVADO",
-
-        "VENDIDO"
-
-    ];
-
-    filtrarPorEstadoDesdeGrafico(estados[indice]);
-
-},
+onClick(){},
 
         plugins:{
 
@@ -3387,42 +7898,168 @@ function filtrarPorEtapa(etapa){
     filtrarLotes();
 
 }
-function actualizarFiltrosActivos(){
 
-    const barra = document.getElementById("barraFiltrosActivos");
+function actualizarBotonesFiltro(){
 
-    let html = "";
+    const botones = [
 
-    if(etapaSeleccionada){
+        "filtroTodos",
 
-        html += `
-        <div class="filtroActivo">
-            📍 ${etapaSeleccionada}
-            <button onclick="
-    etapaSeleccionada='';
+        "filtroLibres",
 
-    filtroActual='TODOS';
+        "filtroReservados",
 
-    document.getElementById('buscarLote').value='';
+        "filtroVendidos"
+
+    ];
+
+    botones.forEach(id=>{
+
+        document
+        .getElementById(id)
+        .classList.remove("activo");
+
+    });
+
+    if(filtroActual === "TODOS"){
+
+        document
+        .getElementById("filtroTodos")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual === "LIBRE"){
+
+        document
+        .getElementById("filtroLibres")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual === "RESERVADO"){
+
+        document
+        .getElementById("filtroReservados")
+        .classList.add("activo");
+
+    }
+
+    if(filtroActual === "VENDIDO"){
+
+        document
+        .getElementById("filtroVendidos")
+        .classList.add("activo");
+
+    }
+
+    const botonEtapas =
+        document.getElementById("btnEtapas");
+
+    if(mostrarPanelEtapas){
+
+        botonEtapas.classList.add("activo");
+
+    }else{
+
+        botonEtapas.classList.remove("activo");
+
+    }
+
+}
+
+function construirPanelEtapas(){
+
+    const panel = document.getElementById("panelEtapas");
+
+    panel.innerHTML = "";
+
+    const etapas = [...new Set(
+
+    todosLosLotes.map(lote=>lote.Etapa)
+
+)].sort((a,b)=>{
+
+    return parseInt(a.replace(/\D/g,"")) - parseInt(b.replace(/\D/g,""));
+
+});
+
+    etapas.forEach(etapa=>{
+
+        const chip = document.createElement("div");
+
+chip.className = "chipEtapa";
+
+actualizarChip();
+
+chip.onclick = ()=>{
+
+    const indice =
+        etapasSeleccionadas.indexOf(etapa);
+
+    if(indice >= 0){
+
+        etapasSeleccionadas.splice(indice,1);
+
+    }else{
+
+        etapasSeleccionadas.push(etapa);
+
+    }
+
+    etapasSeleccionadas.sort((a,b)=>{
+
+        const numeroA =
+            parseInt(a.replace(/\D/g,"")) || 0;
+
+        const numeroB =
+            parseInt(b.replace(/\D/g,"")) || 0;
+
+        return numeroA - numeroB;
+
+    });
+
+    construirPanelEtapas();
 
     filtrarLotes();
 
-    renderizarGraficosPorEtapa(todosLosLotes);
+};
 
-    actualizarBotonesFiltro();
-">✕</button>
-        </div>`;
+function actualizarChip(){
+
+    if(etapasSeleccionadas.includes(etapa)){
+
+        chip.className = "chipEtapa chipActivo";
+
+        chip.innerHTML = `
+            📍 ${etapa}
+            <span class="chipCerrar">✕</span>
+        `;
+
+    }else{
+
+        chip.className = "chipEtapa";
+
+        chip.innerHTML = `
+            📍 ${etapa}
+        `;
+
     }
 
-    barra.innerHTML = html;
+}
 
-    barra.style.display =
-        html === ""
-        ? "none"
-        : "flex";
+actualizarChip();
+
+panel.appendChild(chip);
+
+    });
 
 }
+
 async function cargarLotes(){
+activarMenu(
+    "btnLotes"
+);
 
     try{
 
@@ -3590,13 +8227,15 @@ estadoActual:estadoOriginal,
 estadoSolicitado:estado
 }
 );
-const respuestaSolicitudes =
-await fetch(
-API_URL + "?action=solicitudesPendientes"
-);
+const pendientes =
+    await apiGet(
+        "?action=solicitudesPendientes"
+    );
 
 solicitudesPendientes =
-await respuestaSolicitudes.json();
+    Array.isArray(pendientes)
+    ? pendientes
+    : [];
 
 if(resultado.ok){
 
@@ -3916,19 +8555,17 @@ document
 .getElementById("btnLotes")
 .addEventListener(
 "click",
-async ()=>{
+()=>{
 
-    activarMenu("btnLotes");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnLotes",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="block";
+        "contenedorLotesPrincipal",
 
-    document
-    .getElementById("contenedorLotesPrincipal")
-    .style.display="grid";
+        "grid"
+
+    );
 
     sincronizarPanel();
 
@@ -3939,21 +8576,701 @@ document
 "click",
 async ()=>{
 
-    activarMenu("btnAuditoria");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnAuditoria",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorAuditoria"
 
-    document
-    .getElementById("contenedorAuditoria")
-    .style.display="block";
+    );
 
-    cargarAuditoria();
+    await cargarAuditoria();
 
 });
+function obtenerUltimosRegistrosPorLote(
+    registros
+){
+
+    const ordenados =
+        [...registros]
+        .sort((a,b)=>{
+
+            return (
+                new Date(b.Fecha) -
+                new Date(a.Fecha)
+            );
+
+        });
+
+
+    const mapaLotes =
+        new Map();
+
+
+    ordenados.forEach(item=>{
+
+        const etapa =
+            String(
+                item.Etapa || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        const lote =
+            String(
+                item.Lote || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        const clave =
+            etapa + "|" + lote;
+
+
+        if(
+            lote !== "" &&
+            !mapaLotes.has(clave)
+        ){
+
+            mapaLotes.set(
+                clave,
+                item
+            );
+
+        }
+
+    });
+
+
+    return Array.from(
+        mapaLotes.values()
+    );
+
+}
+function renderizarGraficoAuditoria(
+    nombre,
+    reservados,
+    vendidos
+){
+
+    const contenedor =
+        document.getElementById(
+            "graficoAuditoriaPersona"
+        );
+
+
+    if(!contenedor){
+
+        return;
+
+    }
+
+
+    /*
+    DESTRUIR EL GRÁFICO ANTERIOR
+    */
+
+    if(
+        window.chartAuditoria
+    ){
+
+        window
+        .chartAuditoria
+        .destroy();
+
+        window.chartAuditoria =
+            null;
+
+    }
+
+
+    const total =
+        reservados +
+        vendidos;
+
+
+    const porcentajeReservados =
+        total
+        ? (
+            reservados *
+            100 /
+            total
+        ).toFixed(1)
+        : "0.0";
+
+
+    const porcentajeVendidos =
+        total
+        ? (
+            vendidos *
+            100 /
+            total
+        ).toFixed(1)
+        : "0.0";
+
+
+    contenedor.style.display =
+        "block";
+
+
+    contenedor.innerHTML = `
+
+        <div class="cardGrafico">
+
+            <div class="tituloGrafico">
+
+                <h3>
+                    ${nombre}
+                </h3>
+
+            </div>
+
+
+            <div style="
+                width:175px;
+                height:175px;
+                margin:12px auto;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+            ">
+
+                <canvas
+                    id="canvasAuditoriaPersona">
+                </canvas>
+
+            </div>
+
+
+            <div class="infoGrafico">
+
+                <div class="filaInfoGrafico">
+
+                    <span>
+                        🟡 Reservados
+                    </span>
+
+                    <b>
+                        ${reservados}
+                        (${porcentajeReservados}%)
+                    </b>
+
+                </div>
+
+
+                <div class="filaInfoGrafico">
+
+                    <span>
+                        🔴 Vendidos
+                    </span>
+
+                    <b>
+                        ${vendidos}
+                        (${porcentajeVendidos}%)
+                    </b>
+
+                </div>
+
+            </div>
+
+
+            <div class="totalGrafico">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ${total} lotes
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    const canvas =
+        document.getElementById(
+            "canvasAuditoriaPersona"
+        );
+
+
+    const pluginCentroAuditoria = {
+
+        id:
+            "textoCentroAuditoria",
+
+        afterDraw(chart){
+
+            const meta =
+                chart
+                .getDatasetMeta(0);
+
+
+            if(
+                !meta.data.length
+            ){
+
+                return;
+
+            }
+
+
+            const ctx =
+                chart.ctx;
+
+
+            const x =
+                meta.data[0].x;
+
+
+            const y =
+                meta.data[0].y;
+
+
+            ctx.save();
+
+
+            ctx.textAlign =
+                "center";
+
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillStyle =
+                "#0F172A";
+
+
+            ctx.font =
+                "bold 28px Segoe UI";
+
+
+            ctx.fillText(
+                total,
+                x,
+                y - 8
+            );
+
+
+            ctx.fillStyle =
+                "#64748B";
+
+
+            ctx.font =
+                "12px Segoe UI";
+
+
+            ctx.fillText(
+                "LOTES",
+                x,
+                y + 16
+            );
+
+
+            ctx.restore();
+
+        }
+
+    };
+
+
+    window.chartAuditoria =
+        new Chart(
+            canvas,
+            {
+
+                type:
+                    "doughnut",
+
+
+                plugins:[
+                    pluginCentroAuditoria
+                ],
+
+
+                data:{
+
+                    labels:[
+
+                        "Reservados",
+
+                        "Vendidos"
+
+                    ],
+
+
+                    datasets:[{
+
+                        data:[
+
+                            reservados,
+
+                            vendidos
+
+                        ],
+
+
+                        backgroundColor:[
+
+                            "#FACC15",
+
+                            "#EF4444"
+
+                        ],
+
+
+                        borderColor:
+                            "#FFFFFF",
+
+
+                        borderWidth:
+                            3
+
+                    }]
+
+                },
+
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    cutout:"58%",
+
+
+                    animation:{
+
+                        animateRotate:true,
+
+                        animateScale:true,
+
+                        duration:800,
+
+                        easing:"easeOutQuart"
+
+                    },
+
+
+                    plugins:{
+
+                        legend:{
+
+                            display:false
+
+                        },
+
+
+                        tooltip:{
+
+                            enabled:false
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+function renderizarGraficoGeneralAuditoria(
+    registros
+){
+
+    const contenedor =
+        document.getElementById(
+            "graficoAuditoriaPersona"
+        );
+
+
+    if(!contenedor){
+
+        return;
+
+    }
+
+
+    /*
+    DESTRUIR GRÁFICO ANTERIOR
+    */
+
+    if(
+        window.chartAuditoria
+    ){
+
+        window.chartAuditoria.destroy();
+
+        window.chartAuditoria = null;
+
+    }
+
+
+    /*
+    TOMAR SOLO EL ÚLTIMO REGISTRO
+    DE CADA LOTE
+    */
+
+    const registrosActuales =
+        obtenerUltimosRegistrosPorLote(
+            registros
+        );
+
+
+    /*
+    AGRUPAR POR COLABORADOR
+    */
+
+    const colaboradores = {};
+
+
+    registrosActuales.forEach(item=>{
+
+        const nombre =
+            String(
+                item.Nombre ||
+                item.Usuario ||
+                "Sin nombre"
+            )
+            .trim();
+
+
+        if(!colaboradores[nombre]){
+
+            colaboradores[nombre] = {
+
+                reservados:0,
+
+                vendidos:0
+
+            };
+
+        }
+
+
+        const estado =
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+        if(
+            estado === "RESERVADO"
+        ){
+
+            colaboradores[nombre]
+            .reservados++;
+
+        }
+
+
+        if(
+            estado === "VENDIDO"
+        ){
+
+            colaboradores[nombre]
+            .vendidos++;
+
+        }
+
+    });
+
+
+    /*
+    ORDENAR POR MAYOR TOTAL
+    */
+
+    const nombres =
+        Object.keys(
+            colaboradores
+        )
+        .sort((a,b)=>{
+
+            const totalA =
+                colaboradores[a].reservados +
+                colaboradores[a].vendidos;
+
+
+            const totalB =
+                colaboradores[b].reservados +
+                colaboradores[b].vendidos;
+
+
+            return totalB - totalA;
+
+        });
+
+
+    let html = `
+
+        <div class="cardGrafico">
+
+            <div class="tituloGrafico">
+
+                <h3>
+                    RESUMEN POR COLABORADOR
+                </h3>
+
+            </div>
+
+    `;
+
+
+    nombres.forEach(nombre=>{
+
+        const reservados =
+            colaboradores[nombre]
+            .reservados;
+
+
+        const vendidos =
+            colaboradores[nombre]
+            .vendidos;
+
+
+        const total =
+            reservados +
+            vendidos;
+
+
+        const maximo =
+            Math.max(
+                reservados,
+                vendidos,
+                1
+            );
+
+
+        const anchoReservado =
+            (
+                reservados /
+                maximo
+            ) * 100;
+
+
+        const anchoVendido =
+            (
+                vendidos /
+                maximo
+            ) * 100;
+
+
+        html += `
+
+        <div class="resumenColaborador">
+
+
+            <div class="cabeceraColaborador">
+
+                <strong class="nombreColaborador">
+
+                    ${nombre}
+
+                </strong>
+
+
+                <span class="totalColaborador">
+
+                    Total ${total}
+
+                </span>
+
+            </div>
+
+
+            <div class="filaBarraColaborador">
+
+                <span class="iconoEstadoBarra">
+
+                    🟡
+
+                </span>
+
+
+                <div class="fondoBarra">
+
+                    <div
+                    class="barraReservado"
+                    style="
+                        width:${anchoReservado}%;
+                    ">
+                    </div>
+
+                </div>
+
+
+                <span class="valorBarra">
+
+                    ${reservados}
+
+                </span>
+
+            </div>
+
+
+            <div class="filaBarraColaborador">
+
+                <span class="iconoEstadoBarra">
+
+                    🔴
+
+                </span>
+
+
+                <div class="fondoBarra">
+
+                    <div
+                    class="barraVendido"
+                    style="
+                        width:${anchoVendido}%;
+                    ">
+                    </div>
+
+                </div>
+
+
+                <span class="valorBarra">
+
+                    ${vendidos}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+        `;
+
+    });
+
+
+    html += `
+
+        </div>
+
+    `;
+
+
+    contenedor.style.display =
+        "block";
+
+
+    contenedor.innerHTML =
+        html;
+
+}
 async function cargarAuditoria(){
 
 const rol =
@@ -3972,10 +9289,84 @@ document
 .style.display =
 "block";
 
-const datos =
-await apiGet(
-"?action=auditoria"
-);
+const [
+    datos,
+    colaboradores
+] =
+await Promise.all([
+
+    apiGet(
+        "?action=auditoria"
+    ),
+
+    apiPost(
+        "listarAsesores"
+    )
+
+]);
+
+
+/*
+=========================================
+RELACIONAR USUARIO CON NOMBRE
+=========================================
+*/
+
+const mapaNombres = {};
+
+if(
+    Array.isArray(colaboradores)
+){
+
+    colaboradores.forEach(persona=>{
+
+        const usuario =
+            String(
+                persona.usuario || ""
+            )
+            .trim()
+            .toUpperCase();
+
+        if(usuario !== ""){
+
+            mapaNombres[usuario] =
+                String(
+                    persona.nombre ||
+                    persona.usuario ||
+                    ""
+                )
+                .trim();
+
+        }
+
+    });
+
+}
+
+
+/*
+Agregar Nombre a cada registro
+de auditoría.
+*/
+
+datos.forEach(item=>{
+
+    const usuario =
+        String(
+            item.Usuario || ""
+        )
+        .trim();
+
+    item.Nombre =
+        mapaNombres[
+            usuario.toUpperCase()
+        ]
+        ||
+        usuario;
+
+});
+
+
 datos.sort((a,b)=>{
 
     return new Date(b.Fecha)
@@ -3984,15 +9375,42 @@ datos.sort((a,b)=>{
 
 });
 
+const registrosProyectoActual =
+    obtenerUltimosRegistrosPorLote(
+        datos
+    );
+
+
+const totalProyecto =
+    registrosProyectoActual.length;
+
+
 const reservados =
-datos.filter(
-x => x.Despues === "RESERVADO"
-).length;
+    registrosProyectoActual.filter(
+        item =>
+
+        String(
+            item.Despues || ""
+        )
+        .trim()
+        .toUpperCase()
+        === "RESERVADO"
+
+    ).length;
+
 
 const vendidos =
-datos.filter(
-x => x.Despues === "VENDIDO"
-).length;
+    registrosProyectoActual.filter(
+        item =>
+
+        String(
+            item.Despues || ""
+        )
+        .trim()
+        .toUpperCase()
+        === "VENDIDO"
+
+    ).length;
     let html = `
 
 <div class="tituloModulo">
@@ -4007,7 +9425,7 @@ x => x.Despues === "VENDIDO"
 
     <input
         id="buscarAuditoria"
-        placeholder="🔍 Buscar usuario..."
+        placeholder="🔍 Buscar nombre..."
         style="
         width:350px;
         padding:12px;
@@ -4025,7 +9443,7 @@ x => x.Despues === "VENDIDO"
     ">
 
         <div class="cardDashboard">
-            <h3 id="totalCambios">${datos.length}</h3>
+            <h3 id="totalCambios">${totalProyecto}</h3>
             <p>Total Cambios</p>
         </div>
 
@@ -4041,6 +9459,10 @@ x => x.Despues === "VENDIDO"
 
     </div>
 
+<div id="auditoriaContenidoPrincipal">
+
+<div id="auditoriaTablaPrincipal">
+
 <div class="contenedorTablaScroll">
 
 <table class="tabla">
@@ -4050,7 +9472,7 @@ x => x.Despues === "VENDIDO"
 <tr>
 
 <th>Fecha</th>
-<th>Usuario</th>
+<th>Nombre</th>
 <th>Etapa</th>
 <th>Lote</th>
 <th>Antes</th>
@@ -4071,7 +9493,7 @@ x => x.Despues === "VENDIDO"
 
         <td>${formatearFecha(item.Fecha)}</td>
 
-        <td>${item.Usuario || ""}</td>
+<td>${item.Nombre || item.Usuario || ""}</td>
 
 <td>${item.Etapa || ""}</td>
 
@@ -4095,6 +9517,13 @@ x => x.Despues === "VENDIDO"
 </div>
 
 </div>
+
+<div id="graficoAuditoriaPersona">
+</div>
+
+</div>
+
+</div>
 `;
 
     document
@@ -4103,74 +9532,355 @@ x => x.Despues === "VENDIDO"
     )
     .innerHTML =
     html;
+renderizarGraficoGeneralAuditoria(
+    datos
+);
 document
 .getElementById(
-"buscarAuditoria"
+    "buscarAuditoria"
 )
 .addEventListener(
 "input",
 function(){
-let total = 0;
 
-let reservados = 0;
+    const texto =
+        this.value
+        .trim()
+        .toUpperCase();
 
-let vendidos = 0;
-const texto =
-this.value.toUpperCase();
 
-const filas =
-document.querySelectorAll(
-"#contenedorAuditoria table tr"
-);
+    /*
+    =========================================
+    FILTRAR HISTORIAL POR NOMBRE
+    =========================================
+    */
 
-filas.forEach((fila,i)=>{
+    const filas =
+        document.querySelectorAll(
+            "#contenedorAuditoria table tbody tr"
+        );
 
-if(i===0)return;
 
-const usuario =
-fila.children[1]
-.textContent
-.toUpperCase();
+    filas.forEach(fila=>{
 
-if(usuario.includes(texto)){
+        const nombre =
+            fila.children[1]
+            .textContent
+            .trim()
+            .toUpperCase();
 
-    fila.style.display = "";
 
-    total++;
+        fila.style.display =
+            nombre.includes(texto)
+            ? ""
+            : "none";
 
-    const despues =
-    fila.children[5]
-    .textContent
-    .trim();
+    });
 
-    if(despues === "RESERVADO"){
-        reservados++;
-    }
 
-    if(despues === "VENDIDO"){
-        vendidos++;
-    }
+    /*
+    =========================================
+    OBTENER REGISTROS DEL COLABORADOR
+    =========================================
+    */
+
+    const registrosPersona =
+        datos.filter(item=>{
+
+            const nombre =
+                String(
+                    item.Nombre ||
+                    item.Usuario ||
+                    ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            return nombre.includes(texto);
+
+        });
+
+
+    /*
+    =========================================
+    ORDENAR MÁS RECIENTES PRIMERO
+    =========================================
+    */
+
+    registrosPersona.sort((a,b)=>{
+
+        return (
+            new Date(b.Fecha) -
+            new Date(a.Fecha)
+        );
+
+    });
+
+
+    /*
+    =========================================
+    CONSERVAR SOLO EL ÚLTIMO REGISTRO
+    DE CADA LOTE
+    =========================================
+    */
+
+    const lotesUnicos =
+        new Map();
+
+
+    registrosPersona.forEach(item=>{
+
+        const clave =
+            String(item.Etapa || "")
+            .trim()
+            .toUpperCase()
+            +
+            "|" +
+            String(item.Lote || "")
+            .trim()
+            .toUpperCase();
+
+
+        /*
+        Como están ordenados desde el más
+        reciente al más antiguo, guardamos
+        solamente la primera aparición.
+        */
+
+        if(
+            !lotesUnicos.has(clave)
+        ){
+
+            lotesUnicos.set(
+                clave,
+                item
+            );
+
+        }
+
+    });
+
+
+    const registrosActuales =
+        Array.from(
+            lotesUnicos.values()
+        );
+
+
+    /*
+    =========================================
+    CALCULAR ESTADÍSTICAS REALES
+    =========================================
+    */
+
+    const total =
+        registrosActuales.length;
+
+
+    const reservadosPersona =
+        registrosActuales.filter(item=>
+
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase()
+            === "RESERVADO"
+
+        ).length;
+
+
+    const vendidosPersona =
+        registrosActuales.filter(item=>
+
+            String(
+                item.Despues || ""
+            )
+            .trim()
+            .toUpperCase()
+            === "VENDIDO"
+
+        ).length;
+
+
+    /*
+    =========================================
+    ACTUALIZAR TARJETAS
+    =========================================
+    */
+
+    document
+    .getElementById(
+        "totalCambios"
+    )
+    .textContent =
+        total;
+
+
+    document
+    .getElementById(
+        "totalReservados"
+    )
+    .textContent =
+    reservadosPersona;
+
+
+    document
+    .getElementById(
+        "totalVendidos"
+    )
+    .textContent =
+    vendidosPersona;
+
+
+    /*
+    =========================================
+    MOSTRAR / OCULTAR TORTA
+    =========================================
+    */
+
+    if(
+    texto === ""
+){
+
+    /*
+    RESTAURAR TODA LA TABLA
+    */
+
+    filas.forEach(fila=>{
+
+        fila.style.display =
+            "";
+
+    });
+
+
+    /*
+    RESTAURAR ESTADÍSTICAS
+    DEL PROYECTO COMPLETO
+    */
+
+    document
+    .getElementById(
+        "totalCambios"
+    )
+    .textContent =
+        totalProyecto;
+
+
+    document
+    .getElementById(
+        "totalReservados"
+    )
+    .textContent =
+        reservados;
+
+
+    document
+    .getElementById(
+        "totalVendidos"
+    )
+    .textContent =
+        vendidos;
+
+
+    /*
+    VOLVER AL GRÁFICO GENERAL
+    */
+
+    renderizarGraficoGeneralAuditoria(
+        datos
+    );
+
+
+    return;
 
 }
-else{
 
-    fila.style.display = "none";
 
-}
+        /*
+    =========================================
+    NO MOSTRAR GRÁFICO SI NO HAY RESULTADOS
+    =========================================
+    */
 
-});
+    if(
+        registrosPersona.length === 0
+    ){
 
-document.getElementById(
-"totalCambios"
-).textContent = total;
+        const contenedorGrafico =
+            document.getElementById(
+                "graficoAuditoriaPersona"
+            );
 
-document.getElementById(
-"totalReservados"
-).textContent = reservados;
 
-document.getElementById(
-"totalVendidos"
-).textContent = vendidos;
+        if(
+            window.chartAuditoria
+        ){
+
+            window
+            .chartAuditoria
+            .destroy();
+
+
+            window.chartAuditoria =
+                null;
+
+        }
+
+
+        if(
+            contenedorGrafico
+        ){
+
+            contenedorGrafico
+            .innerHTML =
+                "";
+
+
+            contenedorGrafico
+            .style.display =
+                "none";
+
+        }
+
+
+        return;
+
+    }
+
+
+    /*
+    Obtener el nombre exacto.
+    */
+
+    const primerRegistro =
+        registrosPersona[0];
+
+
+    const nombreEncontrado =
+        String(
+
+            primerRegistro.Nombre ||
+
+            primerRegistro.Usuario ||
+
+            this.value
+
+        )
+        .trim();
+
+
+    renderizarGraficoAuditoria(
+
+        nombreEncontrado,
+
+        reservadosPersona,
+
+        vendidosPersona
+
+    );
 
 });
 localStorage.setItem(
@@ -4185,69 +9895,300 @@ document
 "click",
 async ()=>{
 
-    activarMenu("btnAsesores");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnAsesores",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorAsesores"
 
-    document
-    .getElementById("contenedorAsesores")
-    .style.display="block";
+    );
 
-    cargarAsesores();
+    await cargarAsesores();
 
-}
-);
+});
 document
 .getElementById("btnConsultas")
 .addEventListener(
 "click",
 async ()=>{
 
-    activarMenu("btnConsultas");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnConsultas",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorConsultas"
 
-    document
-    .getElementById("contenedorConsultas")
-    .style.display="block";
+    );
 
-    cargarConsultas();
+    await cargarConsultas();
 
-}
-);
+    await actualizarContadorConsultas();
+
+});
 document
-.getElementById(
-"btnSolicitudes"
-)
+.getElementById("btnSolicitudes")
 .addEventListener(
 "click",
 async ()=>{
 
-    activarMenu("btnSolicitudes");
+    mostrarModulo(
 
-    ocultarTodo();
+        "btnSolicitudes",
 
-    document
-    .getElementById("cabeceraFija")
-    .style.display="none";
+        "contenedorSolicitudes"
 
-    document
-    .getElementById(
-    "contenedorSolicitudes"
-    )
-    .style.display="block";
+    );
 
     await cargarSolicitudes();
 
 });
+
+/* =========================================
+   MÓDULO DE REPORTES EXCEL
+========================================= */
+
+document
+.getElementById("btnReportes")
+.addEventListener(
+"click",
+()=>{
+
+    mostrarModulo(
+        "btnReportes",
+        "contenedorReportes"
+    );
+
+    renderizarModuloReportes();
+
+});
+
+function renderizarModuloReportes(){
+
+    const contenedor =
+        document.getElementById("contenedorReportes");
+
+    if(!contenedor){
+        return;
+    }
+
+    contenedor.innerHTML = `
+        <div class="tituloModulo">
+            <h2>📊 Reportes</h2>
+            <p>Genere archivos Excel con la información actual del panel administrativo.</p>
+        </div>
+
+        <div class="moduloContenido">
+            <div class="gridReportes">
+
+                <div class="cardReporte cardReporteCompleto">
+                    <h3>Reporte completo</h3>
+                    <p>Genera un solo Excel con hojas de Lotes, Auditoría, Colaboradores, Consultas y Solicitudes.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('COMPLETO')">DESCARGAR EXCEL</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Lotes</h3>
+                    <p>Estado, etapa, medidas, área, ubicación y demás datos disponibles de los lotes.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('LOTES')">EXPORTAR LOTES</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Auditoría</h3>
+                    <p>Historial de cambios registrados en el sistema.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('AUDITORIA')">EXPORTAR AUDITORÍA</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Colaboradores</h3>
+                    <p>Listado de administradores y asesores registrados.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('COLABORADORES')">EXPORTAR COLABORADORES</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Consultas</h3>
+                    <p>Consultas recibidas de clientes interesados.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('CONSULTAS')">EXPORTAR CONSULTAS</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Solicitudes</h3>
+                    <p>Solicitudes administrativas registradas por los colaboradores.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('SOLICITUDES')">EXPORTAR SOLICITUDES</button>
+                </div>
+
+            </div>
+        </div>
+    `;
+}
+
+function normalizarDatosExcel(datos){
+
+    if(!Array.isArray(datos)){
+        return [];
+    }
+
+    return datos.map(fila=>{
+
+        const salida = {};
+
+        Object.keys(fila || {}).forEach(clave=>{
+
+            const valor = fila[clave];
+
+            if(
+                valor !== null &&
+                typeof valor === "object"
+            ){
+                salida[clave] = JSON.stringify(valor);
+            }
+            else{
+                salida[clave] = valor ?? "";
+            }
+
+        });
+
+        return salida;
+
+    });
+}
+
+function agregarHojaExcel(libro,nombre,datos){
+
+    const filas = normalizarDatosExcel(datos);
+
+    const hoja = filas.length
+        ? XLSX.utils.json_to_sheet(filas)
+        : XLSX.utils.aoa_to_sheet([["Sin registros"]]);
+
+    XLSX.utils.book_append_sheet(
+        libro,
+        hoja,
+        nombre.substring(0,31)
+    );
+}
+
+async function obtenerDatosReporte(tipo){
+
+    switch(tipo){
+
+        case "LOTES":
+            return await apiGet();
+
+        case "AUDITORIA":
+            return await apiGet("?action=auditoria");
+
+        case "COLABORADORES":
+            return await apiPost("listarAsesores");
+
+        case "CONSULTAS":
+            return await apiGet("?action=consultas");
+
+        case "SOLICITUDES":
+            return await apiGet("?action=solicitudes");
+
+        default:
+            return [];
+    }
+}
+
+function nombreArchivoReporte(tipo){
+
+    const ahora = new Date();
+
+    const fecha = [
+        ahora.getFullYear(),
+        String(ahora.getMonth()+1).padStart(2,"0"),
+        String(ahora.getDate()).padStart(2,"0")
+    ].join("-");
+
+    return `ASSTURIAS_${tipo}_${fecha}.xlsx`;
+}
+
+async function exportarReporteExcel(tipo){
+
+    const rol = String(
+        localStorage.getItem("rol") || ""
+    ).trim().toUpperCase();
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+        mostrarNotificacion(
+            "Acceso restringido",
+            "Solo un administrador puede generar reportes."
+        );
+        return;
+    }
+
+    if(typeof XLSX === "undefined"){
+        mostrarNotificacion(
+            "No se pudo generar el Excel",
+            "La librería de Excel no está disponible. Verifique la conexión a Internet y vuelva a intentar."
+        );
+        return;
+    }
+
+    try{
+
+        const libro = XLSX.utils.book_new();
+
+        if(tipo === "COMPLETO"){
+
+            const [
+                lotes,
+                auditoria,
+                colaboradores,
+                consultas,
+                solicitudes
+            ] = await Promise.all([
+                obtenerDatosReporte("LOTES"),
+                obtenerDatosReporte("AUDITORIA"),
+                obtenerDatosReporte("COLABORADORES"),
+                obtenerDatosReporte("CONSULTAS"),
+                obtenerDatosReporte("SOLICITUDES")
+            ]);
+
+            agregarHojaExcel(libro,"Lotes",lotes);
+            agregarHojaExcel(libro,"Auditoria",auditoria);
+            agregarHojaExcel(libro,"Colaboradores",colaboradores);
+            agregarHojaExcel(libro,"Consultas",consultas);
+            agregarHojaExcel(libro,"Solicitudes",solicitudes);
+
+        }
+        else{
+
+            const datos =
+                await obtenerDatosReporte(tipo);
+
+            agregarHojaExcel(
+                libro,
+                tipo.charAt(0) + tipo.slice(1).toLowerCase(),
+                datos
+            );
+
+        }
+
+        XLSX.writeFile(
+            libro,
+            nombreArchivoReporte(tipo)
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Error generando reporte Excel:",
+            error
+        );
+
+        mostrarNotificacion(
+            "Error al generar reporte",
+            "No se pudo crear el archivo Excel. Revise la consola para más detalles."
+        );
+
+    }
+}
 
 async function cargarAsesores(){
 
@@ -4268,15 +10209,53 @@ document
 
     const asesores =
 await apiPost("listarAsesores");
+asesores.sort((a,b)=>{
+
+    const rolA =
+        String(a.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const rolB =
+        String(b.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const adminA =
+        rolA === "ADMIN" ||
+        rolA === "ADMINISTRADOR";
+
+    const adminB =
+        rolB === "ADMIN" ||
+        rolB === "ADMINISTRADOR";
+
+    if(adminA && !adminB){
+        return -1;
+    }
+
+    if(!adminA && adminB){
+        return 1;
+    }
+
+    return String(a.nombre || "")
+        .localeCompare(
+            String(b.nombre || ""),
+            "es",
+            {
+                sensitivity:"base"
+            }
+        );
+
+});
 
     let html = `
 
 <div class="tituloModulo">
 
-    <h2>👥 Asesores</h2>
+    <h2>👥 Colaboradores</h2>
 
     <p>
-        Administración de usuarios asesores registrados.
+        Administración de asesores y administradores registrados.
     </p>
 
 </div>
@@ -4291,19 +10270,19 @@ id="buscarAsesor"
 
 class="inputModulo"
 
-placeholder="🔍 Buscar asesor...">
+placeholder="🔍 Buscar usuario o nombre...">
 
 <button
 class="btnAzul"
-onclick="abrirModalAsesor()">
-➕ Nuevo Asesor
+onclick="abrirModalColaborador()">
+➕ Nuevo Colaborador
 </button>
 
 </div>
 
 <div class="contenedorTablaScroll">
 
-<table class="tabla">
+<table class="tabla tablaColaboradores">
 
 <thead>
 
@@ -4313,7 +10292,7 @@ onclick="abrirModalAsesor()">
 
 <th>Nombre</th>
 
-<th>Correo</th>
+<th>Rol</th>
 
 <th>Estado</th>
 
@@ -4327,74 +10306,97 @@ onclick="abrirModalAsesor()">
 `;
     asesores.forEach(a=>{
 
-        html += `
+    const esAdministrador =
+        String(a.rol || "")
+        .trim()
+        .toUpperCase() === "ADMIN";
 
-        <tr>
+    html += `
 
-            <td>${a.usuario}</td>
+    <tr>
 
-            <td>${a.nombre}</td>
+        <td>${a.usuario}</td>
 
-            <td>${a.estado}</td>
+        <td>${a.nombre}</td>
 
-            <td style="text-align:center;">
+        <td>
+            <span class="badge ${
+                esAdministrador
+                ? "administrador"
+                : "asesor"
+            }">
+                ${
+                    esAdministrador
+                    ? "ADMINISTRADOR"
+                    : "ASESOR"
+                }
+            </span>
+        </td>
 
-<div class="filaBotones">
+        <td>${a.estado}</td>
 
-    <button
-    class="btnAccionAdmin"
-    onclick="
-    cambiarEstadoAsesor(
-    '${a.usuario}'
-    )">
+        <td>
 
-    ${a.estado==="ACTIVO"
-    ? "Desactivar"
-    : "Activar"}
+            <div class="filaBotones">
 
-    </button>
+                ${
+                    !esAdministrador
+                    ? `
+                    <button
+                    class="btnAccionAdmin"
+                    onclick="
+                    cambiarEstadoAsesor(
+                        '${a.usuario}'
+                    )">
 
-    <button
-    class="btnAccionAdmin"
-    onclick="
-    verPasswordAsesor(
-    '${a.usuario}'
-    )">
+                        ${
+                            a.estado === "ACTIVO"
+                            ? "Desactivar"
+                            : "Activar"
+                        }
 
-    Contraseña
+                    </button>
+                    `
+                    : ""
+                }
 
-    </button>
+                <button
+                class="btnAccionAdmin"
+                onclick="
+                cambiarPasswordAsesor(
+                    '${a.usuario}'
+                )">
 
-    <button
-    class="btnAccionAdmin"
-    onclick="
-    cambiarPasswordAsesor(
-    '${a.usuario}'
-    )">
+                    Cambiar clave
 
-    Cambiar Clave
+                </button>
 
-    </button>
+                ${
+                    !esAdministrador
+                    ? `
+                    <button
+                    class="btnAccionAdmin btnEliminar"
+                    onclick="
+                    eliminarAsesor(
+                        '${a.usuario}'
+                    )">
 
-<button
-class="btnAccionAdmin btnEliminar"
-onclick="
-eliminarAsesor(
-'${a.usuario}'
-)">
+                        Eliminar
 
-Eliminar
+                    </button>
+                    `
+                    : ""
+                }
 
-</button>
-</div>
+            </div>
 
-</td>
+        </td>
 
-        </tr>
+    </tr>
 
-        `;
+    `;
 
-    });
+});
 
     html += `
 </tbody>
@@ -4410,35 +10412,46 @@ Eliminar
     .innerHTML = html;
 document
 .getElementById(
-"buscarAsesor"
+    "buscarAsesor"
 )
 .addEventListener(
 "input",
 function(){
 
-const texto =
-this.value.toUpperCase();
+    const texto =
+        this.value
+        .trim()
+        .toUpperCase();
 
-const filas =
-document.querySelectorAll(
-"#contenedorAsesores table tr"
-);
+    const filas =
+        document.querySelectorAll(
+            "#contenedorAsesores table tbody tr"
+        );
 
-filas.forEach((fila,i)=>{
+    filas.forEach(fila=>{
 
-if(i===0)return;
+        const usuario =
+            fila.children[0]
+            .textContent
+            .trim()
+            .toUpperCase();
 
-const nombre =
-fila.children[1]
-.textContent
-.toUpperCase();
+        const nombre =
+            fila.children[1]
+            .textContent
+            .trim()
+            .toUpperCase();
 
-fila.style.display =
-nombre.includes(texto)
-? ""
-: "none";
+        const coincide =
+            usuario.includes(texto) ||
+            nombre.includes(texto);
 
-});
+        fila.style.display =
+            coincide
+            ? ""
+            : "none";
+
+    });
 
 });
 }
@@ -4671,255 +10684,831 @@ function activarMenu(id){
 }
 function ocultarTodo(){
 
-document.getElementById("contenedorLotesPrincipal").style.display="none";
+    const modulos = [
 
-document.getElementById("contenedorAuditoria").style.display="none";
+        "contenedorLotesPrincipal",
 
-document.getElementById("contenedorAsesores").style.display="none";
+        "contenedorAuditoria",
 
-document.getElementById("contenedorConsultas").style.display="none";
+        "contenedorAsesores",
 
-document.getElementById("contenedorSolicitudes").style.display="none";
+        "contenedorConsultas",
+
+        "contenedorSolicitudes",
+
+        "contenedorReportes"
+
+    ];
+
+    modulos.forEach(id=>{
+
+        const modulo =
+            document.getElementById(id);
+
+        if(modulo){
+
+            modulo.style.display = "none";
+
+        }
+
+    });
+
+}
+function mostrarModulo(
+    botonId,
+    contenedorId,
+    tipoDisplay = "block"
+){
+
+    activarMenu(
+        botonId
+    );
+
+    ocultarTodo();
+
+    const cabecera =
+        document.getElementById(
+            "cabeceraFija"
+        );
+
+    if(cabecera){
+
+        cabecera.style.display =
+            botonId === "btnLotes"
+            ? "block"
+            : "none";
+
+    }
+
+    const contenedor =
+        document.getElementById(
+            contenedorId
+        );
+
+    if(contenedor){
+
+        contenedor.style.display =
+            tipoDisplay;
+
+    }
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"auto"
+
+    });
+
+}
+let consultasActuales = [];
+
+
+/*
+=========================================
+CONSULTAS LEÍDAS
+=========================================
+*/
+
+const CLAVE_CONSULTAS_LEIDAS =
+    "consultasLeidas";
+
+
+function obtenerClaveConsulta(
+    consulta
+){
+
+    return [
+
+        consulta.Fecha || "",
+
+        consulta.Email || "",
+
+        consulta.Telefono || "",
+
+        consulta.Etapa || "",
+
+        consulta.Lote || ""
+
+    ]
+    .map(valor=>
+
+        String(valor)
+        .trim()
+        .toUpperCase()
+
+    )
+    .join("|");
+
+}
+
+
+function obtenerConsultasLeidas(){
+
+    try{
+
+        const guardadas =
+            JSON.parse(
+                localStorage.getItem(
+                    CLAVE_CONSULTAS_LEIDAS
+                )
+                ||
+                "[]"
+            );
+
+
+        return Array.isArray(guardadas)
+            ? guardadas
+            : [];
+
+    }
+    catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function consultaEstaLeida(
+    consulta
+){
+
+    const clave =
+        obtenerClaveConsulta(
+            consulta
+        );
+
+
+    return obtenerConsultasLeidas()
+        .includes(
+            clave
+        );
+
+}
+
+
+function marcarConsultaLeida(
+    consulta
+){
+
+    const clave =
+        obtenerClaveConsulta(
+            consulta
+        );
+
+
+    const consultasLeidas =
+        obtenerConsultasLeidas();
+
+
+    if(
+        !consultasLeidas.includes(
+            clave
+        )
+    ){
+
+        consultasLeidas.push(
+            clave
+        );
+
+
+        localStorage.setItem(
+
+            CLAVE_CONSULTAS_LEIDAS,
+
+            JSON.stringify(
+                consultasLeidas
+            )
+
+        );
+
+    }
+
+}
+
+async function actualizarContadorConsultas(){
+
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    const contador =
+        document.getElementById(
+            "contadorConsultas"
+        );
+
+
+    if(!contador){
+
+        return;
+
+    }
+
+
+    /*
+    SOLO EL ADMINISTRADOR
+    PUEDE VER CONSULTAS
+    */
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+
+        contador.textContent = "";
+
+        return;
+
+    }
+
+
+    try{
+
+        const respuesta =
+            await apiGet(
+                "?action=consultas"
+            );
+
+
+        const consultas =
+            Array.isArray(respuesta)
+            ? respuesta
+            : [];
+
+
+        const cantidadNoLeidas =
+            consultas.filter(consulta=>
+
+                !consultaEstaLeida(
+                    consulta
+                )
+
+            ).length;
+
+
+        contador.textContent =
+            cantidadNoLeidas > 0
+            ? "(" + cantidadNoLeidas + ")"
+            : "";
+
+    }
+    catch(error){
+
+        console.log(
+            "No se pudo actualizar el contador de consultas:",
+            error
+        );
+
+    }
 
 }
 async function cargarConsultas(){
 
     const rol =
-    localStorage.getItem(
-    "rol"
-    );
+        localStorage.getItem(
+            "rol"
+        );
 
-    if(rol !== "ADMIN"){
+
+    if(
+        rol !== "ADMIN"
+    ){
+
         return;
+
     }
+
 
     ocultarTodo();
 
-document
-.getElementById(
-"contenedorConsultas"
-)
-.style.display =
-"block";
+
+    document
+    .getElementById(
+        "contenedorConsultas"
+    )
+    .style.display =
+        "block";
+
 
     let datos;
 
-const ahora = Date.now();
 
-if(
+    const ahora =
+        Date.now();
 
-consultasCache.length > 0 &&
 
-(ahora - cache.consultas) < TIEMPO_CACHE
+    if(
 
-){
+        consultasCache.length > 0 &&
 
-    datos = consultasCache;
+        (
+            ahora -
+            cache.consultas
+        ) < TIEMPO_CACHE
 
-}
-else{
+    ){
 
-    datos = await apiGet(
-    "?action=consultas"
-    );
+        datos =
+            consultasCache;
 
-    consultasCache = datos;
+    }
+    else{
 
-    cache.consultas = ahora;
+        datos =
+            await apiGet(
+                "?action=consultas"
+            );
 
-}
 
-    // Más recientes primero
+        consultasCache =
+            Array.isArray(datos)
+            ? datos
+            : [];
+
+
+        datos =
+            consultasCache;
+
+
+        cache.consultas =
+            ahora;
+
+    }
+
+
+    /*
+    MÁS RECIENTES PRIMERO
+    */
+
     datos.sort((a,b)=>{
 
-        return new Date(b.Fecha)
-        -
-        new Date(a.Fecha);
+        return (
+            new Date(b.Fecha) -
+            new Date(a.Fecha)
+        );
 
     });
 
+consultasActuales = datos;
     let html = `
 
-<div class="tituloModulo">
+    <div class="tituloModulo">
 
-    <h2>📞 Consultas</h2>
+        <h2>
+            📞 Consultas
+        </h2>
 
-    <p>
-        Historial de consultas realizadas por los clientes interesados.
-    </p>
+        <p>
+            Historial de consultas realizadas por los clientes interesados.
+        </p>
 
-</div>
-
-<div class="moduloContenido">
-
-<h3 style="
-margin-top:0;
-margin-bottom:18px;
-font-size:20px;
-color:#0F172A;
-">
-
-🔔 Últimas Consultas
-
-</h3>
-
-`;
-
-    datos
-.slice(0,5)
-.forEach(c=>{
-
-html += `
-
-<div style="
-padding:15px 0;
-border-bottom:1px solid #eee;
-">
-
-    <div>
-    <b>Nombre:</b>
-    ${c.Nombre || ""}
-</div>
-
-<div>
-    <b>Etapa:</b>
-    ${c.Etapa || ""}
-</div>
-
-<div>
-    <b>Lote:</b>
-    ${c.Lote || ""}
-</div>
-
-<div>
-    <b>Teléfono:</b>
-    ${c.Telefono || ""}
-</div>
-
-    <div>
-        <b>Mensaje:</b>
-        ${c.Mensaje || ""}
     </div>
 
-    <div style="
-    color:#666;
-    margin-top:5px;
-    ">
-        ${formatearFecha(c.Fecha)}
-    </div>
 
-</div>
+        <div class="moduloContenido">
 
-`;
+        <div id="vistaListaConsultas">
 
-});
+            <div class="bandejaConsultas">
 
-        
+                <div class="encabezadoConsultas">
 
-    html += `
+                    <div>
+                        De
+                    </div>
 
-</div>
+                    <div>
+                        Asunto
+                    </div>
 
-<div class="contenedorTablaScroll">
+                    <div style="text-align:center;">
+                        Recibido
+                    </div>
 
-<table class="tabla">
-
-<thead>
-
-<tr>
-
-<th>Fecha</th>
-
-<th>Etapa</th>
-
-<th>Lote</th>
-
-<th>Estado</th>
-
-<th>Nombre</th>
-
-<th>Email</th>
-
-<th>Teléfono</th>
-
-<th>Mensaje</th>
-
-</tr>
-
-</thead>
-
-<tbody>
+                </div>
 
     `;
 
-    datos.forEach(c=>{
+
+    datos.forEach((c,index)=>{
+
+
+        const nombreCompleto =
+    String(
+        c.Nombre || ""
+    )
+    .trim();
+
+
+const partesNombre =
+    nombreCompleto
+    .split(/\s+/)
+    .filter(Boolean);
+
+
+const nombreCorto =
+    partesNombre.length >= 2
+    ? partesNombre[0] + " " + partesNombre[1]
+    : nombreCompleto;
+
+
+        const etapa =
+            String(
+                c.Etapa || ""
+            )
+            .trim();
+
+
+        const lote =
+            String(
+                c.Lote || ""
+            )
+            .trim();
+
+
+        const asunto =
+            "Solicito cotización de Etapa: " +
+            etapa +
+            ", Lote: " +
+            lote;
+const estaLeida =
+    consultaEstaLeida(
+        c
+    );
+
 
         html += `
 
-        <tr>
+        <div
+id="filaConsulta_${index}"
+class="filaConsulta ${
+    estaLeida
+    ? "leida"
+    : "noLeida"
+}"
+onclick="abrirDetalleConsulta(${index})"
+>
 
-            <td>${formatearFecha(c.Fecha)}</td>
+            <div class="consultaNombre">
 
-<td>${c.Etapa || ""}</td>
+    ${nombreCorto}
 
-<td>${c.Lote || ""}</td>
-            <td>${c.Estado || ""}</td>
-            <td>${c.Nombre || ""}</td>
-            <td>${c.Email || ""}</td>
-            <td>${c.Telefono || ""}</td>
-            <td>${c.Mensaje || ""}</td>
+</div>
 
-        </tr>
+
+            <div class="consultaAsunto">
+
+                ${asunto}
+
+            </div>
+
+
+            <div class="consultaFecha">
+
+                ${formatearFecha(c.Fecha)}
+
+            </div>
+
+        </div>
+
 
         `;
 
     });
 
-    html += `
 
-</tbody>
+        html += `
 
-</table>
+            </div>
 
-</div>
+        </div>
 
-</div>
 
-`;
+        <div
+            id="vistaDetalleConsulta"
+            style="display:none;">
+        </div>
+
+
+    </div>
+
+    `;
+
 
     document
-.getElementById(
-"contenedorConsultas"
-)
-.innerHTML =
-html;
+    .getElementById(
+        "contenedorConsultas"
+    )
+    .innerHTML =
+        html;
 
-localStorage.setItem(
-"consultasVistas",
-Date.now()
+
+    localStorage.setItem(
+        "consultasVistas",
+        Date.now()
+    );
+
+}
+function abrirDetalleConsulta(
+    indice
+){
+
+    const consulta =
+        consultasActuales[
+            indice
+        ];
+
+
+    if(!consulta){
+
+        return;
+
+    }
+/*
+MARCAR COMO LEÍDA
+*/
+
+marcarConsultaLeida(
+    consulta
 );
+actualizarContadorConsultas();
+
+const filaConsulta =
+    document.getElementById(
+        "filaConsulta_" +
+        indice
+    );
+
+
+if(filaConsulta){
+
+    filaConsulta
+    .classList
+    .remove(
+        "noLeida"
+    );
+
+
+    filaConsulta
+    .classList
+    .add(
+        "leida"
+    );
+
+}
+
+
+    const nombreCompleto =
+        String(
+            consulta.Nombre || ""
+        )
+        .trim();
+
+
+    const etapa =
+        String(
+            consulta.Etapa || ""
+        )
+        .trim();
+
+
+    const lote =
+        String(
+            consulta.Lote || ""
+        )
+        .trim();
+
+
+    const asunto =
+        "Solicito cotización de Etapa: " +
+        etapa +
+        ", Lote: " +
+        lote;
+
+
+    const vistaLista =
+        document.getElementById(
+            "vistaListaConsultas"
+        );
+
+
+    const vistaDetalle =
+        document.getElementById(
+            "vistaDetalleConsulta"
+        );
+
+
+    vistaLista.style.display =
+        "none";
+
+
+    vistaDetalle.style.display =
+        "block";
+
+
+    vistaDetalle.innerHTML = `
+
+        <div class="detalleOutlook">
+
+
+            <div class="barraDetalleConsulta">
+
+                <button
+                    class="btnVolverConsulta"
+                    onclick="cerrarDetalleConsulta()"
+                >
+                    ←
+                </button>
+
+
+                <div class="asuntoDetalleConsulta">
+
+                    ${asunto}
+
+                </div>
+
+            </div>
+
+
+            <div class="cabeceraDetalleConsulta">
+
+                <div>
+
+                    <strong>
+                        ${nombreCompleto}
+                    </strong>
+
+                </div>
+
+
+                <div class="fechaDetalleConsulta">
+
+                    ${formatearFecha(
+                        consulta.Fecha
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="cuerpoDetalleConsulta">
+
+                Hola, deseo consultar el precio del siguiente lote:
+
+                <br><br>
+
+
+                <strong>Lote:</strong>
+                ${lote}
+
+                <br>
+
+
+                <strong>Ubicación:</strong>
+                ${consulta.Ubicacion || "ASSTURIAS"}
+                ${etapa ? " - " + etapa : ""}
+
+                <br>
+
+
+                <strong>Área:</strong>
+                ${consulta.Area || ""}
+
+                <br>
+
+
+                <strong>Nombre:</strong>
+                ${nombreCompleto}
+
+                <br>
+
+
+                <strong>Email:</strong>
+                ${consulta.Email || ""}
+
+                <br>
+
+
+                <strong>Teléfono:</strong>
+                ${consulta.Telefono || ""}
+
+                <br>
+
+
+                <strong>Mensaje:</strong>
+
+                <br>
+
+                ${consulta.Mensaje || ""}
+
+            </div>
+
+
+        </div>
+
+    `;
 
 }
 let solicitudesGlobal = [];
+function cerrarDetalleConsulta(){
 
+    const vistaLista =
+        document.getElementById(
+            "vistaListaConsultas"
+        );
+
+
+    const vistaDetalle =
+        document.getElementById(
+            "vistaDetalleConsulta"
+        );
+
+
+    vistaDetalle.style.display =
+        "none";
+
+
+    vistaDetalle.innerHTML =
+        "";
+
+
+    vistaLista.style.display =
+        "block";
+
+}
 async function actualizarContadorSolicitudes(){
 
-const solicitudes =
-await apiGet(
-"?action=solicitudes"
-);
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
 
-const total =
-solicitudes.length;
+    const contador =
+        document.getElementById(
+            "contadorSolicitudes"
+        );
 
-document
-.getElementById(
-"contadorSolicitudes"
-)
-.innerHTML =
-total > 0
-? ` (${total})`
-: "";
+    /*
+    El contador de solicitudes es exclusivo
+    del administrador.
+    */
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+
+        if(contador){
+
+            contador.innerHTML = "";
+
+        }
+
+        return;
+
+    }
+
+    try{
+
+        const respuesta =
+            await apiGet(
+                "?action=solicitudes"
+            );
+
+        const solicitudes =
+            Array.isArray(respuesta)
+            ? respuesta
+            : [];
+
+        const total =
+            solicitudes.length;
+
+        if(contador){
+
+            contador.innerHTML =
+                total > 0
+                ? ` (${total})`
+                : "";
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "No se pudo actualizar el contador:",
+            error
+        );
+
+    }
 
 }
 async function verificarNuevasSolicitudes(){
@@ -4979,75 +11568,58 @@ totalActual;
 }
 async function sincronizarPanel(){
 
-const rol =
-localStorage.getItem("rol");
+    const rol =
+        localStorage.getItem("rol");
 
-try{
+    try{
 
-const [respuestaLotes, respuestaPendientes] =
-await Promise.all([
+        const [nuevos, pendientes] =
+        await Promise.all([
 
-    fetch(API_URL),
+            apiGet(),
 
-    fetch(API_URL + "?action=solicitudesPendientes")
+            apiGet(
+                "?action=solicitudesPendientes"
+            )
 
-]);
+        ]);
 
-const nuevos =
-await respuestaLotes.json();
+        todosLosLotes =
+            Array.isArray(nuevos)
+            ? nuevos
+            : [];
 
-solicitudesPendientes =
-await respuestaPendientes.json();
+        solicitudesPendientes =
+            Array.isArray(pendientes)
+            ? pendientes
+            : [];
 
-// Reemplazar completamente la información local
-todosLosLotes = nuevos;
+        actualizarDashboard(todosLosLotes);
 
-/*
-const estadoActualLotes = JSON.stringify(datos);
+        renderizarGraficosPorEtapa(todosLosLotes);
 
-if(estadoActualLotes === ultimoEstadoLotes){
+        filtrarLotes();
 
-    actualizarContadorSolicitudes();
+        if(rol === "ADMIN"){
 
-    return;
+            actualizarContadorSolicitudes();
 
-}
+        }
 
-ultimoEstadoLotes = estadoActualLotes;
-*/
+        document
+        .getElementById("ultimaActualizacion")
+        .innerHTML =
+            "🟢 Última actualización: " +
+            new Date().toLocaleString("es-PE");
 
-// Volver a pintar toda la interfaz
-actualizarDashboard(todosLosLotes);
+    }catch(error){
 
-renderizarGraficosPorEtapa(todosLosLotes);
+        console.log(
+            "Error sincronizando:",
+            error
+        );
 
-filtrarLotes();
-
-if(rol === "ADMIN"){
-
-    actualizarContadorSolicitudes();
-
-}
-document
-.getElementById(
-"ultimaActualizacion"
-)
-.innerHTML =
-
-"🟢 Última actualización: " +
-
-new Date()
-.toLocaleString(
-"es-PE"
-);
-}catch(error){
-
-console.log(
-"Error sincronizando:",
-error
-);
-
-}
+    }
 
 }
 async function refrescarSistema(){
@@ -5057,21 +11629,120 @@ async function refrescarSistema(){
 }
 async function cargarSolicitudes(){
 
-const respuesta =
-await fetch(
-API_URL + "?action=solicitudes"
-);
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
 
-const solicitudes =
-await respuesta.json();
-actualizarContadorSolicitudes();
 
-solicitudesGlobal =
-solicitudes;
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
 
-renderizarSolicitudes(
-solicitudes
-);
+        return;
+
+    }
+
+
+    const [
+        respuesta,
+        colaboradores
+    ] =
+    await Promise.all([
+
+        apiGet(
+            "?action=solicitudes"
+        ),
+
+        apiPost(
+            "listarAsesores"
+        )
+
+    ]);
+
+
+    const solicitudes =
+        Array.isArray(respuesta)
+        ? respuesta
+        : [];
+
+
+    /*
+    =========================================
+    RELACIONAR USUARIO CON NOMBRE
+    =========================================
+    */
+
+    const mapaNombres = {};
+
+
+    if(
+        Array.isArray(colaboradores)
+    ){
+
+        colaboradores.forEach(persona=>{
+
+            const usuario =
+                String(
+                    persona.usuario || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            if(usuario !== ""){
+
+                mapaNombres[usuario] =
+                    String(
+                        persona.nombre ||
+                        persona.usuario ||
+                        ""
+                    )
+                    .trim();
+
+            }
+
+        });
+
+    }
+
+
+    /*
+    AGREGAR NOMBRE A CADA SOLICITUD
+    */
+
+    solicitudes.forEach(s=>{
+
+        const usuario =
+            String(
+                s.usuario || ""
+            )
+            .trim();
+
+
+        s.nombre =
+            mapaNombres[
+                usuario.toUpperCase()
+            ]
+            ||
+            usuario;
+
+    });
+
+
+    solicitudesGlobal =
+        solicitudes;
+
+
+    renderizarSolicitudes(
+        solicitudes
+    );
+
+
+    actualizarContadorSolicitudes();
 
 }
 
@@ -5083,7 +11754,7 @@ let html = `
 
 <div class="contenedorTablaScroll">
 
-<table class="tabla">
+<table class="tabla tablaSolicitudes">
 
 <thead>
 
@@ -5091,7 +11762,7 @@ let html = `
 
 <th>Fecha</th>
 
-<th>Usuario</th>
+<th>Nombre</th>
 
 <th>Etapa</th>
 
@@ -5134,7 +11805,7 @@ html += `
 
 <td>${fechaFormateada}</td>
 
-<td>${s.usuario}</td>
+<td>${s.nombre || s.usuario || ""}</td>
 
 <td>${s.etapa}</td>
 
@@ -5146,17 +11817,21 @@ html += `
 
 <td>
 
-<button
-class="btn-verde"
-onclick="aprobarSolicitud(${s.fila})">
-Aprobar
-</button>
+<div class="filaBotones">
 
-<button
-class="btn-rojo"
-onclick="rechazarSolicitud(${s.fila})">
-Rechazar
-</button>
+    <button
+    class="btn-verde"
+    onclick="aprobarSolicitud(${s.fila})">
+        Aprobar
+    </button>
+
+    <button
+    class="btn-rojo"
+    onclick="rechazarSolicitud(${s.fila})">
+        Rechazar
+    </button>
+
+</div>
 
 </td>
 
@@ -5183,32 +11858,49 @@ html;
 
 function filtrarSolicitudes(){
 
-const texto =
-document
-.getElementById(
-"buscarSolicitud"
-)
-.value
-.toUpperCase();
+    const texto =
+        document
+        .getElementById(
+            "buscarSolicitud"
+        )
+        .value
+        .trim()
+        .toUpperCase();
 
-const filtradas =
-solicitudesGlobal.filter(s=>
 
-s.usuario
-.toUpperCase()
-.includes(texto)
+    const filtradas =
+        solicitudesGlobal.filter(s=>{
 
-||
+            const nombre =
+                String(
+                    s.nombre ||
+                    s.usuario ||
+                    ""
+                )
+                .toUpperCase();
 
-s.lote
-.toUpperCase()
-.includes(texto)
 
-);
+            const lote =
+                String(
+                    s.lote || ""
+                )
+                .toUpperCase();
 
-renderizarSolicitudes(
-filtradas
-);
+
+            return (
+
+                nombre.includes(texto) ||
+
+                lote.includes(texto)
+
+            );
+
+        });
+
+
+    renderizarSolicitudes(
+        filtradas
+    );
 
 }
 async function aprobarSolicitud(fila){
@@ -5671,15 +12363,25 @@ await verificarNotificaciones();
 
 await actualizarContadorSolicitudes();
 
+await actualizarContadorConsultas();
+
 await verificarNuevasSolicitudes();
 
 setInterval(
-verificarNuevasSolicitudes,
-15000
+    verificarNuevasSolicitudes,
+    15000
 );
+
+
 setInterval(
-refrescarSistema,
-30000
+    actualizarContadorConsultas,
+    15000
+);
+
+
+setInterval(
+    refrescarSistema,
+    30000
 );
 
 })();
@@ -5691,71 +12393,253 @@ localStorage.getItem("rol")
     }
 
 };
+/* =====================================================
+   MENÚ RESPONSIVO
+===================================================== */
+
+const btnMenuMovil =
+    document.getElementById(
+        "btnMenuMovil"
+    );
+
+
+const sidebarMovil =
+    document.getElementById(
+        "sidebar"
+    );
+
+
+const overlaySidebar =
+    document.getElementById(
+        "overlaySidebar"
+    );
+
+
+function abrirMenuMovil(){
+
+    sidebarMovil
+    .classList
+    .add(
+        "abierto"
+    );
+
+
+    overlaySidebar
+    .classList
+    .add(
+        "activo"
+    );
+
+
+    btnMenuMovil.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function cerrarMenuMovil(){
+
+    sidebarMovil
+    .classList
+    .remove(
+        "abierto"
+    );
+
+
+    overlaySidebar
+    .classList
+    .remove(
+        "activo"
+    );
+
+
+    btnMenuMovil.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+btnMenuMovil.addEventListener(
+    "click",
+    ()=>{
+
+        if(
+            sidebarMovil
+            .classList
+            .contains(
+                "abierto"
+            )
+        ){
+
+            cerrarMenuMovil();
+
+        }
+        else{
+
+            abrirMenuMovil();
+
+        }
+
+    }
+);
+
+
+overlaySidebar.addEventListener(
+    "click",
+    cerrarMenuMovil
+);
+
+
+document
+.querySelectorAll(
+    "#sidebar .menuItem"
+)
+.forEach(boton=>{
+
+    boton.addEventListener(
+        "click",
+        ()=>{
+
+            if(
+                window.innerWidth <= 1180
+            ){
+
+                cerrarMenuMovil();
+
+            }
+
+        }
+    );
+
+});
+
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        if(
+            window.innerWidth > 1180
+        ){
+
+            cerrarMenuMovil();
+
+        }
+
+    }
+);
 document
 .getElementById(
-"cerrarSesion"
+    "cerrarSesion"
 )
-.onclick=()=>{
+.onclick = async ()=>{
 
-localStorage.removeItem(
-"logeado"
-);
+    try{
 
-localStorage.removeItem(
-"usuario"
-);
+        await apiPost(
+            "logout"
+        );
 
-localStorage.removeItem(
-"rol"
-);
+    }catch(error){
 
-document.getElementById(
-"btnAuditoria"
-).style.display = "none";
+        console.log(
+            "No se pudo confirmar el cierre en el servidor:",
+            error
+        );
 
-document.getElementById(
-"btnAsesores"
-).style.display = "none";
+    }finally{
 
-document.getElementById(
-"btnConsultas"
-).style.display = "none";
+        limpiarSesionLocal("");
 
-location.reload();
+        location.reload();
+
+    }
+
 };
 document
 .getElementById("buscarLote")
 .addEventListener(
 "input",
-filtrarLotes
+()=>{
+
+    /* si el usuario empieza a escribir,
+       se eliminan los filtros */
+
+    filtroActual = "TODOS";
+
+    etapasSeleccionadas = [];
+
+    filtrarLotes();
+
+}
 );
 
+function irInicioTabla(){
+
+    const tabla = document.getElementById("contenidoModulo");
+
+    if(tabla){
+
+        tabla.scrollTo({
+
+            top:0,
+
+            behavior:"smooth"
+
+        });
+
+    }
+
+}
 function filtrarLotes(){
 
     const texto =
-    document
-    .getElementById("buscarLote")
-    .value
-    .toUpperCase();
+        document
+        .getElementById("buscarLote")
+        .value
+        .toUpperCase();
 
-    let datos = todosLosLotes.filter(lote=>
+    /*
+    =========================================
+    DATOS PARA LA TABLA
+    Se filtran por:
+    - texto
+    - etapas seleccionadas
+    - estado
+    =========================================
+    */
+
+    let datosTabla = todosLosLotes.filter(lote=>
 
         lote.Lote.toUpperCase().includes(texto)
 
     );
 
-    if(etapaSeleccionada){
+    if(etapasSeleccionadas.length > 0){
 
-        datos = datos.filter(lote=>
+        datosTabla = datosTabla.filter(lote=>
 
-            lote.Etapa === etapaSeleccionada
+            etapasSeleccionadas.includes(lote.Etapa)
 
         );
 
     }
-if(filtroActual !== "TODOS"){
 
-        datos = datos.filter(lote=>
+    if(filtroActual !== "TODOS"){
+
+        datosTabla = datosTabla.filter(lote=>
 
             lote.Estado === filtroActual
 
@@ -5763,11 +12647,36 @@ if(filtroActual !== "TODOS"){
 
     }
 
-    renderizarLotes(datos);
+    renderizarLotes(datosTabla);
 
-actualizarFiltrosActivos();
 
-actualizarBotonesFiltro();
+    /*
+    =========================================
+    DATOS PARA LAS TORTAS
+    Solo se filtran por las etapas elegidas.
+
+    El filtro LIBRE, RESERVADO o VENDIDO
+    no debe eliminar ni cambiar las tortas.
+    =========================================
+    */
+
+    let datosGraficos = todosLosLotes;
+
+    if(etapasSeleccionadas.length > 0){
+
+        datosGraficos = todosLosLotes.filter(lote=>
+
+            etapasSeleccionadas.includes(lote.Etapa)
+
+        );
+
+    }
+
+    renderizarGraficosPorEtapa(datosGraficos);
+
+    irInicioTabla();
+
+    actualizarBotonesFiltro();
 
 }
 document
@@ -5776,13 +12685,16 @@ document
 )
 .onclick = ()=>{
 
-filtroActual = "TODOS";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-etapaSeleccionada = "";
+    filtroActual = "TODOS";
 
-filtrarLotes();
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -5790,11 +12702,16 @@ document
 )
 .onclick = ()=>{
 
-filtroActual="LIBRE";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-filtrarLotes();
+    filtroActual = "LIBRE";
+
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -5802,11 +12719,16 @@ document
 )
 .onclick = ()=>{
 
-filtroActual = "RESERVADO";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-filtrarLotes();
+    filtroActual = "RESERVADO";
+
+    filtrarLotes();
 
 };
+
 
 document
 .getElementById(
@@ -5814,11 +12736,527 @@ document
 )
 .onclick = ()=>{
 
-filtroActual = "VENDIDO";
+    document
+    .getElementById("buscarLote")
+    .value = "";
 
-filtrarLotes();
+    filtroActual = "VENDIDO";
+
+    filtrarLotes();
 
 };
+
+document
+.getElementById(
+"btnEtapas"
+)
+.onclick = ()=>{
+
+    mostrarPanelEtapas =
+        !mostrarPanelEtapas;
+
+
+    const panel =
+        document.getElementById(
+            "panelEtapas"
+        );
+
+
+    if(mostrarPanelEtapas){
+
+        construirPanelEtapas();
+
+        panel.style.display =
+            "flex";
+
+    }
+    else{
+
+        panel.style.display =
+            "none";
+
+
+        etapasSeleccionadas = [];
+
+
+        filtroActual =
+            "TODOS";
+
+
+        document
+        .getElementById(
+            "buscarLote"
+        )
+        .value = "";
+
+
+        filtrarLotes();
+
+    }
+
+
+    /*
+    Actualiza ETAPAS, TODOS,
+    LIBRES, RESERVADOS y VENDIDOS
+    tanto al abrir como al cerrar.
+    */
+
+    actualizarBotonesFiltro();
+
+};
+/* =========================================
+   CIERRE AUTOMÁTICO POR INACTIVIDAD
+========================================= */
+
+const TIEMPO_INACTIVIDAD_MS =
+    20 * 60 * 1000;
+
+let temporizadorInactividad = null;
+
+let cierrePorInactividadEnProceso = false;
+
+
+function reiniciarTemporizadorInactividad(){
+
+    const logeado =
+        localStorage.getItem("logeado");
+
+    const token =
+        localStorage.getItem("token");
+
+    if(
+        logeado !== "SI" ||
+        !token
+    ){
+
+        return;
+
+    }
+
+    clearTimeout(
+        temporizadorInactividad
+    );
+
+    temporizadorInactividad =
+        setTimeout(
+
+            cerrarSesionPorInactividad,
+
+            TIEMPO_INACTIVIDAD_MS
+
+        );
+
+}
+
+
+async function cerrarSesionPorInactividad(){
+
+    if(cierrePorInactividadEnProceso){
+
+        return;
+
+    }
+
+
+    cierrePorInactividadEnProceso =
+        true;
+
+
+    /*
+    GUARDAR EL USUARIO
+    ANTES DE LIMPIAR LA SESIÓN
+    */
+
+    const usuarioActual =
+        document
+        .getElementById(
+            "usuario"
+        )
+        .value;
+
+
+    try{
+
+        await apiPost(
+            "logout"
+        );
+
+    }
+    catch(error){
+
+        console.log(
+            "No se pudo invalidar la sesión por inactividad:",
+            error
+        );
+
+    }
+    finally{
+
+
+        limpiarSesionLocal(
+
+            "La sesión se cerró por inactividad. Ingrese nuevamente."
+
+        );
+
+
+        /*
+        MANTENER EL USUARIO
+        */
+
+        const campoUsuario =
+            document
+            .getElementById(
+                "usuario"
+            );
+
+
+        campoUsuario.value =
+            usuarioActual;
+
+
+        /*
+        BORRAR CONTRASEÑA
+        */
+
+        const campoPassword =
+            document
+            .getElementById(
+                "password"
+            );
+
+
+        campoPassword.value =
+            "";
+
+
+        /*
+        COLOCAR EL CURSOR
+        EN CONTRASEÑA
+        */
+
+        setTimeout(()=>{
+
+            campoPassword.focus();
+
+        },0);
+
+
+        cierrePorInactividadEnProceso =
+            false;
+
+    }
+
+}
+
+
+const eventosDeActividad = [
+
+    "mousedown",
+
+    "keydown",
+
+    "touchstart",
+
+    "scroll"
+
+];
+
+
+eventosDeActividad.forEach(evento=>{
+
+    window.addEventListener(
+
+        evento,
+
+        reiniciarTemporizadorInactividad,
+
+        {
+            passive:true
+        }
+
+    );
+
+});
+
+
+window.addEventListener(
+
+    "load",
+
+    reiniciarTemporizadorInactividad
+
+);
+function abrirModalColaborador(){
+
+    let modal =
+        document.getElementById(
+            "modalColaborador"
+        );
+
+    if(!modal){
+
+        modal =
+            document.createElement("div");
+
+        modal.id =
+            "modalColaborador";
+
+        modal.style.cssText = `
+            position:fixed;
+            inset:0;
+            display:none;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+            background:rgba(15,23,42,.58);
+            backdrop-filter:blur(3px);
+            z-index:9999;
+        `;
+
+        modal.innerHTML = `
+
+        <div class="modalCard">
+
+            <h2>Nuevo colaborador</h2>
+
+            <div style="
+                display:flex;
+                flex-direction:column;
+                gap:12px;
+            ">
+
+                <input
+                id="nuevoUsuario"
+                type="text"
+                placeholder="Usuario"
+                class="inputModulo"
+                style="width:100%;margin:0;">
+
+                <input
+                id="nuevoNombre"
+                type="text"
+                placeholder="Nombre completo"
+                class="inputModulo"
+                style="width:100%;margin:0;">
+
+                <div class="campoPasswordColaborador">
+
+    <input
+    id="nuevoPassword"
+    type="password"
+    placeholder="Contraseña"
+    class="inputModulo">
+
+    <button
+    type="button"
+    class="btnVerPassword"
+    onclick="alternarPasswordColaborador()"
+    aria-label="Mostrar u ocultar contraseña">
+
+        <span id="iconoPasswordColaborador">
+            👁
+        </span>
+
+    </button>
+
+</div>
+
+                <select
+                id="nuevoRol"
+                class="inputModulo"
+                style="width:100%;margin:0;">
+
+                    <option value="ASESOR">
+                        ASESOR
+                    </option>
+
+                    <option value="ADMIN">
+                        ADMINISTRADOR
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="modalAcciones">
+
+                <button
+                type="button"
+                class="btnGris"
+                onclick="cerrarModalColaborador()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                type="button"
+                class="btnAzul"
+                onclick="crearColaborador()">
+
+                    Guardar
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+        document.body.appendChild(
+            modal
+        );
+
+    }
+
+    document
+    .getElementById("nuevoUsuario")
+    .value = "";
+
+    document
+    .getElementById("nuevoNombre")
+    .value = "";
+
+    document
+    .getElementById("nuevoPassword")
+    .value = "";
+
+    document
+    .getElementById("nuevoRol")
+    .value = "ASESOR";
+
+    modal.style.display = "flex";
+
+}
+
+
+function cerrarModalColaborador(){
+
+    const modal =
+        document.getElementById(
+            "modalColaborador"
+        );
+
+    if(modal){
+
+        modal.style.display = "none";
+
+    }
+
+}
+
+
+async function crearColaborador(){
+
+    const usuario =
+        document
+        .getElementById("nuevoUsuario")
+        .value
+        .trim();
+
+    const nombre =
+        document
+        .getElementById("nuevoNombre")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("nuevoPassword")
+        .value;
+
+    const rol =
+        document
+        .getElementById("nuevoRol")
+        .value;
+
+    if(
+        usuario === "" ||
+        nombre === "" ||
+        password === ""
+    ){
+
+        mostrarNotificacion(
+            "Datos incompletos",
+            "Complete todos los campos."
+        );
+
+        return;
+
+    }
+
+    const resultado =
+        await apiPost(
+            "crearAsesor",
+            {
+                usuario:usuario,
+                password:password,
+                nombre:nombre,
+                rol:rol
+            }
+        );
+
+    if(resultado.ok){
+
+        cerrarModalColaborador();
+
+        mostrarNotificacion(
+            "Colaborador creado",
+            rol === "ADMIN"
+            ? "El administrador fue registrado correctamente."
+            : "El asesor fue registrado correctamente."
+        );
+
+        cargarAsesores();
+
+    }else{
+
+        mostrarNotificacion(
+            "No se pudo crear",
+            resultado.mensaje ||
+            "Ocurrió un error."
+        );
+
+    }
+
+}
+function alternarPasswordColaborador(){
+
+    const campo =
+    document.getElementById(
+        "nuevoPassword"
+    );
+
+    const icono =
+        document.getElementById(
+            "iconoPasswordColaborador"
+        );
+
+    if(!campo){
+        return;
+    }
+
+    const estaOculta =
+        campo.type === "password";
+
+    campo.type =
+        estaOculta
+        ? "text"
+        : "password";
+
+    if(icono){
+
+        icono.textContent =
+            estaOculta
+            ? "🙈"
+            : "👁";
+
+    }
+
+}
+</script>
 
 </script>
 
