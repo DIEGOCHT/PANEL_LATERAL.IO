@@ -10947,39 +10947,35 @@ document
 await apiPost("listarAsesores");
 asesores.sort((a,b)=>{
 
-    const rolA =
-        String(a.rol || "")
-        .trim()
-        .toUpperCase();
+    const fechaA =
+        a.fechaRegistro
+        ? new Date(a.fechaRegistro).getTime()
+        : Number.POSITIVE_INFINITY;
 
-    const rolB =
-        String(b.rol || "")
-        .trim()
-        .toUpperCase();
+    const fechaB =
+        b.fechaRegistro
+        ? new Date(b.fechaRegistro).getTime()
+        : Number.POSITIVE_INFINITY;
 
-    const adminA =
-        rolA === "ADMIN" ||
-        rolA === "ADMINISTRADOR";
+    const fechaAValida =
+        Number.isFinite(fechaA)
+        ? fechaA
+        : Number.POSITIVE_INFINITY;
 
-    const adminB =
-        rolB === "ADMIN" ||
-        rolB === "ADMINISTRADOR";
+    const fechaBValida =
+        Number.isFinite(fechaB)
+        ? fechaB
+        : Number.POSITIVE_INFINITY;
 
-    if(adminA && !adminB){
-        return -1;
-    }
-
-    if(!adminA && adminB){
-        return 1;
+    if(fechaAValida !== fechaBValida){
+        return fechaAValida - fechaBValida;
     }
 
     return String(a.nombre || "")
         .localeCompare(
             String(b.nombre || ""),
             "es",
-            {
-                sensitivity:"base"
-            }
+            {sensitivity:"base"}
         );
 
 });
@@ -11299,35 +11295,6 @@ password:nuevaPassword
 "La contraseña fue modificada correctamente."
 
 );
-
-    }
-
-}
-async function verPasswordAsesor(usuario){
-
-    const resultado =
-await apiPost(
-"obtenerPasswordAsesor",
-{
-usuario:usuario
-}
-);
-
-    if(resultado.ok){
-
-        document
-        .getElementById(
-        "passwordAsesor"
-        )
-        .textContent =
-        resultado.password;
-
-        document
-        .getElementById(
-        "modalPassword"
-        )
-        .style.display =
-        "flex";
 
     }
 
