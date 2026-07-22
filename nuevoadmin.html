@@ -6473,122 +6473,55 @@ and
 
 
 
-
 /* =====================================================
-   AUDITORÍA - FECHA EN UNA LÍNEA SIN SCROLL HORIZONTAL
+   AUDITORÍA - COLUMNA FECHA EN UNA SOLA LÍNEA
+   Selector real de la tabla de Auditoría
 ===================================================== */
 
-#auditoriaTablaPrincipal{
-    width:100% !important;
-    min-width:0 !important;
-}
-
-#auditoriaTablaPrincipal .contenedorTablaScroll{
-    width:100% !important;
-    overflow-x:hidden !important;
-    overflow-y:visible !important;
-}
-
-#auditoriaTablaPrincipal .tabla{
-    width:100% !important;
-    min-width:0 !important;
-    table-layout:fixed !important;
-}
-
-/* Distribución equilibrada de las 6 columnas */
 #auditoriaTablaPrincipal .tabla th:nth-child(1),
 #auditoriaTablaPrincipal .tabla td:nth-child(1){
-    width:20% !important;
+    width:210px !important;
+    min-width:210px !important;
+    max-width:210px !important;
+
     white-space:nowrap !important;
-    word-break:normal !important;
+    word-break:keep-all !important;
     overflow-wrap:normal !important;
     hyphens:none !important;
+
+    line-height:1.2 !important;
 }
 
-#auditoriaTablaPrincipal .tabla th:nth-child(2),
-#auditoriaTablaPrincipal .tabla td:nth-child(2){
-    width:18% !important;
+/*
+La tabla debe tener espacio suficiente para no comprimir
+la primera columna y mandar "a. m." / "p. m." abajo.
+*/
+#auditoriaTablaPrincipal .tabla{
+    min-width:1050px !important;
+    table-layout:auto !important;
 }
 
-#auditoriaTablaPrincipal .tabla th:nth-child(3),
-#auditoriaTablaPrincipal .tabla td:nth-child(3){
-    width:15% !important;
+/* Contenedor permite desplazamiento horizontal si hace falta */
+#auditoriaTablaPrincipal .contenedorTablaScroll{
+    overflow-x:auto !important;
+    overflow-y:visible !important;
+    -webkit-overflow-scrolling:touch;
 }
 
-#auditoriaTablaPrincipal .tabla th:nth-child(4),
-#auditoriaTablaPrincipal .tabla td:nth-child(4){
-    width:20% !important;
-}
-
-#auditoriaTablaPrincipal .tabla th:nth-child(5),
-#auditoriaTablaPrincipal .tabla td:nth-child(5){
-    width:13.5% !important;
-}
-
-#auditoriaTablaPrincipal .tabla th:nth-child(6),
-#auditoriaTablaPrincipal .tabla td:nth-child(6){
-    width:13.5% !important;
-}
-
-/* Evita que el texto de las demás columnas empuje la fecha */
-#auditoriaTablaPrincipal .tabla td{
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-/* La columna fecha nunca se corta */
-#auditoriaTablaPrincipal .tabla td:nth-child(1){
-    overflow:visible !important;
-    text-overflow:clip !important;
-    font-size:12px;
-}
-
-/* Ajuste para tablet/celular: se mantiene toda la tabla visible */
-@media (max-width:900px){
-
-    #auditoriaTablaPrincipal .tabla{
-        table-layout:fixed !important;
-        width:100% !important;
-        min-width:0 !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla th,
-    #auditoriaTablaPrincipal .tabla td{
-        padding-left:6px !important;
-        padding-right:6px !important;
-        font-size:11px !important;
-    }
+/* En móvil se conserva exactamente la misma lógica */
+@media (max-width:768px){
 
     #auditoriaTablaPrincipal .tabla th:nth-child(1),
     #auditoriaTablaPrincipal .tabla td:nth-child(1){
-        width:23% !important;
+        width:200px !important;
+        min-width:200px !important;
+        max-width:200px !important;
         white-space:nowrap !important;
-        font-size:10.5px !important;
     }
 
-    #auditoriaTablaPrincipal .tabla th:nth-child(2),
-    #auditoriaTablaPrincipal .tabla td:nth-child(2){
-        width:19% !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla th:nth-child(3),
-    #auditoriaTablaPrincipal .tabla td:nth-child(3){
-        width:13% !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla th:nth-child(4),
-    #auditoriaTablaPrincipal .tabla td:nth-child(4){
-        width:19% !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla th:nth-child(5),
-    #auditoriaTablaPrincipal .tabla td:nth-child(5){
-        width:13% !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla th:nth-child(6),
-    #auditoriaTablaPrincipal .tabla td:nth-child(6){
-        width:13% !important;
+    #auditoriaTablaPrincipal .tabla{
+        min-width:1000px !important;
+        table-layout:auto !important;
     }
 }
 
