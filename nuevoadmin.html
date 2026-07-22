@@ -3464,6 +3464,748 @@ margin-top:18px;
     line-height:1.65;
 
 }
+/* =====================================================
+   MENÚ RESPONSIVO
+===================================================== */
+
+#btnMenuMovil{
+
+    display:none;
+
+    width:42px;
+    min-width:42px;
+    height:42px;
+
+    margin:0;
+    padding:0 10px;
+
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#2563EB;
+    box-shadow:0 5px 14px rgba(37,99,235,.22);
+
+}
+
+#btnMenuMovil span{
+
+    display:block;
+
+    width:20px;
+    height:2px;
+
+    border-radius:2px;
+    background:#FFFFFF;
+
+}
+
+
+#overlaySidebar{
+
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    z-index:3990;
+
+    background:rgba(15,23,42,.42);
+    backdrop-filter:blur(2px);
+
+}
+
+
+/* =====================================================
+   VENTANA DIVIDIDA Y TABLET
+===================================================== */
+
+@media(max-width:1180px){
+
+    body{
+
+        overflow-x:hidden;
+
+    }
+
+
+    #panel{
+
+        padding:14px;
+
+    }
+
+
+    #usuarioHeader{
+
+        min-width:0;
+
+        display:grid;
+
+        grid-template-columns:auto minmax(0,1fr) auto;
+
+        align-items:center;
+
+        gap:14px;
+
+        padding:14px 16px;
+
+    }
+
+
+    #btnMenuMovil{
+
+        display:flex;
+
+    }
+
+
+    .headerInfo{
+
+        min-width:0;
+
+    }
+
+
+    #usuarioLogeado{
+
+        overflow:hidden;
+
+        text-overflow:ellipsis;
+
+    }
+
+
+    .headerAcciones{
+
+        min-width:0;
+
+        gap:10px;
+
+    }
+
+
+    #ultimaActualizacion{
+
+        max-width:310px;
+
+        height:auto;
+        min-height:44px;
+
+        line-height:1.25;
+
+        white-space:normal;
+
+    }
+
+
+    #cerrarSesion{
+
+        width:145px;
+        min-width:145px;
+
+    }
+
+
+    #panelPrincipal{
+
+        display:block;
+
+        min-height:0;
+
+    }
+
+
+    #sidebar{
+
+        position:fixed;
+
+        top:12px;
+        left:12px;
+        bottom:12px;
+
+        width:270px;
+        height:auto;
+        max-height:calc(100vh - 24px);
+
+        overflow-y:auto;
+        overflow-x:hidden;
+
+        z-index:4000;
+
+        transform:translateX(calc(-100% - 28px));
+
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease;
+
+    }
+
+
+    #sidebar.abierto{
+
+        transform:translateX(0);
+
+        box-shadow:
+            0 24px 70px rgba(15,23,42,.28);
+
+    }
+
+
+    #overlaySidebar.activo{
+
+        display:block;
+
+    }
+
+
+    #workspace{
+
+        width:100%;
+        min-width:0;
+        min-height:0;
+
+    }
+
+
+    #contenido{
+
+        width:100%;
+        min-width:0;
+
+    }
+
+
+    #cabeceraFija{
+
+        top:12px;
+
+    }
+
+
+    #cabeceraFija::before{
+
+        top:-12px;
+        height:12px;
+
+    }
+
+
+    #dashboard{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+    }
+
+
+    #herramientas{
+
+        flex-wrap:wrap;
+
+    }
+
+
+    #buscarLote{
+
+        width:100%;
+        flex:1 1 100%;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        flex:1 1 120px;
+
+        min-width:0;
+
+    }
+
+
+    #contenedorLotesPrincipal{
+
+        grid-template-columns:minmax(0,1fr);
+
+        gap:14px;
+
+        overflow:visible;
+
+    }
+
+
+    #panelGraficos{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(auto-fit,minmax(240px,1fr));
+
+        gap:14px;
+
+        padding-right:0;
+
+    }
+
+
+    #auditoriaContenidoPrincipal{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #graficoAuditoriaPersona{
+
+        max-width:320px;
+
+    }
+
+
+    .contenedorTablaScroll{
+
+        width:100%;
+
+        overflow-x:auto;
+        overflow-y:visible;
+
+        border-radius:16px;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+    }
+
+
+    .tabla{
+
+        width:100%;
+
+        min-width:760px;
+
+        table-layout:auto;
+
+    }
+
+
+    .tablaSolicitudes{
+
+        min-width:950px;
+
+    }
+
+
+    .tablaColaboradores{
+
+        min-width:900px;
+
+    }
+
+
+    .bandejaConsultas{
+
+        overflow-x:auto;
+
+    }
+
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        min-width:850px;
+
+    }
+
+}
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    #panel{
+
+        padding:8px;
+
+    }
+
+
+    #usuarioHeader{
+
+        grid-template-columns:auto minmax(0,1fr);
+
+        gap:10px;
+
+        padding:12px;
+
+        border-radius:14px;
+
+    }
+
+
+    .headerAcciones{
+
+        grid-column:1 / -1;
+
+        width:100%;
+
+        display:grid;
+
+        grid-template-columns:minmax(0,1fr) auto;
+
+        gap:8px;
+
+    }
+
+
+    #ultimaActualizacion{
+
+        width:100%;
+        max-width:none;
+
+        min-height:40px;
+
+        padding:8px 10px;
+
+        font-size:12px;
+
+    }
+
+
+    #cerrarSesion{
+
+        width:46px;
+        min-width:46px;
+        height:42px;
+
+        padding:0;
+
+    }
+
+
+    #cerrarSesion > span:last-child{
+
+        display:none !important;
+
+    }
+
+
+    #cerrarSesion .iconoMenu{
+
+        margin:0;
+
+    }
+
+
+    .saludo{
+
+        margin-bottom:3px;
+
+        font-size:9px;
+
+    }
+
+
+    #usuarioLogeado{
+
+        font-size:18px;
+
+    }
+
+
+    .subtitulo{
+
+        font-size:11px;
+
+    }
+
+
+    #fechaActual{
+
+        font-size:9px;
+
+    }
+
+
+    #panelSuperior{
+
+        padding:10px;
+
+        border-radius:14px;
+
+    }
+
+
+    #dashboard{
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:8px;
+
+        margin-bottom:8px;
+
+    }
+
+
+    .cardDashboard{
+
+        height:64px;
+
+        padding:8px;
+
+        gap:8px;
+
+        border-radius:12px;
+
+    }
+
+
+    .cardIcono{
+
+        width:38px;
+        height:38px;
+
+        margin-left:0;
+
+        border-radius:10px;
+
+    }
+
+
+    .cardDashboard h3{
+
+        font-size:18px;
+
+    }
+
+
+    .cardDashboard p{
+
+        font-size:9px;
+
+        letter-spacing:.4px;
+
+    }
+
+
+    #herramientas{
+
+        display:grid;
+
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+
+        gap:8px;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1;
+
+        width:100%;
+        min-width:0;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        width:100%;
+        min-width:0;
+
+        padding:0 8px;
+
+        font-size:11px;
+
+    }
+
+
+    #filtroVendidos{
+
+        grid-column:1 / -1;
+
+    }
+
+
+    #panelEtapas{
+
+        gap:5px;
+
+    }
+
+
+    .chipEtapa{
+
+        padding:5px 9px;
+
+        font-size:11px;
+
+    }
+
+
+    #panelGraficos{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    .tituloModulo{
+
+        padding:16px;
+
+        margin-bottom:12px;
+
+        border-radius:14px;
+
+    }
+
+
+    .tituloModulo h2{
+
+        font-size:21px;
+
+    }
+
+
+    .tituloModulo p{
+
+        font-size:12px;
+
+    }
+
+
+    .moduloContenido{
+
+        padding:12px;
+
+        margin-top:10px;
+
+        border-radius:14px;
+
+    }
+
+
+    .inputBusqueda,
+    .inputModulo{
+
+        width:100%;
+        max-width:none;
+
+    }
+
+
+    .seccionBuscador,
+    .barraModulo{
+
+        align-items:stretch;
+
+        flex-direction:column;
+
+    }
+
+
+    .seccionBuscador .btnAzul,
+    .barraModulo .btnAzul{
+
+        width:100%;
+
+    }
+
+
+    .barraDetalleConsulta{
+
+        align-items:flex-start;
+
+        padding:12px;
+
+    }
+
+
+    .asuntoDetalleConsulta{
+
+        font-size:15px;
+
+        line-height:1.35;
+
+    }
+
+
+    .cabeceraDetalleConsulta{
+
+        align-items:flex-start;
+
+        flex-direction:column;
+
+        gap:6px;
+
+        padding:14px;
+
+    }
+
+
+    .cuerpoDetalleConsulta{
+
+        padding:18px 14px;
+
+        font-size:13px;
+
+    }
+
+}
+@media(max-width:420px){
+
+    #dashboard{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #herramientas{
+
+        grid-template-columns:minmax(0,1fr);
+
+    }
+
+
+    #buscarLote,
+    #filtroVendidos{
+
+        grid-column:auto;
+
+    }
+
+
+    #sidebar{
+
+        left:8px;
+        top:8px;
+        bottom:8px;
+
+        width:min(280px,calc(100vw - 16px));
+
+        max-height:calc(100vh - 16px);
+
+    }
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -3507,6 +4249,18 @@ margin-top:18px;
 <div id="panel">
 
     <div id="usuarioHeader">
+
+    <button
+        type="button"
+        id="btnMenuMovil"
+        aria-label="Abrir menú"
+        aria-expanded="false">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
 
     <div class="headerInfo">
 
@@ -3567,6 +4321,7 @@ margin-top:18px;
 
 </div>
 
+<div id="overlaySidebar"></div>
 <div id="panelPrincipal">
 
     <aside id="sidebar">
@@ -9347,6 +10102,153 @@ localStorage.getItem("rol")
     }
 
 };
+/* =====================================================
+   MENÚ RESPONSIVO
+===================================================== */
+
+const btnMenuMovil =
+    document.getElementById(
+        "btnMenuMovil"
+    );
+
+
+const sidebarMovil =
+    document.getElementById(
+        "sidebar"
+    );
+
+
+const overlaySidebar =
+    document.getElementById(
+        "overlaySidebar"
+    );
+
+
+function abrirMenuMovil(){
+
+    sidebarMovil
+    .classList
+    .add(
+        "abierto"
+    );
+
+
+    overlaySidebar
+    .classList
+    .add(
+        "activo"
+    );
+
+
+    btnMenuMovil.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function cerrarMenuMovil(){
+
+    sidebarMovil
+    .classList
+    .remove(
+        "abierto"
+    );
+
+
+    overlaySidebar
+    .classList
+    .remove(
+        "activo"
+    );
+
+
+    btnMenuMovil.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+btnMenuMovil.addEventListener(
+    "click",
+    ()=>{
+
+        if(
+            sidebarMovil
+            .classList
+            .contains(
+                "abierto"
+            )
+        ){
+
+            cerrarMenuMovil();
+
+        }
+        else{
+
+            abrirMenuMovil();
+
+        }
+
+    }
+);
+
+
+overlaySidebar.addEventListener(
+    "click",
+    cerrarMenuMovil
+);
+
+
+document
+.querySelectorAll(
+    "#sidebar .menuItem"
+)
+.forEach(boton=>{
+
+    boton.addEventListener(
+        "click",
+        ()=>{
+
+            if(
+                window.innerWidth <= 1180
+            ){
+
+                cerrarMenuMovil();
+
+            }
+
+        }
+    );
+
+});
+
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        if(
+            window.innerWidth > 1180
+        ){
+
+            cerrarMenuMovil();
+
+        }
+
+    }
+);
 document
 .getElementById(
     "cerrarSesion"
