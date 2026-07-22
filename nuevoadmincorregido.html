@@ -2738,32 +2738,39 @@ margin-top:18px;
 .tablaColaboradores th:nth-child(2),
 .tablaColaboradores td:nth-child(2){
 
-    width:29%;
+    width:12%;
 
 }
 
 .tablaColaboradores th:nth-child(3),
 .tablaColaboradores td:nth-child(3){
 
-    width:15%;
+    width:21%;
 
 }
 
 .tablaColaboradores th:nth-child(4),
 .tablaColaboradores td:nth-child(4){
 
-    width:12%;
+    width:13%;
 
 }
 
 .tablaColaboradores th:nth-child(5),
 .tablaColaboradores td:nth-child(5){
 
-    width:29%;
+    width:11%;
 
 }
 
-.tablaColaboradores td:nth-child(2){
+.tablaColaboradores th:nth-child(6),
+.tablaColaboradores td:nth-child(6){
+
+    width:28%;
+
+}
+
+.tablaColaboradores td:nth-child(3){
 
     white-space:normal;
 
@@ -10282,6 +10289,16 @@ function prepararDatosReporte(tipo, datos){
 
     const columnasExcluir = excluir[tipo] || [];
 
+    if(tipo === "COLABORADORES"){
+        return datos.map(fila=>({
+            "Fecha de registro": fila?.fechaRegistro || "",
+            "Usuario": fila?.usuario || "",
+            "Nombre": fila?.nombre || "",
+            "Rol": fila?.rol || "",
+            "Estado": fila?.estado || ""
+        }));
+    }
+
     return datos.map(fila=>{
 
         const salida = {};
@@ -10400,7 +10417,7 @@ function formatearFechaReporte(valor){
 function valorCeldaExcelReporte(encabezado, valor){
     const clave = String(encabezado || "").trim().toLowerCase();
 
-    if(clave === "fecha" && typeof valor === "string"){
+    if((clave === "fecha" || clave === "fecha de registro") && typeof valor === "string"){
         const texto = valor.trim();
         if(/^\d{4}-\d{2}-\d{2}T/.test(texto)){
             const fecha = new Date(texto);
@@ -10454,7 +10471,7 @@ function calcularAnchoColumna(encabezado, filas, tipo){
     let minimo = 10;
     let maximoPermitido = 42;
 
-    if(claveMin === "fecha"){
+    if(claveMin === "fecha" || claveMin === "fecha de registro"){
         // Garantiza fecha + hora + a. m./p. m. en una sola línea.
         minimo = 25;
         maximoPermitido = 30;
@@ -10534,7 +10551,7 @@ function agregarHojaExcel(libro,tipo,datos){
 
     hoja.mergeCells(2,1,2,totalColumnas);
     const celdaSubtitulo = hoja.getCell(2,1);
-    celdaSubtitulo.value = `Generado: ${new Date().toLocaleString("es-PE")}  |  Use los filtros de los encabezados para buscar y filtrar; en Fecha puede usar día, mes, año o rango.`;
+    celdaSubtitulo.value = `Generado: ${new Date().toLocaleString("es-PE")}`;
     celdaSubtitulo.font = {
         italic:true,
         size:10,
@@ -10639,7 +10656,7 @@ function agregarHojaExcel(libro,tipo,datos){
 
             filaExcel.eachCell((celda,columna)=>{
                 const encabezado = String(encabezados[columna-1] || "").trim().toLowerCase();
-                const esFecha = encabezado === "fecha";
+                const esFecha = encabezado === "fecha" || encabezado === "fecha de registro";
                 const esMensaje = encabezado === "mensaje";
 
                 if(esFecha && celda.value instanceof Date){
@@ -10887,6 +10904,28 @@ async function exportarReporteExcel(tipo){
     }
 }
 
+function formatearFechaRegistroColaborador(valor){
+
+    if(!valor){
+        return "—";
+    }
+
+    const fecha = new Date(valor);
+
+    if(Number.isNaN(fecha.getTime())){
+        return String(valor);
+    }
+
+    return fecha.toLocaleString("es-PE",{
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit",
+        hour12:true
+    });
+}
+
 async function cargarAsesores(){
 
 const rol =
@@ -10985,6 +11024,8 @@ onclick="abrirModalColaborador()">
 
 <tr>
 
+<th>Fecha de registro</th>
+
 <th>Usuario</th>
 
 <th>Nombre</th>
@@ -11011,6 +11052,8 @@ onclick="abrirModalColaborador()">
     html += `
 
     <tr>
+
+        <td>${formatearFechaRegistroColaborador(a.fechaRegistro)}</td>
 
         <td>${a.usuario}</td>
 
@@ -11128,13 +11171,13 @@ function(){
     filas.forEach(fila=>{
 
         const usuario =
-            fila.children[0]
+            fila.children[1]
             .textContent
             .trim()
             .toUpperCase();
 
         const nombre =
-            fila.children[1]
+            fila.children[2]
             .textContent
             .trim()
             .toUpperCase();
