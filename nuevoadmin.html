@@ -5528,6 +5528,420 @@ and
     }
 
 }
+/* =====================================================
+   CORRECCIÓN FINAL PARA CELULAR Y TABLET
+   - Filtros dentro de su contenedor
+   - ASUNTO más cerca de DE
+   - Resúmenes de colaboradores uniformes
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    =========================================
+    1. FILTROS DE LOTES EN TABLET Y CELULAR
+    =========================================
+    */
+
+    #herramientas{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(180px,1.6fr)
+            repeat(5,minmax(0,1fr))
+            !important;
+
+        gap:7px !important;
+
+        width:100% !important;
+        max-width:100% !important;
+
+        overflow:hidden !important;
+
+        align-items:center;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:auto !important;
+
+        width:100% !important;
+        min-width:0 !important;
+        max-width:none !important;
+
+        position:relative !important;
+
+        left:auto !important;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        grid-column:auto !important;
+
+        width:100% !important;
+        min-width:0 !important;
+        max-width:none !important;
+
+        height:36px !important;
+
+        margin:0 !important;
+
+        padding:0 3px !important;
+
+        font-size:clamp(
+            8px,
+            1vw,
+            11px
+        ) !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:0 !important;
+
+        white-space:nowrap !important;
+
+        overflow:hidden;
+
+        text-overflow:clip;
+
+    }
+
+
+    /*
+    =========================================
+    2. CONSULTAS:
+    REDUCIR COLUMNA DE Y ACERCAR ASUNTO
+    =========================================
+    */
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        grid-template-columns:
+            170px
+            minmax(350px,1fr)
+            145px
+            !important;
+
+        min-width:665px !important;
+
+        padding-left:12px !important;
+        padding-right:12px !important;
+
+        column-gap:8px;
+
+    }
+
+
+    .consultaNombre{
+
+        padding-right:4px;
+
+    }
+
+
+    .consultaAsunto{
+
+        padding-left:0;
+
+    }
+
+
+    /*
+    El título RECIBIDO y sus fechas
+    permanecen centrados.
+    */
+
+    .encabezadoConsultas > div:last-child,
+    .consultaFecha{
+
+        text-align:center !important;
+
+    }
+
+
+    /*
+    =========================================
+    3. RESUMEN POR COLABORADOR
+    MISMO ANCHO PARA TODOS
+    =========================================
+    */
+
+    #graficoAuditoriaPersona .cardGrafico{
+
+        width:100% !important;
+        max-width:none !important;
+
+        display:block !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        display:block !important;
+
+        width:100% !important;
+        max-width:none !important;
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:14px 0 !important;
+
+        box-sizing:border-box;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .cabeceraColaborador{
+
+        width:100% !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        justify-content:space-between !important;
+
+        gap:12px !important;
+
+        margin-bottom:10px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .nombreColaborador{
+
+        flex:1 1 auto;
+
+        min-width:0;
+
+        text-align:left;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .totalColaborador{
+
+        flex:0 0 auto;
+
+        text-align:right;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .filaBarraColaborador{
+
+        width:100% !important;
+
+        display:grid !important;
+
+        grid-template-columns:
+            20px
+            minmax(0,1fr)
+            28px
+            !important;
+
+        align-items:center;
+
+        gap:8px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .fondoBarra{
+
+        width:100% !important;
+        min-width:0 !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .valorBarra{
+
+        width:28px;
+
+        text-align:right;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES EXCLUSIVOS PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    /*
+    En celular el buscador queda arriba
+    y los cinco filtros quedan en una sola fila.
+    */
+
+    #herramientas{
+
+        grid-template-columns:
+            repeat(5,minmax(0,1fr))
+            !important;
+
+        gap:4px !important;
+
+    }
+
+
+    #buscarLote{
+
+        grid-column:1 / -1 !important;
+
+    }
+
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:36px !important;
+
+        padding:0 1px !important;
+
+        font-size:7.5px !important;
+
+    }
+
+
+    /*
+    CONSULTAS EN CELULAR:
+    DE aún más angosto.
+    */
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        grid-template-columns:
+            145px
+            minmax(330px,1fr)
+            140px
+            !important;
+
+        min-width:615px !important;
+
+        padding-left:10px !important;
+        padding-right:10px !important;
+
+        column-gap:5px;
+
+    }
+
+
+    /*
+    Resumen de colaboradores:
+    aprovechar todo el ancho del celular.
+    */
+
+    #graficoAuditoriaPersona
+    .cardGrafico{
+
+        padding-left:12px !important;
+        padding-right:12px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        padding-top:14px !important;
+        padding-bottom:14px !important;
+
+    }
+
+}
+/* =====================================================
+   BOTÓN DE MENÚ SIEMPRE VISIBLE
+   CELULAR Y TABLET
+===================================================== */
+
+@media(max-width:1180px){
+
+    #btnMenuMovil{
+
+        position:fixed !important;
+
+        top:18px !important;
+        left:18px !important;
+
+        z-index:5000 !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+        margin:0 !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+        justify-content:center !important;
+
+        box-shadow:
+            0 8px 22px rgba(37,99,235,.32) !important;
+
+    }
+
+
+    /*
+    Reserva el espacio del botón
+    para que no tape el nombre.
+    */
+
+    #usuarioHeader{
+
+        padding-left:82px !important;
+
+    }
+
+}
+@media(max-width:700px){
+
+    #btnMenuMovil{
+
+        top:16px !important;
+        left:16px !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:76px !important;
+
+    }
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
