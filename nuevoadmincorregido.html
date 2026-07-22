@@ -9362,7 +9362,18 @@ function renderizarGraficoGeneralAuditoria(
 
             return totalB - totalA;
 
-        });
+        })
+        .filter(nombre =>
+            (colaboradores[nombre].reservados + colaboradores[nombre].vendidos) > 0
+        );
+
+    if(!nombres.length){
+        contenedor.innerHTML = "";
+        contenedor.style.display = "none";
+        return;
+    }
+
+    contenedor.style.display = "block";
 
 
     let html = `
@@ -9731,23 +9742,23 @@ function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha, va
             </div>`;
     });
 
+    if(!totalVentas){
+        contenedor.innerHTML = "";
+        contenedor.style.display = "none";
+        return;
+    }
+
+    contenedor.style.display = "block";
+
     contenedor.innerHTML = `
         <div class="cardVentasColaboradores">
             <h3>Ventas por colaborador</h3>
             <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha,valorFechaHasta)}</div>
-            ${totalVentas ? `
-                <div class="canvasVentasWrap">
-                    <canvas id="canvasVentasColaboradores"></canvas>
-                </div>
-                <div class="leyendaVentasAuditoria">${leyenda}</div>
-            ` : `
-                <div class="sinVentasAuditoria">No hay ventas registradas para este filtro.</div>
-            `}
+            <div class="canvasVentasWrap">
+                <canvas id="canvasVentasColaboradores"></canvas>
+            </div>
+            <div class="leyendaVentasAuditoria">${leyenda}</div>
         </div>`;
-
-    if(!totalVentas){
-        return;
-    }
 
     const canvas = document.getElementById("canvasVentasColaboradores");
     const pluginCentro = {
@@ -9850,23 +9861,23 @@ function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha, 
             </div>`;
     });
 
+    if(!totalReservas){
+        contenedor.innerHTML = "";
+        contenedor.style.display = "none";
+        return;
+    }
+
+    contenedor.style.display = "block";
+
     contenedor.innerHTML = `
         <div class="cardVentasColaboradores">
             <h3>Reservas por colaborador</h3>
             <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha,valorFechaHasta)}</div>
-            ${totalReservas ? `
-                <div class="canvasVentasWrap">
-                    <canvas id="canvasReservasColaboradores"></canvas>
-                </div>
-                <div class="leyendaVentasAuditoria">${leyenda}</div>
-            ` : `
-                <div class="sinVentasAuditoria">No hay reservas registradas para este filtro.</div>
-            `}
+            <div class="canvasVentasWrap">
+                <canvas id="canvasReservasColaboradores"></canvas>
+            </div>
+            <div class="leyendaVentasAuditoria">${leyenda}</div>
         </div>`;
-
-    if(!totalReservas){
-        return;
-    }
 
     const canvas = document.getElementById("canvasReservasColaboradores");
     const pluginCentro = {
@@ -10386,6 +10397,22 @@ function formatearFechaReporte(valor){
     });
 }
 
+function valorCeldaExcelReporte(encabezado, valor){
+    const clave = String(encabezado || "").trim().toLowerCase();
+
+    if(clave === "fecha" && typeof valor === "string"){
+        const texto = valor.trim();
+        if(/^\d{4}-\d{2}-\d{2}T/.test(texto)){
+            const fecha = new Date(texto);
+            if(!Number.isNaN(fecha.getTime())){
+                return fecha;
+            }
+        }
+    }
+
+    return formatearFechaReporte(valor);
+}
+
 function calcularAnchoColumna(encabezado, filas, tipo){
 
     const clave = String(encabezado || "");
@@ -10507,7 +10534,7 @@ function agregarHojaExcel(libro,tipo,datos){
 
     hoja.mergeCells(2,1,2,totalColumnas);
     const celdaSubtitulo = hoja.getCell(2,1);
-    celdaSubtitulo.value = `Generado: ${new Date().toLocaleString("es-PE")}`;
+    celdaSubtitulo.value = `Generado: ${new Date().toLocaleString("es-PE")}  |  Use los filtros de los encabezados para buscar y filtrar; en Fecha puede usar día, mes, año o rango.`;
     celdaSubtitulo.font = {
         italic:true,
         size:10,
@@ -10604,7 +10631,7 @@ function agregarHojaExcel(libro,tipo,datos){
 
     if(filas.length){
         filas.forEach((fila,indice)=>{
-            const valores = encabezados.map(clave=>formatearFechaReporte(fila[clave]));
+            const valores = encabezados.map(clave=>valorCeldaExcelReporte(clave,fila[clave]));
             const filaExcel = hoja.addRow(valores);
             filaExcel.height = tipo === "CONSULTAS"
                 ? calcularAlturaFilaConsulta(fila,encabezados)
@@ -10614,6 +10641,10 @@ function agregarHojaExcel(libro,tipo,datos){
                 const encabezado = String(encabezados[columna-1] || "").trim().toLowerCase();
                 const esFecha = encabezado === "fecha";
                 const esMensaje = encabezado === "mensaje";
+
+                if(esFecha && celda.value instanceof Date){
+                    celda.numFmt = 'dd/mm/yyyy, hh:mm AM/PM';
+                }
 
                 celda.font = {size:10,color:{argb:"FF0F172A"}};
                 celda.alignment = {
