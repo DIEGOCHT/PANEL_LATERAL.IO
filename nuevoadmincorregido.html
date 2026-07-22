@@ -6143,7 +6143,9 @@ and
     font-size:14px;
 }
 
-#filtroFechaAuditoria{
+#filtroFechaAuditoria,
+#filtroFechaDesdeAuditoria,
+#filtroFechaHastaAuditoria{
     width:170px;
     height:44px;
     margin:0;
@@ -6153,6 +6155,19 @@ and
     background:#FFFFFF;
     color:#0F172A;
     font-size:14px;
+}
+
+#grupoRangoAuditoria{
+    display:none;
+    align-items:center;
+    gap:8px;
+}
+
+.etiquetaRangoAuditoria{
+    color:#64748B;
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
 }
 
 #btnAplicarFechaAuditoria,
@@ -6282,10 +6297,18 @@ and
     #buscarAuditoria,
     #tipoFechaAuditoria,
     #filtroFechaAuditoria,
+    #filtroFechaDesdeAuditoria,
+    #filtroFechaHastaAuditoria,
+    #grupoRangoAuditoria,
     #btnAplicarFechaAuditoria,
     #btnTodasFechasAuditoria{
         width:100%;
         min-width:0;
+    }
+
+    #grupoRangoAuditoria{
+        flex-direction:column;
+        align-items:stretch;
     }
 }
 
@@ -9473,9 +9496,36 @@ function obtenerAnioActualAuditoria(){
     return String(new Date().getFullYear());
 }
 
-function configurarControlFechaAuditoria(tipo, control, conservar=false){
+function configurarControlFechaAuditoria(tipo, control, controlHasta, conservar=false){
     const tipoNormalizado = String(tipo || "MES").toUpperCase();
+    const grupoRango = document.getElementById("grupoRangoAuditoria");
     const valorAnterior = conservar ? String(control.value || "") : "";
+
+    if(grupoRango){
+        grupoRango.style.display = tipoNormalizado === "RANGO" ? "flex" : "none";
+    }
+
+    control.style.display = tipoNormalizado === "RANGO" ? "none" : "block";
+
+    if(tipoNormalizado === "RANGO"){
+        if(controlHasta){
+            control.type = "date";
+            controlHasta.type = "date";
+
+            const hoy = new Date();
+            const primeroMes = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,"0")}-01`;
+            const hoyTexto = obtenerDiaActualAuditoria();
+
+            control.value = /^\d{4}-\d{2}-\d{2}$/.test(valorAnterior)
+                ? valorAnterior
+                : primeroMes;
+
+            if(!/^\d{4}-\d{2}-\d{2}$/.test(String(controlHasta.value || ""))){
+                controlHasta.value = hoyTexto;
+            }
+        }
+        return;
+    }
 
     if(tipoNormalizado === "DIA"){
         control.type = "date";
@@ -9508,7 +9558,15 @@ function configurarControlFechaAuditoria(tipo, control, conservar=false){
         : obtenerMesActualAuditoria();
 }
 
-function registroCoincideFechaAuditoria(item, tipo, valor){
+function fechaLocalDesdeISO(valor){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(String(valor || ""))){
+        return null;
+    }
+    const [anio,mes,dia] = String(valor).split("-").map(Number);
+    return new Date(anio,mes-1,dia,0,0,0,0);
+}
+
+function registroCoincideFechaAuditoria(item, tipo, valor, valorHasta=""){
     if(!valor){
         return true;
     }
@@ -9523,6 +9581,18 @@ function registroCoincideFechaAuditoria(item, tipo, valor){
     const dia = String(fecha.getDate()).padStart(2,"0");
     const tipoNormalizado = String(tipo || "MES").toUpperCase();
 
+    if(tipoNormalizado === "RANGO"){
+        const desde = fechaLocalDesdeISO(valor);
+        const hasta = fechaLocalDesdeISO(valorHasta);
+        if(!desde || !hasta){
+            return true;
+        }
+        const fechaDia = new Date(anio,fecha.getMonth(),fecha.getDate(),0,0,0,0);
+        const inicio = desde <= hasta ? desde : hasta;
+        const fin = desde <= hasta ? hasta : desde;
+        return fechaDia >= inicio && fechaDia <= fin;
+    }
+
     if(tipoNormalizado === "DIA"){
         return `${anio}-${mes}-${dia}` === valor;
     }
@@ -9534,12 +9604,23 @@ function registroCoincideFechaAuditoria(item, tipo, valor){
     return `${anio}-${mes}` === valor;
 }
 
-function etiquetaFechaAuditoria(tipo, valor){
+function etiquetaFechaAuditoria(tipo, valor, valorHasta=""){
     if(!valor){
         return "Todas las fechas";
     }
 
     const tipoNormalizado = String(tipo || "MES").toUpperCase();
+
+    if(tipoNormalizado === "RANGO"){
+        if(!valorHasta){
+            return "Rango de fechas";
+        }
+        const formatear = iso => {
+            const fecha = fechaLocalDesdeISO(iso);
+            return fecha ? fecha.toLocaleDateString("es-PE",{day:"2-digit",month:"2-digit",year:"numeric"}) : "";
+        };
+        return `${formatear(valor)} al ${formatear(valorHasta)}`;
+    }
 
     if(tipoNormalizado === "DIA"){
         const [anio,mes,dia] = valor.split("-").map(Number);
@@ -9561,7 +9642,7 @@ function etiquetaFechaAuditoria(tipo, valor){
     });
 }
 
-function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha){
+function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha, valorFechaHasta=""){
     const contenedor = document.getElementById("graficoVentasColaboradores");
     if(!contenedor){
         return;
@@ -9610,7 +9691,7 @@ function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha){
     contenedor.innerHTML = `
         <div class="cardVentasColaboradores">
             <h3>Ventas por colaborador</h3>
-            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha)}</div>
+            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha,valorFechaHasta)}</div>
             ${totalVentas ? `
                 <div class="canvasVentasWrap">
                     <canvas id="canvasVentasColaboradores"></canvas>
@@ -9682,7 +9763,7 @@ function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha){
     });
 }
 
-function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha){
+function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha, valorFechaHasta=""){
     const contenedor = document.getElementById("graficoReservasColaboradores");
     if(!contenedor){
         return;
@@ -9729,7 +9810,7 @@ function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha){
     contenedor.innerHTML = `
         <div class="cardVentasColaboradores">
             <h3>Reservas por colaborador</h3>
-            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha)}</div>
+            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha,valorFechaHasta)}</div>
             ${totalReservas ? `
                 <div class="canvasVentasWrap">
                     <canvas id="canvasReservasColaboradores"></canvas>
@@ -9856,12 +9937,20 @@ async function cargarAuditoria(){
                     <option value="DIA">DÍA</option>
                     <option value="MES" selected>MES</option>
                     <option value="ANIO">AÑO</option>
+                    <option value="RANGO">RANGO</option>
                 </select>
 
                 <input
                     id="filtroFechaAuditoria"
                     type="month"
                     value="${mesInicial}">
+
+                <div id="grupoRangoAuditoria">
+                    <span class="etiquetaRangoAuditoria">DESDE</span>
+                    <input id="filtroFechaDesdeAuditoria" type="date">
+                    <span class="etiquetaRangoAuditoria">HASTA</span>
+                    <input id="filtroFechaHastaAuditoria" type="date">
+                </div>
 
                 <button id="btnAplicarFechaAuditoria">
                     📅 FILTRAR FECHA
@@ -9923,6 +10012,8 @@ async function cargarAuditoria(){
     const buscador = document.getElementById("buscarAuditoria");
     const tipoFecha = document.getElementById("tipoFechaAuditoria");
     const filtroFecha = document.getElementById("filtroFechaAuditoria");
+    const filtroFechaDesde = document.getElementById("filtroFechaDesdeAuditoria");
+    const filtroFechaHasta = document.getElementById("filtroFechaHastaAuditoria");
     const botonFecha = document.getElementById("btnAplicarFechaAuditoria");
     const botonTodas = document.getElementById("btnTodasFechasAuditoria");
     const tbody = document.getElementById("tbodyAuditoria");
@@ -9930,12 +10021,17 @@ async function cargarAuditoria(){
     function aplicarFiltrosAuditoria(){
         const texto = String(buscador.value || "").trim().toUpperCase();
         const tipo = String(tipoFecha.value || "MES").trim().toUpperCase();
-        const valorFecha = String(filtroFecha.value || "").trim();
+        const valorFecha = tipo === "RANGO"
+            ? String(filtroFechaDesde.value || "").trim()
+            : String(filtroFecha.value || "").trim();
+        const valorFechaHasta = tipo === "RANGO"
+            ? String(filtroFechaHasta.value || "").trim()
+            : "";
 
         const registrosFiltrados = datos.filter(item=>{
             const nombre = String(item.Nombre || item.Usuario || "").trim().toUpperCase();
             const coincideNombre = nombre.includes(texto);
-            const coincideFecha = registroCoincideFechaAuditoria(item,tipo,valorFecha);
+            const coincideFecha = registroCoincideFechaAuditoria(item,tipo,valorFecha,valorFechaHasta);
             return coincideNombre && coincideFecha;
         });
 
@@ -9968,27 +10064,35 @@ async function cargarAuditoria(){
         Ambos gráficos reciben exactamente el mismo conjunto filtrado.
         Así el buscador y la fecha siempre trabajan relacionados.
         */
-        renderizarTortaVentasColaboradores(registrosFiltrados,tipo,valorFecha);
-        renderizarTortaReservasColaboradores(registrosFiltrados,tipo,valorFecha);
+        renderizarTortaVentasColaboradores(registrosFiltrados,tipo,valorFecha,valorFechaHasta);
+        renderizarTortaReservasColaboradores(registrosFiltrados,tipo,valorFecha,valorFechaHasta);
         renderizarGraficoGeneralAuditoria(registrosFiltrados);
     }
 
     buscador.addEventListener("input",aplicarFiltrosAuditoria);
 
     tipoFecha.addEventListener("change",()=>{
-        configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,false);
+        configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,filtroFechaHasta,false);
+        if(String(tipoFecha.value).toUpperCase() === "RANGO"){
+            filtroFechaDesde.value = filtroFecha.value;
+        }
         aplicarFiltrosAuditoria();
     });
 
     filtroFecha.addEventListener("change",aplicarFiltrosAuditoria);
+    filtroFechaDesde.addEventListener("change",aplicarFiltrosAuditoria);
+    filtroFechaHasta.addEventListener("change",aplicarFiltrosAuditoria);
 
     botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
 
     botonTodas.addEventListener("click",()=>{
         filtroFecha.value = "";
+        filtroFechaDesde.value = "";
+        filtroFechaHasta.value = "";
         aplicarFiltrosAuditoria();
     });
 
+    configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,filtroFechaHasta,true);
     aplicarFiltrosAuditoria();
 
     localStorage.setItem("auditoriaVista",Date.now());
