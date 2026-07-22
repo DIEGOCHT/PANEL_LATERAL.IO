@@ -6107,6 +6107,174 @@ and
     }
 }
 
+
+
+/* =====================================================
+   AUDITORÍA V4 - BUSCADOR + FECHA + VENTAS
+===================================================== */
+.barraFiltrosAuditoria{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+#buscarAuditoria{
+    width:350px;
+    height:44px;
+    margin:0;
+    padding:0 14px;
+    border:1px solid #CBD5E1;
+    border-radius:12px;
+    background:#FFFFFF;
+    font-size:14px;
+}
+
+#filtroMesAuditoria{
+    width:170px;
+    height:44px;
+    margin:0;
+    padding:0 12px;
+    border:1px solid #CBD5E1;
+    border-radius:12px;
+    background:#FFFFFF;
+    color:#0F172A;
+    font-size:14px;
+}
+
+#btnAplicarFechaAuditoria,
+#btnTodasFechasAuditoria{
+    width:auto;
+    height:44px;
+    min-width:130px;
+    margin:0;
+    padding:0 16px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:700;
+}
+
+#btnAplicarFechaAuditoria{
+    background:#2563EB;
+    color:#FFFFFF;
+}
+
+#btnTodasFechasAuditoria{
+    min-width:105px;
+    background:#F1F5F9;
+    color:#334155;
+    border:1px solid #CBD5E1;
+}
+
+#panelAuditoriaDerecho{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
+    min-width:0;
+    padding-right:4px;
+}
+
+#graficoVentasColaboradores{
+    width:100%;
+    min-width:0;
+}
+
+.cardVentasColaboradores{
+    background:#FFFFFF;
+    border:1px solid #E2E8F0;
+    border-radius:18px;
+    padding:14px;
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
+}
+
+.cardVentasColaboradores h3{
+    margin:0;
+    padding-bottom:10px;
+    border-bottom:1px solid #E2E8F0;
+    color:#0F172A;
+    font-size:13px;
+    font-weight:700;
+    text-align:center;
+    text-transform:uppercase;
+}
+
+.subtituloVentasAuditoria{
+    margin:8px 0 0;
+    color:#64748B;
+    font-size:11px;
+    text-align:center;
+}
+
+.canvasVentasWrap{
+    width:185px;
+    height:185px;
+    margin:10px auto 12px;
+}
+
+.leyendaVentasAuditoria{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-top:8px;
+}
+
+.itemVentaAuditoria{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:8px;
+    align-items:center;
+    font-size:11px;
+}
+
+.itemVentaAuditoria .nombreVenta{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#334155;
+    font-weight:600;
+}
+
+.itemVentaAuditoria .valorVenta{
+    color:#0F172A;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.puntoVentaAuditoria{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    margin-right:6px;
+    border-radius:50%;
+    vertical-align:middle;
+}
+
+.sinVentasAuditoria{
+    padding:28px 8px;
+    color:#64748B;
+    font-size:12px;
+    text-align:center;
+}
+
+@media(max-width:700px){
+    .barraFiltrosAuditoria{
+        align-items:stretch;
+    }
+
+    #buscarAuditoria,
+    #filtroMesAuditoria,
+    #btnAplicarFechaAuditoria,
+    #btnTodasFechasAuditoria{
+        width:100%;
+        min-width:0;
+    }
+}
+
 /* =====================================================
    REPORTES
 ===================================================== */
@@ -9276,623 +9444,336 @@ function renderizarGraficoGeneralAuditoria(
         html;
 
 }
-async function cargarAuditoria(){
 
-const rol =
-localStorage.getItem("rol");
-
-if(rol !== "ADMIN"){
-    return;
+function obtenerMesActualAuditoria(){
+    const ahora = new Date();
+    return `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
 }
 
-ocultarTodo();
-
-document
-.getElementById(
-"contenedorAuditoria"
-)
-.style.display =
-"block";
-
-const [
-    datos,
-    colaboradores
-] =
-await Promise.all([
-
-    apiGet(
-        "?action=auditoria"
-    ),
-
-    apiPost(
-        "listarAsesores"
-    )
-
-]);
-
-
-/*
-=========================================
-RELACIONAR USUARIO CON NOMBRE
-=========================================
-*/
-
-const mapaNombres = {};
-
-if(
-    Array.isArray(colaboradores)
-){
-
-    colaboradores.forEach(persona=>{
-
-        const usuario =
-            String(
-                persona.usuario || ""
-            )
-            .trim()
-            .toUpperCase();
-
-        if(usuario !== ""){
-
-            mapaNombres[usuario] =
-                String(
-                    persona.nombre ||
-                    persona.usuario ||
-                    ""
-                )
-                .trim();
-
-        }
-
-    });
-
-}
-
-
-/*
-Agregar Nombre a cada registro
-de auditoría.
-*/
-
-datos.forEach(item=>{
-
-    const usuario =
-        String(
-            item.Usuario || ""
-        )
-        .trim();
-
-    item.Nombre =
-        mapaNombres[
-            usuario.toUpperCase()
-        ]
-        ||
-        usuario;
-
-});
-
-
-datos.sort((a,b)=>{
-
-    return new Date(b.Fecha)
-    -
-    new Date(a.Fecha);
-
-});
-
-const registrosProyectoActual =
-    obtenerUltimosRegistrosPorLote(
-        datos
-    );
-
-
-const totalProyecto =
-    registrosProyectoActual.length;
-
-
-const reservados =
-    registrosProyectoActual.filter(
-        item =>
-
-        String(
-            item.Despues || ""
-        )
-        .trim()
-        .toUpperCase()
-        === "RESERVADO"
-
-    ).length;
-
-
-const vendidos =
-    registrosProyectoActual.filter(
-        item =>
-
-        String(
-            item.Despues || ""
-        )
-        .trim()
-        .toUpperCase()
-        === "VENDIDO"
-
-    ).length;
-    let html = `
-
-<div class="tituloModulo">
-
-    <h2>📑 Auditoría</h2>
-
-    <p>Registro histórico de todos los cambios realizados en el sistema.</p>
-
-</div>
-
-<div class="moduloContenido">
-
-    <input
-        id="buscarAuditoria"
-        placeholder="🔍 Buscar nombre..."
-        style="
-        width:350px;
-        padding:12px;
-        border-radius:12px;
-        border:1px solid #CBD5E1;
-        font-size:15px;
-        margin-bottom:20px;
-    ">
-
-    <div id="resumenAuditoria"
-    style="
-    display:flex;
-    gap:20px;
-    margin-bottom:20px;
-    ">
-
-        <div class="cardDashboard">
-            <h3 id="totalCambios">${totalProyecto}</h3>
-            <p>Total Cambios</p>
-        </div>
-
-        <div class="cardDashboard">
-            <h3 id="totalReservados">${reservados}</h3>
-            <p>🟡 Reservados</p>
-        </div>
-
-        <div class="cardDashboard">
-            <h3 id="totalVendidos">${vendidos}</h3>
-            <p>🔴 Vendidos</p>
-        </div>
-
-    </div>
-
-<div id="auditoriaContenidoPrincipal">
-
-<div id="auditoriaTablaPrincipal">
-
-<div class="contenedorTablaScroll">
-
-<table class="tabla">
-
-<thead>
-
-<tr>
-
-<th>Fecha</th>
-<th>Nombre</th>
-<th>Etapa</th>
-<th>Lote</th>
-<th>Antes</th>
-<th>Después</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-`;
-
-    datos.forEach(item=>{
-
-      html += `
-
-      <tr>
-
-        <td>${formatearFecha(item.Fecha)}</td>
-
-<td>${item.Nombre || item.Usuario || ""}</td>
-
-<td>${item.Etapa || ""}</td>
-
-<td>${item.Lote || ""}</td>
-
-<td>${item.Antes || ""}</td>
-
-        <td>${item.Despues || ""}</td>
-
-      </tr>
-
-      `;
-
-    });
-
-    html += `
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<div id="graficoAuditoriaPersona">
-</div>
-
-</div>
-
-</div>
-`;
-
-    document
-    .getElementById(
-    "contenedorAuditoria"
-    )
-    .innerHTML =
-    html;
-renderizarGraficoGeneralAuditoria(
-    datos
-);
-document
-.getElementById(
-    "buscarAuditoria"
-)
-.addEventListener(
-"input",
-function(){
-
-    const texto =
-        this.value
-        .trim()
-        .toUpperCase();
-
-
-    /*
-    =========================================
-    FILTRAR HISTORIAL POR NOMBRE
-    =========================================
-    */
-
-    const filas =
-        document.querySelectorAll(
-            "#contenedorAuditoria table tbody tr"
-        );
-
-
-    filas.forEach(fila=>{
-
-        const nombre =
-            fila.children[1]
-            .textContent
-            .trim()
-            .toUpperCase();
-
-
-        fila.style.display =
-            nombre.includes(texto)
-            ? ""
-            : "none";
-
-    });
-
-
-    /*
-    =========================================
-    OBTENER REGISTROS DEL COLABORADOR
-    =========================================
-    */
-
-    const registrosPersona =
-        datos.filter(item=>{
-
-            const nombre =
-                String(
-                    item.Nombre ||
-                    item.Usuario ||
-                    ""
-                )
-                .trim()
-                .toUpperCase();
-
-
-            return nombre.includes(texto);
-
-        });
-
-
-    /*
-    =========================================
-    ORDENAR MÁS RECIENTES PRIMERO
-    =========================================
-    */
-
-    registrosPersona.sort((a,b)=>{
-
-        return (
-            new Date(b.Fecha) -
-            new Date(a.Fecha)
-        );
-
-    });
-
-
-    /*
-    =========================================
-    CONSERVAR SOLO EL ÚLTIMO REGISTRO
-    DE CADA LOTE
-    =========================================
-    */
-
-    const lotesUnicos =
-        new Map();
-
-
-    registrosPersona.forEach(item=>{
-
-        const clave =
-            String(item.Etapa || "")
-            .trim()
-            .toUpperCase()
-            +
-            "|" +
-            String(item.Lote || "")
-            .trim()
-            .toUpperCase();
-
-
-        /*
-        Como están ordenados desde el más
-        reciente al más antiguo, guardamos
-        solamente la primera aparición.
-        */
-
-        if(
-            !lotesUnicos.has(clave)
-        ){
-
-            lotesUnicos.set(
-                clave,
-                item
-            );
-
-        }
-
-    });
-
-
-    const registrosActuales =
-        Array.from(
-            lotesUnicos.values()
-        );
-
-
-    /*
-    =========================================
-    CALCULAR ESTADÍSTICAS REALES
-    =========================================
-    */
-
-    const total =
-        registrosActuales.length;
-
-
-    const reservadosPersona =
-        registrosActuales.filter(item=>
-
-            String(
-                item.Despues || ""
-            )
-            .trim()
-            .toUpperCase()
-            === "RESERVADO"
-
-        ).length;
-
-
-    const vendidosPersona =
-        registrosActuales.filter(item=>
-
-            String(
-                item.Despues || ""
-            )
-            .trim()
-            .toUpperCase()
-            === "VENDIDO"
-
-        ).length;
-
-
-    /*
-    =========================================
-    ACTUALIZAR TARJETAS
-    =========================================
-    */
-
-    document
-    .getElementById(
-        "totalCambios"
-    )
-    .textContent =
-        total;
-
-
-    document
-    .getElementById(
-        "totalReservados"
-    )
-    .textContent =
-    reservadosPersona;
-
-
-    document
-    .getElementById(
-        "totalVendidos"
-    )
-    .textContent =
-    vendidosPersona;
-
-
-    /*
-    =========================================
-    MOSTRAR / OCULTAR TORTA
-    =========================================
-    */
-
-    if(
-    texto === ""
-){
-
-    /*
-    RESTAURAR TODA LA TABLA
-    */
-
-    filas.forEach(fila=>{
-
-        fila.style.display =
-            "";
-
-    });
-
-
-    /*
-    RESTAURAR ESTADÍSTICAS
-    DEL PROYECTO COMPLETO
-    */
-
-    document
-    .getElementById(
-        "totalCambios"
-    )
-    .textContent =
-        totalProyecto;
-
-
-    document
-    .getElementById(
-        "totalReservados"
-    )
-    .textContent =
-        reservados;
-
-
-    document
-    .getElementById(
-        "totalVendidos"
-    )
-    .textContent =
-        vendidos;
-
-
-    /*
-    VOLVER AL GRÁFICO GENERAL
-    */
-
-    renderizarGraficoGeneralAuditoria(
-        datos
-    );
-
-
-    return;
-
-}
-
-
-        /*
-    =========================================
-    NO MOSTRAR GRÁFICO SI NO HAY RESULTADOS
-    =========================================
-    */
-
-    if(
-        registrosPersona.length === 0
-    ){
-
-        const contenedorGrafico =
-            document.getElementById(
-                "graficoAuditoriaPersona"
-            );
-
-
-        if(
-            window.chartAuditoria
-        ){
-
-            window
-            .chartAuditoria
-            .destroy();
-
-
-            window.chartAuditoria =
-                null;
-
-        }
-
-
-        if(
-            contenedorGrafico
-        ){
-
-            contenedorGrafico
-            .innerHTML =
-                "";
-
-
-            contenedorGrafico
-            .style.display =
-                "none";
-
-        }
-
-
-        return;
-
+function registroCoincideMesAuditoria(item, mes){
+    if(!mes){
+        return true;
     }
 
+    const fecha = new Date(item?.Fecha);
+    if(Number.isNaN(fecha.getTime())){
+        return false;
+    }
 
-    /*
-    Obtener el nombre exacto.
-    */
+    const clave = `${fecha.getFullYear()}-${String(fecha.getMonth()+1).padStart(2,"0")}`;
+    return clave === mes;
+}
 
-    const primerRegistro =
-        registrosPersona[0];
+function etiquetaMesAuditoria(mes){
+    if(!mes){
+        return "Todas las fechas";
+    }
 
+    const [anio,numeroMes] = mes.split("-").map(Number);
+    const fecha = new Date(anio, numeroMes-1, 1);
 
-    const nombreEncontrado =
-        String(
+    return fecha.toLocaleDateString("es-PE",{
+        month:"long",
+        year:"numeric"
+    });
+}
 
-            primerRegistro.Nombre ||
+function renderizarTortaVentasColaboradores(registros, mes){
+    const contenedor = document.getElementById("graficoVentasColaboradores");
+    if(!contenedor){
+        return;
+    }
 
-            primerRegistro.Usuario ||
+    if(window.chartVentasColaboradores){
+        window.chartVentasColaboradores.destroy();
+        window.chartVentasColaboradores = null;
+    }
 
-            this.value
+    const ventas = {};
 
-        )
-        .trim();
+    registros.forEach(item=>{
+        const estado = String(item.Despues || "").trim().toUpperCase();
+        if(estado !== "VENDIDO"){
+            return;
+        }
 
+        const nombre = String(item.Nombre || item.Usuario || "Sin nombre").trim();
+        ventas[nombre] = (ventas[nombre] || 0) + 1;
+    });
 
-    renderizarGraficoAuditoria(
+    const ranking = Object.entries(ventas)
+        .sort((a,b)=>b[1]-a[1]);
 
-        nombreEncontrado,
+    const totalVentas = ranking.reduce((suma,item)=>suma+item[1],0);
+    const paleta = [
+        "#2563EB","#EF4444","#22C55E","#F59E0B","#8B5CF6",
+        "#06B6D4","#EC4899","#84CC16","#F97316","#64748B"
+    ];
 
-        reservadosPersona,
+    let leyenda = "";
+    ranking.forEach(([nombre,cantidad],indice)=>{
+        const porcentaje = totalVentas ? (cantidad*100/totalVentas).toFixed(1) : "0.0";
+        const color = paleta[indice % paleta.length];
 
-        vendidosPersona
+        leyenda += `
+            <div class="itemVentaAuditoria">
+                <span class="nombreVenta" title="${nombre}">
+                    <span class="puntoVentaAuditoria" style="background:${color}"></span>${nombre}
+                </span>
+                <span class="valorVenta">${cantidad} (${porcentaje}%)</span>
+            </div>`;
+    });
 
-    );
+    contenedor.innerHTML = `
+        <div class="cardVentasColaboradores">
+            <h3>Ventas por colaborador</h3>
+            <div class="subtituloVentasAuditoria">${etiquetaMesAuditoria(mes)}</div>
+            ${totalVentas ? `
+                <div class="canvasVentasWrap">
+                    <canvas id="canvasVentasColaboradores"></canvas>
+                </div>
+                <div class="leyendaVentasAuditoria">${leyenda}</div>
+            ` : `
+                <div class="sinVentasAuditoria">No hay ventas registradas para este filtro.</div>
+            `}
+        </div>`;
 
-});
-localStorage.setItem(
-"auditoriaVista",
-Date.now()
-);
+    if(!totalVentas){
+        return;
+    }
 
+    const canvas = document.getElementById("canvasVentasColaboradores");
+    const pluginCentro = {
+        id:"textoCentroVentasColaboradores",
+        afterDraw(chart){
+            const meta = chart.getDatasetMeta(0);
+            if(!meta.data.length){
+                return;
+            }
+
+            const ctx = chart.ctx;
+            const x = meta.data[0].x;
+            const y = meta.data[0].y;
+            ctx.save();
+            ctx.textAlign="center";
+            ctx.textBaseline="middle";
+            ctx.fillStyle="#0F172A";
+            ctx.font="bold 28px Segoe UI";
+            ctx.fillText(totalVentas,x,y-7);
+            ctx.fillStyle="#64748B";
+            ctx.font="11px Segoe UI";
+            ctx.fillText("VENTAS",x,y+16);
+            ctx.restore();
+        }
+    };
+
+    window.chartVentasColaboradores = new Chart(canvas,{
+        type:"doughnut",
+        plugins:[pluginCentro],
+        data:{
+            labels:ranking.map(item=>item[0]),
+            datasets:[{
+                data:ranking.map(item=>item[1]),
+                backgroundColor:ranking.map((_,i)=>paleta[i % paleta.length]),
+                borderColor:"#FFFFFF",
+                borderWidth:3
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            cutout:"58%",
+            plugins:{
+                legend:{display:false},
+                tooltip:{
+                    callbacks:{
+                        label(context){
+                            const cantidad = context.raw || 0;
+                            const porcentaje = totalVentas ? (cantidad*100/totalVentas).toFixed(1) : "0.0";
+                            return `${context.label}: ${cantidad} venta(s) (${porcentaje}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+async function cargarAuditoria(){
+
+    const rol = localStorage.getItem("rol");
+    if(rol !== "ADMIN"){
+        return;
+    }
+
+    ocultarTodo();
+
+    document
+    .getElementById("contenedorAuditoria")
+    .style.display = "block";
+
+    const [datos,colaboradores] = await Promise.all([
+        apiGet("?action=auditoria"),
+        apiPost("listarAsesores")
+    ]);
+
+    const mapaNombres = {};
+
+    if(Array.isArray(colaboradores)){
+        colaboradores.forEach(persona=>{
+            const usuario = String(persona.usuario || "").trim().toUpperCase();
+            if(usuario !== ""){
+                mapaNombres[usuario] = String(persona.nombre || persona.usuario || "").trim();
+            }
+        });
+    }
+
+    datos.forEach(item=>{
+        const usuario = String(item.Usuario || "").trim();
+        item.Nombre = mapaNombres[usuario.toUpperCase()] || usuario;
+    });
+
+    datos.sort((a,b)=>new Date(b.Fecha)-new Date(a.Fecha));
+
+    const mesInicial = obtenerMesActualAuditoria();
+
+    let html = `
+        <div class="tituloModulo">
+            <h2>📑 Auditoría</h2>
+            <p>Registro histórico de todos los cambios realizados en el sistema.</p>
+        </div>
+
+        <div class="moduloContenido">
+            <div class="barraFiltrosAuditoria">
+                <input
+                    id="buscarAuditoria"
+                    placeholder="🔍 Buscar nombre...">
+
+                <input
+                    id="filtroMesAuditoria"
+                    type="month"
+                    value="${mesInicial}">
+
+                <button id="btnAplicarFechaAuditoria">
+                    📅 FILTRAR FECHA
+                </button>
+
+                <button id="btnTodasFechasAuditoria">
+                    TODAS
+                </button>
+            </div>
+
+            <div id="resumenAuditoria" style="display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap;">
+                <div class="cardDashboard">
+                    <h3 id="totalCambios">0</h3>
+                    <p>Total Cambios</p>
+                </div>
+
+                <div class="cardDashboard">
+                    <h3 id="totalReservados">0</h3>
+                    <p>🟡 Reservados</p>
+                </div>
+
+                <div class="cardDashboard">
+                    <h3 id="totalVendidos">0</h3>
+                    <p>🔴 Vendidos</p>
+                </div>
+            </div>
+
+            <div id="auditoriaContenidoPrincipal">
+                <div id="auditoriaTablaPrincipal">
+                    <div class="contenedorTablaScroll">
+                        <table class="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre</th>
+                                    <th>Etapa</th>
+                                    <th>Lote</th>
+                                    <th>Antes</th>
+                                    <th>Después</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyAuditoria"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panelAuditoriaDerecho">
+                    <div id="graficoVentasColaboradores"></div>
+                    <div id="graficoAuditoriaPersona"></div>
+                </div>
+            </div>
+        </div>`;
+
+    document
+    .getElementById("contenedorAuditoria")
+    .innerHTML = html;
+
+    const buscador = document.getElementById("buscarAuditoria");
+    const filtroMes = document.getElementById("filtroMesAuditoria");
+    const botonFecha = document.getElementById("btnAplicarFechaAuditoria");
+    const botonTodas = document.getElementById("btnTodasFechasAuditoria");
+    const tbody = document.getElementById("tbodyAuditoria");
+
+    function aplicarFiltrosAuditoria(){
+        const texto = String(buscador.value || "").trim().toUpperCase();
+        const mes = String(filtroMes.value || "").trim();
+
+        const registrosFiltrados = datos.filter(item=>{
+            const nombre = String(item.Nombre || item.Usuario || "").trim().toUpperCase();
+            const coincideNombre = nombre.includes(texto);
+            const coincideMes = registroCoincideMesAuditoria(item,mes);
+            return coincideNombre && coincideMes;
+        });
+
+        tbody.innerHTML = registrosFiltrados.map(item=>`
+            <tr>
+                <td>${formatearFecha(item.Fecha)}</td>
+                <td>${item.Nombre || item.Usuario || ""}</td>
+                <td>${item.Etapa || ""}</td>
+                <td>${item.Lote || ""}</td>
+                <td>${item.Antes || ""}</td>
+                <td>${item.Despues || ""}</td>
+            </tr>
+        `).join("");
+
+        const registrosActuales = obtenerUltimosRegistrosPorLote(registrosFiltrados);
+
+        const reservados = registrosActuales.filter(item=>
+            String(item.Despues || "").trim().toUpperCase() === "RESERVADO"
+        ).length;
+
+        const vendidos = registrosActuales.filter(item=>
+            String(item.Despues || "").trim().toUpperCase() === "VENDIDO"
+        ).length;
+
+        document.getElementById("totalCambios").textContent = registrosActuales.length;
+        document.getElementById("totalReservados").textContent = reservados;
+        document.getElementById("totalVendidos").textContent = vendidos;
+
+        /*
+        Ambos gráficos reciben exactamente el mismo conjunto filtrado.
+        Así el buscador y la fecha siempre trabajan relacionados.
+        */
+        renderizarTortaVentasColaboradores(registrosFiltrados,mes);
+        renderizarGraficoGeneralAuditoria(registrosFiltrados);
+    }
+
+    buscador.addEventListener("input",aplicarFiltrosAuditoria);
+
+    filtroMes.addEventListener("change",aplicarFiltrosAuditoria);
+
+    botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
+
+    botonTodas.addEventListener("click",()=>{
+        filtroMes.value = "";
+        aplicarFiltrosAuditoria();
+    });
+
+    aplicarFiltrosAuditoria();
+
+    localStorage.setItem("auditoriaVista",Date.now());
 }
 document
 .getElementById("btnAsesores")
@@ -10243,22 +10124,18 @@ function agregarHojaExcel(libro,tipo,datos){
 
     const filas = prepararDatosReporte(tipo,datos);
     const nombre = nombreHojaReporte(tipo);
-    const hoja = libro.addWorksheet(nombre,{
-        views:[{
-            state:"frozen",
-            ySplit:4
-        }]
-    });
+    const hoja = libro.addWorksheet(nombre);
 
     const encabezados = filas.length
         ? Object.keys(filas[0])
         : ["Sin registros"];
 
     const totalColumnas = Math.max(encabezados.length,1);
+    const tituloCompleto = `ASSTURIAS - ${tituloReporteExcel(tipo)}`;
 
     hoja.mergeCells(1,1,1,totalColumnas);
     const celdaTitulo = hoja.getCell(1,1);
-    celdaTitulo.value = `ASSTURIAS - ${tituloReporteExcel(tipo)}`;
+    celdaTitulo.value = tituloCompleto;
     celdaTitulo.font = {
         bold:true,
         size:16,
@@ -10271,14 +10148,15 @@ function agregarHojaExcel(libro,tipo,datos){
     };
     celdaTitulo.alignment = {
         vertical:"middle",
-        horizontal:"center"
+        horizontal:"center",
+        wrapText:false,
+        shrinkToFit:false
     };
     hoja.getRow(1).height = 30;
 
     hoja.mergeCells(2,1,2,totalColumnas);
     const celdaSubtitulo = hoja.getCell(2,1);
-    celdaSubtitulo.value =
-        `Generado: ${new Date().toLocaleString("es-PE")}`;
+    celdaSubtitulo.value = `Generado: ${new Date().toLocaleString("es-PE")}`;
     celdaSubtitulo.font = {
         italic:true,
         size:10,
@@ -10295,7 +10173,56 @@ function agregarHojaExcel(libro,tipo,datos){
     };
     hoja.getRow(2).height = 21;
 
-    hoja.addRow([]);
+    let filaEncabezadoNumero = 4;
+
+    /* Dashboard superior exclusivo del reporte de LOTES */
+    if(tipo === "LOTES"){
+        const estados = filas.map(f=>String(f.Estado ?? f.estado ?? "").trim().toUpperCase());
+        const total = filas.length;
+        const libres = estados.filter(e=>e === "LIBRE").length;
+        const reservados = estados.filter(e=>e === "RESERVADO").length;
+        const vendidos = estados.filter(e=>e === "VENDIDO").length;
+
+        hoja.addRow([]); // fila 3
+
+        const filaLabels = hoja.addRow(["TOTAL LOTES","LIBRES","RESERVADOS","VENDIDOS"]);
+        const filaValores = hoja.addRow([total,libres,reservados,vendidos]);
+
+        const estilosResumen = [
+            {fondo:"FFEFF6FF",texto:"FF1D4ED8",borde:"FF2563EB"},
+            {fondo:"FFDCFCE7",texto:"FF15803D",borde:"FF22C55E"},
+            {fondo:"FFFEF3C7",texto:"FFB45309",borde:"FFF59E0B"},
+            {fondo:"FFFEE2E2",texto:"FFB91C1C",borde:"FFEF4444"}
+        ];
+
+        for(let col=1; col<=4; col++){
+            const estilo = estilosResumen[col-1];
+            const label = filaLabels.getCell(col);
+            const valor = filaValores.getCell(col);
+
+            [label,valor].forEach(celda=>{
+                celda.fill = {type:"pattern",pattern:"solid",fgColor:{argb:estilo.fondo}};
+                celda.border = {
+                    top:{style:"thin",color:{argb:estilo.borde}},
+                    left:{style:"thin",color:{argb:estilo.borde}},
+                    bottom:{style:"thin",color:{argb:estilo.borde}},
+                    right:{style:"thin",color:{argb:estilo.borde}}
+                };
+                celda.alignment = {horizontal:"center",vertical:"middle"};
+            });
+
+            label.font = {bold:true,size:9,color:{argb:"FF475569"}};
+            valor.font = {bold:true,size:16,color:{argb:estilo.texto}};
+        }
+
+        filaLabels.height = 20;
+        filaValores.height = 28;
+        hoja.addRow([]); // fila 6
+        filaEncabezadoNumero = 7;
+    }
+    else{
+        hoja.addRow([]); // fila 3
+    }
 
     const filaEncabezado = hoja.addRow(encabezados);
     filaEncabezado.height = 24;
@@ -10325,46 +10252,29 @@ function agregarHojaExcel(libro,tipo,datos){
     });
 
     if(filas.length){
-
         filas.forEach((fila,indice)=>{
-
-            const valores = encabezados.map(clave=>{
-                const valor = fila[clave];
-                return formatearFechaReporte(valor);
-            });
-
+            const valores = encabezados.map(clave=>formatearFechaReporte(fila[clave]));
             const filaExcel = hoja.addRow(valores);
             filaExcel.height = tipo === "CONSULTAS"
-                ? calcularAlturaFilaConsulta(fila, encabezados)
+                ? calcularAlturaFilaConsulta(fila,encabezados)
                 : 21;
 
             filaExcel.eachCell((celda,columna)=>{
-
-                const encabezado =
-                    String(encabezados[columna-1] || "")
-                    .trim()
-                    .toLowerCase();
-
-                celda.font = {
-                    size:10,
-                    color:{argb:"FF0F172A"}
-                };
-
+                const encabezado = String(encabezados[columna-1] || "").trim().toLowerCase();
                 const esFecha = encabezado === "fecha";
                 const esMensaje = encabezado === "mensaje";
 
+                celda.font = {size:10,color:{argb:"FF0F172A"}};
                 celda.alignment = {
-                    vertical: esMensaje ? "top" : "middle",
+                    vertical:esMensaje ? "top" : "middle",
                     horizontal:(
                         esMensaje ||
                         encabezado === "email" ||
                         encabezado === "nombre" ||
                         encabezado === "usuario"
                     ) ? "left" : "center",
-                    // Fecha nunca debe partirse. Mensaje sí se ajusta.
-                    wrapText: !esFecha
+                    wrapText:esMensaje ? true : !esFecha
                 };
-
                 celda.border = {
                     top:{style:"thin",color:{argb:"FFE2E8F0"}},
                     left:{style:"thin",color:{argb:"FFE2E8F0"}},
@@ -10373,60 +10283,58 @@ function agregarHojaExcel(libro,tipo,datos){
                 };
 
                 if(indice % 2 === 1){
-                    celda.fill = {
-                        type:"pattern",
-                        pattern:"solid",
-                        fgColor:{argb:"FFF8FAFC"}
-                    };
+                    celda.fill = {type:"pattern",pattern:"solid",fgColor:{argb:"FFF8FAFC"}};
                 }
 
-                if(
-                    encabezado === "estado" ||
-                    encabezado === "antes" ||
-                    encabezado === "despues" ||
-                    encabezado === "actual" ||
-                    encabezado === "solicita"
-                ){
-                    const estilo =
-                        colorEstadoExcel(celda.value);
-
+                if([
+                    "estado","antes","despues","actual","solicita"
+                ].includes(encabezado)){
+                    const estilo = colorEstadoExcel(celda.value);
                     if(estilo){
-                        celda.fill = {
-                            type:"pattern",
-                            pattern:"solid",
-                            fgColor:{argb:"FF" + estilo.fondo}
-                        };
-                        celda.font = {
-                            bold:true,
-                            size:10,
-                            color:{argb:"FF" + estilo.texto}
-                        };
+                        celda.fill = {type:"pattern",pattern:"solid",fgColor:{argb:"FF"+estilo.fondo}};
+                        celda.font = {bold:true,size:10,color:{argb:"FF"+estilo.texto}};
                     }
                 }
             });
         });
 
         hoja.autoFilter = {
-            from:{row:4,column:1},
-            to:{row:4,column:totalColumnas}
+            from:{row:filaEncabezadoNumero,column:1},
+            to:{row:filaEncabezadoNumero,column:totalColumnas}
         };
-
     }
     else{
         const filaVacia = hoja.addRow(["Sin registros"]);
-        filaVacia.getCell(1).font = {
-            italic:true,
-            color:{argb:"FF64748B"}
-        };
+        filaVacia.getCell(1).font = {italic:true,color:{argb:"FF64748B"}};
     }
 
     encabezados.forEach((encabezado,indice)=>{
-        hoja.getColumn(indice+1).width =
-            calcularAnchoColumna(encabezado, filas, tipo);
+        hoja.getColumn(indice+1).width = calcularAnchoColumna(encabezado,filas,tipo);
     });
 
+    /*
+    Excel no autoajusta una celda combinada. Garantizamos que la suma de
+    los anchos de todas las columnas sea suficiente para mostrar el título.
+    */
+    const anchoActual = Array.from({length:totalColumnas},(_,i)=>hoja.getColumn(i+1).width || 10)
+        .reduce((a,b)=>a+b,0);
+    const anchoTituloNecesario = Math.max(52, tituloCompleto.length * 1.18);
+
+    if(anchoActual < anchoTituloNecesario){
+        const adicional = (anchoTituloNecesario - anchoActual) / totalColumnas;
+        for(let i=1;i<=totalColumnas;i++){
+            hoja.getColumn(i).width = (hoja.getColumn(i).width || 10) + adicional;
+        }
+    }
+
+    hoja.views = [{
+        state:"frozen",
+        ySplit:filaEncabezadoNumero,
+        activeCell:`A${filaEncabezadoNumero+1}`
+    }];
+
     hoja.pageSetup = {
-        orientation: totalColumnas > 7 ? "landscape" : "portrait",
+        orientation:totalColumnas > 7 ? "landscape" : "portrait",
         fitToPage:true,
         fitToWidth:1,
         fitToHeight:0,
