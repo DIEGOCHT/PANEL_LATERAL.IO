@@ -5344,32 +5344,34 @@ margin-top:18px;
 
 
     /*
-    Mantener exactamente la escala de 175 x 175.
-    Evita que las tortas de LOTES se vean
-    más grandes que la de Auditoría.
-    */
+Mantiene 175 x 175 solamente para
+el contenedor de una torta.
 
-    #graficoAuditoriaPersona
-    .cardGrafico > div:nth-child(2),
+No afecta los bloques
+.resumenColaborador.
+*/
 
-    #panelGraficos
-    .cardGrafico > div:nth-child(2){
+#graficoAuditoriaPersona
+.cardGrafico > div:nth-child(2):not(.resumenColaborador),
 
-        width:175px !important;
+#panelGraficos
+.cardGrafico > div:nth-child(2){
 
-        min-width:175px !important;
+    width:175px !important;
 
-        max-width:175px !important;
+    min-width:175px !important;
 
-        height:175px !important;
+    max-width:175px !important;
 
-        min-height:175px !important;
+    height:175px !important;
 
-        max-height:175px !important;
+    min-height:175px !important;
 
-        margin:12px auto !important;
+    max-height:175px !important;
 
-    }
+    margin:12px auto !important;
+
+}
 
 
     /*
@@ -5938,6 +5940,149 @@ and
     #usuarioHeader{
 
         padding-left:76px !important;
+
+    }
+
+}
+/* =====================================================
+   RESUMEN POR COLABORADOR
+   TABLET Y CELULAR EN POSICIÓN VERTICAL
+===================================================== */
+
+@media
+(max-width:1180px)
+and
+(orientation:portrait){
+
+    /*
+    El gráfico/resumen baja debajo
+    de la tabla y ocupa todo el ancho.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        width:100% !important;
+
+    }
+
+
+    #graficoAuditoriaPersona{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:0 !important;
+
+    }
+
+
+    /*
+    La tarjeta exterior ocupa
+    todo el ancho de la pantalla.
+    */
+
+    #graficoAuditoriaPersona
+    .cardGrafico{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        height:auto !important;
+
+        min-height:0 !important;
+
+        margin:0 !important;
+
+        padding:14px 18px !important;
+
+    }
+
+
+    /*
+    Cada colaborador usa el mismo modelo
+    de escritorio, centrado dentro
+    de la tarjeta exterior.
+    */
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        display:block !important;
+
+        width:100% !important;
+
+        max-width:420px !important;
+
+        min-width:0 !important;
+
+        height:auto !important;
+
+        min-height:0 !important;
+
+        max-height:none !important;
+
+        margin:0 auto !important;
+
+        padding:12px 0 !important;
+
+        box-sizing:border-box;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .cabeceraColaborador{
+
+        width:100% !important;
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        justify-content:space-between !important;
+
+        gap:10px !important;
+
+        margin-bottom:10px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .filaBarraColaborador{
+
+        width:100% !important;
+
+        grid-template-columns:
+            20px
+            minmax(0,1fr)
+            28px
+            !important;
+
+        gap:7px !important;
+
+        margin-top:7px !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .fondoBarra{
+
+        width:100% !important;
+
+        min-width:0 !important;
 
     }
 
@@ -12245,43 +12390,65 @@ document
     filtrarLotes();
 
 };
+
 document
 .getElementById(
 "btnEtapas"
 )
 .onclick = ()=>{
 
-    mostrarPanelEtapas = !mostrarPanelEtapas;
+    mostrarPanelEtapas =
+        !mostrarPanelEtapas;
+
 
     const panel =
-        document.getElementById("panelEtapas");
+        document.getElementById(
+            "panelEtapas"
+        );
+
 
     if(mostrarPanelEtapas){
 
         construirPanelEtapas();
 
-        panel.style.display = "flex";
+        panel.style.display =
+            "flex";
 
-        actualizarBotonesFiltro();
+    }
+    else{
 
-    }else{
+        panel.style.display =
+            "none";
 
-        panel.style.display = "none";
 
         etapasSeleccionadas = [];
 
-        filtroActual = "TODOS";
+
+        filtroActual =
+            "TODOS";
+
 
         document
-        .getElementById("buscarLote")
+        .getElementById(
+            "buscarLote"
+        )
         .value = "";
+
 
         filtrarLotes();
 
     }
 
-};
 
+    /*
+    Actualiza ETAPAS, TODOS,
+    LIBRES, RESERVADOS y VENDIDOS
+    tanto al abrir como al cerrar.
+    */
+
+    actualizarBotonesFiltro();
+
+};
 /* =========================================
    CIERRE AUTOMÁTICO POR INACTIVIDAD
 ========================================= */
