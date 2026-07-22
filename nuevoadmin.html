@@ -470,7 +470,8 @@ line-height:1;
     line-height:1;
 
 }
-#contadorSolicitudes{
+#contadorSolicitudes,
+#contadorConsultas{
 
     flex:0;
 
@@ -3653,6 +3654,8 @@ margin-top:18px;
 
     <span>Consultas</span>
 
+    <span id="contadorConsultas"></span>
+
 </button>
 
         <button id="btnAsesores" class="menuItem">
@@ -4382,6 +4385,8 @@ resultado.nombre;
 cargarLotes();
 
 verificarNotificaciones();
+
+actualizarContadorConsultas();
 
 reiniciarTemporizadorInactividad();
 
@@ -7120,6 +7125,8 @@ async ()=>{
 
     await cargarConsultas();
 
+    await actualizarContadorConsultas();
+
 });
 document
 .getElementById("btnSolicitudes")
@@ -7835,7 +7842,86 @@ function marcarConsultaLeida(
 
 }
 
+async function actualizarContadorConsultas(){
 
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    const contador =
+        document.getElementById(
+            "contadorConsultas"
+        );
+
+
+    if(!contador){
+
+        return;
+
+    }
+
+
+    /*
+    SOLO EL ADMINISTRADOR
+    PUEDE VER CONSULTAS
+    */
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
+
+        contador.textContent = "";
+
+        return;
+
+    }
+
+
+    try{
+
+        const respuesta =
+            await apiGet(
+                "?action=consultas"
+            );
+
+
+        const consultas =
+            Array.isArray(respuesta)
+            ? respuesta
+            : [];
+
+
+        const cantidadNoLeidas =
+            consultas.filter(consulta=>
+
+                !consultaEstaLeida(
+                    consulta
+                )
+
+            ).length;
+
+
+        contador.textContent =
+            cantidadNoLeidas > 0
+            ? "(" + cantidadNoLeidas + ")"
+            : "";
+
+    }
+    catch(error){
+
+        console.log(
+            "No se pudo actualizar el contador de consultas:",
+            error
+        );
+
+    }
+
+}
 async function cargarConsultas(){
 
     const rol =
@@ -8105,7 +8191,7 @@ MARCAR COMO LEÍDA
 marcarConsultaLeida(
     consulta
 );
-
+actualizarContadorConsultas();
 
 const filaConsulta =
     document.getElementById(
@@ -9231,15 +9317,25 @@ await verificarNotificaciones();
 
 await actualizarContadorSolicitudes();
 
+await actualizarContadorConsultas();
+
 await verificarNuevasSolicitudes();
 
 setInterval(
-verificarNuevasSolicitudes,
-15000
+    verificarNuevasSolicitudes,
+    15000
 );
+
+
 setInterval(
-refrescarSistema,
-30000
+    actualizarContadorConsultas,
+    15000
+);
+
+
+setInterval(
+    refrescarSistema,
+    30000
 );
 
 })();
