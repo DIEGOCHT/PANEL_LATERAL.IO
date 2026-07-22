@@ -3120,7 +3120,7 @@ margin-top:18px;
 
     display:grid;
 
-    grid-template-columns:240px minmax(0,1fr) 170px;
+    grid-template-columns:290px minmax(0,1fr) 180px;
 
     align-items:center;
 
@@ -3147,7 +3147,7 @@ margin-top:18px;
 
     display:grid;
 
-    grid-template-columns:240px minmax(0,1fr) 170px;
+    grid-template-columns:290px minmax(0,1fr) 180px;
 
     align-items:center;
 
@@ -3216,7 +3216,7 @@ margin-top:18px;
 
     color:#64748B;
 
-    text-align:right;
+    text-align:center;
 
     white-space:nowrap;
 
@@ -3287,6 +3287,124 @@ margin-top:18px;
 .detalleConsultaCuerpo strong{
 
     font-weight:700;
+
+}
+/* ==========================================
+   CONSULTA ABIERTA - ESTILO OUTLOOK
+========================================== */
+
+.detalleOutlook{
+
+    width:100%;
+
+    background:#FFFFFF;
+
+}
+
+
+.barraDetalleConsulta{
+
+    min-height:62px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:0 18px;
+
+    border-bottom:1px solid #E2E8F0;
+
+}
+
+
+.btnVolverConsulta{
+
+    width:38px;
+
+    height:38px;
+
+    min-width:38px;
+
+    margin:0;
+
+    padding:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid #CBD5E1;
+
+    border-radius:8px;
+
+    background:#FFFFFF;
+
+    color:#334155;
+
+    font-size:20px;
+
+}
+
+
+.btnVolverConsulta:hover{
+
+    background:#F1F5F9;
+
+}
+
+
+.asuntoDetalleConsulta{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.cabeceraDetalleConsulta{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 20px;
+
+    border-bottom:1px solid #E2E8F0;
+
+    color:#334155;
+
+    font-size:13px;
+
+}
+
+
+.fechaDetalleConsulta{
+
+    color:#64748B;
+
+    font-size:12px;
+
+}
+
+
+.cuerpoDetalleConsulta{
+
+    padding:26px 32px;
+
+    color:#0F172A;
+
+    font-size:14px;
+
+    line-height:1.65;
 
 }
 </style>
@@ -7534,6 +7652,7 @@ function mostrarModulo(
     });
 
 }
+let consultasActuales = [];
 async function cargarConsultas(){
 
     const rol =
@@ -7621,7 +7740,7 @@ async function cargarConsultas(){
 
     });
 
-
+consultasActuales = datos;
     let html = `
 
     <div class="tituloModulo">
@@ -7637,27 +7756,27 @@ async function cargarConsultas(){
     </div>
 
 
-    <div class="moduloContenido">
+        <div class="moduloContenido">
 
+        <div id="vistaListaConsultas">
 
-        <div class="bandejaConsultas">
+            <div class="bandejaConsultas">
 
+                <div class="encabezadoConsultas">
 
-            <div class="encabezadoConsultas">
+                    <div>
+                        De
+                    </div>
 
-                <div>
-                    De
+                    <div>
+                        Asunto
+                    </div>
+
+                    <div style="text-align:center;">
+                        Recibido
+                    </div>
+
                 </div>
-
-                <div>
-                    Asunto
-                </div>
-
-                <div style="text-align:right;">
-                    Recibido
-                </div>
-
-            </div>
 
     `;
 
@@ -7665,11 +7784,23 @@ async function cargarConsultas(){
     datos.forEach((c,index)=>{
 
 
-        const nombre =
-            String(
-                c.Nombre || ""
-            )
-            .trim();
+        const nombreCompleto =
+    String(
+        c.Nombre || ""
+    )
+    .trim();
+
+
+const partesNombre =
+    nombreCompleto
+    .split(/\s+/)
+    .filter(Boolean);
+
+
+const nombreCorto =
+    partesNombre.length >= 2
+    ? partesNombre[0] + " " + partesNombre[1]
+    : nombreCompleto;
 
 
         const etapa =
@@ -7702,9 +7833,9 @@ async function cargarConsultas(){
 
             <div class="consultaNombre">
 
-                ${nombre}
+    ${nombreCorto}
 
-            </div>
+</div>
 
 
             <div class="consultaAsunto">
@@ -7723,115 +7854,23 @@ async function cargarConsultas(){
         </div>
 
 
-        <div
-        id="detalleConsulta_${index}"
-        class="detalleConsulta"
-        >
-
-
-            <div class="detalleConsultaTitulo">
-
-                ${asunto}
-
-            </div>
-
-
-            <div class="detalleConsultaRemitente">
-
-                <strong>De:</strong>
-                ${nombre}
-
-                &nbsp;&nbsp;
-
-                <strong>Recibido:</strong>
-                ${formatearFecha(c.Fecha)}
-
-            </div>
-
-
-            <div class="detalleConsultaCuerpo">
-
-                Hola, deseo consultar el precio del siguiente lote:
-
-                <br><br>
-
-
-                <strong>
-                    Lote:
-                </strong>
-
-                ${lote}
-
-                <br>
-
-
-                <strong>
-                    Ubicación:
-                </strong>
-
-                ${c.Ubicacion || "ASSTURIAS"}
-                ${etapa ? " - " + etapa : ""}
-
-                <br>
-
-
-                <strong>
-                    Área:
-                </strong>
-
-                ${c.Area || ""}
-
-                <br>
-
-
-                <strong>
-                    Nombre:
-                </strong>
-
-                ${nombre}
-
-                <br>
-
-
-                <strong>
-                    Email:
-                </strong>
-
-                ${c.Email || ""}
-
-                <br>
-
-
-                <strong>
-                    Teléfono:
-                </strong>
-
-                ${c.Telefono || ""}
-
-                <br>
-
-
-                <strong>
-                    Mensaje:
-                </strong>
-
-                <br>
-
-                ${c.Mensaje || ""}
-
-            </div>
-
-
-        </div>
-
         `;
 
     });
 
 
-    html += `
+        html += `
+
+            </div>
 
         </div>
+
+
+        <div
+            id="vistaDetalleConsulta"
+            style="display:none;">
+        </div>
+
 
     </div>
 
@@ -7856,58 +7895,198 @@ function abrirDetalleConsulta(
     indice
 ){
 
-    const detalle =
-        document.getElementById(
-            "detalleConsulta_" +
+    const consulta =
+        consultasActuales[
             indice
-        );
+        ];
 
 
-    if(!detalle){
+    if(!consulta){
 
         return;
 
     }
 
 
-    /*
-    CERRAR LOS DEMÁS
-    */
-
-    document
-    .querySelectorAll(
-        ".detalleConsulta"
-    )
-    .forEach(elemento=>{
-
-        if(
-            elemento !== detalle
-        ){
-
-            elemento
-            .classList
-            .remove(
-                "activo"
-            );
-
-        }
-
-    });
+    const nombreCompleto =
+        String(
+            consulta.Nombre || ""
+        )
+        .trim();
 
 
-    /*
-    ABRIR / CERRAR EL SELECCIONADO
-    */
+    const etapa =
+        String(
+            consulta.Etapa || ""
+        )
+        .trim();
 
-    detalle
-    .classList
-    .toggle(
-        "activo"
-    );
+
+    const lote =
+        String(
+            consulta.Lote || ""
+        )
+        .trim();
+
+
+    const asunto =
+        "Solicito cotización de Etapa: " +
+        etapa +
+        ", Lote: " +
+        lote;
+
+
+    const vistaLista =
+        document.getElementById(
+            "vistaListaConsultas"
+        );
+
+
+    const vistaDetalle =
+        document.getElementById(
+            "vistaDetalleConsulta"
+        );
+
+
+    vistaLista.style.display =
+        "none";
+
+
+    vistaDetalle.style.display =
+        "block";
+
+
+    vistaDetalle.innerHTML = `
+
+        <div class="detalleOutlook">
+
+
+            <div class="barraDetalleConsulta">
+
+                <button
+                    class="btnVolverConsulta"
+                    onclick="cerrarDetalleConsulta()"
+                >
+                    ←
+                </button>
+
+
+                <div class="asuntoDetalleConsulta">
+
+                    ${asunto}
+
+                </div>
+
+            </div>
+
+
+            <div class="cabeceraDetalleConsulta">
+
+                <div>
+
+                    <strong>
+                        ${nombreCompleto}
+                    </strong>
+
+                </div>
+
+
+                <div class="fechaDetalleConsulta">
+
+                    ${formatearFecha(
+                        consulta.Fecha
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="cuerpoDetalleConsulta">
+
+                Hola, deseo consultar el precio del siguiente lote:
+
+                <br><br>
+
+
+                <strong>Lote:</strong>
+                ${lote}
+
+                <br>
+
+
+                <strong>Ubicación:</strong>
+                ${consulta.Ubicacion || "ASSTURIAS"}
+                ${etapa ? " - " + etapa : ""}
+
+                <br>
+
+
+                <strong>Área:</strong>
+                ${consulta.Area || ""}
+
+                <br>
+
+
+                <strong>Nombre:</strong>
+                ${nombreCompleto}
+
+                <br>
+
+
+                <strong>Email:</strong>
+                ${consulta.Email || ""}
+
+                <br>
+
+
+                <strong>Teléfono:</strong>
+                ${consulta.Telefono || ""}
+
+                <br>
+
+
+                <strong>Mensaje:</strong>
+
+                <br>
+
+                ${consulta.Mensaje || ""}
+
+            </div>
+
+
+        </div>
+
+    `;
 
 }
 let solicitudesGlobal = [];
+function cerrarDetalleConsulta(){
 
+    const vistaLista =
+        document.getElementById(
+            "vistaListaConsultas"
+        );
+
+
+    const vistaDetalle =
+        document.getElementById(
+            "vistaDetalleConsulta"
+        );
+
+
+    vistaDetalle.style.display =
+        "none";
+
+
+    vistaDetalle.innerHTML =
+        "";
+
+
+    vistaLista.style.display =
+        "block";
+
+}
 async function actualizarContadorSolicitudes(){
 
     const rol =
