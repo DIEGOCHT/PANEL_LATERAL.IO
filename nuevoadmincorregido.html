@@ -6131,7 +6131,19 @@ and
     font-size:14px;
 }
 
-#filtroMesAuditoria{
+#tipoFechaAuditoria{
+    width:120px;
+    height:44px;
+    margin:0;
+    padding:0 12px;
+    border:1px solid #CBD5E1;
+    border-radius:12px;
+    background:#FFFFFF;
+    color:#0F172A;
+    font-size:14px;
+}
+
+#filtroFechaAuditoria{
     width:170px;
     height:44px;
     margin:0;
@@ -6179,7 +6191,8 @@ and
     padding-right:4px;
 }
 
-#graficoVentasColaboradores{
+#graficoVentasColaboradores,
+#graficoReservasColaboradores{
     width:100%;
     min-width:0;
 }
@@ -6267,7 +6280,8 @@ and
     }
 
     #buscarAuditoria,
-    #filtroMesAuditoria,
+    #tipoFechaAuditoria,
+    #filtroFechaAuditoria,
     #btnAplicarFechaAuditoria,
     #btnTodasFechasAuditoria{
         width:100%;
@@ -9450,8 +9464,52 @@ function obtenerMesActualAuditoria(){
     return `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
 }
 
-function registroCoincideMesAuditoria(item, mes){
-    if(!mes){
+function obtenerDiaActualAuditoria(){
+    const ahora = new Date();
+    return `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}-${String(ahora.getDate()).padStart(2,"0")}`;
+}
+
+function obtenerAnioActualAuditoria(){
+    return String(new Date().getFullYear());
+}
+
+function configurarControlFechaAuditoria(tipo, control, conservar=false){
+    const tipoNormalizado = String(tipo || "MES").toUpperCase();
+    const valorAnterior = conservar ? String(control.value || "") : "";
+
+    if(tipoNormalizado === "DIA"){
+        control.type = "date";
+        control.placeholder = "Seleccionar día";
+        control.value = /^\d{4}-\d{2}-\d{2}$/.test(valorAnterior)
+            ? valorAnterior
+            : obtenerDiaActualAuditoria();
+        return;
+    }
+
+    if(tipoNormalizado === "ANIO"){
+        control.type = "number";
+        control.min = "2000";
+        control.max = "2100";
+        control.step = "1";
+        control.placeholder = "Año";
+        control.value = /^\d{4}$/.test(valorAnterior)
+            ? valorAnterior
+            : obtenerAnioActualAuditoria();
+        return;
+    }
+
+    control.type = "month";
+    control.removeAttribute("min");
+    control.removeAttribute("max");
+    control.removeAttribute("step");
+    control.placeholder = "Seleccionar mes";
+    control.value = /^\d{4}-\d{2}$/.test(valorAnterior)
+        ? valorAnterior
+        : obtenerMesActualAuditoria();
+}
+
+function registroCoincideFechaAuditoria(item, tipo, valor){
+    if(!valor){
         return true;
     }
 
@@ -9460,25 +9518,50 @@ function registroCoincideMesAuditoria(item, mes){
         return false;
     }
 
-    const clave = `${fecha.getFullYear()}-${String(fecha.getMonth()+1).padStart(2,"0")}`;
-    return clave === mes;
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth()+1).padStart(2,"0");
+    const dia = String(fecha.getDate()).padStart(2,"0");
+    const tipoNormalizado = String(tipo || "MES").toUpperCase();
+
+    if(tipoNormalizado === "DIA"){
+        return `${anio}-${mes}-${dia}` === valor;
+    }
+
+    if(tipoNormalizado === "ANIO"){
+        return String(anio) === String(valor);
+    }
+
+    return `${anio}-${mes}` === valor;
 }
 
-function etiquetaMesAuditoria(mes){
-    if(!mes){
+function etiquetaFechaAuditoria(tipo, valor){
+    if(!valor){
         return "Todas las fechas";
     }
 
-    const [anio,numeroMes] = mes.split("-").map(Number);
-    const fecha = new Date(anio, numeroMes-1, 1);
+    const tipoNormalizado = String(tipo || "MES").toUpperCase();
 
-    return fecha.toLocaleDateString("es-PE",{
+    if(tipoNormalizado === "DIA"){
+        const [anio,mes,dia] = valor.split("-").map(Number);
+        return new Date(anio,mes-1,dia).toLocaleDateString("es-PE",{
+            day:"2-digit",
+            month:"long",
+            year:"numeric"
+        });
+    }
+
+    if(tipoNormalizado === "ANIO"){
+        return `Año ${valor}`;
+    }
+
+    const [anio,numeroMes] = valor.split("-").map(Number);
+    return new Date(anio,numeroMes-1,1).toLocaleDateString("es-PE",{
         month:"long",
         year:"numeric"
     });
 }
 
-function renderizarTortaVentasColaboradores(registros, mes){
+function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha){
     const contenedor = document.getElementById("graficoVentasColaboradores");
     if(!contenedor){
         return;
@@ -9527,7 +9610,7 @@ function renderizarTortaVentasColaboradores(registros, mes){
     contenedor.innerHTML = `
         <div class="cardVentasColaboradores">
             <h3>Ventas por colaborador</h3>
-            <div class="subtituloVentasAuditoria">${etiquetaMesAuditoria(mes)}</div>
+            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha)}</div>
             ${totalVentas ? `
                 <div class="canvasVentasWrap">
                     <canvas id="canvasVentasColaboradores"></canvas>
@@ -9599,6 +9682,125 @@ function renderizarTortaVentasColaboradores(registros, mes){
     });
 }
 
+function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha){
+    const contenedor = document.getElementById("graficoReservasColaboradores");
+    if(!contenedor){
+        return;
+    }
+
+    if(window.chartReservasColaboradores){
+        window.chartReservasColaboradores.destroy();
+        window.chartReservasColaboradores = null;
+    }
+
+    const reservas = {};
+
+    registros.forEach(item=>{
+        const estado = String(item.Despues || "").trim().toUpperCase();
+        if(estado !== "RESERVADO"){
+            return;
+        }
+
+        const nombre = String(item.Nombre || item.Usuario || "Sin nombre").trim();
+        reservas[nombre] = (reservas[nombre] || 0) + 1;
+    });
+
+    const ranking = Object.entries(reservas).sort((a,b)=>b[1]-a[1]);
+    const totalReservas = ranking.reduce((suma,item)=>suma+item[1],0);
+    const paleta = [
+        "#F59E0B","#2563EB","#22C55E","#EF4444","#8B5CF6",
+        "#06B6D4","#EC4899","#84CC16","#F97316","#64748B"
+    ];
+
+    let leyenda = "";
+    ranking.forEach(([nombre,cantidad],indice)=>{
+        const porcentaje = totalReservas ? (cantidad*100/totalReservas).toFixed(1) : "0.0";
+        const color = paleta[indice % paleta.length];
+
+        leyenda += `
+            <div class="itemVentaAuditoria">
+                <span class="nombreVenta" title="${nombre}">
+                    <span class="puntoVentaAuditoria" style="background:${color}"></span>${nombre}
+                </span>
+                <span class="valorVenta">${cantidad} (${porcentaje}%)</span>
+            </div>`;
+    });
+
+    contenedor.innerHTML = `
+        <div class="cardVentasColaboradores">
+            <h3>Reservas por colaborador</h3>
+            <div class="subtituloVentasAuditoria">${etiquetaFechaAuditoria(tipoFecha,valorFecha)}</div>
+            ${totalReservas ? `
+                <div class="canvasVentasWrap">
+                    <canvas id="canvasReservasColaboradores"></canvas>
+                </div>
+                <div class="leyendaVentasAuditoria">${leyenda}</div>
+            ` : `
+                <div class="sinVentasAuditoria">No hay reservas registradas para este filtro.</div>
+            `}
+        </div>`;
+
+    if(!totalReservas){
+        return;
+    }
+
+    const canvas = document.getElementById("canvasReservasColaboradores");
+    const pluginCentro = {
+        id:"textoCentroReservasColaboradores",
+        afterDraw(chart){
+            const meta = chart.getDatasetMeta(0);
+            if(!meta.data.length){
+                return;
+            }
+
+            const ctx = chart.ctx;
+            const x = meta.data[0].x;
+            const y = meta.data[0].y;
+            ctx.save();
+            ctx.textAlign="center";
+            ctx.textBaseline="middle";
+            ctx.fillStyle="#0F172A";
+            ctx.font="bold 28px Segoe UI";
+            ctx.fillText(totalReservas,x,y-7);
+            ctx.fillStyle="#64748B";
+            ctx.font="11px Segoe UI";
+            ctx.fillText("RESERVAS",x,y+16);
+            ctx.restore();
+        }
+    };
+
+    window.chartReservasColaboradores = new Chart(canvas,{
+        type:"doughnut",
+        plugins:[pluginCentro],
+        data:{
+            labels:ranking.map(item=>item[0]),
+            datasets:[{
+                data:ranking.map(item=>item[1]),
+                backgroundColor:ranking.map((_,i)=>paleta[i % paleta.length]),
+                borderColor:"#FFFFFF",
+                borderWidth:3
+            }]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            cutout:"58%",
+            plugins:{
+                legend:{display:false},
+                tooltip:{
+                    callbacks:{
+                        label(context){
+                            const cantidad = context.raw || 0;
+                            const porcentaje = totalReservas ? (cantidad*100/totalReservas).toFixed(1) : "0.0";
+                            return `${context.label}: ${cantidad} reserva(s) (${porcentaje}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
 async function cargarAuditoria(){
 
     const rol = localStorage.getItem("rol");
@@ -9636,6 +9838,7 @@ async function cargarAuditoria(){
     datos.sort((a,b)=>new Date(b.Fecha)-new Date(a.Fecha));
 
     const mesInicial = obtenerMesActualAuditoria();
+    const tipoFechaInicial = "MES";
 
     let html = `
         <div class="tituloModulo">
@@ -9649,8 +9852,14 @@ async function cargarAuditoria(){
                     id="buscarAuditoria"
                     placeholder="🔍 Buscar nombre...">
 
+                <select id="tipoFechaAuditoria" title="Tipo de filtro de fecha">
+                    <option value="DIA">DÍA</option>
+                    <option value="MES" selected>MES</option>
+                    <option value="ANIO">AÑO</option>
+                </select>
+
                 <input
-                    id="filtroMesAuditoria"
+                    id="filtroFechaAuditoria"
                     type="month"
                     value="${mesInicial}">
 
@@ -9701,6 +9910,7 @@ async function cargarAuditoria(){
 
                 <div id="panelAuditoriaDerecho">
                     <div id="graficoVentasColaboradores"></div>
+                    <div id="graficoReservasColaboradores"></div>
                     <div id="graficoAuditoriaPersona"></div>
                 </div>
             </div>
@@ -9711,20 +9921,22 @@ async function cargarAuditoria(){
     .innerHTML = html;
 
     const buscador = document.getElementById("buscarAuditoria");
-    const filtroMes = document.getElementById("filtroMesAuditoria");
+    const tipoFecha = document.getElementById("tipoFechaAuditoria");
+    const filtroFecha = document.getElementById("filtroFechaAuditoria");
     const botonFecha = document.getElementById("btnAplicarFechaAuditoria");
     const botonTodas = document.getElementById("btnTodasFechasAuditoria");
     const tbody = document.getElementById("tbodyAuditoria");
 
     function aplicarFiltrosAuditoria(){
         const texto = String(buscador.value || "").trim().toUpperCase();
-        const mes = String(filtroMes.value || "").trim();
+        const tipo = String(tipoFecha.value || "MES").trim().toUpperCase();
+        const valorFecha = String(filtroFecha.value || "").trim();
 
         const registrosFiltrados = datos.filter(item=>{
             const nombre = String(item.Nombre || item.Usuario || "").trim().toUpperCase();
             const coincideNombre = nombre.includes(texto);
-            const coincideMes = registroCoincideMesAuditoria(item,mes);
-            return coincideNombre && coincideMes;
+            const coincideFecha = registroCoincideFechaAuditoria(item,tipo,valorFecha);
+            return coincideNombre && coincideFecha;
         });
 
         tbody.innerHTML = registrosFiltrados.map(item=>`
@@ -9756,18 +9968,24 @@ async function cargarAuditoria(){
         Ambos gráficos reciben exactamente el mismo conjunto filtrado.
         Así el buscador y la fecha siempre trabajan relacionados.
         */
-        renderizarTortaVentasColaboradores(registrosFiltrados,mes);
+        renderizarTortaVentasColaboradores(registrosFiltrados,tipo,valorFecha);
+        renderizarTortaReservasColaboradores(registrosFiltrados,tipo,valorFecha);
         renderizarGraficoGeneralAuditoria(registrosFiltrados);
     }
 
     buscador.addEventListener("input",aplicarFiltrosAuditoria);
 
-    filtroMes.addEventListener("change",aplicarFiltrosAuditoria);
+    tipoFecha.addEventListener("change",()=>{
+        configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,false);
+        aplicarFiltrosAuditoria();
+    });
+
+    filtroFecha.addEventListener("change",aplicarFiltrosAuditoria);
 
     botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
 
     botonTodas.addEventListener("click",()=>{
-        filtroMes.value = "";
+        filtroFecha.value = "";
         aplicarFiltrosAuditoria();
     });
 
