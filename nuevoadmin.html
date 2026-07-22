@@ -4859,6 +4859,675 @@ margin-top:18px;
     }
 
 }
+
+/* =====================================================
+   AJUSTES FINALES PARA TABLET Y CELULAR
+   NUEVOADMIN 117
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    =========================================
+    1. BOTÓN DEL MENÚ DENTRO DEL ENCABEZADO
+    =========================================
+    */
+
+    #btnMenuMovil{
+
+        position:static !important;
+
+        top:auto !important;
+        left:auto !important;
+
+        align-self:center;
+
+        width:48px;
+        min-width:48px;
+        height:48px;
+
+        margin:0;
+
+        z-index:auto;
+
+        flex-shrink:0;
+
+    }
+
+
+    #usuarioHeader{
+
+        padding-left:16px !important;
+
+        grid-template-columns:
+            auto minmax(0,1fr) auto;
+
+        align-items:center;
+
+    }
+
+
+    /*
+    =========================================
+    2. TEXTO DE LOS FILTROS MÁS GRANDE
+    =========================================
+    */
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        font-size:11px !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:0 !important;
+
+        padding-left:3px !important;
+        padding-right:3px !important;
+
+    }
+
+
+    /*
+    =========================================
+    3. ESTADÍSTICAS DE AUDITORÍA
+    SIN CONTENIDO COMPRIMIDO
+    =========================================
+    */
+
+    #resumenAuditoria .cardDashboard{
+
+        display:flex !important;
+
+        flex-direction:column !important;
+
+        align-items:center !important;
+
+        justify-content:center !important;
+
+        gap:5px !important;
+
+        padding:7px 3px !important;
+
+        overflow:hidden;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        display:block;
+
+        width:100%;
+
+        margin:0;
+
+        font-size:18px !important;
+
+        line-height:1 !important;
+
+        text-align:center;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        display:block;
+
+        width:100%;
+
+        margin:0 !important;
+
+        font-size:9px !important;
+
+        line-height:1.1 !important;
+
+        text-align:center;
+
+        white-space:normal !important;
+
+    }
+
+
+    /*
+    =========================================
+    4. CONTENEDORES HORIZONTALES DE TABLAS
+    OCUPAN TODA LA ALTURA RESTANTE
+    =========================================
+    */
+
+    .contenedorTablaScroll{
+
+        width:100% !important;
+
+        min-height:
+            calc(100svh - 235px) !important;
+
+        overflow-x:auto !important;
+
+        overflow-y:hidden !important;
+
+        touch-action:pan-x pan-y !important;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+        padding-bottom:10px;
+
+    }
+
+
+    /*
+    La tabla queda arriba, pero todo el espacio
+    blanco inferior pertenece al contenedor
+    desplazable horizontalmente.
+    */
+
+    .contenedorTablaScroll .tabla{
+
+        margin-bottom:0;
+
+    }
+
+
+    /*
+    SOLICITUDES
+    */
+
+    #listaSolicitudes{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 260px) !important;
+
+        overflow:visible !important;
+
+    }
+
+
+    #listaSolicitudes .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 265px) !important;
+
+    }
+
+
+    /*
+    =========================================
+    5. CONSULTAS CON EL MISMO COMPORTAMIENTO
+    =========================================
+    */
+
+    #vistaListaConsultas{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 235px);
+
+    }
+
+
+    .bandejaConsultas{
+
+        width:100%;
+
+        min-height:
+            calc(100svh - 250px);
+
+        overflow-x:auto !important;
+        overflow-y:hidden !important;
+
+        touch-action:pan-x pan-y;
+
+        overscroll-behavior-x:contain;
+
+        -webkit-overflow-scrolling:touch;
+
+        padding-bottom:10px;
+
+    }
+
+
+    .encabezadoConsultas,
+    .filaConsulta{
+
+        min-width:850px;
+
+    }
+
+
+    /*
+    =========================================
+    6. MÓDULOS OCUPAN LA PANTALLA RESTANTE
+    =========================================
+    */
+
+    #contenedorSolicitudes,
+    #contenedorConsultas,
+    #contenedorAsesores,
+    #contenedorAuditoria{
+
+        min-height:
+            calc(100svh - 20px) !important;
+
+    }
+
+
+    .moduloContenido{
+
+        min-height:
+            calc(100svh - 180px) !important;
+
+    }
+
+}
+
+
+/* =====================================================
+   AJUSTES EXCLUSIVOS PARA CELULAR
+===================================================== */
+
+@media(max-width:700px){
+
+    /*
+    El encabezado queda:
+    menú + nombre
+    y debajo actualización + cerrar sesión.
+    */
+
+    #usuarioHeader{
+
+        display:grid;
+
+        grid-template-columns:
+            auto minmax(0,1fr);
+
+        column-gap:12px;
+
+        row-gap:10px;
+
+        padding:12px !important;
+
+    }
+
+
+    #btnMenuMovil{
+
+        grid-column:1;
+
+        grid-row:1;
+
+        width:52px;
+        min-width:52px;
+        height:52px;
+
+        border-radius:12px;
+
+    }
+
+
+    .headerInfo{
+
+        grid-column:2;
+
+        grid-row:1;
+
+        align-self:center;
+
+    }
+
+
+    .headerAcciones{
+
+        grid-column:1 / -1;
+
+        grid-row:2;
+
+    }
+
+
+    /*
+    Filtros legibles sin romper la fila.
+    */
+
+    #btnEtapas,
+    #filtroTodos,
+    #filtroLibres,
+    #filtroReservados,
+    #filtroVendidos{
+
+        height:38px !important;
+
+        font-size:9.5px !important;
+
+        padding:0 2px !important;
+
+    }
+
+
+    /*
+    Auditoría: número y título separados.
+    */
+
+    #resumenAuditoria .cardDashboard{
+
+        height:64px !important;
+
+        gap:6px !important;
+
+        padding:8px 2px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard h3{
+
+        font-size:18px !important;
+
+    }
+
+
+    #resumenAuditoria .cardDashboard p{
+
+        font-size:8px !important;
+
+    }
+
+
+    /*
+    Mayor altura útil para desplazar
+    las tablas desde el espacio blanco.
+    */
+
+    .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 205px) !important;
+
+    }
+
+
+    #listaSolicitudes .contenedorTablaScroll{
+
+        min-height:
+            calc(100svh - 215px) !important;
+
+    }
+
+
+    #vistaListaConsultas,
+    .bandejaConsultas{
+
+        min-height:
+            calc(100svh - 210px) !important;
+
+    }
+
+}
+/* =====================================================
+   GRÁFICOS RESPONSIVOS FINALES
+   TABLET Y CELULAR
+===================================================== */
+
+@media(max-width:1180px){
+
+    /*
+    En posición vertical:
+    tabla y gráficos uno debajo del otro.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        gap:14px !important;
+
+        width:100% !important;
+
+        align-items:start;
+
+    }
+
+
+    /*
+    El contenedor del gráfico de Auditoría
+    ya no queda limitado a 320 px.
+    */
+
+    #graficoAuditoriaPersona{
+
+        display:block;
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:0 !important;
+
+    }
+
+
+    /*
+    Todas las tarjetas de gráficos
+    ocupan el ancho disponible.
+    */
+
+    #graficoAuditoriaPersona .cardGrafico,
+    #panelGraficos .cardGrafico{
+
+        width:100% !important;
+
+        max-width:none !important;
+
+        min-width:0 !important;
+
+        margin:0 !important;
+
+        padding:14px !important;
+
+    }
+
+
+    /*
+    Mantener exactamente la escala de 175 x 175.
+    Evita que las tortas de LOTES se vean
+    más grandes que la de Auditoría.
+    */
+
+    #graficoAuditoriaPersona
+    .cardGrafico > div:nth-child(2),
+
+    #panelGraficos
+    .cardGrafico > div:nth-child(2){
+
+        width:175px !important;
+
+        min-width:175px !important;
+
+        max-width:175px !important;
+
+        height:175px !important;
+
+        min-height:175px !important;
+
+        max-height:175px !important;
+
+        margin:12px auto !important;
+
+    }
+
+
+    /*
+    Centrar la información ubicada
+    debajo de las tortas.
+    */
+
+    #graficoAuditoriaPersona .infoGrafico,
+    #graficoAuditoriaPersona .totalGrafico,
+    #panelGraficos .infoGrafico,
+    #panelGraficos .totalGrafico{
+
+        width:100% !important;
+
+        max-width:420px !important;
+
+        margin-left:auto !important;
+
+        margin-right:auto !important;
+
+    }
+
+
+    #graficoAuditoriaPersona .totalGrafico,
+    #panelGraficos .totalGrafico{
+
+        margin-top:14px !important;
+
+    }
+
+
+    /*
+    RESUMEN POR COLABORADOR:
+    la tarjeta ocupa todo el ancho,
+    pero su contenido permanece centrado.
+    */
+
+    #graficoAuditoriaPersona
+    .resumenColaborador{
+
+        width:100% !important;
+
+        max-width:520px !important;
+
+        margin-left:auto !important;
+
+        margin-right:auto !important;
+
+    }
+
+
+    #graficoAuditoriaPersona
+    .tituloGrafico{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+
+    /*
+    En vertical, los gráficos de LOTES
+    aparecen uno debajo de otro.
+    */
+
+    #panelGraficos{
+
+        display:grid !important;
+
+        grid-template-columns:
+            minmax(0,1fr) !important;
+
+        gap:14px !important;
+
+        width:100% !important;
+
+    }
+
+}
+
+
+/* =====================================================
+   TABLET O CELULAR EN POSICIÓN HORIZONTAL
+===================================================== */
+
+@media(
+    max-width:1180px
+)
+and
+(
+    orientation:landscape
+){
+
+    /*
+    Tabla y gráfico de Auditoría pueden
+    colocarse lado a lado cuando entren.
+
+    Si no entran, el siguiente elemento
+    baja automáticamente.
+    */
+
+    #auditoriaContenidoPrincipal{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(
+                    min(360px,100%),
+                    1fr
+                )
+            ) !important;
+
+        gap:14px !important;
+
+        align-items:start;
+
+    }
+
+
+    /*
+    Gráficos de LOTES:
+    se colocan tantos como entren
+    en cada fila.
+
+    Los restantes bajan automáticamente.
+    */
+
+    #panelGraficos{
+
+        display:grid !important;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(
+                    min(280px,100%),
+                    1fr
+                )
+            ) !important;
+
+        gap:14px !important;
+
+        align-items:start;
+
+    }
+
+
+    #graficoAuditoriaPersona,
+    #panelGraficos .cardGrafico{
+
+        width:100% !important;
+
+    }
+
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -8465,6 +9134,58 @@ function(){
 }
 
 
+        /*
+    =========================================
+    NO MOSTRAR GRÁFICO SI NO HAY RESULTADOS
+    =========================================
+    */
+
+    if(
+        registrosPersona.length === 0
+    ){
+
+        const contenedorGrafico =
+            document.getElementById(
+                "graficoAuditoriaPersona"
+            );
+
+
+        if(
+            window.chartAuditoria
+        ){
+
+            window
+            .chartAuditoria
+            .destroy();
+
+
+            window.chartAuditoria =
+                null;
+
+        }
+
+
+        if(
+            contenedorGrafico
+        ){
+
+            contenedorGrafico
+            .innerHTML =
+                "";
+
+
+            contenedorGrafico
+            .style.display =
+                "none";
+
+        }
+
+
+        return;
+
+    }
+
+
     /*
     Obtener el nombre exacto.
     */
@@ -8474,24 +9195,27 @@ function(){
 
 
     const nombreEncontrado =
-        primerRegistro
-        ? String(
+        String(
+
             primerRegistro.Nombre ||
+
             primerRegistro.Usuario ||
+
             this.value
-        ).trim()
-        : this.value.trim();
+
+        )
+        .trim();
 
 
     renderizarGraficoAuditoria(
 
-    nombreEncontrado,
+        nombreEncontrado,
 
-    reservadosPersona,
+        reservadosPersona,
 
-    vendidosPersona
+        vendidosPersona
 
-);
+    );
 
 });
 localStorage.setItem(
