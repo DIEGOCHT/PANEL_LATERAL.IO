@@ -10149,44 +10149,89 @@ function formatearFechaReporte(valor){
     });
 }
 
-function calcularAnchoColumna(encabezado, filas){
+function calcularAnchoColumna(encabezado, filas, tipo){
 
     const clave = String(encabezado || "");
     const claveMin = clave.trim().toLowerCase();
 
-    const anchosFijos = {
-        fecha:20,
-        usuario:18,
-        nombre:24,
-        etapa:14,
-        lote:20,
-        estado:14,
-        antes:14,
-        despues:14,
-        medidas:18,
-        area:15,
-        ubicacion:18,
-        rol:16,
-        email:30,
-        telefono:17,
-        mensaje:42,
-        actual:14,
-        solicita:14
-    };
-
-    if(anchosFijos[claveMin]){
-        return anchosFijos[claveMin];
+    /*
+    La columna MENSAJE de Consultas mantiene un ancho fijo.
+    El contenido largo se ajusta dentro de la celda y la fila
+    aumenta de altura sin ensanchar toda la hoja.
+    */
+    if(tipo === "CONSULTAS" && claveMin === "mensaje"){
+        return 48;
     }
 
-    let maximo = clave.length + 3;
+    let maximo = Math.max(clave.length + 3, 10);
 
-    filas.slice(0,150).forEach(fila=>{
-        const valor = fila[encabezado];
-        const largo = String(valor ?? "").length + 2;
-        maximo = Math.max(maximo,largo);
+    filas.forEach(fila=>{
+
+        let valor = fila?.[encabezado] ?? "";
+
+        // Medimos la fecha ya formateada, no el ISO original.
+        valor = formatearFechaReporte(valor);
+
+        const texto = String(valor ?? "")
+            .replace(/\r?\n/g, " ")
+            .trim();
+
+        maximo = Math.max(
+            maximo,
+            texto.length + 2
+        );
+
     });
 
-    return Math.min(Math.max(maximo,12),32);
+    /*
+    Ancho automático con límites razonables para evitar
+    hojas excesivamente anchas por un dato excepcional.
+    */
+    let minimo = 10;
+    let maximoPermitido = 42;
+
+    if(claveMin === "fecha"){
+        // Garantiza fecha + hora + a. m./p. m. en una sola línea.
+        minimo = 25;
+        maximoPermitido = 30;
+    }
+    else if(claveMin === "email"){
+        maximoPermitido = 38;
+    }
+    else if(claveMin === "nombre"){
+        maximoPermitido = 32;
+    }
+
+    return Math.min(
+        Math.max(maximo, minimo),
+        maximoPermitido
+    );
+}
+
+function calcularAlturaFilaConsulta(fila, encabezados){
+
+    const indiceMensaje = encabezados.findIndex(
+        h=>String(h || "").trim().toLowerCase() === "mensaje"
+    );
+
+    if(indiceMensaje === -1){
+        return 21;
+    }
+
+    const claveMensaje = encabezados[indiceMensaje];
+    const mensaje = String(fila?.[claveMensaje] ?? "");
+
+    if(!mensaje){
+        return 21;
+    }
+
+    // Aproximación para una columna de 48 caracteres de ancho.
+    const lineas = Math.max(1, Math.ceil(mensaje.length / 52));
+
+    return Math.min(
+        Math.max(21, lineas * 15),
+        90
+    );
 }
 
 function agregarHojaExcel(libro,tipo,datos){
@@ -10284,7 +10329,9 @@ function agregarHojaExcel(libro,tipo,datos){
             });
 
             const filaExcel = hoja.addRow(valores);
-            filaExcel.height = 21;
+            filaExcel.height = tipo === "CONSULTAS"
+                ? calcularAlturaFilaConsulta(fila, encabezados)
+                : 21;
 
             filaExcel.eachCell((celda,columna)=>{
 
@@ -10298,15 +10345,19 @@ function agregarHojaExcel(libro,tipo,datos){
                     color:{argb:"FF0F172A"}
                 };
 
+                const esFecha = encabezado === "fecha";
+                const esMensaje = encabezado === "mensaje";
+
                 celda.alignment = {
-                    vertical:"middle",
+                    vertical: esMensaje ? "top" : "middle",
                     horizontal:(
-                        encabezado === "mensaje" ||
+                        esMensaje ||
                         encabezado === "email" ||
                         encabezado === "nombre" ||
                         encabezado === "usuario"
                     ) ? "left" : "center",
-                    wrapText:true
+                    // Fecha nunca debe partirse. Mensaje sí se ajusta.
+                    wrapText: !esFecha
                 };
 
                 celda.border = {
@@ -10366,7 +10417,7 @@ function agregarHojaExcel(libro,tipo,datos){
 
     encabezados.forEach((encabezado,indice)=>{
         hoja.getColumn(indice+1).width =
-            calcularAnchoColumna(encabezado,filas);
+            calcularAnchoColumna(encabezado, filas, tipo);
     });
 
     hoja.pageSetup = {
