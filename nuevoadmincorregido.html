@@ -6131,19 +6131,6 @@ and
     font-size:14px;
 }
 
-#tipoFechaAuditoria{
-    width:120px;
-    height:44px;
-    margin:0;
-    padding:0 12px;
-    border:1px solid #CBD5E1;
-    border-radius:12px;
-    background:#FFFFFF;
-    color:#0F172A;
-    font-size:14px;
-}
-
-#filtroFechaAuditoria,
 #filtroFechaDesdeAuditoria,
 #filtroFechaHastaAuditoria{
     width:170px;
@@ -6158,7 +6145,7 @@ and
 }
 
 #grupoRangoAuditoria{
-    display:none;
+    display:flex;
     align-items:center;
     gap:8px;
 }
@@ -6170,8 +6157,7 @@ and
     white-space:nowrap;
 }
 
-#btnAplicarFechaAuditoria,
-#btnTodasFechasAuditoria{
+#btnAplicarFechaAuditoria{
     width:auto;
     height:44px;
     min-width:130px;
@@ -6190,12 +6176,6 @@ and
     color:#FFFFFF;
 }
 
-#btnTodasFechasAuditoria{
-    min-width:105px;
-    background:#F1F5F9;
-    color:#334155;
-    border:1px solid #CBD5E1;
-}
 
 #panelAuditoriaDerecho{
     display:flex;
@@ -6295,13 +6275,10 @@ and
     }
 
     #buscarAuditoria,
-    #tipoFechaAuditoria,
-    #filtroFechaAuditoria,
     #filtroFechaDesdeAuditoria,
     #filtroFechaHastaAuditoria,
     #grupoRangoAuditoria,
-    #btnAplicarFechaAuditoria,
-    #btnTodasFechasAuditoria{
+    #btnAplicarFechaAuditoria{
         width:100%;
         min-width:0;
     }
@@ -9984,8 +9961,9 @@ async function cargarAuditoria(){
 
     datos.sort((a,b)=>new Date(b.Fecha)-new Date(a.Fecha));
 
-    const mesInicial = obtenerMesActualAuditoria();
-    const tipoFechaInicial = "MES";
+    const hoyAuditoria = new Date();
+    const fechaDesdeInicial = `${hoyAuditoria.getFullYear()}-${String(hoyAuditoria.getMonth()+1).padStart(2,"0")}-01`;
+    const fechaHastaInicial = obtenerDiaActualAuditoria();
 
     let html = `
         <div class="tituloModulo">
@@ -9999,31 +9977,21 @@ async function cargarAuditoria(){
                     id="buscarAuditoria"
                     placeholder="🔍 Buscar nombre...">
 
-                <select id="tipoFechaAuditoria" title="Tipo de filtro de fecha">
-                    <option value="DIA">DÍA</option>
-                    <option value="MES" selected>MES</option>
-                    <option value="ANIO">AÑO</option>
-                    <option value="RANGO">RANGO</option>
-                </select>
-
-                <input
-                    id="filtroFechaAuditoria"
-                    type="month"
-                    value="${mesInicial}">
-
                 <div id="grupoRangoAuditoria">
                     <span class="etiquetaRangoAuditoria">DESDE</span>
-                    <input id="filtroFechaDesdeAuditoria" type="date">
+                    <input
+                        id="filtroFechaDesdeAuditoria"
+                        type="date"
+                        value="${fechaDesdeInicial}">
                     <span class="etiquetaRangoAuditoria">HASTA</span>
-                    <input id="filtroFechaHastaAuditoria" type="date">
+                    <input
+                        id="filtroFechaHastaAuditoria"
+                        type="date"
+                        value="${fechaHastaInicial}">
                 </div>
 
                 <button id="btnAplicarFechaAuditoria">
                     📅 FILTRAR FECHA
-                </button>
-
-                <button id="btnTodasFechasAuditoria">
-                    TODAS
                 </button>
             </div>
 
@@ -10076,23 +10044,16 @@ async function cargarAuditoria(){
     .innerHTML = html;
 
     const buscador = document.getElementById("buscarAuditoria");
-    const tipoFecha = document.getElementById("tipoFechaAuditoria");
-    const filtroFecha = document.getElementById("filtroFechaAuditoria");
     const filtroFechaDesde = document.getElementById("filtroFechaDesdeAuditoria");
     const filtroFechaHasta = document.getElementById("filtroFechaHastaAuditoria");
     const botonFecha = document.getElementById("btnAplicarFechaAuditoria");
-    const botonTodas = document.getElementById("btnTodasFechasAuditoria");
     const tbody = document.getElementById("tbodyAuditoria");
 
     function aplicarFiltrosAuditoria(){
         const texto = String(buscador.value || "").trim().toUpperCase();
-        const tipo = String(tipoFecha.value || "MES").trim().toUpperCase();
-        const valorFecha = tipo === "RANGO"
-            ? String(filtroFechaDesde.value || "").trim()
-            : String(filtroFecha.value || "").trim();
-        const valorFechaHasta = tipo === "RANGO"
-            ? String(filtroFechaHasta.value || "").trim()
-            : "";
+        const tipo = "RANGO";
+        const valorFecha = String(filtroFechaDesde.value || "").trim();
+        const valorFechaHasta = String(filtroFechaHasta.value || "").trim();
 
         const registrosFiltrados = datos.filter(item=>{
             const nombre = String(item.Nombre || item.Usuario || "").trim().toUpperCase();
@@ -10137,28 +10098,30 @@ async function cargarAuditoria(){
 
     buscador.addEventListener("input",aplicarFiltrosAuditoria);
 
-    tipoFecha.addEventListener("change",()=>{
-        configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,filtroFechaHasta,false);
-        if(String(tipoFecha.value).toUpperCase() === "RANGO"){
-            filtroFechaDesde.value = filtroFecha.value;
+    filtroFechaDesde.addEventListener("change",()=>{
+        if(
+            filtroFechaDesde.value &&
+            filtroFechaHasta.value &&
+            filtroFechaDesde.value > filtroFechaHasta.value
+        ){
+            filtroFechaHasta.value = filtroFechaDesde.value;
         }
         aplicarFiltrosAuditoria();
     });
 
-    filtroFecha.addEventListener("change",aplicarFiltrosAuditoria);
-    filtroFechaDesde.addEventListener("change",aplicarFiltrosAuditoria);
-    filtroFechaHasta.addEventListener("change",aplicarFiltrosAuditoria);
-
-    botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
-
-    botonTodas.addEventListener("click",()=>{
-        filtroFecha.value = "";
-        filtroFechaDesde.value = "";
-        filtroFechaHasta.value = "";
+    filtroFechaHasta.addEventListener("change",()=>{
+        if(
+            filtroFechaDesde.value &&
+            filtroFechaHasta.value &&
+            filtroFechaHasta.value < filtroFechaDesde.value
+        ){
+            filtroFechaDesde.value = filtroFechaHasta.value;
+        }
         aplicarFiltrosAuditoria();
     });
 
-    configurarControlFechaAuditoria(tipoFecha.value,filtroFecha,filtroFechaHasta,true);
+    botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
+
     aplicarFiltrosAuditoria();
 
     localStorage.setItem("auditoriaVista",Date.now());
