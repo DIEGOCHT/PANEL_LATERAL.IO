@@ -3177,7 +3177,63 @@ margin-top:18px;
 
 }
 
+/* ==========================================
+   CONSULTAS LEÍDAS Y NO LEÍDAS
+========================================== */
 
+.filaConsulta.noLeida{
+
+    background:#F8FBFF;
+
+    box-shadow:
+        inset 4px 0 0 #2563EB;
+
+}
+
+
+.filaConsulta.noLeida .consultaNombre,
+.filaConsulta.noLeida .consultaAsunto{
+
+    font-weight:700;
+
+    color:#0F172A;
+
+}
+
+
+.filaConsulta.leida{
+
+    background:#FFFFFF;
+
+    box-shadow:none;
+
+}
+
+
+.filaConsulta.leida .consultaNombre{
+
+    font-weight:500;
+
+    color:#334155;
+
+}
+
+
+.filaConsulta.leida .consultaAsunto{
+
+    font-weight:400;
+
+    color:#475569;
+
+}
+
+
+.filaConsulta.noLeida:hover,
+.filaConsulta.leida:hover{
+
+    background:#F1F5F9;
+
+}
 .consultaNombre{
 
     font-size:13px;
@@ -7653,6 +7709,133 @@ function mostrarModulo(
 
 }
 let consultasActuales = [];
+
+
+/*
+=========================================
+CONSULTAS LEÍDAS
+=========================================
+*/
+
+const CLAVE_CONSULTAS_LEIDAS =
+    "consultasLeidas";
+
+
+function obtenerClaveConsulta(
+    consulta
+){
+
+    return [
+
+        consulta.Fecha || "",
+
+        consulta.Email || "",
+
+        consulta.Telefono || "",
+
+        consulta.Etapa || "",
+
+        consulta.Lote || ""
+
+    ]
+    .map(valor=>
+
+        String(valor)
+        .trim()
+        .toUpperCase()
+
+    )
+    .join("|");
+
+}
+
+
+function obtenerConsultasLeidas(){
+
+    try{
+
+        const guardadas =
+            JSON.parse(
+                localStorage.getItem(
+                    CLAVE_CONSULTAS_LEIDAS
+                )
+                ||
+                "[]"
+            );
+
+
+        return Array.isArray(guardadas)
+            ? guardadas
+            : [];
+
+    }
+    catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+function consultaEstaLeida(
+    consulta
+){
+
+    const clave =
+        obtenerClaveConsulta(
+            consulta
+        );
+
+
+    return obtenerConsultasLeidas()
+        .includes(
+            clave
+        );
+
+}
+
+
+function marcarConsultaLeida(
+    consulta
+){
+
+    const clave =
+        obtenerClaveConsulta(
+            consulta
+        );
+
+
+    const consultasLeidas =
+        obtenerConsultasLeidas();
+
+
+    if(
+        !consultasLeidas.includes(
+            clave
+        )
+    ){
+
+        consultasLeidas.push(
+            clave
+        );
+
+
+        localStorage.setItem(
+
+            CLAVE_CONSULTAS_LEIDAS,
+
+            JSON.stringify(
+                consultasLeidas
+            )
+
+        );
+
+    }
+
+}
+
+
 async function cargarConsultas(){
 
     const rol =
@@ -7822,14 +8005,23 @@ const nombreCorto =
             etapa +
             ", Lote: " +
             lote;
+const estaLeida =
+    consultaEstaLeida(
+        c
+    );
 
 
         html += `
 
         <div
-        class="filaConsulta"
-        onclick="abrirDetalleConsulta(${index})"
-        >
+id="filaConsulta_${index}"
+class="filaConsulta ${
+    estaLeida
+    ? "leida"
+    : "noLeida"
+}"
+onclick="abrirDetalleConsulta(${index})"
+>
 
             <div class="consultaNombre">
 
@@ -7906,6 +8098,38 @@ function abrirDetalleConsulta(
         return;
 
     }
+/*
+MARCAR COMO LEÍDA
+*/
+
+marcarConsultaLeida(
+    consulta
+);
+
+
+const filaConsulta =
+    document.getElementById(
+        "filaConsulta_" +
+        indice
+    );
+
+
+if(filaConsulta){
+
+    filaConsulta
+    .classList
+    .remove(
+        "noLeida"
+    );
+
+
+    filaConsulta
+    .classList
+    .add(
+        "leida"
+    );
+
+}
 
 
     const nombreCompleto =
