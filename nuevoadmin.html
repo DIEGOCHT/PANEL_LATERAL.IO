@@ -6471,6 +6471,32 @@ and
     }
 }
 
+
+/* =====================================================
+   AUDITORÍA - FECHA Y HORA SIEMPRE EN UNA SOLA LÍNEA
+===================================================== */
+#tablaAuditoria th:first-child,
+#tablaAuditoria td:first-child,
+.tablaAuditoria th:first-child,
+.tablaAuditoria td:first-child{
+    white-space:nowrap !important;
+    word-break:normal !important;
+    overflow-wrap:normal !important;
+    min-width:190px;
+    width:190px;
+}
+
+@media (max-width:768px){
+    #tablaAuditoria th:first-child,
+    #tablaAuditoria td:first-child,
+    .tablaAuditoria th:first-child,
+    .tablaAuditoria td:first-child{
+        min-width:180px;
+        width:180px;
+        white-space:nowrap !important;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
