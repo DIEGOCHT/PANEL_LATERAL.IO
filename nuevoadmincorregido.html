@@ -6129,6 +6129,11 @@ and
     border-radius:16px;
     padding:18px;
     box-shadow:0 6px 18px rgba(15,23,42,.05);
+
+    /* Mantiene todos los botones de exportación alineados abajo */
+    display:flex;
+    flex-direction:column;
+    height:100%;
 }
 
 .cardReporte h3{
@@ -6147,7 +6152,7 @@ and
 .btnReporteExcel{
     width:100%;
     height:40px;
-    margin:0;
+    margin:auto 0 0;
     padding:0 14px;
     border-radius:10px;
     background:#16A34A;
@@ -10474,6 +10479,16 @@ function nombreArchivoReporte(tipo){
 }
 
 async function exportarReporteExcel(tipo){
+
+    /*
+    Verifica nuevamente la licencia justo antes de generar el archivo.
+    Así, aunque la sesión lleve tiempo abierta, no se exporta si pago deja de ser SI.
+    */
+    const licenciaValida = await verificarLicencia();
+
+    if(!licenciaValida){
+        return;
+    }
 
     const rol = String(
         localStorage.getItem("rol") || ""
