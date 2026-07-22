@@ -6471,60 +6471,6 @@ and
     }
 }
 
-
-
-/* =====================================================
-   AUDITORÍA - COLUMNA FECHA EN UNA SOLA LÍNEA
-   Selector real de la tabla de Auditoría
-===================================================== */
-
-#auditoriaTablaPrincipal .tabla th:nth-child(1),
-#auditoriaTablaPrincipal .tabla td:nth-child(1){
-    width:210px !important;
-    min-width:210px !important;
-    max-width:210px !important;
-
-    white-space:nowrap !important;
-    word-break:keep-all !important;
-    overflow-wrap:normal !important;
-    hyphens:none !important;
-
-    line-height:1.2 !important;
-}
-
-/*
-La tabla debe tener espacio suficiente para no comprimir
-la primera columna y mandar "a. m." / "p. m." abajo.
-*/
-#auditoriaTablaPrincipal .tabla{
-    min-width:1050px !important;
-    table-layout:auto !important;
-}
-
-/* Contenedor permite desplazamiento horizontal si hace falta */
-#auditoriaTablaPrincipal .contenedorTablaScroll{
-    overflow-x:auto !important;
-    overflow-y:visible !important;
-    -webkit-overflow-scrolling:touch;
-}
-
-/* En móvil se conserva exactamente la misma lógica */
-@media (max-width:768px){
-
-    #auditoriaTablaPrincipal .tabla th:nth-child(1),
-    #auditoriaTablaPrincipal .tabla td:nth-child(1){
-        width:200px !important;
-        min-width:200px !important;
-        max-width:200px !important;
-        white-space:nowrap !important;
-    }
-
-    #auditoriaTablaPrincipal .tabla{
-        min-width:1000px !important;
-        table-layout:auto !important;
-    }
-}
-
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
