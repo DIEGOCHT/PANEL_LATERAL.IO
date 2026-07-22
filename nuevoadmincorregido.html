@@ -6375,6 +6375,72 @@ and
     background:#F8FBFF;
 }
 
+
+
+/* =====================================================
+   CORRECCIÓN FINAL - LOTES SIN ESPACIO VACÍO INFERIOR
+   NUEVOADMIN 129
+   =====================================================
+   Las reglas responsivas generales daban una altura
+   mínima de casi 1 pantalla a todos los contenedores de
+   tablas. En LOTES eso dejaba un bloque blanco enorme
+   cuando había pocos resultados. Esta corrección afecta
+   únicamente al módulo LOTES.
+===================================================== */
+
+#contenedorLotesPrincipal{
+    min-height:0 !important;
+    height:auto !important;
+    flex:none !important;
+    align-self:start;
+}
+
+#contenedorLotes{
+    min-height:0 !important;
+    height:auto !important;
+}
+
+#contenedorLotes .contenedorTablaScroll{
+    min-height:0 !important;
+    height:auto !important;
+    max-height:none !important;
+    padding-bottom:0 !important;
+    overflow-x:auto !important;
+    overflow-y:visible !important;
+}
+
+#contenedorLotes .tabla{
+    margin-bottom:0 !important;
+}
+
+/* En tablet y celular conserva el desplazamiento
+   horizontal, pero la altura depende de las filas. */
+@media(max-width:1180px){
+    #contenedorLotesPrincipal,
+    #contenedorLotes,
+    #contenedorLotes .contenedorTablaScroll{
+        min-height:0 !important;
+        height:auto !important;
+        max-height:none !important;
+    }
+
+    #contenedorLotes .contenedorTablaScroll{
+        padding-bottom:6px !important;
+        overflow-x:auto !important;
+        overflow-y:visible !important;
+        -webkit-overflow-scrolling:touch;
+        touch-action:pan-x pan-y !important;
+    }
+}
+
+@media(max-width:700px){
+    #contenedorLotes .contenedorTablaScroll{
+        min-height:0 !important;
+        height:auto !important;
+        padding-bottom:4px !important;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
