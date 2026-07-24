@@ -7413,6 +7413,16 @@ localStorage.setItem(
 "usuario",
 resultado.nombre
 );
+
+/*
+Usuario real de acceso. Se guarda separado del nombre
+para identificar exactamente la cuenta administradora.
+*/
+localStorage.setItem(
+"usuarioCuenta",
+resultado.usuario
+);
+
 localStorage.setItem(
 "logeado",
 "SI"
@@ -11287,7 +11297,7 @@ onclick="abrirModalColaborador()">
 
     const usuarioSesion =
         String(
-            localStorage.getItem("usuario") || ""
+            localStorage.getItem("usuarioCuenta") || ""
         )
         .trim()
         .toUpperCase();
