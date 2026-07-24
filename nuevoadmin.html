@@ -11285,6 +11285,19 @@ onclick="abrirModalColaborador()">
         .trim()
         .toUpperCase() === "ADMIN";
 
+    const usuarioSesion =
+        String(
+            localStorage.getItem("usuario") || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const esMismaCuenta =
+        String(a.usuario || "")
+        .trim()
+        .toUpperCase() ===
+        usuarioSesion;
+
     html += `
 
     <tr>
@@ -11336,16 +11349,23 @@ onclick="abrirModalColaborador()">
                     : ""
                 }
 
-                <button
-                class="btnAccionAdmin"
-                onclick="
-                cambiarPasswordAsesor(
-                    '${a.usuario}'
-                )">
+                ${
+                    !esAdministrador ||
+                    esMismaCuenta
+                    ? `
+                    <button
+                    class="btnAccionAdmin"
+                    onclick="
+                    cambiarPasswordAsesor(
+                        '${a.usuario}'
+                    )">
 
-                    Cambiar clave
+                        Cambiar clave
 
-                </button>
+                    </button>
+                    `
+                    : ""
+                }
 
                 ${
                     !esAdministrador
@@ -11530,11 +11550,23 @@ password:nuevaPassword
 
         mostrarNotificacion(
 
-"Contraseña actualizada",
+            "Contraseña actualizada",
 
-"La contraseña fue modificada correctamente."
+            "La contraseña fue modificada correctamente."
 
-);
+        );
+
+    }
+    else{
+
+        mostrarNotificacion(
+
+            "Cambio no permitido",
+
+            resultado.mensaje ||
+            "No se pudo cambiar la contraseña."
+
+        );
 
     }
 
@@ -13547,12 +13579,10 @@ document
 "input",
 ()=>{
 
-    /* si el usuario empieza a escribir,
-       se eliminan los filtros */
-
-    filtroActual = "TODOS";
-
-    etapasSeleccionadas = [];
+    /*
+    El buscador NO reinicia los demás filtros.
+    Texto + etapas + estado trabajan siempre juntos.
+    */
 
     filtrarLotes();
 
@@ -13676,9 +13706,10 @@ document
 )
 .onclick = ()=>{
 
-    document
-    .getElementById("buscarLote")
-    .value = "";
+    /*
+    TODOS significa todos los ESTADOS.
+    Conserva el texto buscado y las etapas seleccionadas.
+    */
 
     filtroActual = "TODOS";
 
@@ -13693,10 +13724,6 @@ document
 )
 .onclick = ()=>{
 
-    document
-    .getElementById("buscarLote")
-    .value = "";
-
     filtroActual = "LIBRE";
 
     filtrarLotes();
@@ -13710,10 +13737,6 @@ document
 )
 .onclick = ()=>{
 
-    document
-    .getElementById("buscarLote")
-    .value = "";
-
     filtroActual = "RESERVADO";
 
     filtrarLotes();
@@ -13726,10 +13749,6 @@ document
 "filtroVendidos"
 )
 .onclick = ()=>{
-
-    document
-    .getElementById("buscarLote")
-    .value = "";
 
     filtroActual = "VENDIDO";
 
