@@ -11535,51 +11535,297 @@ usuario:usuario
     }
 
 }
-async function cambiarPasswordAsesor(usuario){
+let usuarioCambioPassword = "";
 
-    const nuevaPassword =
-    prompt(
-    "Nueva contraseña para " +
-    usuario
-    );
+function cambiarPasswordAsesor(usuario){
 
-    if(!nuevaPassword){
+    usuarioCambioPassword = usuario;
+
+    let modal =
+        document.getElementById("modalCambiarPassword");
+
+    if(!modal){
+
+        modal = document.createElement("div");
+        modal.id = "modalCambiarPassword";
+
+        modal.style.cssText = `
+            position:fixed;
+            inset:0;
+            display:none;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+            background:rgba(15,23,42,.58);
+            backdrop-filter:blur(3px);
+            z-index:20000;
+        `;
+
+        modal.innerHTML = `
+            <div class="modalCard" style="width:460px;max-width:calc(100vw - 32px);">
+
+                <h2>Cambiar contraseña</h2>
+
+                <div style="
+                    margin:-4px 0 20px;
+                    text-align:center;
+                    color:#64748B;
+                    font-size:14px;
+                    line-height:1.5;
+                ">
+                    Usuario:
+                    <strong id="usuarioCambioPasswordTexto"
+                    style="color:#0F172A;"></strong>
+                </div>
+
+                <div style="
+                    display:flex;
+                    flex-direction:column;
+                    gap:12px;
+                ">
+
+                    <div class="campoPasswordColaborador">
+                        <input
+                            id="passwordCambioNueva"
+                            type="password"
+                            placeholder="Nueva contraseña"
+                            class="inputModulo"
+                            autocomplete="new-password"
+                            style="width:100%;margin:0;padding-right:52px;">
+
+                        <button
+                            type="button"
+                            class="btnVerPassword"
+                            onclick="alternarCampoCambioPassword('passwordCambioNueva','iconoCambioNueva')"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <span id="iconoCambioNueva">👁</span>
+                        </button>
+                    </div>
+
+                    <div class="campoPasswordColaborador">
+                        <input
+                            id="passwordCambioConfirmar"
+                            type="password"
+                            placeholder="Confirmar contraseña"
+                            class="inputModulo"
+                            autocomplete="new-password"
+                            style="width:100%;margin:0;padding-right:52px;">
+
+                        <button
+                            type="button"
+                            class="btnVerPassword"
+                            onclick="alternarCampoCambioPassword('passwordCambioConfirmar','iconoCambioConfirmar')"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <span id="iconoCambioConfirmar">👁</span>
+                        </button>
+                    </div>
+
+                    <div id="errorCambioPassword" style="
+                        display:none;
+                        padding:10px 12px;
+                        border-radius:10px;
+                        background:#FEF2F2;
+                        color:#B91C1C;
+                        font-size:13px;
+                        font-weight:600;
+                        line-height:1.4;
+                        text-align:center;
+                    "></div>
+
+                </div>
+
+                <div class="modalAcciones">
+
+                    <button
+                        type="button"
+                        class="btnGris"
+                        onclick="cerrarModalCambioPassword()">
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btnAzul"
+                        id="btnConfirmarCambioPassword"
+                        onclick="confirmarCambioPassword()">
+                        Cambiar contraseña
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        modal.addEventListener("click", function(e){
+            if(e.target === modal){
+                cerrarModalCambioPassword();
+            }
+        });
+
+        modal.addEventListener("keydown", function(e){
+            if(e.key === "Enter"){
+                confirmarCambioPassword();
+            }
+        });
+    }
+
+    document.getElementById("usuarioCambioPasswordTexto").textContent = usuario;
+
+    const nueva = document.getElementById("passwordCambioNueva");
+    const confirmar = document.getElementById("passwordCambioConfirmar");
+    const error = document.getElementById("errorCambioPassword");
+
+    nueva.value = "";
+    confirmar.value = "";
+    nueva.type = "password";
+    confirmar.type = "password";
+
+    document.getElementById("iconoCambioNueva").textContent = "👁";
+    document.getElementById("iconoCambioConfirmar").textContent = "👁";
+
+    error.style.display = "none";
+    error.textContent = "";
+
+    modal.style.display = "flex";
+
+    setTimeout(()=>{
+        nueva.focus();
+    },50);
+}
+
+function cerrarModalCambioPassword(){
+
+    const modal =
+        document.getElementById("modalCambiarPassword");
+
+    if(modal){
+        modal.style.display = "none";
+    }
+
+    usuarioCambioPassword = "";
+}
+
+function alternarCampoCambioPassword(campoId, iconoId){
+
+    const campo = document.getElementById(campoId);
+    const icono = document.getElementById(iconoId);
+
+    if(!campo){
         return;
     }
 
-    const resultado =
-await apiPost(
-"cambiarPasswordAsesor",
-{
-usuario:usuario,
-password:nuevaPassword
+    const oculta = campo.type === "password";
+
+    campo.type = oculta ? "text" : "password";
+
+    if(icono){
+        icono.textContent = oculta ? "🙈" : "👁";
+    }
 }
-);
 
-    if(resultado.ok){
+function mostrarErrorCambioPassword(mensaje){
 
-        mostrarNotificacion(
+    const error =
+        document.getElementById("errorCambioPassword");
 
-            "Contraseña actualizada",
-
-            "La contraseña fue modificada correctamente."
-
-        );
-
-    }
-    else{
-
-        mostrarNotificacion(
-
-            "Cambio no permitido",
-
-            resultado.mensaje ||
-            "No se pudo cambiar la contraseña."
-
-        );
-
+    if(!error){
+        return;
     }
 
+    error.textContent = mensaje;
+    error.style.display = "block";
+}
+
+async function confirmarCambioPassword(){
+
+    if(!usuarioCambioPassword){
+        return;
+    }
+
+    const nuevaPassword =
+        document.getElementById("passwordCambioNueva").value;
+
+    const confirmarPassword =
+        document.getElementById("passwordCambioConfirmar").value;
+
+    const error =
+        document.getElementById("errorCambioPassword");
+
+    error.style.display = "none";
+    error.textContent = "";
+
+    if(!nuevaPassword || !confirmarPassword){
+        mostrarErrorCambioPassword(
+            "Complete los dos campos de contraseña."
+        );
+        return;
+    }
+
+    if(nuevaPassword.length < 8){
+        mostrarErrorCambioPassword(
+            "La contraseña debe tener al menos 8 caracteres."
+        );
+        return;
+    }
+
+    if(nuevaPassword !== confirmarPassword){
+        mostrarErrorCambioPassword(
+            "Las contraseñas no coinciden."
+        );
+        return;
+    }
+
+    const boton =
+        document.getElementById("btnConfirmarCambioPassword");
+
+    boton.disabled = true;
+    boton.textContent = "Guardando...";
+
+    const usuario = usuarioCambioPassword;
+
+    try{
+
+        const resultado =
+            await apiPost(
+                "cambiarPasswordAsesor",
+                {
+                    usuario:usuario,
+                    password:nuevaPassword
+                }
+            );
+
+        if(resultado.ok){
+
+            cerrarModalCambioPassword();
+
+            mostrarNotificacion(
+                "Contraseña actualizada",
+                "La contraseña fue modificada correctamente."
+            );
+
+        }else{
+
+            mostrarErrorCambioPassword(
+                resultado.mensaje ||
+                "No se pudo cambiar la contraseña."
+            );
+
+        }
+
+    }catch(errorPeticion){
+
+        mostrarErrorCambioPassword(
+            "No se pudo completar el cambio. Intente nuevamente."
+        );
+
+    }finally{
+
+        boton.disabled = false;
+        boton.textContent = "Cambiar contraseña";
+
+    }
 }
 async function eliminarAsesor(usuario){
 mostrarConfirmacion(
