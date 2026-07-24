@@ -8838,12 +8838,49 @@ loteActualizado.Estado
 +
 
 "</b></div>";
-document
-.getElementById(
+const selectNuevoEstado =
+document.getElementById(
 "nuevoEstado"
+);
+
+const estadoActualModal =
+String(
+    loteActualizado.Estado || ""
 )
-.value =
-loteActualizado.Estado;
+.trim()
+.toUpperCase();
+
+const estadosPermitidos =
+[
+    "LIBRE",
+    "RESERVADO",
+    "VENDIDO"
+]
+.filter(function(estado){
+    return estado !== estadoActualModal;
+});
+
+selectNuevoEstado.innerHTML =
+estadosPermitidos
+.map(function(estado){
+
+    return (
+        '<option value="' +
+        estado +
+        '">' +
+        estado +
+        '</option>'
+    );
+
+})
+.join("");
+
+if(estadosPermitidos.length > 0){
+
+    selectNuevoEstado.value =
+    estadosPermitidos[0];
+
+}
 
     document
     .getElementById(
@@ -9854,13 +9891,7 @@ function renderizarTortaVentasColaboradores(registros, tipoFecha, valorFecha, va
             plugins:{
                 legend:{display:false},
                 tooltip:{
-                    callbacks:{
-                        label(context){
-                            const cantidad = context.raw || 0;
-                            const porcentaje = totalVentas ? (cantidad*100/totalVentas).toFixed(1) : "0.0";
-                            return `${context.label}: ${cantidad} venta(s) (${porcentaje}%)`;
-                        }
-                    }
+                    enabled:false
                 }
             }
         }
@@ -9973,13 +10004,7 @@ function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha, 
             plugins:{
                 legend:{display:false},
                 tooltip:{
-                    callbacks:{
-                        label(context){
-                            const cantidad = context.raw || 0;
-                            const porcentaje = totalReservas ? (cantidad*100/totalReservas).toFixed(1) : "0.0";
-                            return `${context.label}: ${cantidad} reserva(s) (${porcentaje}%)`;
-                        }
-                    }
+                    enabled:false
                 }
             }
         }
