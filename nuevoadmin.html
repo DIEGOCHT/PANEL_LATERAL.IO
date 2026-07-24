@@ -11591,15 +11591,8 @@ function cambiarPasswordAsesor(usuario){
                             placeholder="Nueva contraseña"
                             class="inputModulo"
                             autocomplete="new-password"
-                            style="width:100%;margin:0;padding-right:52px;">
+                            style="width:100%;margin:0;padding-right:14px;">
 
-                        <button
-                            type="button"
-                            class="btnVerPassword"
-                            onclick="alternarCampoCambioPassword('passwordCambioNueva','iconoCambioNueva')"
-                            aria-label="Mostrar u ocultar contraseña">
-                            <span id="iconoCambioNueva">👁</span>
-                        </button>
                     </div>
 
                     <div class="campoPasswordColaborador">
@@ -11609,15 +11602,8 @@ function cambiarPasswordAsesor(usuario){
                             placeholder="Confirmar contraseña"
                             class="inputModulo"
                             autocomplete="new-password"
-                            style="width:100%;margin:0;padding-right:52px;">
+                            style="width:100%;margin:0;padding-right:14px;">
 
-                        <button
-                            type="button"
-                            class="btnVerPassword"
-                            onclick="alternarCampoCambioPassword('passwordCambioConfirmar','iconoCambioConfirmar')"
-                            aria-label="Mostrar u ocultar contraseña">
-                            <span id="iconoCambioConfirmar">👁</span>
-                        </button>
                     </div>
 
                     <div id="errorCambioPassword" style="
@@ -11682,9 +11668,6 @@ function cambiarPasswordAsesor(usuario){
     nueva.type = "password";
     confirmar.type = "password";
 
-    document.getElementById("iconoCambioNueva").textContent = "👁";
-    document.getElementById("iconoCambioConfirmar").textContent = "👁";
-
     error.style.display = "none";
     error.textContent = "";
 
@@ -11705,24 +11688,6 @@ function cerrarModalCambioPassword(){
     }
 
     usuarioCambioPassword = "";
-}
-
-function alternarCampoCambioPassword(campoId, iconoId){
-
-    const campo = document.getElementById(campoId);
-    const icono = document.getElementById(iconoId);
-
-    if(!campo){
-        return;
-    }
-
-    const oculta = campo.type === "password";
-
-    campo.type = oculta ? "text" : "password";
-
-    if(icono){
-        icono.textContent = oculta ? "🙈" : "👁";
-    }
 }
 
 function mostrarErrorCambioPassword(mensaje){
