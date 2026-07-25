@@ -1637,6 +1637,140 @@ table-layout:fixed;
     background:#1D4ED8;
 
 }
+
+/* ======================================
+   ACCIONES DEL LOGIN
+====================================== */
+
+.loginAcciones{
+
+    width:100%;
+    margin-top:28px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+
+}
+
+.loginAcciones button{
+
+    width:100%;
+    min-width:0;
+    height:52px;
+
+    margin:0;
+    padding:0 14px;
+
+    border-radius:14px;
+
+    font-size:14px;
+    font-weight:700;
+    line-height:1.15;
+
+}
+
+#btnLogin{
+
+    margin-top:0;
+
+}
+
+#btnOlvidePassword{
+
+    background:#64748B;
+    color:#FFFFFF;
+
+}
+
+#btnOlvidePassword:hover{
+
+    background:#475569;
+
+}
+
+
+/* ======================================
+   RECUPERAR CONTRASEÑA DESDE LOGIN
+====================================== */
+
+#modalRecuperarPassword{
+
+    position:fixed;
+    inset:0;
+
+    display:none;
+    justify-content:center;
+    align-items:center;
+
+    width:100%;
+    height:100%;
+
+    padding:20px;
+
+    background:rgba(15,23,42,.58);
+    backdrop-filter:blur(3px);
+
+    z-index:30000;
+
+}
+
+#modalRecuperarPassword .modalCard{
+
+    width:460px;
+    max-width:calc(100vw - 32px);
+
+}
+
+.camposRecuperacionPassword{
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+}
+
+.camposRecuperacionPassword .inputModulo{
+
+    width:100%;
+    height:48px;
+    margin:0;
+    padding:0 14px;
+
+}
+
+#mensajeRecuperacionPassword{
+
+    display:none;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+    background:#FEF2F2;
+
+    color:#B91C1C;
+
+    font-size:13px;
+    font-weight:600;
+    line-height:1.4;
+    text-align:center;
+
+}
+
+@media(max-width:600px){
+
+    .loginAcciones{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .loginAcciones button{
+        padding:0 8px;
+        font-size:12px;
+    }
+
+}
+
 /*======================================
         SIDEBAR V3
 ======================================*/
@@ -6502,13 +6636,95 @@ and
         id="password"
         placeholder="Contraseña">
 
-    <button id="btnLogin">
+    <div class="loginAcciones">
 
-        Ingresar
+        <button id="btnLogin">
+            Ingresar
+        </button>
 
-    </button>
+        <button
+            type="button"
+            id="btnOlvidePassword"
+            onclick="abrirRecuperarPassword()">
+            Olvidé la contraseña
+        </button>
+
+    </div>
 
     <div id="error"></div>
+
+</div>
+
+<div id="modalRecuperarPassword">
+
+    <div class="modalCard">
+
+        <h2>Recuperar contraseña</h2>
+
+        <div style="
+            margin:-4px 0 20px;
+            color:#64748B;
+            font-size:14px;
+            line-height:1.5;
+            text-align:center;
+        ">
+            Disponible únicamente para cuentas de administrador.
+        </div>
+
+        <div class="camposRecuperacionPassword">
+
+            <input
+                id="recuperarUsuario"
+                type="text"
+                class="inputModulo"
+                placeholder="Usuario administrador"
+                autocomplete="username">
+
+            <input
+                id="recuperarCodigo"
+                type="password"
+                class="inputModulo"
+                placeholder="Código de recuperación"
+                autocomplete="off">
+
+            <input
+                id="recuperarNuevaPassword"
+                type="password"
+                class="inputModulo"
+                placeholder="Nueva contraseña"
+                autocomplete="new-password">
+
+            <input
+                id="recuperarConfirmarPassword"
+                type="password"
+                class="inputModulo"
+                placeholder="Confirmar contraseña"
+                autocomplete="new-password">
+
+            <div id="mensajeRecuperacionPassword"></div>
+
+        </div>
+
+        <div class="modalAcciones">
+
+            <button
+                type="button"
+                class="btnGris"
+                onclick="cerrarRecuperarPassword()">
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="btnAzul"
+                id="btnConfirmarRecuperacion"
+                onclick="confirmarRecuperarPassword()">
+                Crear nueva contraseña
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -7359,6 +7575,243 @@ function aplicarPermisosRol(rol){
     }
 
 }
+function abrirRecuperarPassword(){
+
+    const modal =
+        document.getElementById(
+            "modalRecuperarPassword"
+        );
+
+    const usuarioLogin =
+        document.getElementById("usuario")
+        .value
+        .trim();
+
+    document.getElementById(
+        "recuperarUsuario"
+    ).value = usuarioLogin;
+
+    document.getElementById(
+        "recuperarCodigo"
+    ).value = "";
+
+    document.getElementById(
+        "recuperarNuevaPassword"
+    ).value = "";
+
+    document.getElementById(
+        "recuperarConfirmarPassword"
+    ).value = "";
+
+    const mensaje =
+        document.getElementById(
+            "mensajeRecuperacionPassword"
+        );
+
+    mensaje.style.display = "none";
+    mensaje.textContent = "";
+
+    modal.style.display = "flex";
+
+    setTimeout(()=>{
+
+        const campo =
+            usuarioLogin
+            ? document.getElementById("recuperarCodigo")
+            : document.getElementById("recuperarUsuario");
+
+        campo.focus();
+
+    },50);
+
+}
+
+
+function cerrarRecuperarPassword(){
+
+    const modal =
+        document.getElementById(
+            "modalRecuperarPassword"
+        );
+
+    modal.style.display = "none";
+
+}
+
+
+function mostrarErrorRecuperacionPassword(mensaje){
+
+    const caja =
+        document.getElementById(
+            "mensajeRecuperacionPassword"
+        );
+
+    caja.textContent = mensaje;
+    caja.style.display = "block";
+
+}
+
+
+async function confirmarRecuperarPassword(){
+
+    const usuario =
+        document.getElementById(
+            "recuperarUsuario"
+        ).value.trim();
+
+    const codigo =
+        document.getElementById(
+            "recuperarCodigo"
+        ).value;
+
+    const nueva =
+        document.getElementById(
+            "recuperarNuevaPassword"
+        ).value;
+
+    const confirmar =
+        document.getElementById(
+            "recuperarConfirmarPassword"
+        ).value;
+
+    const mensaje =
+        document.getElementById(
+            "mensajeRecuperacionPassword"
+        );
+
+    mensaje.style.display = "none";
+    mensaje.textContent = "";
+
+
+    if(
+        !usuario ||
+        !codigo ||
+        !nueva ||
+        !confirmar
+    ){
+
+        mostrarErrorRecuperacionPassword(
+            "Complete todos los campos."
+        );
+
+        return;
+
+    }
+
+
+    if(nueva.length < 8){
+
+        mostrarErrorRecuperacionPassword(
+            "La nueva contraseña debe tener al menos 8 caracteres."
+        );
+
+        return;
+
+    }
+
+
+    if(nueva !== confirmar){
+
+        mostrarErrorRecuperacionPassword(
+            "Las contraseñas nuevas no coinciden."
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        document.getElementById(
+            "btnConfirmarRecuperacion"
+        );
+
+    boton.disabled = true;
+    boton.textContent = "Verificando...";
+
+
+    try{
+
+        const resultado =
+            await apiPost(
+                "recuperarPasswordLogin",
+                {
+                    usuario:usuario,
+                    codigo:codigo,
+                    password:nueva
+                }
+            );
+
+
+        if(resultado.ok){
+
+            cerrarRecuperarPassword();
+
+            document.getElementById(
+                "usuario"
+            ).value = usuario;
+
+            document.getElementById(
+                "password"
+            ).value = "";
+
+            mostrarNotificacion(
+                "Contraseña actualizada",
+                "La nueva contraseña fue creada correctamente. Ya puede iniciar sesión."
+            );
+
+        }else{
+
+            mostrarErrorRecuperacionPassword(
+                resultado.mensaje ||
+                "No se pudo recuperar la contraseña."
+            );
+
+        }
+
+    }
+    catch(error){
+
+        mostrarErrorRecuperacionPassword(
+            "No se pudo completar la recuperación. Intente nuevamente."
+        );
+
+    }
+    finally{
+
+        boton.disabled = false;
+        boton.textContent =
+            "Crear nueva contraseña";
+
+    }
+
+}
+
+
+document
+.addEventListener(
+    "keydown",
+    function(evento){
+
+        const modal =
+            document.getElementById(
+                "modalRecuperarPassword"
+            );
+
+        if(
+            evento.key === "Escape" &&
+            modal &&
+            modal.style.display === "flex"
+        ){
+
+            cerrarRecuperarPassword();
+
+        }
+
+    }
+);
+
+
 async function login(){
 
     const usuario =
@@ -7367,7 +7820,7 @@ async function login(){
 
     const password =
     document.getElementById("password")
-    .value.trim();
+    .value;
 
     if(
         usuario === "" ||
@@ -11584,6 +12037,20 @@ function cambiarPasswordAsesor(usuario){
                     gap:12px;
                 ">
 
+                    <div
+                        id="bloquePasswordAntigua"
+                        class="campoPasswordColaborador"
+                        style="display:none;">
+
+                        <input
+                            id="passwordCambioAntigua"
+                            type="password"
+                            placeholder="Contraseña antigua"
+                            class="inputModulo"
+                            autocomplete="current-password"
+                            style="width:100%;margin:0;padding-right:14px;">
+                    </div>
+
                     <div class="campoPasswordColaborador">
                         <input
                             id="passwordCambioNueva"
@@ -11659,22 +12126,81 @@ function cambiarPasswordAsesor(usuario){
 
     document.getElementById("usuarioCambioPasswordTexto").textContent = usuario;
 
-    const nueva = document.getElementById("passwordCambioNueva");
-    const confirmar = document.getElementById("passwordCambioConfirmar");
-    const error = document.getElementById("errorCambioPassword");
+    const antigua =
+        document.getElementById("passwordCambioAntigua");
 
+    const bloqueAntigua =
+        document.getElementById("bloquePasswordAntigua");
+
+    const nueva =
+        document.getElementById("passwordCambioNueva");
+
+    const confirmar =
+        document.getElementById("passwordCambioConfirmar");
+
+    const error =
+        document.getElementById("errorCambioPassword");
+
+
+    const usuarioSesion =
+        String(
+            localStorage.getItem("usuarioCuenta") ||
+            localStorage.getItem("usuario") ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const rolSesion =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    const esAdministradorSesion =
+        rolSesion === "ADMIN" ||
+        rolSesion === "ADMINISTRADOR";
+
+    const esPropiaCuentaAdmin =
+        esAdministradorSesion &&
+        String(usuario || "")
+        .trim()
+        .toUpperCase() ===
+        usuarioSesion;
+
+
+    bloqueAntigua.style.display =
+        esPropiaCuentaAdmin
+        ? "block"
+        : "none";
+
+    antigua.value = "";
     nueva.value = "";
     confirmar.value = "";
+
+    antigua.type = "password";
     nueva.type = "password";
     confirmar.type = "password";
 
     error.style.display = "none";
     error.textContent = "";
 
+    modal.dataset.requierePasswordAntigua =
+        esPropiaCuentaAdmin
+        ? "SI"
+        : "NO";
+
     modal.style.display = "flex";
 
     setTimeout(()=>{
-        nueva.focus();
+
+        if(esPropiaCuentaAdmin){
+            antigua.focus();
+        }else{
+            nueva.focus();
+        }
+
     },50);
 }
 
@@ -11709,6 +12235,16 @@ async function confirmarCambioPassword(){
         return;
     }
 
+    const modal =
+        document.getElementById("modalCambiarPassword");
+
+    const requierePasswordAntigua =
+        modal &&
+        modal.dataset.requierePasswordAntigua === "SI";
+
+    const passwordAntigua =
+        document.getElementById("passwordCambioAntigua").value;
+
     const nuevaPassword =
         document.getElementById("passwordCambioNueva").value;
 
@@ -11721,9 +12257,19 @@ async function confirmarCambioPassword(){
     error.style.display = "none";
     error.textContent = "";
 
+    if(
+        requierePasswordAntigua &&
+        !passwordAntigua
+    ){
+        mostrarErrorCambioPassword(
+            "Ingrese su contraseña antigua."
+        );
+        return;
+    }
+
     if(!nuevaPassword || !confirmarPassword){
         mostrarErrorCambioPassword(
-            "Complete los dos campos de contraseña."
+            "Complete la nueva contraseña y su confirmación."
         );
         return;
     }
@@ -11757,7 +12303,11 @@ async function confirmarCambioPassword(){
                 "cambiarPasswordAsesor",
                 {
                     usuario:usuario,
-                    password:nuevaPassword
+                    password:nuevaPassword,
+                    passwordActual:
+                        requierePasswordAntigua
+                        ? passwordAntigua
+                        : ""
                 }
             );
 
