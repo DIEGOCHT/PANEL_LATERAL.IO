@@ -3645,6 +3645,43 @@ const contenidoFiltrosMovil =
 let elementosFiltrosMovidos = [];
 
 
+function esMovilOTabletFiltros(){
+
+    const anchoCompatible =
+        window.innerWidth <= 1180;
+
+    const punteroTactil =
+        window.matchMedia(
+            "(pointer:coarse)"
+        ).matches;
+
+    const sinHover =
+        window.matchMedia(
+            "(hover:none)"
+        ).matches;
+
+    const userAgentMovil =
+        /Android|iPhone|iPad|iPod|Mobile|Tablet/i
+        .test(
+            navigator.userAgent || ""
+        );
+
+    /*
+    Debe tener tamaño compatible y además ser
+    táctil/móvil. Un PC con ventana angosta no entra.
+    */
+    return (
+        anchoCompatible &&
+        (
+            punteroTactil ||
+            sinHover ||
+            userAgentMovil
+        )
+    );
+
+}
+
+
 function obtenerElementosFiltroActual(){
 
     const visible =
@@ -3708,8 +3745,18 @@ function obtenerElementosFiltroActual(){
                 "buscarAsesor"
             );
 
-        return buscador
-            ? [buscador]
+        const seccion =
+            buscador
+            ? buscador.closest(
+                ".seccionBuscador"
+              )
+            : null;
+
+        /*
+        Incluye buscador + Nuevo Colaborador.
+        */
+        return seccion
+            ? [seccion]
             : [];
 
     }
@@ -3721,6 +3768,11 @@ function obtenerElementosFiltroActual(){
         );
 
     if(visible(auditoria)){
+
+        const tabs =
+            auditoria.querySelector(
+                ".tabsAuditoria"
+            );
 
         const vistaAdmin =
             document.getElementById(
@@ -3738,9 +3790,16 @@ function obtenerElementosFiltroActual(){
                 : "#vistaAuditoriaLotes .barraFiltrosAuditoria"
             );
 
-        return barra
-            ? [barra]
-            : [];
+
+        /*
+        Dentro de Filtros se muestran:
+        LOTES | ADMINISTRACIÓN
+        y debajo los filtros de la subpestaña activa.
+        */
+        return [
+            tabs,
+            barra
+        ].filter(Boolean);
 
     }
 
@@ -3784,7 +3843,7 @@ function restaurarFiltrosMovil(){
 function abrirFiltrosMovil(){
 
     if(
-        window.innerWidth > 1180
+        !esMovilOTabletFiltros()
     ){
         return;
     }
@@ -3877,6 +3936,9 @@ function cerrarFiltrosMovil(){
     document.body.style.overflow =
         "";
 
+    document.documentElement.style.overflow =
+        "";
+
 }
 
 
@@ -3890,12 +3952,24 @@ function actualizarBotonFiltrosMovil(){
 
 
     if(
-        window.innerWidth > 1180
+        !esMovilOTabletFiltros()
     ){
 
         btnFiltrosMovil
         .classList
         .add("oculto");
+
+        /*
+        Si por cualquier razón estaba abierto,
+        en escritorio se restaura inmediatamente.
+        */
+        if(
+            panelFiltrosMovil
+            .classList
+            .contains("abierto")
+        ){
+            cerrarFiltrosMovil();
+        }
 
         return;
 
@@ -3975,12 +4049,17 @@ document.addEventListener(
             )
         ){
 
-            cerrarFiltrosMovil();
+            /*
+            Dejamos terminar el cambio LOTES/ADMINISTRACIÓN
+            y luego cerramos el panel.
+            */
+            setTimeout(()=>{
 
-            setTimeout(
-                actualizarBotonFiltrosMovil,
-                0
-            );
+                cerrarFiltrosMovil();
+
+                actualizarBotonFiltrosMovil();
+
+            },0);
 
         }
 
@@ -3993,7 +4072,7 @@ window.addEventListener(
     ()=>{
 
         if(
-            window.innerWidth > 1180
+            !esMovilOTabletFiltros()
         ){
             cerrarFiltrosMovil();
         }
@@ -7529,6 +7608,229 @@ La página crecerá solamente con el contenido real.
         right:12px;
         padding:14px;
     }
+}
+
+
+/* =====================================================
+   CORRECCIÓN FINAL FILTROS MÓVIL / TABLET
+===================================================== */
+
+/*
+En escritorio el botón de filtros NO existe visualmente.
+Se usa !important porque la versión anterior tenía reglas
+posteriores que podían volver a mostrarlo.
+*/
+#btnFiltrosMovil{
+    display:none !important;
+}
+
+
+/*
+Solo dispositivos táctiles tipo móvil/tablet.
+Un PC que reduzca la ventana no mostrará este botón.
+*/
+@media (max-width:1180px) and (pointer:coarse){
+
+    #btnFiltrosMovil:not(.oculto){
+        position:fixed !important;
+
+        /*
+        Queda debajo del botón Cerrar sesión.
+        */
+        top:76px !important;
+        right:16px !important;
+        left:auto !important;
+
+        z-index:5000 !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+        margin:0 !important;
+        padding:0 !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        border:none !important;
+        border-radius:10px !important;
+
+        background:#2563EB !important;
+        color:#FFFFFF !important;
+
+        box-shadow:
+            0 8px 22px rgba(37,99,235,.32) !important;
+    }
+
+    #btnFiltrosMovil.oculto{
+        display:none !important;
+    }
+
+    /*
+    Cerrar sesión sigue arriba a la derecha.
+    */
+    #cerrarSesion{
+        position:fixed !important;
+        top:16px !important;
+        right:16px !important;
+
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+
+        z-index:5000 !important;
+
+        margin:0 !important;
+        padding:0 !important;
+
+        border-radius:10px !important;
+
+        box-shadow:
+            0 8px 22px rgba(37,99,235,.32) !important;
+    }
+
+    #cerrarSesion > span:last-child{
+        display:none !important;
+    }
+
+    #cerrarSesion .iconoMenu{
+        width:21px !important;
+        min-width:21px !important;
+        height:21px !important;
+        margin:0 !important;
+    }
+
+    /*
+    El botón ☰ mantiene su ubicación previa.
+    No se modifica aquí.
+    */
+
+
+    /* PANEL DE FILTROS */
+    #panelFiltrosMovil{
+        top:136px !important;
+        left:12px !important;
+        right:12px !important;
+
+        max-height:
+            calc(100vh - 154px) !important;
+    }
+
+
+    /*
+    AUDITORÍA:
+    LOTES | ADMINISTRACIÓN también viajan dentro
+    del panel de filtros.
+    */
+    #panelFiltrosMovil .tabsAuditoria{
+        width:100% !important;
+        margin:0 0 12px !important;
+    }
+
+    #panelFiltrosMovil .tabAuditoria{
+        flex:1 1 0 !important;
+        min-width:0 !important;
+    }
+
+
+    /*
+    COLABORADORES:
+    buscador + Nuevo Colaborador.
+    */
+    #panelFiltrosMovil .seccionBuscador{
+        display:flex !important;
+        flex-direction:column !important;
+        gap:10px !important;
+        width:100% !important;
+        margin:0 !important;
+    }
+
+    #panelFiltrosMovil .seccionBuscador input,
+    #panelFiltrosMovil .seccionBuscador button{
+        width:100% !important;
+        max-width:none !important;
+        margin:0 !important;
+    }
+
+
+    /*
+    LOTES:
+    buscador arriba y botones en 2 columnas.
+    */
+    #panelFiltrosMovil #herramientas{
+        display:grid !important;
+        grid-template-columns:
+            repeat(2,minmax(0,1fr)) !important;
+        gap:10px !important;
+    }
+
+    #panelFiltrosMovil #buscarLote{
+        grid-column:1 / -1 !important;
+    }
+
+
+    /*
+    SOLICITUDES
+    */
+    #panelFiltrosMovil #filtrosSolicitudes{
+        width:100% !important;
+        margin:0 !important;
+    }
+
+    #panelFiltrosMovil #buscarSolicitud{
+        width:100% !important;
+        max-width:none !important;
+        margin:0 !important;
+    }
+
+
+    /*
+    AUDITORÍA: mismo aspecto compacto.
+    */
+    #panelFiltrosMovil .barraFiltrosAuditoria{
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:stretch !important;
+        gap:10px !important;
+        width:100% !important;
+        margin:0 !important;
+    }
+
+    #panelFiltrosMovil
+    .barraFiltrosAuditoria input,
+
+    #panelFiltrosMovil
+    .barraFiltrosAuditoria button,
+
+    #panelFiltrosMovil
+    #grupoRangoAuditoria,
+
+    #panelFiltrosMovil
+    #grupoRangoAuditoriaAdmin{
+        width:100% !important;
+        max-width:none !important;
+        min-width:0 !important;
+        margin:0 !important;
+    }
+
+}
+
+
+/*
+Tablets/móviles que reportan hover:none pero no pointer:coarse
+(típico de algunos navegadores integrados).
+*/
+@media (max-width:1180px) and (hover:none){
+
+    #btnFiltrosMovil:not(.oculto){
+        display:flex !important;
+        top:76px !important;
+        right:16px !important;
+        left:auto !important;
+    }
+
 }
 
 </style>
