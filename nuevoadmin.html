@@ -6730,6 +6730,81 @@ and
     }
 }
 
+
+/* =====================================================
+   AUDITORÍA ADMINISTRACIÓN = MISMO ESTILO QUE LOTES
+===================================================== */
+
+#buscarAuditoriaAdmin{
+    width:350px;
+    height:44px;
+    margin:0;
+    padding:0 14px;
+    border:1px solid #CBD5E1;
+    border-radius:12px;
+    background:#FFFFFF;
+    font-size:14px;
+}
+
+#filtroFechaDesdeAuditoriaAdmin,
+#filtroFechaHastaAuditoriaAdmin{
+    width:170px;
+    height:44px;
+    margin:0;
+    padding:0 12px;
+    border:1px solid #CBD5E1;
+    border-radius:12px;
+    background:#FFFFFF;
+    color:#0F172A;
+    font-size:14px;
+}
+
+#grupoRangoAuditoriaAdmin{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+#btnAplicarFechaAuditoriaAdmin{
+    width:auto;
+    height:44px;
+    min-width:130px;
+    margin:0;
+    padding:0 16px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:12px;
+    background:#2563EB;
+    color:#FFFFFF;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+#btnAplicarFechaAuditoriaAdmin:hover{
+    background:#1D4ED8;
+}
+
+@media(max-width:700px){
+
+    #buscarAuditoriaAdmin,
+    #filtroFechaDesdeAuditoriaAdmin,
+    #filtroFechaHastaAuditoriaAdmin,
+    #grupoRangoAuditoriaAdmin,
+    #btnAplicarFechaAuditoriaAdmin{
+        width:100%;
+        min-width:0;
+    }
+
+    #grupoRangoAuditoriaAdmin{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7236,22 +7311,6 @@ style="display:none;">
 id="contenedorSolicitudes"
 class="vistaModulo"
 style="display:none;">
-
-<div class="tituloModulo">
-
-<h2>
-
-📋 Solicitudes Pendientes
-
-</h2>
-
-<p>
-
-Administre las solicitudes enviadas por los asesores.
-
-</p>
-
-</div>
 
 <div
 style="
@@ -10717,11 +10776,6 @@ async function cargarAuditoria(){
 
 
     const htmlAuditoria = `
-        <div class="tituloModulo">
-            <h2>📑 Auditoría</h2>
-            <p>Historial de movimientos de lotes y acciones administrativas del sistema.</p>
-        </div>
-
         <div class="moduloContenido">
 
             <div class="tabsAuditoria">
@@ -10862,7 +10916,7 @@ async function cargarAuditoria(){
                         id="buscarAuditoriaAdmin"
                         placeholder="🔍 Buscar usuario, acción o detalle...">
 
-                    <div id="grupoRangoAuditoria">
+                    <div id="grupoRangoAuditoriaAdmin">
 
                         <span class="etiquetaRangoAuditoria">
                             DESDE
@@ -11795,11 +11849,6 @@ function renderizarModuloReportes(){
     }
 
     contenedor.innerHTML = `
-        <div class="tituloModulo">
-            <h2>📊 Reportes</h2>
-            <p>Genere archivos Excel con la información actual del panel administrativo.</p>
-        </div>
-
         <div class="moduloContenido">
             <div class="gridReportes">
 
@@ -12668,6 +12717,33 @@ function timestampFechaRegistro(valor){
 
 asesores.sort((a,b)=>{
 
+    const rolA =
+        String(a.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const rolB =
+        String(b.rol || "")
+        .trim()
+        .toUpperCase();
+
+    const adminA =
+        rolA === "ADMIN" ||
+        rolA === "ADMINISTRADOR";
+
+    const adminB =
+        rolB === "ADMIN" ||
+        rolB === "ADMINISTRADOR";
+
+    /*
+    Primero todos los administradores.
+    Dentro de administradores y asesores:
+    fecha de registro ASCENDENTE.
+    */
+    if(adminA !== adminB){
+        return adminA ? -1 : 1;
+    }
+
     const fechaA =
         timestampFechaRegistro(
             a.fechaRegistro
@@ -12678,26 +12754,11 @@ asesores.sort((a,b)=>{
             b.fechaRegistro
         );
 
-    /*
-    ÚNICO criterio:
-    FECHA DE REGISTRO ASCENDENTE.
-    Los registros sin fecha quedan al final.
-    */
-    return fechaB - fechaA;
+    return fechaA - fechaB;
 
 });
 
     let html = `
-
-<div class="tituloModulo">
-
-    <h2>👥 Colaboradores</h2>
-
-    <p>
-        Administración de asesores y administradores registrados.
-    </p>
-
-</div>
 
 <div class="moduloContenido">
 
@@ -14077,19 +14138,6 @@ async function cargarConsultas(){
 
 consultasActuales = datos;
     let html = `
-
-    <div class="tituloModulo">
-
-        <h2>
-            📞 Consultas
-        </h2>
-
-        <p>
-            Historial de consultas realizadas por los clientes interesados.
-        </p>
-
-    </div>
-
 
         <div class="moduloContenido">
 
@@ -16167,19 +16215,9 @@ function abrirModalColaborador(){
     id="nuevoPassword"
     type="password"
     placeholder="Contraseña"
-    class="inputModulo">
+    class="inputModulo"
+    style="width:100%;margin:0;">
 
-    <button
-    type="button"
-    class="btnVerPassword"
-    onclick="alternarPasswordColaborador()"
-    aria-label="Mostrar u ocultar contraseña">
-
-        <span id="iconoPasswordColaborador">
-            👁
-        </span>
-
-    </button>
 
 </div>
 
@@ -16354,40 +16392,7 @@ async function crearColaborador(){
     }
 
 }
-function alternarPasswordColaborador(){
 
-    const campo =
-    document.getElementById(
-        "nuevoPassword"
-    );
-
-    const icono =
-        document.getElementById(
-            "iconoPasswordColaborador"
-        );
-
-    if(!campo){
-        return;
-    }
-
-    const estaOculta =
-        campo.type === "password";
-
-    campo.type =
-        estaOculta
-        ? "text"
-        : "password";
-
-    if(icono){
-
-        icono.textContent =
-            estaOculta
-            ? "🙈"
-            : "👁";
-
-    }
-
-}
 </script>
 
 </script>
