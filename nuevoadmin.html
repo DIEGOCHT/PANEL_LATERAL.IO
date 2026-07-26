@@ -1245,7 +1245,7 @@ border-bottom:4px solid transparent;
 
     display:grid;
 
-    grid-template-columns:minmax(0,1fr) 260px;
+    grid-template-columns:minmax(0,1fr) 230px;
 
     gap:16px;
 
@@ -3618,6 +3618,398 @@ margin-top:18px;
     line-height:1.65;
 
 }
+/* =====================================================
+   FILTROS RESPONSIVOS
+===================================================== */
+
+const btnFiltrosMovil =
+    document.getElementById(
+        "btnFiltrosMovil"
+    );
+
+const panelFiltrosMovil =
+    document.getElementById(
+        "panelFiltrosMovil"
+    );
+
+const overlayFiltrosMovil =
+    document.getElementById(
+        "overlayFiltrosMovil"
+    );
+
+const contenidoFiltrosMovil =
+    document.getElementById(
+        "contenidoFiltrosMovil"
+    );
+
+let elementosFiltrosMovidos = [];
+
+
+function obtenerElementosFiltroActual(){
+
+    const visible =
+        elemento =>
+            elemento &&
+            getComputedStyle(
+                elemento
+            ).display !== "none";
+
+
+    const lotes =
+        document.getElementById(
+            "contenedorLotesPrincipal"
+        );
+
+    if(visible(lotes)){
+
+        return [
+            document.getElementById(
+                "herramientas"
+            ),
+            document.getElementById(
+                "panelEtapas"
+            ),
+            document.getElementById(
+                "barraFiltrosActivos"
+            )
+        ].filter(Boolean);
+
+    }
+
+
+    const solicitudes =
+        document.getElementById(
+            "contenedorSolicitudes"
+        );
+
+    if(visible(solicitudes)){
+
+        const filtros =
+            document.getElementById(
+                "filtrosSolicitudes"
+            );
+
+        return filtros
+            ? [filtros]
+            : [];
+
+    }
+
+
+    const asesores =
+        document.getElementById(
+            "contenedorAsesores"
+        );
+
+    if(visible(asesores)){
+
+        const buscador =
+            document.getElementById(
+                "buscarAsesor"
+            );
+
+        return buscador
+            ? [buscador]
+            : [];
+
+    }
+
+
+    const auditoria =
+        document.getElementById(
+            "contenedorAuditoria"
+        );
+
+    if(visible(auditoria)){
+
+        const vistaAdmin =
+            document.getElementById(
+                "vistaAuditoriaAdministracion"
+            );
+
+        const adminVisible =
+            visible(vistaAdmin);
+
+
+        const barra =
+            document.querySelector(
+                adminVisible
+                ? "#vistaAuditoriaAdministracion .barraFiltrosAuditoria"
+                : "#vistaAuditoriaLotes .barraFiltrosAuditoria"
+            );
+
+        return barra
+            ? [barra]
+            : [];
+
+    }
+
+
+    return [];
+
+}
+
+
+function restaurarFiltrosMovil(){
+
+    elementosFiltrosMovidos
+    .forEach(item=>{
+
+        if(
+            item.elemento &&
+            item.placeholder &&
+            item.placeholder.parentNode
+        ){
+
+            item.placeholder.parentNode
+            .insertBefore(
+                item.elemento,
+                item.placeholder
+            );
+
+            item.placeholder.remove();
+
+        }
+
+    });
+
+
+    elementosFiltrosMovidos = [];
+
+    contenidoFiltrosMovil.innerHTML = "";
+
+}
+
+
+function abrirFiltrosMovil(){
+
+    if(
+        window.innerWidth > 1180
+    ){
+        return;
+    }
+
+
+    restaurarFiltrosMovil();
+
+
+    const elementos =
+        obtenerElementosFiltroActual();
+
+
+    if(!elementos.length){
+        return;
+    }
+
+
+    elementos.forEach(elemento=>{
+
+        const placeholder =
+            document.createComment(
+                "filtro-movil-placeholder"
+            );
+
+
+        elemento.parentNode
+        .insertBefore(
+            placeholder,
+            elemento
+        );
+
+
+        elementosFiltrosMovidos.push({
+            elemento:elemento,
+            placeholder:placeholder
+        });
+
+
+        contenidoFiltrosMovil
+        .appendChild(
+            elemento
+        );
+
+    });
+
+
+    panelFiltrosMovil
+    .classList
+    .add("abierto");
+
+
+    overlayFiltrosMovil
+    .classList
+    .add("activo");
+
+
+    btnFiltrosMovil.setAttribute(
+        "aria-expanded",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function cerrarFiltrosMovil(){
+
+    panelFiltrosMovil
+    .classList
+    .remove("abierto");
+
+
+    overlayFiltrosMovil
+    .classList
+    .remove("activo");
+
+
+    btnFiltrosMovil.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    restaurarFiltrosMovil();
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+function actualizarBotonFiltrosMovil(){
+
+    if(
+        !btnFiltrosMovil
+    ){
+        return;
+    }
+
+
+    if(
+        window.innerWidth > 1180
+    ){
+
+        btnFiltrosMovil
+        .classList
+        .add("oculto");
+
+        return;
+
+    }
+
+
+    btnFiltrosMovil
+    .classList
+    .toggle(
+        "oculto",
+        obtenerElementosFiltroActual()
+        .length === 0
+    );
+
+}
+
+
+btnFiltrosMovil.addEventListener(
+    "click",
+    ()=>{
+
+        if(
+            panelFiltrosMovil
+            .classList
+            .contains("abierto")
+        ){
+            cerrarFiltrosMovil();
+        }
+        else{
+            abrirFiltrosMovil();
+        }
+
+    }
+);
+
+
+overlayFiltrosMovil.addEventListener(
+    "click",
+    cerrarFiltrosMovil
+);
+
+
+document
+.querySelectorAll(
+    "#sidebar .menuItem"
+)
+.forEach(boton=>{
+
+    boton.addEventListener(
+        "click",
+        ()=>{
+
+            cerrarFiltrosMovil();
+
+            setTimeout(
+                actualizarBotonFiltrosMovil,
+                0
+            );
+
+        }
+    );
+
+});
+
+
+document.addEventListener(
+    "click",
+    evento=>{
+
+        if(
+            evento.target &&
+            (
+                evento.target.id ===
+                "tabAuditoriaLotes" ||
+                evento.target.id ===
+                "tabAuditoriaAdministracion"
+            )
+        ){
+
+            cerrarFiltrosMovil();
+
+            setTimeout(
+                actualizarBotonFiltrosMovil,
+                0
+            );
+
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        if(
+            window.innerWidth > 1180
+        ){
+            cerrarFiltrosMovil();
+        }
+
+        actualizarBotonFiltrosMovil();
+
+    }
+);
+
+
+setTimeout(
+    actualizarBotonFiltrosMovil,
+    0
+);
+
+
 /* =====================================================
    MENÚ RESPONSIVO
 ===================================================== */
@@ -6879,6 +7271,266 @@ La página crecerá solamente con el contenido real.
 
 }
 
+
+/* =====================================================
+   AUDITORÍA - MÁS ESPACIO PARA FECHA Y NOMBRE
+===================================================== */
+
+@media(min-width:1181px){
+
+    #auditoriaContenidoPrincipal{
+        grid-template-columns:minmax(0,1fr) 230px !important;
+        gap:14px !important;
+    }
+
+    #panelAuditoriaDerecho{
+        width:230px !important;
+        max-width:230px !important;
+        padding-right:0 !important;
+    }
+
+    #graficoVentasColaboradores,
+    #graficoReservasColaboradores,
+    #graficoAuditoriaPersona{
+        width:230px !important;
+        max-width:230px !important;
+    }
+
+    #auditoriaTablaPrincipal .tabla th:nth-child(1),
+    #auditoriaTablaPrincipal .tabla td:nth-child(1){
+        white-space:nowrap !important;
+        min-width:165px !important;
+    }
+
+    #auditoriaTablaPrincipal .tabla th:nth-child(2),
+    #auditoriaTablaPrincipal .tabla td:nth-child(2){
+        white-space:nowrap !important;
+        min-width:145px !important;
+    }
+
+    .canvasVentasWrap{
+        width:165px !important;
+        height:165px !important;
+    }
+
+    #graficoAuditoriaPersona .cardGrafico{
+        padding:12px !important;
+    }
+}
+
+
+/* Leyendas más legibles */
+.itemVentaAuditoria{
+    font-size:12.5px !important;
+    gap:7px !important;
+}
+
+.itemVentaAuditoria .nombreVenta,
+.itemVentaAuditoria .valorVenta{
+    font-size:12.5px !important;
+}
+
+.itemVentaAuditoria .nombreVenta{
+    font-weight:600 !important;
+}
+
+.itemVentaAuditoria .valorVenta{
+    font-weight:700 !important;
+}
+
+.puntoVentaAuditoria{
+    width:10px !important;
+    height:10px !important;
+    margin-right:5px !important;
+}
+
+#panelAuditoriaDerecho .filaInfoGrafico,
+#panelAuditoriaDerecho .filaInfoGrafico span,
+#panelAuditoriaDerecho .filaInfoGrafico b{
+    font-size:13.5px !important;
+}
+
+
+/* =====================================================
+   FILTROS FLOTANTES - TABLET / MÓVIL
+===================================================== */
+
+#btnFiltrosMovil{
+    display:none;
+}
+
+#overlayFiltrosMovil{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:4990;
+    background:rgba(15,23,42,.42);
+    backdrop-filter:blur(2px);
+}
+
+#overlayFiltrosMovil.activo{
+    display:block;
+}
+
+#panelFiltrosMovil{
+    display:none;
+    position:fixed;
+    z-index:4995;
+    top:78px;
+    left:18px;
+    right:18px;
+    max-height:calc(100vh - 100px);
+    overflow:auto;
+    padding:16px;
+    border:1px solid #E2E8F0;
+    border-radius:18px;
+    background:#FFFFFF;
+    box-shadow:0 18px 55px rgba(15,23,42,.24);
+}
+
+#panelFiltrosMovil.abierto{
+    display:block;
+}
+
+#panelFiltrosMovil .filtroMovilGrupo{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
+}
+
+#panelFiltrosMovil #herramientas{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+    width:100% !important;
+}
+
+#panelFiltrosMovil #buscarLote{
+    grid-column:1 / -1 !important;
+    width:100% !important;
+    max-width:none !important;
+}
+
+#panelFiltrosMovil #herramientas button{
+    width:100% !important;
+    min-width:0 !important;
+}
+
+#panelFiltrosMovil #panelEtapas,
+#panelFiltrosMovil #barraFiltrosActivos{
+    width:100% !important;
+}
+
+#panelFiltrosMovil .barraFiltrosAuditoria{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    width:100% !important;
+    gap:10px !important;
+    margin:0 !important;
+}
+
+#panelFiltrosMovil .barraFiltrosAuditoria input,
+#panelFiltrosMovil .barraFiltrosAuditoria button,
+#panelFiltrosMovil #grupoRangoAuditoria,
+#panelFiltrosMovil #grupoRangoAuditoriaAdmin,
+#panelFiltrosMovil #buscarSolicitud,
+#panelFiltrosMovil #buscarAsesor{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+}
+
+#panelFiltrosMovil #grupoRangoAuditoria,
+#panelFiltrosMovil #grupoRangoAuditoriaAdmin{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:8px !important;
+}
+
+
+@media(max-width:1180px){
+
+    #btnFiltrosMovil{
+        position:fixed !important;
+        top:18px !important;
+        left:78px !important;
+        z-index:5000 !important;
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+        margin:0 !important;
+        padding:0 !important;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:none;
+        border-radius:10px;
+        background:#2563EB;
+        color:#FFFFFF;
+        box-shadow:0 8px 22px rgba(37,99,235,.32) !important;
+    }
+
+    #btnFiltrosMovil.oculto{
+        display:none !important;
+    }
+
+    #btnFiltrosMovil svg{
+        width:21px;
+        height:21px;
+    }
+
+    /*
+    Cerrar sesión queda flotante, igual que Menú.
+    */
+    #cerrarSesion{
+        position:fixed !important;
+        top:18px !important;
+        right:18px !important;
+        z-index:5000 !important;
+        width:48px !important;
+        min-width:48px !important;
+        height:48px !important;
+        margin:0 !important;
+        padding:0 !important;
+        border-radius:10px !important;
+        box-shadow:0 8px 22px rgba(37,99,235,.32) !important;
+    }
+
+    #cerrarSesion > span:last-child{
+        display:none !important;
+    }
+
+    #cerrarSesion .iconoMenu{
+        width:21px !important;
+        min-width:21px !important;
+        height:21px !important;
+        margin:0 !important;
+    }
+}
+
+@media(max-width:700px){
+
+    #btnFiltrosMovil{
+        top:16px !important;
+        left:74px !important;
+    }
+
+    #cerrarSesion{
+        top:16px !important;
+        right:16px !important;
+    }
+
+    #panelFiltrosMovil{
+        top:76px;
+        left:12px;
+        right:12px;
+        padding:14px;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7018,6 +7670,26 @@ La página crecerá solamente con el contenido real.
 
     </button>
 
+    <button
+        type="button"
+        id="btnFiltrosMovil"
+        class="oculto"
+        aria-label="Abrir filtros"
+        aria-expanded="false">
+
+        <svg viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <path d="M4 5h16"/>
+            <path d="M7 12h10"/>
+            <path d="M10 19h4"/>
+        </svg>
+
+    </button>
+
     <div class="headerInfo">
 
         <div class="saludo">
@@ -7078,6 +7750,12 @@ La página crecerá solamente con el contenido real.
 </div>
 
 <div id="overlaySidebar"></div>
+
+<div id="overlayFiltrosMovil"></div>
+
+<div id="panelFiltrosMovil">
+    <div id="contenidoFiltrosMovil" class="filtroMovilGrupo"></div>
+</div>
 <div id="panelPrincipal">
 
     <aside id="sidebar">
@@ -7389,6 +8067,7 @@ style="display:none;">
     <div class="moduloContenido">
 
         <div
+        id="filtrosSolicitudes"
         style="
         margin-bottom:20px;
         ">
@@ -14087,6 +14766,14 @@ function mostrarModulo(
         botonId
     );
 
+    /*
+    Conservamos la posición actual antes de cambiar de módulo.
+    */
+    const scrollActual =
+        window.scrollY ||
+        document.documentElement.scrollTop ||
+        0;
+
     ocultarTodo();
 
     const cabecera =
@@ -14115,11 +14802,22 @@ function mostrarModulo(
 
     }
 
-    window.scrollTo({
+    /*
+    No subir al inicio al cambiar de pestaña.
+    */
+    requestAnimationFrame(()=>{
 
-        top:0,
+        window.scrollTo(
+            0,
+            scrollActual
+        );
 
-        behavior:"auto"
+        if(
+            typeof actualizarBotonFiltrosMovil ===
+            "function"
+        ){
+            actualizarBotonFiltrosMovil();
+        }
 
     });
 
