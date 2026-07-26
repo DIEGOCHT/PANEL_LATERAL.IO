@@ -6605,6 +6605,131 @@ and
     }
 }
 
+
+/* =====================================================
+   AUDITORÍA: LOTES | ADMINISTRACIÓN
+===================================================== */
+
+.tabsAuditoria{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0 0 18px;
+    padding:5px;
+    width:max-content;
+    max-width:100%;
+    background:#F1F5F9;
+    border:1px solid #E2E8F0;
+    border-radius:12px;
+}
+
+.tabAuditoria{
+    min-width:150px;
+    height:40px;
+    margin:0;
+    padding:0 18px;
+    border:none;
+    border-radius:9px;
+    background:transparent;
+    color:#475569;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.tabAuditoria:hover{
+    background:#E2E8F0;
+    color:#0F172A;
+}
+
+.tabAuditoria.activo{
+    background:#2563EB;
+    color:#FFFFFF;
+    box-shadow:0 4px 12px rgba(37,99,235,.18);
+}
+
+#vistaAuditoriaAdministracion{
+    display:none;
+}
+
+.resumenAuditoriaAdmin{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.resumenAuditoriaAdmin .cardDashboard{
+    min-width:180px;
+    flex:0 0 220px;
+}
+
+.tablaAuditoriaAdmin{
+    width:100%;
+    table-layout:auto;
+}
+
+.tablaAuditoriaAdmin th,
+.tablaAuditoriaAdmin td{
+    white-space:nowrap;
+}
+
+.tablaAuditoriaAdmin td:last-child{
+    white-space:normal;
+    min-width:240px;
+    text-align:left;
+}
+
+.badgeAccionAdmin{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#EFF6FF;
+    color:#1D4ED8;
+    font-size:11px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.badgeAccionAdmin.seguridad{
+    background:#FEF3C7;
+    color:#B45309;
+}
+
+.badgeAccionAdmin.eliminar{
+    background:#FEE2E2;
+    color:#B91C1C;
+}
+
+.badgeAccionAdmin.estado{
+    background:#F1F5F9;
+    color:#475569;
+}
+
+@media(max-width:700px){
+    .tabsAuditoria{
+        width:100%;
+    }
+
+    .tabAuditoria{
+        min-width:0;
+        flex:1;
+        padding:0 8px;
+        font-size:12px;
+    }
+
+    #vistaAuditoriaAdministracion .contenedorTablaScroll{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .tablaAuditoriaAdmin{
+        min-width:1050px;
+    }
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6668,7 +6793,7 @@ and
             line-height:1.5;
             text-align:center;
         ">
-            Disponible únicamente para cuentas de administrador.
+            Disponible para administradores y asesores.
         </div>
 
         <div class="camposRecuperacionPassword">
@@ -6681,10 +6806,10 @@ and
                 autocomplete="username">
 
             <input
-                id="recuperarCodigo"
+                id="recuperarPasswordAnterior"
                 type="password"
                 class="inputModulo"
-                placeholder="Código de recuperación"
+                placeholder="Contraseña anterior que recuerde"
                 autocomplete="off">
 
             <input
@@ -7592,7 +7717,7 @@ function abrirRecuperarPassword(){
     ).value = usuarioLogin;
 
     document.getElementById(
-        "recuperarCodigo"
+        "recuperarPasswordAnterior"
     ).value = "";
 
     document.getElementById(
@@ -7617,7 +7742,7 @@ function abrirRecuperarPassword(){
 
         const campo =
             usuarioLogin
-            ? document.getElementById("recuperarCodigo")
+            ? document.getElementById("recuperarPasswordAnterior")
             : document.getElementById("recuperarUsuario");
 
         campo.focus();
@@ -7659,9 +7784,9 @@ async function confirmarRecuperarPassword(){
             "recuperarUsuario"
         ).value.trim();
 
-    const codigo =
+    const passwordAnterior =
         document.getElementById(
-            "recuperarCodigo"
+            "recuperarPasswordAnterior"
         ).value;
 
     const nueva =
@@ -7685,7 +7810,7 @@ async function confirmarRecuperarPassword(){
 
     if(
         !usuario ||
-        !codigo ||
+        !passwordAnterior ||
         !nueva ||
         !confirmar
     ){
@@ -7737,7 +7862,7 @@ async function confirmarRecuperarPassword(){
                 "recuperarPasswordLogin",
                 {
                     usuario:usuario,
-                    codigo:codigo,
+                    passwordAnterior:passwordAnterior,
                     password:nueva
                 }
             );
@@ -10476,8 +10601,17 @@ function renderizarTortaReservasColaboradores(registros, tipoFecha, valorFecha, 
 
 async function cargarAuditoria(){
 
-    const rol = localStorage.getItem("rol");
-    if(rol !== "ADMIN"){
+    const rol =
+        String(
+            localStorage.getItem("rol") || ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(
+        rol !== "ADMIN" &&
+        rol !== "ADMINISTRADOR"
+    ){
         return;
     }
 
@@ -10487,238 +10621,671 @@ async function cargarAuditoria(){
     .getElementById("contenedorAuditoria")
     .style.display = "block";
 
-    const [datos,colaboradores] = await Promise.all([
+
+    const [
+        datosLotes,
+        colaboradores,
+        datosAdmin
+    ] = await Promise.all([
+
         apiGet("?action=auditoria"),
-        apiPost("listarAsesores")
+
+        apiPost("listarAsesores"),
+
+        apiGet("?action=auditoriaAdmin")
+
     ]);
+
 
     const mapaNombres = {};
 
     if(Array.isArray(colaboradores)){
+
         colaboradores.forEach(persona=>{
-            const usuario = String(persona.usuario || "").trim().toUpperCase();
+
+            const usuario =
+                String(persona.usuario || "")
+                .trim()
+                .toUpperCase();
+
             if(usuario !== ""){
-                mapaNombres[usuario] = String(persona.nombre || persona.usuario || "").trim();
+
+                mapaNombres[usuario] =
+                    String(
+                        persona.nombre ||
+                        persona.usuario ||
+                        ""
+                    ).trim();
+
             }
+
         });
+
     }
 
+
+    /*
+    Todas las tablas cronológicas se presentan
+    de la fecha más antigua a la más reciente.
+    */
+    const datos =
+        Array.isArray(datosLotes)
+        ? datosLotes
+        : [];
+
     datos.forEach(item=>{
-        const usuario = String(item.Usuario || "").trim();
-        item.Nombre = mapaNombres[usuario.toUpperCase()] || usuario;
+
+        const usuario =
+            String(item.Usuario || "")
+            .trim();
+
+        item.Nombre =
+            mapaNombres[
+                usuario.toUpperCase()
+            ] ||
+            usuario;
+
     });
 
-    datos.sort((a,b)=>new Date(b.Fecha)-new Date(a.Fecha));
+    datos.sort(
+        (a,b)=>
+        new Date(b.Fecha) -
+        new Date(a.Fecha)
+    );
 
-    const hoyAuditoria = new Date();
-    const fechaDesdeInicial = `${hoyAuditoria.getFullYear()}-${String(hoyAuditoria.getMonth()+1).padStart(2,"0")}-01`;
-    const fechaHastaInicial = obtenerDiaActualAuditoria();
 
-    let html = `
+    const auditoriaAdmin =
+        Array.isArray(datosAdmin)
+        ? datosAdmin
+        : [];
+
+    auditoriaAdmin.sort(
+        (a,b)=>
+        new Date(b.Fecha) -
+        new Date(a.Fecha)
+    );
+
+
+    const hoyAuditoria =
+        new Date();
+
+    const fechaDesdeInicial =
+        `${hoyAuditoria.getFullYear()}-${String(hoyAuditoria.getMonth()+1).padStart(2,"0")}-01`;
+
+    const fechaHastaInicial =
+        obtenerDiaActualAuditoria();
+
+
+    const htmlAuditoria = `
         <div class="tituloModulo">
             <h2>📑 Auditoría</h2>
-            <p>Registro histórico de todos los cambios realizados en el sistema.</p>
+            <p>Historial de movimientos de lotes y acciones administrativas del sistema.</p>
         </div>
 
         <div class="moduloContenido">
-            <div class="barraFiltrosAuditoria">
-                <input
-                    id="buscarAuditoria"
-                    placeholder="🔍 Buscar nombre...">
 
-                <div id="grupoRangoAuditoria">
-                    <span class="etiquetaRangoAuditoria">DESDE</span>
-                    <input
-                        id="filtroFechaDesdeAuditoria"
-                        type="date"
-                        value="${fechaDesdeInicial}">
-                    <span class="etiquetaRangoAuditoria">HASTA</span>
-                    <input
-                        id="filtroFechaHastaAuditoria"
-                        type="date"
-                        value="${fechaHastaInicial}">
-                </div>
+            <div class="tabsAuditoria">
+                <button
+                    type="button"
+                    id="tabAuditoriaLotes"
+                    class="tabAuditoria activo">
+                    LOTES
+                </button>
 
-                <button id="btnAplicarFechaAuditoria">
-                    📅 FILTRAR FECHA
+                <button
+                    type="button"
+                    id="tabAuditoriaAdministracion"
+                    class="tabAuditoria">
+                    ADMINISTRACIÓN
                 </button>
             </div>
 
-            <div id="resumenAuditoria" style="display:flex;gap:20px;margin-bottom:20px;flex-wrap:wrap;">
-                <div class="cardDashboard">
-                    <h3 id="totalCambios">0</h3>
-                    <p>Total Cambios</p>
-                </div>
 
-                <div class="cardDashboard">
-                    <h3 id="totalReservados">0</h3>
-                    <p>🟡 Reservados</p>
-                </div>
+            <!-- =========================
+                 AUDITORÍA DE LOTES
+            ========================== -->
+            <div id="vistaAuditoriaLotes">
 
-                <div class="cardDashboard">
-                    <h3 id="totalVendidos">0</h3>
-                    <p>🔴 Vendidos</p>
-                </div>
-            </div>
+                <div class="barraFiltrosAuditoria">
 
-            <div id="auditoriaContenidoPrincipal">
-                <div id="auditoriaTablaPrincipal">
-                    <div class="contenedorTablaScroll">
-                        <table class="tabla">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Nombre</th>
-                                    <th>Etapa</th>
-                                    <th>Lote</th>
-                                    <th>Antes</th>
-                                    <th>Después</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodyAuditoria"></tbody>
-                        </table>
+                    <input
+                        id="buscarAuditoria"
+                        placeholder="🔍 Buscar nombre...">
+
+                    <div id="grupoRangoAuditoria">
+
+                        <span class="etiquetaRangoAuditoria">
+                            DESDE
+                        </span>
+
+                        <input
+                            id="filtroFechaDesdeAuditoria"
+                            type="date"
+                            value="${fechaDesdeInicial}">
+
+                        <span class="etiquetaRangoAuditoria">
+                            HASTA
+                        </span>
+
+                        <input
+                            id="filtroFechaHastaAuditoria"
+                            type="date"
+                            value="${fechaHastaInicial}">
+
                     </div>
+
+                    <button id="btnAplicarFechaAuditoria">
+                        📅 FILTRAR FECHA
+                    </button>
+
                 </div>
 
-                <div id="panelAuditoriaDerecho">
-                    <div id="graficoVentasColaboradores"></div>
-                    <div id="graficoReservasColaboradores"></div>
-                    <div id="graficoAuditoriaPersona"></div>
+
+                <div
+                    id="resumenAuditoria"
+                    style="
+                        display:flex;
+                        gap:20px;
+                        margin-bottom:20px;
+                        flex-wrap:wrap;
+                    ">
+
+                    <div class="cardDashboard">
+                        <h3 id="totalCambios">0</h3>
+                        <p>Total Cambios</p>
+                    </div>
+
+                    <div class="cardDashboard">
+                        <h3 id="totalReservados">0</h3>
+                        <p>🟡 Reservados</p>
+                    </div>
+
+                    <div class="cardDashboard">
+                        <h3 id="totalVendidos">0</h3>
+                        <p>🔴 Vendidos</p>
+                    </div>
+
                 </div>
+
+
+                <div id="auditoriaContenidoPrincipal">
+
+                    <div id="auditoriaTablaPrincipal">
+
+                        <div class="contenedorTablaScroll">
+
+                            <table class="tabla">
+
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Nombre</th>
+                                        <th>Etapa</th>
+                                        <th>Lote</th>
+                                        <th>Antes</th>
+                                        <th>Después</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tbodyAuditoria"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="panelAuditoriaDerecho">
+
+                        <div id="graficoVentasColaboradores"></div>
+
+                        <div id="graficoReservasColaboradores"></div>
+
+                        <div id="graficoAuditoriaPersona"></div>
+
+                    </div>
+
+                </div>
+
             </div>
-        </div>`;
+
+
+            <!-- =========================
+                 AUDITORÍA ADMINISTRATIVA
+            ========================== -->
+            <div id="vistaAuditoriaAdministracion">
+
+                <div class="barraFiltrosAuditoria">
+
+                    <input
+                        id="buscarAuditoriaAdmin"
+                        placeholder="🔍 Buscar usuario, acción o detalle...">
+
+                    <div id="grupoRangoAuditoria">
+
+                        <span class="etiquetaRangoAuditoria">
+                            DESDE
+                        </span>
+
+                        <input
+                            id="filtroFechaDesdeAuditoriaAdmin"
+                            type="date"
+                            value="${fechaDesdeInicial}">
+
+                        <span class="etiquetaRangoAuditoria">
+                            HASTA
+                        </span>
+
+                        <input
+                            id="filtroFechaHastaAuditoriaAdmin"
+                            type="date"
+                            value="${fechaHastaInicial}">
+
+                    </div>
+
+                    <button id="btnAplicarFechaAuditoriaAdmin">
+                        📅 FILTRAR FECHA
+                    </button>
+
+                </div>
+
+
+                <div class="resumenAuditoriaAdmin">
+
+                    <div class="cardDashboard">
+                        <h3 id="totalMovimientosAdmin">0</h3>
+                        <p>Total movimientos</p>
+                    </div>
+
+                    <div class="cardDashboard">
+                        <h3 id="totalCreadosAdmin">0</h3>
+                        <p>Usuarios creados</p>
+                    </div>
+
+                    <div class="cardDashboard">
+                        <h3 id="totalSeguridadAdmin">0</h3>
+                        <p>Acciones de seguridad</p>
+                    </div>
+
+                </div>
+
+
+                <div class="contenedorTablaScroll">
+
+                    <table class="tabla tablaAuditoriaAdmin">
+
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Ejecutado por</th>
+                                <th>Acción</th>
+                                <th>Usuario afectado</th>
+                                <th>Rol</th>
+                                <th>Antes</th>
+                                <th>Después</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tbodyAuditoriaAdmin"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
 
     document
     .getElementById("contenedorAuditoria")
-    .innerHTML = html;
+    .innerHTML = htmlAuditoria;
 
-    const buscador = document.getElementById("buscarAuditoria");
-    const filtroFechaDesde = document.getElementById("filtroFechaDesdeAuditoria");
-    const filtroFechaHasta = document.getElementById("filtroFechaHastaAuditoria");
-    const botonFecha = document.getElementById("btnAplicarFechaAuditoria");
-    const tbody = document.getElementById("tbodyAuditoria");
+
+    /* =====================================================
+       PESTAÑAS
+    ===================================================== */
+
+    const tabLotes =
+        document.getElementById(
+            "tabAuditoriaLotes"
+        );
+
+    const tabAdmin =
+        document.getElementById(
+            "tabAuditoriaAdministracion"
+        );
+
+    const vistaLotes =
+        document.getElementById(
+            "vistaAuditoriaLotes"
+        );
+
+    const vistaAdmin =
+        document.getElementById(
+            "vistaAuditoriaAdministracion"
+        );
+
+
+    function activarSubAuditoria(tipo){
+
+        const administracion =
+            tipo === "ADMIN";
+
+        tabLotes.classList.toggle(
+            "activo",
+            !administracion
+        );
+
+        tabAdmin.classList.toggle(
+            "activo",
+            administracion
+        );
+
+        vistaLotes.style.display =
+            administracion
+            ? "none"
+            : "block";
+
+        vistaAdmin.style.display =
+            administracion
+            ? "block"
+            : "none";
+
+    }
+
+
+    tabLotes.addEventListener(
+        "click",
+        ()=>{
+            activarSubAuditoria("LOTES");
+        }
+    );
+
+
+    tabAdmin.addEventListener(
+        "click",
+        ()=>{
+            activarSubAuditoria("ADMIN");
+        }
+    );
+
+
+    /* =====================================================
+       FILTROS AUDITORÍA DE LOTES
+    ===================================================== */
+
+    const buscador =
+        document.getElementById(
+            "buscarAuditoria"
+        );
+
+    const filtroFechaDesde =
+        document.getElementById(
+            "filtroFechaDesdeAuditoria"
+        );
+
+    const filtroFechaHasta =
+        document.getElementById(
+            "filtroFechaHastaAuditoria"
+        );
+
+    const botonFecha =
+        document.getElementById(
+            "btnAplicarFechaAuditoria"
+        );
+
+    const tbody =
+        document.getElementById(
+            "tbodyAuditoria"
+        );
+
 
     function aplicarFiltrosAuditoria(){
-        const texto = String(buscador.value || "").trim().toUpperCase();
+
+        const texto =
+            String(
+                buscador.value || ""
+            )
+            .trim()
+            .toUpperCase();
+
         const tipo = "RANGO";
-        const valorFecha = String(filtroFechaDesde.value || "").trim();
-        const valorFechaHasta = String(filtroFechaHasta.value || "").trim();
 
-        const registrosFiltrados = datos.filter(item=>{
-            const nombre = String(item.Nombre || item.Usuario || "").trim().toUpperCase();
-            const coincideNombre = nombre.includes(texto);
-            const coincideFecha = registroCoincideFechaAuditoria(item,tipo,valorFecha,valorFechaHasta);
-            return coincideNombre && coincideFecha;
-        });
+        const valorFecha =
+            String(
+                filtroFechaDesde.value || ""
+            ).trim();
 
-        tbody.innerHTML = registrosFiltrados.map(item=>`
-            <tr>
-                <td>${formatearFecha(item.Fecha)}</td>
-                <td>${item.Nombre || item.Usuario || ""}</td>
-                <td>${item.Etapa || ""}</td>
-                <td>${item.Lote || ""}</td>
-                <td>${item.Antes || ""}</td>
-                <td>${item.Despues || ""}</td>
-            </tr>
-        `).join("");
+        const valorFechaHasta =
+            String(
+                filtroFechaHasta.value || ""
+            ).trim();
 
-        const registrosActuales = obtenerUltimosRegistrosPorLote(registrosFiltrados);
 
-        const reservados = registrosActuales.filter(item=>
-            String(item.Despues || "").trim().toUpperCase() === "RESERVADO"
-        ).length;
+        const registrosFiltrados =
+            datos.filter(item=>{
 
-        const vendidos = registrosActuales.filter(item=>
-            String(item.Despues || "").trim().toUpperCase() === "VENDIDO"
-        ).length;
-
-        document.getElementById("totalCambios").textContent = registrosActuales.length;
-        document.getElementById("totalReservados").textContent = reservados;
-        document.getElementById("totalVendidos").textContent = vendidos;
-
-        /*
-        Cuando se escribe un nombre en el buscador y las coincidencias
-        corresponden a un solo colaborador, recuperamos el comportamiento
-        anterior: UNA SOLA TORTA con Reservados + Vendidos + Total.
-        */
-        const nombresCoincidentes = [
-            ...new Set(
-                registrosFiltrados.map(item=>
+                const nombre =
                     String(
                         item.Nombre ||
                         item.Usuario ||
                         ""
-                    ).trim()
-                ).filter(Boolean)
+                    )
+                    .trim()
+                    .toUpperCase();
+
+                const coincideNombre =
+                    nombre.includes(texto);
+
+                const coincideFecha =
+                    registroCoincideFechaAuditoria(
+                        item,
+                        tipo,
+                        valorFecha,
+                        valorFechaHasta
+                    );
+
+                return (
+                    coincideNombre &&
+                    coincideFecha
+                );
+
+            });
+
+
+        /*
+        Mantiene siempre orden cronológico ascendente.
+        */
+        registrosFiltrados.sort(
+            (a,b)=>
+            new Date(b.Fecha) -
+            new Date(a.Fecha)
+        );
+
+
+        tbody.innerHTML =
+            registrosFiltrados
+            .map(item=>`
+                <tr>
+                    <td>${formatearFecha(item.Fecha)}</td>
+                    <td>${item.Nombre || item.Usuario || ""}</td>
+                    <td>${item.Etapa || ""}</td>
+                    <td>${item.Lote || ""}</td>
+                    <td>${item.Antes || ""}</td>
+                    <td>${item.Despues || ""}</td>
+                </tr>
+            `)
+            .join("");
+
+
+        const registrosActuales =
+            obtenerUltimosRegistrosPorLote(
+                registrosFiltrados
+            );
+
+
+        const reservados =
+            registrosActuales
+            .filter(item=>
+                String(
+                    item.Despues || ""
+                )
+                .trim()
+                .toUpperCase() ===
+                "RESERVADO"
+            )
+            .length;
+
+
+        const vendidos =
+            registrosActuales
+            .filter(item=>
+                String(
+                    item.Despues || ""
+                )
+                .trim()
+                .toUpperCase() ===
+                "VENDIDO"
+            )
+            .length;
+
+
+        document
+        .getElementById("totalCambios")
+        .textContent =
+            registrosActuales.length;
+
+
+        document
+        .getElementById("totalReservados")
+        .textContent =
+            reservados;
+
+
+        document
+        .getElementById("totalVendidos")
+        .textContent =
+            vendidos;
+
+
+        const nombresCoincidentes = [
+            ...new Set(
+                registrosFiltrados
+                .map(item=>
+                    String(
+                        item.Nombre ||
+                        item.Usuario ||
+                        ""
+                    )
+                    .trim()
+                )
+                .filter(Boolean)
             )
         ];
 
+
         const contVentas =
-            document.getElementById("graficoVentasColaboradores");
+            document.getElementById(
+                "graficoVentasColaboradores"
+            );
 
         const contReservas =
-            document.getElementById("graficoReservasColaboradores");
+            document.getElementById(
+                "graficoReservasColaboradores"
+            );
 
         const contResumen =
-            document.getElementById("graficoAuditoriaPersona");
+            document.getElementById(
+                "graficoAuditoriaPersona"
+            );
+
 
         if(
             texto !== "" &&
             nombresCoincidentes.length === 1
         ){
 
-            if(window.chartVentasColaboradores){
+            if(
+                window.chartVentasColaboradores
+            ){
                 window.chartVentasColaboradores.destroy();
                 window.chartVentasColaboradores = null;
             }
 
-            if(window.chartReservasColaboradores){
+
+            if(
+                window.chartReservasColaboradores
+            ){
                 window.chartReservasColaboradores.destroy();
                 window.chartReservasColaboradores = null;
             }
+
 
             if(contVentas){
                 contVentas.innerHTML = "";
                 contVentas.style.display = "none";
             }
 
+
             if(contReservas){
                 contReservas.innerHTML = "";
                 contReservas.style.display = "none";
             }
+
 
             const actualesPersona =
                 obtenerUltimosRegistrosPorLote(
                     registrosFiltrados
                 );
 
+
             const reservadosPersona =
-                actualesPersona.filter(item=>
-                    String(item.Despues || "")
+                actualesPersona
+                .filter(item=>
+                    String(
+                        item.Despues || ""
+                    )
                     .trim()
-                    .toUpperCase() === "RESERVADO"
-                ).length;
+                    .toUpperCase() ===
+                    "RESERVADO"
+                )
+                .length;
+
 
             const vendidosPersona =
-                actualesPersona.filter(item=>
-                    String(item.Despues || "")
+                actualesPersona
+                .filter(item=>
+                    String(
+                        item.Despues || ""
+                    )
                     .trim()
-                    .toUpperCase() === "VENDIDO"
-                ).length;
+                    .toUpperCase() ===
+                    "VENDIDO"
+                )
+                .length;
+
 
             if(
                 reservadosPersona +
                 vendidosPersona > 0
             ){
+
                 renderizarGraficoAuditoria(
                     nombresCoincidentes[0],
                     reservadosPersona,
                     vendidosPersona
                 );
+
             }
             else if(contResumen){
+
                 contResumen.innerHTML = "";
                 contResumen.style.display = "none";
+
             }
 
         }
@@ -10743,38 +11310,408 @@ async function cargarAuditoria(){
             );
 
         }
+
     }
 
-    buscador.addEventListener("input",aplicarFiltrosAuditoria);
 
-    filtroFechaDesde.addEventListener("change",()=>{
-        if(
-            filtroFechaDesde.value &&
-            filtroFechaHasta.value &&
-            filtroFechaDesde.value > filtroFechaHasta.value
-        ){
-            filtroFechaHasta.value = filtroFechaDesde.value;
+    buscador.addEventListener(
+        "input",
+        aplicarFiltrosAuditoria
+    );
+
+
+    filtroFechaDesde.addEventListener(
+        "change",
+        ()=>{
+
+            if(
+                filtroFechaDesde.value &&
+                filtroFechaHasta.value &&
+                filtroFechaDesde.value >
+                filtroFechaHasta.value
+            ){
+                filtroFechaHasta.value =
+                    filtroFechaDesde.value;
+            }
+
+            aplicarFiltrosAuditoria();
+
         }
-        aplicarFiltrosAuditoria();
-    });
+    );
 
-    filtroFechaHasta.addEventListener("change",()=>{
-        if(
-            filtroFechaDesde.value &&
-            filtroFechaHasta.value &&
-            filtroFechaHasta.value < filtroFechaDesde.value
-        ){
-            filtroFechaDesde.value = filtroFechaHasta.value;
+
+    filtroFechaHasta.addEventListener(
+        "change",
+        ()=>{
+
+            if(
+                filtroFechaDesde.value &&
+                filtroFechaHasta.value &&
+                filtroFechaHasta.value <
+                filtroFechaDesde.value
+            ){
+                filtroFechaDesde.value =
+                    filtroFechaHasta.value;
+            }
+
+            aplicarFiltrosAuditoria();
+
         }
-        aplicarFiltrosAuditoria();
-    });
+    );
 
-    botonFecha.addEventListener("click",aplicarFiltrosAuditoria);
+
+    botonFecha.addEventListener(
+        "click",
+        aplicarFiltrosAuditoria
+    );
+
+
+    /* =====================================================
+       FILTROS AUDITORÍA ADMINISTRATIVA
+    ===================================================== */
+
+    const buscarAdmin =
+        document.getElementById(
+            "buscarAuditoriaAdmin"
+        );
+
+    const desdeAdmin =
+        document.getElementById(
+            "filtroFechaDesdeAuditoriaAdmin"
+        );
+
+    const hastaAdmin =
+        document.getElementById(
+            "filtroFechaHastaAuditoriaAdmin"
+        );
+
+    const btnFechaAdmin =
+        document.getElementById(
+            "btnAplicarFechaAuditoriaAdmin"
+        );
+
+    const tbodyAdmin =
+        document.getElementById(
+            "tbodyAuditoriaAdmin"
+        );
+
+
+    function claseAccionAdmin(accion){
+
+        const valor =
+            String(accion || "")
+            .toUpperCase();
+
+        if(
+            valor.includes("CONTRASE") ||
+            valor.includes("RECUPER")
+        ){
+            return "seguridad";
+        }
+
+        if(valor.includes("ELIMINAR")){
+            return "eliminar";
+        }
+
+        if(
+            valor.includes("ACTIVAR") ||
+            valor.includes("DESACTIVAR")
+        ){
+            return "estado";
+        }
+
+        return "";
+
+    }
+
+
+    function registroAdminCoincideFecha(
+        item,
+        desde,
+        hasta
+    ){
+
+        const fecha =
+            new Date(item.Fecha);
+
+        if(
+            Number.isNaN(
+                fecha.getTime()
+            )
+        ){
+            return false;
+        }
+
+        const inicio =
+            desde
+            ? new Date(
+                `${desde}T00:00:00`
+              )
+            : null;
+
+        const fin =
+            hasta
+            ? new Date(
+                `${hasta}T23:59:59.999`
+              )
+            : null;
+
+        if(
+            inicio &&
+            fecha < inicio
+        ){
+            return false;
+        }
+
+        if(
+            fin &&
+            fecha > fin
+        ){
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    function aplicarFiltrosAuditoriaAdmin(){
+
+        const texto =
+            String(
+                buscarAdmin.value || ""
+            )
+            .trim()
+            .toUpperCase();
+
+        const desde =
+            String(
+                desdeAdmin.value || ""
+            ).trim();
+
+        const hasta =
+            String(
+                hastaAdmin.value || ""
+            ).trim();
+
+
+        const filtrados =
+            auditoriaAdmin
+            .filter(item=>{
+
+                const textoRegistro = [
+                    item.EjecutadoPor,
+                    item.Accion,
+                    item.UsuarioAfectado,
+                    item.Rol,
+                    item.Antes,
+                    item.Despues,
+                    item.Detalle
+                ]
+                .map(v=>
+                    String(v || "")
+                    .toUpperCase()
+                )
+                .join(" ");
+
+                return (
+                    textoRegistro.includes(texto) &&
+                    registroAdminCoincideFecha(
+                        item,
+                        desde,
+                        hasta
+                    )
+                );
+
+            })
+            .sort(
+                (a,b)=>
+                new Date(b.Fecha) -
+                new Date(a.Fecha)
+            );
+
+
+        tbodyAdmin.innerHTML =
+            filtrados
+            .map(item=>{
+
+                const accion =
+                    String(
+                        item.Accion || ""
+                    );
+
+                return `
+                    <tr>
+                        <td>${formatearFecha(item.Fecha)}</td>
+                        <td>${item.EjecutadoPor || ""}</td>
+                        <td>
+                            <span class="badgeAccionAdmin ${claseAccionAdmin(accion)}">
+                                ${accion}
+                            </span>
+                        </td>
+                        <td>${item.UsuarioAfectado || ""}</td>
+                        <td>${item.Rol || ""}</td>
+                        <td>${item.Antes || ""}</td>
+                        <td>${item.Despues || ""}</td>
+                        <td>${item.Detalle || ""}</td>
+                    </tr>
+                `;
+
+            })
+            .join("");
+
+
+        const creados =
+            filtrados
+            .filter(item=>
+                String(
+                    item.Accion || ""
+                )
+                .toUpperCase() ===
+                "CREAR USUARIO"
+            )
+            .length;
+
+
+        const seguridad =
+            filtrados
+            .filter(item=>{
+
+                const accion =
+                    String(
+                        item.Accion || ""
+                    )
+                    .toUpperCase();
+
+                return (
+                    accion.includes("CONTRASE") ||
+                    accion.includes("RECUPER")
+                );
+
+            })
+            .length;
+
+
+        document
+        .getElementById(
+            "totalMovimientosAdmin"
+        )
+        .textContent =
+            filtrados.length;
+
+
+        document
+        .getElementById(
+            "totalCreadosAdmin"
+        )
+        .textContent =
+            creados;
+
+
+        document
+        .getElementById(
+            "totalSeguridadAdmin"
+        )
+        .textContent =
+            seguridad;
+
+    }
+
+
+    buscarAdmin.addEventListener(
+        "input",
+        aplicarFiltrosAuditoriaAdmin
+    );
+
+
+    desdeAdmin.addEventListener(
+        "change",
+        ()=>{
+
+            if(
+                desdeAdmin.value &&
+                hastaAdmin.value &&
+                desdeAdmin.value >
+                hastaAdmin.value
+            ){
+                hastaAdmin.value =
+                    desdeAdmin.value;
+            }
+
+            aplicarFiltrosAuditoriaAdmin();
+
+        }
+    );
+
+
+    hastaAdmin.addEventListener(
+        "change",
+        ()=>{
+
+            if(
+                desdeAdmin.value &&
+                hastaAdmin.value &&
+                hastaAdmin.value <
+                desdeAdmin.value
+            ){
+                desdeAdmin.value =
+                    hastaAdmin.value;
+            }
+
+            aplicarFiltrosAuditoriaAdmin();
+
+        }
+    );
+
+
+    btnFechaAdmin.addEventListener(
+        "click",
+        aplicarFiltrosAuditoriaAdmin
+    );
+
 
     aplicarFiltrosAuditoria();
 
-    localStorage.setItem("auditoriaVista",Date.now());
+    aplicarFiltrosAuditoriaAdmin();
+
+    activarSubAuditoria(
+        localStorage.getItem(
+            "subAuditoriaActiva"
+        ) === "ADMIN"
+        ? "ADMIN"
+        : "LOTES"
+    );
+
+
+    tabLotes.addEventListener(
+        "click",
+        ()=>{
+            localStorage.setItem(
+                "subAuditoriaActiva",
+                "LOTES"
+            );
+        }
+    );
+
+
+    tabAdmin.addEventListener(
+        "click",
+        ()=>{
+            localStorage.setItem(
+                "subAuditoriaActiva",
+                "ADMIN"
+            );
+        }
+    );
+
+
+    localStorage.setItem(
+        "auditoriaVista",
+        Date.now()
+    );
+
 }
+
 document
 .getElementById("btnAsesores")
 .addEventListener(
@@ -10868,7 +11805,7 @@ function renderizarModuloReportes(){
 
                 <div class="cardReporte cardReporteCompleto">
                     <h3>Reporte completo</h3>
-                    <p>Genera un solo Excel con hojas de Lotes, Auditoría, Colaboradores, Consultas y Solicitudes.</p>
+                    <p>Genera un solo Excel con hojas de Lotes, Auditoría de Lotes, Auditoría Administrativa, Colaboradores, Consultas y Solicitudes.</p>
                     <button class="btnReporteExcel" onclick="exportarReporteExcel('COMPLETO')">DESCARGAR EXCEL</button>
                 </div>
 
@@ -10879,9 +11816,15 @@ function renderizarModuloReportes(){
                 </div>
 
                 <div class="cardReporte">
-                    <h3>Auditoría</h3>
-                    <p>Historial de cambios registrados en el sistema.</p>
-                    <button class="btnReporteExcel" onclick="exportarReporteExcel('AUDITORIA')">EXPORTAR AUDITORÍA</button>
+                    <h3>Auditoría de Lotes</h3>
+                    <p>Historial cronológico de cambios de estado realizados en los lotes.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('AUDITORIA')">EXPORTAR AUDITORÍA DE LOTES</button>
+                </div>
+
+                <div class="cardReporte">
+                    <h3>Auditoría Administrativa</h3>
+                    <p>Creación, activación, eliminación y acciones de seguridad de colaboradores.</p>
+                    <button class="btnReporteExcel" onclick="exportarReporteExcel('AUDITORIA_ADMIN')">EXPORTAR AUDITORÍA ADMIN</button>
                 </div>
 
                 <div class="cardReporte">
@@ -10922,16 +11865,71 @@ function prepararDatosReporte(tipo, datos){
     const columnasExcluir = excluir[tipo] || [];
 
     if(tipo === "COLABORADORES"){
-        return datos.map(fila=>({
+
+        return datos
+        .slice()
+        .sort((a,b)=>
+            timestampFechaRegistro(b?.fechaRegistro) -
+            timestampFechaRegistro(a?.fechaRegistro)
+        )
+        .map(fila=>({
             "Fecha de registro": fila?.fechaRegistro || "",
             "Usuario": fila?.usuario || "",
             "Nombre": fila?.nombre || "",
             "Rol": fila?.rol || "",
             "Estado": fila?.estado || ""
         }));
+
     }
 
-    return datos.map(fila=>{
+
+    if(tipo === "AUDITORIA_ADMIN"){
+
+        return datos
+        .slice()
+        .sort((a,b)=>
+            new Date(b?.Fecha) -
+            new Date(a?.Fecha)
+        )
+        .map(fila=>({
+            "Fecha": fila?.Fecha || "",
+            "Ejecutado por": fila?.EjecutadoPor || "",
+            "Acción": fila?.Accion || "",
+            "Usuario afectado": fila?.UsuarioAfectado || "",
+            "Rol": fila?.Rol || "",
+            "Antes": fila?.Antes || "",
+            "Después": fila?.Despues || "",
+            "Detalle": fila?.Detalle || ""
+        }));
+
+    }
+
+
+    /*
+    Las demás tablas con columna Fecha también se exportan
+    en orden cronológico ascendente.
+    */
+    const datosOrdenados =
+        datos.slice();
+
+    if(
+        datosOrdenados.length &&
+        Object.prototype.hasOwnProperty.call(
+            datosOrdenados[0] || {},
+            "Fecha"
+        )
+    ){
+
+        datosOrdenados.sort(
+            (a,b)=>
+            new Date(b?.Fecha) -
+            new Date(a?.Fecha)
+        );
+
+    }
+
+
+    return datosOrdenados.map(fila=>{
 
         const salida = {};
 
@@ -10967,7 +11965,8 @@ function tituloReporteExcel(tipo){
 
     const titulos = {
         LOTES: "REPORTE DE LOTES",
-        AUDITORIA: "REPORTE DE AUDITORÍA",
+        AUDITORIA: "REPORTE DE AUDITORÍA DE LOTES",
+        AUDITORIA_ADMIN: "REPORTE DE AUDITORÍA ADMINISTRATIVA",
         COLABORADORES: "REPORTE DE COLABORADORES",
         CONSULTAS: "REPORTE DE CONSULTAS",
         SOLICITUDES: "REPORTE DE SOLICITUDES"
@@ -10980,7 +11979,8 @@ function nombreHojaReporte(tipo){
 
     const nombres = {
         LOTES: "Lotes",
-        AUDITORIA: "Auditoria",
+        AUDITORIA: "Auditoria Lotes",
+        AUDITORIA_ADMIN: "Auditoria Admin",
         COLABORADORES: "Colaboradores",
         CONSULTAS: "Consultas",
         SOLICITUDES: "Solicitudes"
@@ -11318,7 +12318,7 @@ function agregarHojaExcel(libro,tipo,datos){
                 }
 
                 if([
-                    "estado","antes","despues","actual","solicita"
+                    "estado","antes","despues","después","actual","solicita"
                 ].includes(encabezado)){
                     const estilo = colorEstadoExcel(celda.value);
                     if(estilo){
@@ -11389,6 +12389,9 @@ async function obtenerDatosReporte(tipo){
 
         case "AUDITORIA":
             return await apiGet("?action=auditoria");
+
+        case "AUDITORIA_ADMIN":
+            return await apiGet("?action=auditoriaAdmin");
 
         case "COLABORADORES":
             return await apiPost("listarAsesores");
@@ -11465,6 +12468,7 @@ async function exportarReporteExcel(tipo){
             const tipos = [
                 "LOTES",
                 "AUDITORIA",
+                "AUDITORIA_ADMIN",
                 "COLABORADORES",
                 "CONSULTAS",
                 "SOLICITUDES"
@@ -11679,7 +12683,7 @@ asesores.sort((a,b)=>{
     FECHA DE REGISTRO ASCENDENTE.
     Los registros sin fecha quedan al final.
     */
-    return fechaA - fechaB;
+    return fechaB - fechaA;
 
 });
 
@@ -11791,10 +12795,7 @@ onclick="abrirModalColaborador()">
 
             <div class="filaBotones">
 
-                ${
-                    !esAdministrador
-                    ? `
-                    <button
+                <button
                     class="btnAccionAdmin"
                     onclick="
                     cambiarEstadoAsesor(
@@ -11807,33 +12808,22 @@ onclick="abrirModalColaborador()">
                             : "Activar"
                         }
 
-                    </button>
-                    `
-                    : ""
-                }
+                </button>
 
-                ${
-                    !esAdministrador ||
-                    esMismaCuenta
-                    ? `
-                    <button
+                
+
+                <button
                     class="btnAccionAdmin"
                     onclick="
-                    cambiarPasswordAsesor(
+                    abrirRestablecerPasswordAsesor(
                         '${a.usuario}'
                     )">
 
-                        Cambiar clave
+                        Restablecer contraseña
 
-                    </button>
-                    `
-                    : ""
-                }
+                </button>
 
-                ${
-                    !esAdministrador
-                    ? `
-                    <button
+                <button
                     class="btnAccionAdmin btnEliminar"
                     onclick="
                     eliminarAsesor(
@@ -11842,10 +12832,7 @@ onclick="abrirModalColaborador()">
 
                         Eliminar
 
-                    </button>
-                    `
-                    : ""
-                }
+                </button>
 
             </div>
 
@@ -11984,6 +12971,15 @@ usuario:usuario
     if(resultado.ok){
 
         cargarAsesores();
+
+    }
+    else{
+
+        mostrarNotificacion(
+            "Acción no permitida",
+            resultado.mensaje ||
+            "No se pudo cambiar el estado del colaborador."
+        );
 
     }
 
@@ -12342,12 +13338,355 @@ async function confirmarCambioPassword(){
 
     }
 }
+
+let usuarioRestablecerPassword = "";
+
+
+function abrirRestablecerPasswordAsesor(usuario){
+
+    usuarioRestablecerPassword =
+        String(usuario || "");
+
+    let modal =
+        document.getElementById(
+            "modalRestablecerPassword"
+        );
+
+
+    if(!modal){
+
+        modal =
+            document.createElement(
+                "div"
+            );
+
+        modal.id =
+            "modalRestablecerPassword";
+
+        modal.style.cssText = `
+            position:fixed;
+            inset:0;
+            display:none;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+            background:rgba(15,23,42,.58);
+            backdrop-filter:blur(3px);
+            z-index:20000;
+        `;
+
+
+        modal.innerHTML = `
+            <div
+                class="modalCard"
+                style="
+                    width:460px;
+                    max-width:calc(100vw - 32px);
+                ">
+
+                <h2>
+                    Restablecer contraseña
+                </h2>
+
+                <div style="
+                    margin:-4px 0 20px;
+                    text-align:center;
+                    color:#64748B;
+                    font-size:14px;
+                    line-height:1.5;
+                ">
+                    Colaborador:
+                    <strong
+                        id="usuarioRestablecerPasswordTexto"
+                        style="color:#0F172A;">
+                    </strong>
+                </div>
+
+                <div style="
+                    display:flex;
+                    flex-direction:column;
+                    gap:12px;
+                ">
+
+                    <input
+                        id="passwordRestablecerNueva"
+                        type="password"
+                        placeholder="Nueva contraseña"
+                        class="inputModulo"
+                        autocomplete="new-password"
+                        style="
+                            width:100%;
+                            margin:0;
+                        ">
+
+                    <input
+                        id="passwordRestablecerConfirmar"
+                        type="password"
+                        placeholder="Confirmar contraseña"
+                        class="inputModulo"
+                        autocomplete="new-password"
+                        style="
+                            width:100%;
+                            margin:0;
+                        ">
+
+                    <div
+                        id="errorRestablecerPassword"
+                        style="
+                            display:none;
+                            padding:10px 12px;
+                            border-radius:10px;
+                            background:#FEF2F2;
+                            color:#B91C1C;
+                            font-size:13px;
+                            font-weight:600;
+                            line-height:1.4;
+                            text-align:center;
+                        ">
+                    </div>
+
+                </div>
+
+                <div class="modalAcciones">
+
+                    <button
+                        type="button"
+                        class="btnGris"
+                        onclick="
+                            cerrarRestablecerPasswordAsesor()
+                        ">
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btnAzul"
+                        id="btnConfirmarRestablecerPassword"
+                        onclick="
+                            confirmarRestablecerPasswordAsesor()
+                        ">
+                        Restablecer
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+
+        document.body.appendChild(
+            modal
+        );
+
+    }
+
+
+    document
+    .getElementById(
+        "usuarioRestablecerPasswordTexto"
+    )
+    .textContent =
+        usuarioRestablecerPassword;
+
+
+    document
+    .getElementById(
+        "passwordRestablecerNueva"
+    )
+    .value = "";
+
+
+    document
+    .getElementById(
+        "passwordRestablecerConfirmar"
+    )
+    .value = "";
+
+
+    const error =
+        document.getElementById(
+            "errorRestablecerPassword"
+        );
+
+    error.style.display = "none";
+    error.textContent = "";
+
+
+    modal.style.display = "flex";
+
+
+    setTimeout(()=>{
+
+        document
+        .getElementById(
+            "passwordRestablecerNueva"
+        )
+        .focus();
+
+    },50);
+
+}
+
+
+function cerrarRestablecerPasswordAsesor(){
+
+    const modal =
+        document.getElementById(
+            "modalRestablecerPassword"
+        );
+
+    if(modal){
+        modal.style.display = "none";
+    }
+
+    usuarioRestablecerPassword = "";
+
+}
+
+
+function errorRestablecerPassword(
+    mensaje
+){
+
+    const error =
+        document.getElementById(
+            "errorRestablecerPassword"
+        );
+
+    error.textContent =
+        mensaje;
+
+    error.style.display =
+        "block";
+
+}
+
+
+async function confirmarRestablecerPasswordAsesor(){
+
+    if(!usuarioRestablecerPassword){
+        return;
+    }
+
+
+    const nueva =
+        document.getElementById(
+            "passwordRestablecerNueva"
+        ).value;
+
+
+    const confirmar =
+        document.getElementById(
+            "passwordRestablecerConfirmar"
+        ).value;
+
+
+    if(
+        !nueva ||
+        !confirmar
+    ){
+
+        errorRestablecerPassword(
+            "Complete los dos campos."
+        );
+
+        return;
+
+    }
+
+
+    if(nueva.length < 8){
+
+        errorRestablecerPassword(
+            "La contraseña debe tener al menos 8 caracteres."
+        );
+
+        return;
+
+    }
+
+
+    if(nueva !== confirmar){
+
+        errorRestablecerPassword(
+            "Las contraseñas no coinciden."
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        document.getElementById(
+            "btnConfirmarRestablecerPassword"
+        );
+
+    boton.disabled = true;
+    boton.textContent =
+        "Guardando...";
+
+
+    try{
+
+        const resultado =
+            await apiPost(
+                "restablecerPasswordAsesor",
+                {
+                    usuario:
+                        usuarioRestablecerPassword,
+
+                    password:
+                        nueva
+                }
+            );
+
+
+        if(resultado.ok){
+
+            cerrarRestablecerPasswordAsesor();
+
+            mostrarNotificacion(
+                "Contraseña restablecida",
+                "El colaborador podrá ingresar con la nueva contraseña."
+            );
+
+        }
+        else{
+
+            errorRestablecerPassword(
+                resultado.mensaje ||
+                "No se pudo restablecer la contraseña."
+            );
+
+        }
+
+    }
+    catch(error){
+
+        errorRestablecerPassword(
+            "No se pudo completar la operación."
+        );
+
+    }
+    finally{
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Restablecer";
+
+    }
+
+}
+
+
 async function eliminarAsesor(usuario){
 mostrarConfirmacion(
 
-"Eliminar Asesor",
+"Eliminar colaborador",
 
-"¿Desea eliminar el asesor?<br><br><b>" +
+"¿Desea eliminar el colaborador?<br><br><b>" +
 
 usuario +
 
@@ -12369,9 +13708,9 @@ usuario:usuario
 
         mostrarNotificacion(
 
-        "Asesor eliminado",
+        "Colaborador eliminado",
 
-        "El asesor fue eliminado correctamente."
+        "El colaborador fue eliminado correctamente."
 
         );
 
@@ -12380,9 +13719,10 @@ usuario:usuario
 
         mostrarNotificacion(
 
-        "Error",
+        "No se pudo eliminar",
 
-        "No se pudo eliminar."
+        resultado.mensaje ||
+        "No se pudo eliminar el colaborador."
 
         );
 
