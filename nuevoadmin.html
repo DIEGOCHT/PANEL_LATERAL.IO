@@ -6805,6 +6805,80 @@ and
 
 }
 
+
+/* =====================================================
+   ALINEACIÓN SUPERIOR UNIFICADA DE LOS MÓDULOS
+===================================================== */
+
+/*
+Al eliminar los encabezados grandes, .moduloContenido conservaba
+margin-top:18px. Eso hacía que Consultas, Auditoría, Reportes,
+Colaboradores y Solicitudes comenzaran más abajo que Lotes.
+*/
+#contenedorSolicitudes > .moduloContenido,
+#contenedorConsultas > .moduloContenido,
+#contenedorAsesores > .moduloContenido,
+#contenedorAuditoria > .moduloContenido,
+#contenedorReportes > .moduloContenido{
+    margin-top:0 !important;
+}
+
+/* Todos los módulos arrancan exactamente desde el inicio del workspace. */
+#contenedorLotesPrincipal,
+#contenedorSolicitudes,
+#contenedorConsultas,
+#contenedorAsesores,
+#contenedorAuditoria,
+#contenedorReportes{
+    margin-top:0 !important;
+    padding-top:0 !important;
+}
+
+/*
+El contenido dinámico de Consultas/Asesores/Auditoría/Reportes
+también queda pegado al borde superior de su vista.
+*/
+#contenedorConsultas .moduloContenido,
+#contenedorAsesores .moduloContenido,
+#contenedorAuditoria .moduloContenido,
+#contenedorReportes .moduloContenido,
+#contenedorSolicitudes .moduloContenido{
+    margin-top:0 !important;
+}
+
+/*
+Solicitudes adopta el mismo contenedor blanco usado en las
+otras pestañas.
+*/
+#contenedorSolicitudes .moduloContenido{
+    width:100%;
+}
+
+/*
+Evita altura mínima innecesaria después de quitar encabezados.
+La página crecerá solamente con el contenido real.
+*/
+.vistaModulo,
+#contenedorSolicitudes,
+#contenedorConsultas,
+#contenedorAsesores,
+#contenedorAuditoria,
+#contenedorReportes{
+    min-height:0 !important;
+}
+
+@media(max-width:900px){
+
+    #contenedorSolicitudes > .moduloContenido,
+    #contenedorConsultas > .moduloContenido,
+    #contenedorAsesores > .moduloContenido,
+    #contenedorAuditoria > .moduloContenido,
+    #contenedorReportes > .moduloContenido{
+        margin-top:0 !important;
+    }
+
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -7312,29 +7386,34 @@ id="contenedorSolicitudes"
 class="vistaModulo"
 style="display:none;">
 
-<div
-style="
-margin-bottom:20px;
-">
+    <div class="moduloContenido">
 
-<input
+        <div
+        style="
+        margin-bottom:20px;
+        ">
 
-type="text"
+            <input
 
-id="buscarSolicitud"
+            type="text"
 
-class="inputBusqueda"
+            id="buscarSolicitud"
 
-placeholder="🔍 Buscar nombre o lote..."
+            class="inputBusqueda"
 
-onkeyup="filtrarSolicitudes()"
+            placeholder="🔍 Buscar nombre o lote..."
 
->
+            onkeyup="filtrarSolicitudes()"
 
-</div>
-<div
-id="listaSolicitudes">
-</div>
+            >
+
+        </div>
+
+        <div
+        id="listaSolicitudes">
+        </div>
+
+    </div>
 
 </div>
 </div> <!-- contenidoScrollable -->
@@ -11899,6 +11978,104 @@ function renderizarModuloReportes(){
     `;
 }
 
+function timestampFechaRegistroReporte(valor){
+
+    if(
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+    ){
+        return Number.POSITIVE_INFINITY;
+    }
+
+    if(valor instanceof Date){
+
+        const tiempo =
+            valor.getTime();
+
+        return Number.isNaN(tiempo)
+            ? Number.POSITIVE_INFINITY
+            : tiempo;
+    }
+
+    if(typeof valor === "number"){
+
+        return Number.isFinite(valor)
+            ? valor
+            : Number.POSITIVE_INFINITY;
+    }
+
+    const texto =
+        String(valor)
+        .trim();
+
+    /*
+    Formato mostrado por la página:
+    22/07/2026, 10:47 a. m.
+    */
+    const coincidencia =
+        texto.match(
+            /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:,\s*(\d{1,2}):(\d{2})\s*([ap])\.\s*m\.)?$/i
+        );
+
+    if(coincidencia){
+
+        const dia =
+            Number(coincidencia[1]);
+
+        const mes =
+            Number(coincidencia[2]) - 1;
+
+        const anio =
+            Number(coincidencia[3]);
+
+        let hora =
+            Number(
+                coincidencia[4] || 0
+            );
+
+        const minuto =
+            Number(
+                coincidencia[5] || 0
+            );
+
+        const periodo =
+            String(
+                coincidencia[6] || ""
+            )
+            .toLowerCase();
+
+        if(periodo === "p" && hora < 12){
+            hora += 12;
+        }
+
+        if(periodo === "a" && hora === 12){
+            hora = 0;
+        }
+
+        return new Date(
+            anio,
+            mes,
+            dia,
+            hora,
+            minuto,
+            0,
+            0
+        ).getTime();
+    }
+
+    const fechaNormal =
+        new Date(texto);
+
+    const tiempo =
+        fechaNormal.getTime();
+
+    return Number.isNaN(tiempo)
+        ? Number.POSITIVE_INFINITY
+        : tiempo;
+}
+
+
 function prepararDatosReporte(tipo, datos){
 
     if(!Array.isArray(datos)){
@@ -11917,10 +12094,45 @@ function prepararDatosReporte(tipo, datos){
 
         return datos
         .slice()
-        .sort((a,b)=>
-            timestampFechaRegistro(b?.fechaRegistro) -
-            timestampFechaRegistro(a?.fechaRegistro)
-        )
+        .sort((a,b)=>{
+
+            const rolA =
+                String(a?.rol || "")
+                .trim()
+                .toUpperCase();
+
+            const rolB =
+                String(b?.rol || "")
+                .trim()
+                .toUpperCase();
+
+            const adminA =
+                rolA === "ADMIN" ||
+                rolA === "ADMINISTRADOR";
+
+            const adminB =
+                rolB === "ADMIN" ||
+                rolB === "ADMINISTRADOR";
+
+            /*
+            Igual que la pestaña Colaboradores:
+            ADMINISTRADORES primero y luego ASESORES.
+            Dentro de cada grupo, fecha ASCENDENTE.
+            */
+            if(adminA !== adminB){
+                return adminA ? -1 : 1;
+            }
+
+            return (
+                timestampFechaRegistroReporte(
+                    a?.fechaRegistro
+                ) -
+                timestampFechaRegistroReporte(
+                    b?.fechaRegistro
+                )
+            );
+
+        })
         .map(fila=>({
             "Fecha de registro": fila?.fechaRegistro || "",
             "Usuario": fila?.usuario || "",
